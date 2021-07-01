@@ -1,0 +1,125 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Player.gd" type="Script" id=1]
+[ext_resource path="res://BallChase.gd" type="Script" id=2]
+[ext_resource path="res://addons/regular_polygon2d_node/RegularPolygon2D.gd" type="Script" id=3]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 30.0
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 30.0
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 10, 360 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 10, 360 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 620, 10 )
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 620, 10 )
+
+[node name="BallChase" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="Player" type="KinematicBody2D" parent="."]
+position = Vector2( 419, 178 )
+script = ExtResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource( 1 )
+
+[node name="RegularPolygon2D" type="Node2D" parent="Player"]
+script = ExtResource( 3 )
+centered = true
+num_sides = 16
+
+[node name="Fruit" type="Area2D" parent="."]
+position = Vector2( 972.11, 379.045 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fruit"]
+shape = SubResource( 2 )
+
+[node name="RegularPolygon2D" type="Node2D" parent="Fruit"]
+script = ExtResource( 3 )
+centered = true
+num_sides = 16
+polygon_color = Color( 0.776471, 0.141176, 0.619608, 1 )
+
+[node name="Walls" type="Node2D" parent="."]
+
+[node name="LeftWall" type="StaticBody2D" parent="Walls"]
+position = Vector2( 10, 360 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/LeftWall"]
+shape = SubResource( 3 )
+
+[node name="ColorRect" type="ColorRect" parent="Walls/LeftWall"]
+margin_left = -10.0
+margin_top = -360.0
+margin_right = 10.0
+margin_bottom = 360.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RightWall" type="StaticBody2D" parent="Walls"]
+position = Vector2( 1270, 360 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/RightWall"]
+shape = SubResource( 4 )
+
+[node name="ColorRect" type="ColorRect" parent="Walls/RightWall"]
+margin_left = -10.0
+margin_top = -360.0
+margin_right = 10.0
+margin_bottom = 360.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TopWall" type="StaticBody2D" parent="Walls"]
+position = Vector2( 640, 10 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/TopWall"]
+shape = SubResource( 5 )
+
+[node name="ColorRect" type="ColorRect" parent="Walls/TopWall"]
+margin_left = -620.0
+margin_top = -10.0
+margin_right = 620.0
+margin_bottom = 10.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BottomWall" type="StaticBody2D" parent="Walls"]
+position = Vector2( 640, 710 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/BottomWall"]
+shape = SubResource( 6 )
+
+[node name="ColorRect" type="ColorRect" parent="Walls/BottomWall"]
+margin_left = -620.0
+margin_top = -10.0
+margin_right = 620.0
+margin_bottom = 10.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BackGround" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="BackGround"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.172549, 0.172549, 0.172549, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="body_entered" from="Fruit" to="." method="_on_Fruit_body_entered"]
