@@ -11,7 +11,7 @@ var _action = Vector2.ZERO
 
     
 func _physics_process(delta):
-    print(delta)
+    print(_action)
     var direction = get_direction()
     if direction.length() > 1.0:
         direction = direction.normalized()
@@ -30,6 +30,7 @@ func get_direction():
     return direction
     
 func set_action(action):
+    
     _action.x = action[0]
     _action.y = action[1]
 

@@ -9,6 +9,8 @@ export var FAIL_REWARD := -1.0
 var just_got_fruit = false
 var just_wall_hit = false
 var done = false
+var action_repeat = 8
+var n_action_steps = 0
 #var reward = 0.0
 
 
@@ -103,7 +105,13 @@ func reset():
     done = true
 
 func _get_obs():
-    return [0.0,1.0,2.0,3.0]
+    var relative = fruit.position - player.position
+    var result = []
+    result.append(player.position.x)
+    result.append(player.position.y)   
+    result.append(relative.x)
+    result.append(relative.y)
+    return result
     
 func _get_done():
     return true
@@ -126,7 +134,10 @@ func get_reward():
 func _physics_process(delta):    
     # two modes, human control, agent control
     # pause tree, send obs, get actions, set actions, unpause tree
-    print("pause")
+    if n_action_steps % action_repeat != 0:
+        n_action_steps += 1
+        return
+    n_action_steps += 1
     get_tree().set_pause(true) 
     var message = {
         "type":"step",
