@@ -43,6 +43,7 @@ import gym
 import socket
 import time
 import json
+import numpy as np
 
 MAJOR_VERSION = 0
 MINOR_VERSION = 1
@@ -57,15 +58,18 @@ class GodotEnv(gym.Env):
 
     def step(self, action):
         print("Stepping")
-        message = {"type": "action", "action": "1"}
+        message = {
+            "type": "action",
+            "action": np.random.uniform(-1.0, 1.0, size=(2,)).tolist(),
+        }
         self._send_as_json(message)
-        response = self._get_json_dict()["message"]
+        response = self._get_json_dict()
 
         return response["obs"], response["reward"], response["reward"]
 
     def reset(self):
         message = self._get_json_dict()
-        return message["message"]["obs"]
+        return message["obs"]
 
     def close(self):
         self.connection.close()
@@ -90,7 +94,8 @@ class GodotEnv(gym.Env):
     def _handshake(self):
         message = {
             "type": "handshake",
-            "message": {"major_version": "0", "minor_version": "1"},
+            "major_version": "0",
+            "minor_version": "1",
         }
 
         self._send_as_json(message)
@@ -103,6 +108,7 @@ class GodotEnv(gym.Env):
         print(json_dict)
 
     def _send_as_json(self, dictionary):
+        print("sending ", dictionary)
         message_json = json.dumps(dictionary)
         self.send_string(message_json)
 
@@ -149,4 +155,3 @@ if __name__ == "__main__":
     # for i in range(200):
     #     print(env.step(i))
     #     time.sleep(0.05)
-

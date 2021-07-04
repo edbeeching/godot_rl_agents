@@ -31,19 +31,14 @@ func _ready():
     _send_env_info()
     
     reset()
-    
-    #_send_obs()
 
 func _handshake():
     print("performing handshake")
     
     var json_dict = _get_dict_json_message()
-    
-    
     assert(json_dict["type"] == "handshake")
-    print(json_dict)
-    var major_version = json_dict["message"]["major_version"]
-    var minor_version = json_dict["message"]["minor_version"]
+    var major_version = json_dict["major_version"]
+    var minor_version = json_dict["minor_version"]
     if major_version != MAJOR_VERSION:
         print("WARNING: major verison mismatching ", major_version, " ", MAJOR_VERSION)  
     if minor_version != MINOR_VERSION:
@@ -53,7 +48,6 @@ func _get_dict_json_message():
     # returns a dictionartary from of the most recent message
     # this is not waiting
     while client.get_available_bytes() == 0:
-        print("waiting")
         OS.delay_msec(1)
     var message = client.get_string()
 
@@ -73,30 +67,13 @@ func _send_env_info():
     
     var message = {
         "type" : "env_info",
-        "message" : {
-            "obs_size":"4",
-            "action_size": "2",
-            "action_type": "continuous",
-            "n_agents": "2"
-           }
+        "obs_size":"4",
+        "action_size": "2",
+        "action_type": "continuous",
+        "n_agents": "2"
        }
     _send_dict_as_json_message(message)
-    
-#func _process(delta):
-#    #print("Process")
-#    if should_connect and not connected:
-#        print("connecting to server")
-#        connect_to_server(5.0)
-#        pass
-#    if connected and not client.is_connected_to_host():
-#        connected = false
-#
-#    var message = client.get_string()
-#    print(message)
-    
-#    if OS.get_ticks_msec() - start_time > 1000:
-#        send_var("hello world!")
-#        start_time = OS.get_ticks_msec() 
+
 
 func connect_to_server(timeout_seconds):
     set_process(true)
@@ -115,16 +92,8 @@ func connect_to_server(timeout_seconds):
 func disconnect_from_server():
     client.disconnect_from_host()
 
-
-func send_var(msg):
-    var data = [1, 2, 3, 4]
-    if client.is_connected_to_host():
-        client.put_string(to_json(data))
         
 func reset():
-    # set the player to a random location
-    # set the fruit to a random location
-    # reset the score
     player._velocity = Vector2.ZERO
     player.position.x = rand_range(_bounds.position.x, _bounds.end.x)
     player.position.y = rand_range(_bounds.position.y, _bounds.end.y)	
@@ -161,15 +130,16 @@ func _physics_process(delta):
     get_tree().set_pause(true) 
     var message = {
         "type":"step",
-        "message" : {
-            "obs": _get_obs(),
-            "reward": _get_reward(),
-            "done": _get_done()
-           }
+        "obs": _get_obs(),
+        "reward": _get_reward(),
+        "done": _get_done()
+           
        }
     _send_dict_as_json_message(message)
     
-    var action = _get_dict_json_message()
+    var response = _get_dict_json_message()
+    var action = response["action"]
+    player.set_action(action)
     print("action received")
     
     

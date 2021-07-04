@@ -7,6 +7,8 @@ extends KinematicBody2D
 export var speed := 500
 export var friction = 0.18
 var _velocity := Vector2.ZERO
+var _action = Vector2.ZERO
+
     
 func _physics_process(delta):
     print(delta)
@@ -19,6 +21,7 @@ func _physics_process(delta):
     _velocity = move_and_slide(_velocity)
 
 func get_direction():
+    return _action
     var direction := Vector2(
         Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
         Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
@@ -26,8 +29,9 @@ func get_direction():
     
     return direction
     
-func set_action():
-    pass
+func set_action(action):
+    _action.x = action[0]
+    _action.y = action[1]
 
 func set_reward():
     pass
