@@ -36,6 +36,7 @@ shape = SubResource( 1 )
 script = ExtResource( 3 )
 centered = true
 num_sides = 16
+collision_shape = false
 
 [node name="Fruit" type="Area2D" parent="."]
 position = Vector2( 972.11, 379.045 )
@@ -48,10 +49,11 @@ script = ExtResource( 3 )
 centered = true
 num_sides = 16
 polygon_color = Color( 0.776471, 0.141176, 0.619608, 1 )
+collision_shape = false
 
 [node name="Walls" type="Node2D" parent="."]
 
-[node name="LeftWall" type="StaticBody2D" parent="Walls"]
+[node name="LeftWall" type="Area2D" parent="Walls"]
 position = Vector2( 10, 360 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/LeftWall"]
@@ -66,7 +68,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="RightWall" type="StaticBody2D" parent="Walls"]
+[node name="RightWall" type="Area2D" parent="Walls"]
 position = Vector2( 1270, 360 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/RightWall"]
@@ -81,7 +83,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TopWall" type="StaticBody2D" parent="Walls"]
+[node name="TopWall" type="Area2D" parent="Walls"]
 position = Vector2( 640, 10 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/TopWall"]
@@ -96,7 +98,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="BottomWall" type="StaticBody2D" parent="Walls"]
+[node name="BottomWall" type="Area2D" parent="Walls"]
 position = Vector2( 640, 710 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/BottomWall"]
@@ -123,3 +125,7 @@ __meta__ = {
 }
 
 [connection signal="body_entered" from="Fruit" to="." method="_on_Fruit_body_entered"]
+[connection signal="body_entered" from="Walls/LeftWall" to="." method="_on_LeftWall_body_entered"]
+[connection signal="body_entered" from="Walls/RightWall" to="." method="_on_RightWall_body_entered"]
+[connection signal="body_entered" from="Walls/TopWall" to="." method="_on_TopWall_body_entered"]
+[connection signal="body_entered" from="Walls/BottomWall" to="." method="_on_BottomWall_body_entered"]

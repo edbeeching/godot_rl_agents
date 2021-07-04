@@ -25,130 +25,130 @@ var DEBUG_VERBOSE = 1
 var LOG_LEVEL = DEBUG_NONE
 
 func vlog(arg1, arg2 = "", arg3 = ""):
-	if LOG_LEVEL >= DEBUG_VERBOSE:
-		print(arg1,arg2,arg3)
+    if LOG_LEVEL >= DEBUG_VERBOSE:
+        print(arg1,arg2,arg3)
 
 func dlog(arg1, arg2 = "", arg3 = ""):
-	if LOG_LEVEL >= DEBUG_INFO:
-		print(arg1,arg2,arg3)
+    if LOG_LEVEL >= DEBUG_INFO:
+        print(arg1,arg2,arg3)
 
 func poly_offset():
-	if !centered:
-		return Vector2(size/2 + border_size, size/2 + border_size)
-	return Vector2(0,0)
+    if !centered:
+        return Vector2(size/2 + border_size, size/2 + border_size)
+    return Vector2(0,0)
 
 func poly_pts(p_size):
-	p_size /= 2
-	var th = 2*PI/num_sides
-	var pts = PoolVector2Array()
-	var off = poly_offset()
-	vlog("off: ", off)
-	for i in range(num_sides):
-		pts.append(off + polar2cartesian(p_size, deg2rad(-90+polygon_rotation) + i*th))
-	return pts
+    p_size /= 2
+    var th = 2*PI/num_sides
+    var pts = PoolVector2Array()
+    var off = poly_offset()
+    vlog("off: ", off)
+    for i in range(num_sides):
+        pts.append(off + polar2cartesian(p_size, deg2rad(-90+polygon_rotation) + i*th))
+    return pts
 
 func draw_poly(p_size, p_color, p_texture):
-	var pts = poly_pts(p_size)
+    var pts = poly_pts(p_size)
 
-	var uvs = PoolVector2Array()	
-	if p_texture:
-		var ts = polygon_texture.get_size()
-		vlog(" ts: ", ts)
-		for pt in pts:
-			uvs.append((pt - poly_offset() + Vector2(p_size, p_size)) / ts)
+    var uvs = PoolVector2Array()    
+    if p_texture:
+        var ts = polygon_texture.get_size()
+        vlog(" ts: ", ts)
+        for pt in pts:
+            uvs.append((pt - poly_offset() + Vector2(p_size, p_size)) / ts)
 
-	vlog("pts: ", pts)
-	vlog("uvs: ", uvs)
-	draw_colored_polygon(pts, p_color, uvs, p_texture, polygon_texture, true)
-	
+    vlog("pts: ", pts)
+    vlog("uvs: ", uvs)
+    draw_colored_polygon(pts, p_color, uvs, p_texture, polygon_texture, true)
+    
 func _notification(what):
-	if what == NOTIFICATION_DRAW:
-		if border_size > 0:
-			draw_poly(size + border_size, border_color, null)
-		draw_poly(size, polygon_color, polygon_texture)
-	if what == NOTIFICATION_READY:
-		vlog("enter tree")
-		if !collision_shape || Engine.is_editor_hint():
-			vlog("editor mode: Not adding collision")
-			return
-			
-		var p = get_parent();
-		if p == null:
-			vlog("no parent")
-			return
-		
-		if p is CollisionObject2D:
-			vlog("parent is CollisionObject2D")
-			var shape = ConvexPolygonShape2D.new()
-			shape.points = poly_pts(size + border_size)
-			vlog("shape.points = ", shape.points)
-			var col = CollisionShape2D.new()
-			col.shape = shape
-			p.call_deferred("add_child", col)
+    if what == NOTIFICATION_DRAW:
+        if border_size > 0:
+            draw_poly(size + border_size, border_color, null)
+        draw_poly(size, polygon_color, polygon_texture)
+    if what == NOTIFICATION_READY:
+        vlog("enter tree")
+        if !collision_shape || Engine.is_editor_hint():
+            vlog("editor mode: Not adding collision")
+            return
+            
+        var p = get_parent();
+        if p == null:
+            vlog("no parent")
+            return
+        
+        if p is CollisionObject2D:
+            vlog("parent is CollisionObject2D")
+            var shape = ConvexPolygonShape2D.new()
+            shape.points = poly_pts(size + border_size)
+            vlog("shape.points = ", shape.points)
+            var col = CollisionShape2D.new()
+            col.shape = shape
+            p.call_deferred("add_child", col)
 
 
 func parent_collision_shape_set(p_val):
-	collision_shape = p_val
+    collision_shape = p_val
 
 func parent_collision_shape_get():
-	return collision_shape
+    return collision_shape
 
 func polygon_texture_set(texture):
-	polygon_texture = texture
-	update()
+    polygon_texture = texture
+    update()
 
 func polygon_texture_get():
-	return polygon_texture
+    return polygon_texture
 
 func centered_set(val):
-	centered = val
-	update()
+    centered = val
+    update()
 
 func centered_get():
-	return centered
+    return centered
 
 func border_color_set(color):
-	border_color = color
-	update()
+    border_color = color
+    update()
 
 func border_color_get():
-	return border_color
+    return border_color
 
 func polygon_color_set(color):
-	polygon_color = color
-	update()
+    polygon_color = color
+    update()
 
 func polygon_color_get():
-	return polygon_color
+    return polygon_color
 
 func polygon_rotation_set(rot):
-	polygon_rotation = rot
-	update()
+    polygon_rotation = rot
+    update()
 
 func polygon_rotation_get():
-	return polygon_rotation
+    return polygon_rotation
 
 func border_size_set(size):
-	border_size = size
-	update()
+    border_size = size
+    update()
 
 func border_size_get():
-	return border_size
+    return border_size
 
 func num_sides_set(sides):
-	num_sides = sides
-	update()
+    num_sides = sides
+    update()
 
 func num_sides_get():
-	return num_sides
+    return num_sides
 
 func size_set(s):
-	size = s
-	update()
+    size = s
+    update()
 
 func size_get():
-	return size
+    return size
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+    pass # Replace with function body.

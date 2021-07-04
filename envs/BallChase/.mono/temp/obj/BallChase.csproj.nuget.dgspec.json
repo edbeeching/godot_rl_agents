@@ -1,0 +1,53 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/edward/play/godot/godot_rl_agents/envs/BallChase/BallChase.csproj": {}
+  },
+  "projects": {
+    "/home/edward/play/godot/godot_rl_agents/envs/BallChase/BallChase.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/edward/play/godot/godot_rl_agents/envs/BallChase/BallChase.csproj",
+        "projectName": "BallChase",
+        "projectPath": "/home/edward/play/godot/godot_rl_agents/envs/BallChase/BallChase.csproj",
+        "packagesPath": "/home/edward/.nuget/packages/",
+        "outputPath": "/home/edward/play/godot/godot_rl_agents/envs/BallChase/.mono/temp/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/edward/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net472"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net472": {
+            "targetAlias": "net472",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net472": {
+          "targetAlias": "net472",
+          "dependencies": {
+            "Microsoft.NETFramework.ReferenceAssemblies": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.0.0, )",
+              "autoReferenced": true
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/5.0.301/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

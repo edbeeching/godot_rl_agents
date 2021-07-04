@@ -1,0 +1,8 @@
+/home/edward/play/godot/godot_rl_agents/envs/BallChase/.mono/temp/bin/Debug/BallChase.dll
+/home/edward/play/godot/godot_rl_agents/envs/BallChase/.mono/temp/bin/Debug/BallChase.pdb
+/home/edward/play/godot/godot_rl_agents/envs/BallChase/.mono/temp/obj/Debug/BallChase.csproj.AssemblyReference.cache
+/home/edward/play/godot/godot_rl_agents/envs/BallChase/.mono/temp/obj/Debug/BallChase.AssemblyInfoInputs.cache
+/home/edward/play/godot/godot_rl_agents/envs/BallChase/.mono/temp/obj/Debug/BallChase.AssemblyInfo.cs
+/home/edward/play/godot/godot_rl_agents/envs/BallChase/.mono/temp/obj/Debug/BallChase.csproj.CoreCompileInputs.cache
+/home/edward/play/godot/godot_rl_agents/envs/BallChase/.mono/temp/obj/Debug/BallChase.dll
+/home/edward/play/godot/godot_rl_agents/envs/BallChase/.mono/temp/obj/Debug/BallChase.pdb
