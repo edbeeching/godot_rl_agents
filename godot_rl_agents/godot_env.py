@@ -60,12 +60,12 @@ class GodotEnv(gym.Env):
         print("Stepping")
         message = {
             "type": "action",
-            "action": np.random.uniform(-1.0, 1.0, size=(2,)).tolist(),
+            "action": action,
         }
         self._send_as_json(message)
         response = self._get_json_dict()
 
-        return response["obs"], response["reward"], response["reward"]
+        return response["obs"], response["reward"], response["done"]
 
     def reset(self):
         message = self._get_json_dict()
@@ -105,10 +105,8 @@ class GodotEnv(gym.Env):
         self._send_as_json(message)
 
         json_dict = self._get_json_dict()
-        print(json_dict)
 
     def _send_as_json(self, dictionary):
-        print("sending ", dictionary)
         message_json = json.dumps(dictionary)
         self.send_string(message_json)
 
@@ -148,7 +146,9 @@ if __name__ == "__main__":
     print("obs", obs)
 
     while True:
-        obs, reward, done = env.step(1)
+        action = np.random.uniform(-1.0, 1.0, size=(2,)).tolist()
+        obs, reward, done = env.step(action)
+        print(obs, reward, done)
 
     # action = 1
     # obs = env.step(action)
