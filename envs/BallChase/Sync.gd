@@ -1,20 +1,7 @@
 extends Node
 
-extends Node2D
-
-var _bounds := Rect2(50,50,1280-50,720-50)
-onready var player = $Player
-onready var fruit = $Fruit
-export var STEP_REWARD := -0.01
-export var GOAL_REWARD := 1.0
-export var FAIL_REWARD := -1.0
-var just_got_fruit = false
-var just_wall_hit = false
-var done = false
 var action_repeat = 8
 var n_action_steps = 0
-#var reward = 0.0
-
 
 const MAJOR_VERSION := "0"
 const MINOR_VERSION := "1" 
@@ -23,18 +10,27 @@ var client
 var connected = false
 var message_center
 var should_connect = true
+var agents
 onready var start_time = OS.get_ticks_msec()
 
 func _ready():
-    client = StreamPeerTCP.new()
-    #client.set_no_delay(true)
+    _get_agents()
     
     connected = connect_to_server()
     if connected:
+        _set_heuristic("model")
         _handshake()
         _send_env_info()
-    
-    reset()
+    else:
+        _set_heuristic("human")
+        
+        
+func _get_agents():
+    agents = get_tree().get_nodes_in_group("AGENT")
+
+func _set_heuristic(heuristic):
+    for agent in agents:
+        agent.set_heuristic(heuristic)
 
 func _handshake():
     print("performing handshake")
@@ -71,18 +67,18 @@ func _send_env_info():
     
     var message = {
         "type" : "env_info",
-        "obs_size":"4",
-        "action_size": "2",
-        "action_type": "continuous",
-        "n_agents": "2"
+        "obs_size": agents[0].get_obs_size(),
+        "action_size": agents[0].get_action_size(),
+        "action_type": agents[0].get_action_type(),
+        "n_agents": len(agents)
        }
     _send_dict_as_json_message(message)
 
 
 func connect_to_server():
-    
     print("trying to connect to server")
-    
+    client = StreamPeerTCP.new()
+    client.set_no_delay(true)
     #set_process(true)
     var ip = "localhost"
     var port = 10008
@@ -103,20 +99,58 @@ func _physics_process(delta):
         n_action_steps += 1
         return
     n_action_steps += 1
+    
+    
     if connected:
         get_tree().set_pause(true) 
+        
+        var reward = _get_reward_from_agents()
+        var done = _get_done_from_agents()
+        _reset_agents_if_done() # this ensures the new observation is from the next env instance
+        
+        var obs = _get_obs_from_agents()
+        
         var message = {
             "type": "step",
-            "obs": _get_obs(),
-            "reward": _get_reward(),
-            "done": _get_done()
+            "obs": obs,
+            "reward": reward,
+            "done": done
         }
         _send_dict_as_json_message(message)
         
         var response = _get_dict_json_message()
         var action = response["action"]
-        player.set_action(action)
+        _set_agent_actions(action)
         print("action received")
-        done = false
         
         get_tree().set_pause(false) 
+    else:
+        _reset_agents_if_done()
+
+func _reset_agents_if_done():
+     for agent in agents:
+        agent.reset_if_done()
+
+func _get_obs_from_agents():
+    var obs = []
+    for agent in agents:
+        obs.append(agent.get_obs())
+    return obs
+    
+func _get_reward_from_agents():
+    var rewards = [] 
+    for agent in agents:
+        rewards.append(agent.get_reward())
+    return rewards    
+    
+func _get_done_from_agents():
+    var dones = [] 
+    for agent in agents:
+        dones.append(agent.get_done())
+    return dones    
+    
+func _set_agent_actions(actions):
+    print("actions ", actions)
+    for i in range(len(actions)):
+        agents[i].set_action(actions[i])
+    

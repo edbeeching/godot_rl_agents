@@ -1,7 +1,6 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
-[ext_resource path="res://BallChase.gd" type="Script" id=2]
 [ext_resource path="res://addons/regular_polygon2d_node/RegularPolygon2D.gd" type="Script" id=3]
 
 [sub_resource type="CircleShape2D" id=1]
@@ -23,9 +22,10 @@ extents = Vector2( 620, 10 )
 extents = Vector2( 620, 10 )
 
 [node name="BallChase" type="Node2D"]
-script = ExtResource( 2 )
 
-[node name="Player" type="KinematicBody2D" parent="."]
+[node name="Player" type="KinematicBody2D" parent="." groups=[
+"AGENT",
+]]
 position = Vector2( 419, 178 )
 script = ExtResource( 1 )
 
@@ -124,8 +124,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[connection signal="body_entered" from="Fruit" to="." method="_on_Fruit_body_entered"]
-[connection signal="body_entered" from="Walls/LeftWall" to="." method="_on_LeftWall_body_entered"]
-[connection signal="body_entered" from="Walls/RightWall" to="." method="_on_RightWall_body_entered"]
-[connection signal="body_entered" from="Walls/TopWall" to="." method="_on_TopWall_body_entered"]
-[connection signal="body_entered" from="Walls/BottomWall" to="." method="_on_BottomWall_body_entered"]
+[connection signal="body_entered" from="Fruit" to="Player" method="_on_Fruit_body_entered"]
+[connection signal="body_entered" from="Walls/LeftWall" to="Player" method="_on_LeftWall_body_entered"]
+[connection signal="body_entered" from="Walls/RightWall" to="Player" method="_on_RightWall_body_entered"]
+[connection signal="body_entered" from="Walls/TopWall" to="Player" method="_on_TopWall_body_entered"]
+[connection signal="body_entered" from="Walls/BottomWall" to="Player" method="_on_BottomWall_body_entered"]

@@ -7,8 +7,5 @@
 
 [node name="BallChase" parent="." instance=ExtResource( 1 )]
 
-[node name="BallChase2" parent="." instance=ExtResource( 1 )]
-position = Vector2( 1377.55, 0 )
-
 [node name="Sync" type="Node" parent="."]
 script = ExtResource( 2 )

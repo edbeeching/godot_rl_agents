@@ -45,6 +45,8 @@ import time
 import json
 import numpy as np
 
+from gym import spaces
+
 MAJOR_VERSION = 0
 MINOR_VERSION = 1
 
@@ -55,21 +57,24 @@ class GodotEnv(gym.Env):
         self.connection = self._start_server()
         self._handshake()
         self._get_env_info()
+        
 
     def step(self, action):
         print("Stepping")
         message = {
             "type": "action",
-            "action": action,
+            "action": action.tolist(),
         }
         self._send_as_json(message)
         response = self._get_json_dict()
 
-        return response["obs"], response["reward"], response["done"]
+        return np.array(response["obs"][0]), response["reward"][0], response["done"][0], {}
 
     def reset(self):
         message = self._get_json_dict()
-        return message["obs"]
+        obs = np.array(message["obs"][0])
+        print(obs.shape, self.observation_space.shape)
+        return obs
 
     def close(self):
         self.connection.close()
@@ -105,6 +110,15 @@ class GodotEnv(gym.Env):
         self._send_as_json(message)
 
         json_dict = self._get_json_dict()
+        assert json_dict["type"] == "env_info"
+        n_actions = json_dict["action_size"]
+        if json_dict["action_type"] == "discrete":
+            self.action_space = spaces.Discrete(n_actions)
+        elif json_dict["action_type"] == "continuous":
+            self.action_space = spaces.Box(low=-1.0, high=1.0, shape=(1, n_actions))
+        
+        self.observation_space = spaces.Box(low=-1.0, high=1.0,
+                                        shape=(json_dict["obs_size"],), dtype=np.float32)
 
     def _send_as_json(self, dictionary):
         message_json = json.dumps(dictionary)
@@ -139,19 +153,24 @@ class GodotEnv(gym.Env):
 
 
 if __name__ == "__main__":
-
+    from stable_baselines3.common.env_checker import check_env
     env = GodotEnv()
-    obs = env.reset()
+    
+    check_env(env)
+    
+    
+#     obs = env.reset()
 
-    print("obs", obs)
+#     print("obs", obs)
 
-    while True:
-        action = np.random.uniform(-1.0, 1.0, size=(2,)).tolist()
-        obs, reward, done = env.step(action)
-        print(obs, reward, done)
+#     while True:
+#         action = np.random.uniform(-1.0, 1.0, size=(2,2))
+#         obs, reward, done = env.step(action)
+#         print(obs, reward, done)
 
-    # action = 1
-    # obs = env.step(action)
-    # for i in range(200):
-    #     print(env.step(i))
-    #     time.sleep(0.05)
+#     # action = 1
+#     # obs = env.step(action)
+#     # for i in range(200):
+#     #     print(env.step(i))
+#     #     time.sleep(0.05)
+# os = spaces.Box(low=-1.0, high=1.0,shape=(1,4), dtype=np.float32)
