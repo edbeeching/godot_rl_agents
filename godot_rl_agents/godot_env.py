@@ -38,29 +38,29 @@ OBSERVATIONS
 
 
 """
-
-import gym
-import socket
 import time
+import socket
 import json
 import numpy as np
-
 from gym import spaces
+
+from stable_baselines3 import PPO
+from stable_baselines3.common.vec_env.base_vec_env import VecEnv
+
 
 MAJOR_VERSION = 0
 MINOR_VERSION = 1
 
 
-class GodotEnv(gym.Env):
+class GodotEnv(VecEnv):
     def __init__(self, port=10008):
         self.port = port
         self.connection = self._start_server()
+        self.num_envs = 2
         self._handshake()
         self._get_env_info()
-        
 
     def step(self, action):
-        print("Stepping")
         message = {
             "type": "action",
             "action": action.tolist(),
@@ -68,12 +68,16 @@ class GodotEnv(gym.Env):
         self._send_as_json(message)
         response = self._get_json_dict()
 
-        return np.array(response["obs"][0]), response["reward"][0], response["done"][0], {}
+        return (
+            np.array(response["obs"]),
+            response["reward"],
+            np.array(response["done"]),
+            [{}] * len(response["done"]),
+        )
 
     def reset(self):
         message = self._get_json_dict()
-        obs = np.array(message["obs"][0])
-        print(obs.shape, self.observation_space.shape)
+        obs = np.array(message["obs"])
         return obs
 
     def close(self):
@@ -115,10 +119,11 @@ class GodotEnv(gym.Env):
         if json_dict["action_type"] == "discrete":
             self.action_space = spaces.Discrete(n_actions)
         elif json_dict["action_type"] == "continuous":
-            self.action_space = spaces.Box(low=-1.0, high=1.0, shape=(1, n_actions))
-        
-        self.observation_space = spaces.Box(low=-1.0, high=1.0,
-                                        shape=(json_dict["obs_size"],), dtype=np.float32)
+            self.action_space = spaces.Box(low=-1.0, high=1.0, shape=(n_actions,))
+
+        self.observation_space = spaces.Box(
+            low=-1.0, high=1.0, shape=(json_dict["obs_size"],), dtype=np.float32
+        )
 
     def _send_as_json(self, dictionary):
         message_json = json.dumps(dictionary)
@@ -143,22 +148,45 @@ class GodotEnv(gym.Env):
         return string
 
     def send_string(self, string):
-
         message = len(string).to_bytes(4, "little") + bytes(string.encode())
-        print("send message", message)
         self.connection.sendall(message)
 
     def _send_action(self, action):
         self.send_string(action)
 
+    # VecEnv methods
+    def env_is_wrapped(self):
+        return [False] * self.num_envs
+
+    def env_method(self):
+        raise NotImplementedError()
+
+    def get_attr(self):
+        raise NotImplementedError()
+
+    def seed(self):
+        raise NotImplementedError()
+
+    def set_attr(self):
+        raise NotImplementedError()
+
+    def step_async(self):
+        raise NotImplementedError()
+
+    def step_wait(self):
+        raise NotImplementedError()
+
 
 if __name__ == "__main__":
     from stable_baselines3.common.env_checker import check_env
+
     env = GodotEnv()
-    
-    check_env(env)
-    
-    
+
+    # check_env(env)
+
+    model = PPO("MlpPolicy", env, verbose=2)
+    model.learn(1000)
+
 #     obs = env.reset()
 
 #     print("obs", obs)

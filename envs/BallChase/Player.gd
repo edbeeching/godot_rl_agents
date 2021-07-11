@@ -18,6 +18,7 @@ onready var fruit = $"../Fruit"
 var fruit_just_entered = false
 var just_hit_wall = false
 var done = false
+var best_fruit_distance = 0.0
 
 func _physics_process(delta):
     var direction = get_direction()
@@ -34,12 +35,11 @@ func reset():
     done = false
     _velocity = Vector2.ZERO
     _action = Vector2.ZERO
-    print("bounds,", _bounds.position.x," ", _bounds.end.x," ", _bounds.position.y, " ",_bounds.end.y, " ", rand_range(_bounds.position.x, _bounds.end.x))
     position.x = rand_range(_bounds.position.x, _bounds.end.x)
     position.y = rand_range(_bounds.position.y, _bounds.end.y)	
     fruit.position.x = rand_range(_bounds.position.x, _bounds.end.x)
     fruit.position.y = rand_range(_bounds.position.y, _bounds.end.y)
-
+    best_fruit_distance = position.distance_to(fruit.position)
 
     
 func get_direction():
@@ -58,6 +58,7 @@ func get_direction():
     return direction
     
 func set_action(action):
+    print(action)
     _action.x = action[0]
     _action.y = action[1]
     
@@ -78,14 +79,26 @@ func get_reward():
     var reward = 0.0
     reward -= 0.01 # step penalty
     if fruit_just_entered:
-        reward += 1.0
+        reward += 10.0
         fruit_just_entered = false
     
     if just_hit_wall:
         reward -= 1.0
         just_hit_wall = false
     
+    reward += shaping_reward()
     return reward
+    
+func shaping_reward():
+    var s_reward = 0.0
+    var fruit_distance = position.distance_to(fruit.position)
+    
+    if fruit_distance < best_fruit_distance:
+        s_reward += best_fruit_distance - fruit_distance
+        best_fruit_distance = fruit_distance
+        
+    s_reward /= 100.0
+    return s_reward
     
 func set_heuristic(heuristic):
     print("setting heuristic")

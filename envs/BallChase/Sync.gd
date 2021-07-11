@@ -50,15 +50,11 @@ func _get_dict_json_message():
     while client.get_available_bytes() == 0:
         OS.delay_msec(1)
     var message = client.get_string()
-
-    print("message received")
-    print(message)
     var json_data = JSON.parse(message).result
     
     return json_data
 
 func _send_dict_as_json_message(dict):
-    print("Sending: %s" % to_json(dict))
     client.put_string(to_json(dict))
 
 func _send_env_info():
@@ -121,7 +117,6 @@ func _physics_process(delta):
         var response = _get_dict_json_message()
         var action = response["action"]
         _set_agent_actions(action)
-        print("action received")
         
         get_tree().set_pause(false) 
     else:
@@ -150,7 +145,6 @@ func _get_done_from_agents():
     return dones    
     
 func _set_agent_actions(actions):
-    print("actions ", actions)
     for i in range(len(actions)):
         agents[i].set_action(actions[i])
     
