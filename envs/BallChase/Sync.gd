@@ -48,7 +48,7 @@ func _get_dict_json_message():
     # returns a dictionartary from of the most recent message
     # this is not waiting
     while client.get_available_bytes() == 0:
-        OS.delay_msec(1)
+        OS.delay_usec(10)
     var message = client.get_string()
     var json_data = JSON.parse(message).result
     
@@ -94,8 +94,10 @@ func _physics_process(delta):
     if n_action_steps % action_repeat != 0:
         n_action_steps += 1
         return
+        
+    var relative = agents[0].fruit.position - agents[0].position
+    #print(((relative.x / 1280)) , " " , ((relative.y / 720)) )    
     n_action_steps += 1
-    
     
     if connected:
         get_tree().set_pause(true) 

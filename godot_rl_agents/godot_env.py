@@ -56,7 +56,7 @@ class GodotEnv(VecEnv):
     def __init__(self, port=10008):
         self.port = port
         self.connection = self._start_server()
-        self.num_envs = 2
+        self.num_envs = 9
         self._handshake()
         self._get_env_info()
 
@@ -141,7 +141,7 @@ class GodotEnv(VecEnv):
     def get_data(self):
         data = self.connection.recv(4)
         if not data:
-            time.sleep(0.001)
+            time.sleep(0.000001)
             return self.get_data()
         length = int.from_bytes(data, "little")
         string = self.connection.recv(length).decode()
@@ -184,8 +184,24 @@ if __name__ == "__main__":
 
     # check_env(env)
 
-    model = PPO("MlpPolicy", env, verbose=2)
-    model.learn(1000)
+    # obs_buff = []
+    # reward_buff = []
+    # done_buff = []
+    # action_buff = []
+
+    # obs = env.reset()
+    # obs_buff.append(obs)
+    # for i in range(50):
+    #     print(i)
+    #     action = np.random.uniform(-1.0, 1.0, size=(9, 2))
+    #     obs, reward, done, info = env.step(action)
+    #     obs_buff.append(obs)
+    #     reward_buff.append(reward)
+    #     done_buff.append(done)
+    #     action_buff.append(action)
+
+    model = PPO("MlpPolicy", env, ent_coef=0.0001, verbose=2, n_steps=32)
+    model.learn(200000)
 
 #     obs = env.reset()
 

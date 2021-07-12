@@ -18,7 +18,10 @@ onready var fruit = $"../Fruit"
 var fruit_just_entered = false
 var just_hit_wall = false
 var done = false
-var best_fruit_distance = 0.0
+var best_fruit_distance = 10000.0
+
+var n_steps = 0
+var max_steps = 500
 
 func _physics_process(delta):
     var direction = get_direction()
@@ -28,6 +31,11 @@ func _physics_process(delta):
     var target_velocity = direction * speed
     _velocity += (target_velocity - _velocity) * friction
     _velocity = move_and_slide(_velocity)
+    
+    n_steps += 1
+    if n_steps > max_steps:
+        done = true
+        just_hit_wall = true
 
 func reset():
     fruit_just_entered = false
@@ -40,6 +48,7 @@ func reset():
     fruit.position.x = rand_range(_bounds.position.x, _bounds.end.x)
     fruit.position.y = rand_range(_bounds.position.y, _bounds.end.y)
     best_fruit_distance = position.distance_to(fruit.position)
+    n_steps = 0 
 
     
 func get_direction():
@@ -58,7 +67,6 @@ func get_direction():
     return direction
     
 func set_action(action):
-    print(action)
     _action.x = action[0]
     _action.y = action[1]
     
@@ -67,12 +75,16 @@ func reset_if_done():
         reset()
         
 func get_obs():
+    
     var relative = fruit.position - position
+    relative = relative.normalized()
     var result = []
-    result.append(((position.x / WIDTH)-0.5) * 2)
-    result.append(((position.y / HEIGHT)-0.5) * 2)  
-    result.append(((relative.x / WIDTH)-0.5) * 2)
-    result.append(((relative.y / HEIGHT)-0.5) * 2)  
+#    result.append(((position.x / WIDTH)-0.5) * 2)
+#    result.append(((position.y / HEIGHT)-0.5) * 2)  
+    result.append(relative.x)
+    result.append(relative.y)
+#    result.append(((relative.x / WIDTH)-0.5) * 2)
+#    result.append(((relative.y / HEIGHT)-0.5) * 2)  
     return result
     
 func get_reward():
@@ -83,7 +95,7 @@ func get_reward():
         fruit_just_entered = false
     
     if just_hit_wall:
-        reward -= 1.0
+        reward -= 10.0
         just_hit_wall = false
     
     reward += shaping_reward()
@@ -105,7 +117,7 @@ func set_heuristic(heuristic):
     self._heuristic = heuristic
 
 func get_obs_size():
-    return 4
+    return len(get_obs())
     
 func get_action_size():
     return 2
