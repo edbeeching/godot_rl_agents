@@ -1,59 +1,12 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Jul  2 14:16:23 2021
-
-@author: edward
-
-Communication is with messages of json strings
-
-e.g
-
-HANDSHAKING
-message = {
-    "type"  : "handshake",
-    "message":{
-        "major_version": "0"
-        "minor_version": "1"
-        }
-}
-
-message = {
-    "type" : "env_info"
-    "message": {
-        "observation_space" : "shape ...",
-        "action_space": "shape ...",
-        "action_type":" continuous / discrete",
-        "n_agents": n_agents       
-        }
-    }
-
-
-ACTIONS
-
-
-
-OBSERVATIONS
-
-
-
-"""
 import time
 import socket
 import json
 import numpy as np
 from gym import spaces
 
-from stable_baselines3 import PPO
-from stable_baselines3.common.vec_env.base_vec_env import VecEnv
 
-
-MAJOR_VERSION = 0
-MINOR_VERSION = 1
-
-
-class GodotEnv(VecEnv):
-    def __init__(self, port=10008):
+class GodotEnv:
+    def __init__(self, port=10008, seed=0):
         self.port = port
         self.connection = self._start_server()
         self.num_envs = 9
@@ -119,7 +72,9 @@ class GodotEnv(VecEnv):
         if json_dict["action_type"] == "discrete":
             self.action_space = spaces.Discrete(n_actions)
         elif json_dict["action_type"] == "continuous":
-            self.action_space = spaces.Box(low=-1.0, high=1.0, shape=(n_actions,))
+            self.action_space = spaces.Box(
+                low=-1.0, high=1.0, shape=(n_actions,)
+            )
 
         self.observation_space = spaces.Box(
             low=-1.0, high=1.0, shape=(json_dict["obs_size"],), dtype=np.float32
@@ -127,94 +82,29 @@ class GodotEnv(VecEnv):
 
     def _send_as_json(self, dictionary):
         message_json = json.dumps(dictionary)
-        self.send_string(message_json)
+        self._send_string(message_json)
 
     def _get_json_dict(self):
-        data = self.get_data()
+        data = self._get_data()
 
         return json.loads(data)
 
     def _get_obs(self):
 
-        return self.get_data()
+        return self._get_data()
 
-    def get_data(self):
+    def _get_data(self):
         data = self.connection.recv(4)
         if not data:
             time.sleep(0.000001)
-            return self.get_data()
+            return self._get_data()
         length = int.from_bytes(data, "little")
         string = self.connection.recv(length).decode()
         return string
 
-    def send_string(self, string):
+    def _send_string(self, string):
         message = len(string).to_bytes(4, "little") + bytes(string.encode())
         self.connection.sendall(message)
 
     def _send_action(self, action):
-        self.send_string(action)
-
-    # VecEnv methods
-    def env_is_wrapped(self):
-        return [False] * self.num_envs
-
-    def env_method(self):
-        raise NotImplementedError()
-
-    def get_attr(self):
-        raise NotImplementedError()
-
-    def seed(self):
-        raise NotImplementedError()
-
-    def set_attr(self):
-        raise NotImplementedError()
-
-    def step_async(self):
-        raise NotImplementedError()
-
-    def step_wait(self):
-        raise NotImplementedError()
-
-
-if __name__ == "__main__":
-    from stable_baselines3.common.env_checker import check_env
-
-    env = GodotEnv()
-
-    # check_env(env)
-
-    # obs_buff = []
-    # reward_buff = []
-    # done_buff = []
-    # action_buff = []
-
-    # obs = env.reset()
-    # obs_buff.append(obs)
-    # for i in range(50):
-    #     print(i)
-    #     action = np.random.uniform(-1.0, 1.0, size=(9, 2))
-    #     obs, reward, done, info = env.step(action)
-    #     obs_buff.append(obs)
-    #     reward_buff.append(reward)
-    #     done_buff.append(done)
-    #     action_buff.append(action)
-
-    model = PPO("MlpPolicy", env, ent_coef=0.0001, verbose=2, n_steps=32)
-    model.learn(200000)
-
-#     obs = env.reset()
-
-#     print("obs", obs)
-
-#     while True:
-#         action = np.random.uniform(-1.0, 1.0, size=(2,2))
-#         obs, reward, done = env.step(action)
-#         print(obs, reward, done)
-
-#     # action = 1
-#     # obs = env.step(action)
-#     # for i in range(200):
-#     #     print(env.step(i))
-#     #     time.sleep(0.05)
-# os = spaces.Box(low=-1.0, high=1.0,shape=(1,4), dtype=np.float32)
+        self._send_string(action)
