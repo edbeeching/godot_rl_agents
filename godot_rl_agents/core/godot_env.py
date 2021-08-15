@@ -1,4 +1,5 @@
 import time
+import subprocess
 import socket
 import json
 import numpy as np
@@ -6,10 +7,28 @@ from gym import spaces
 
 
 class GodotEnv:
-    def __init__(self, port=10008, seed=0):
+    MAJOR_VERSION = 0
+    MINOR_VERSION = 1
+
+    def __init__(
+        self,
+        env_path=None,
+        port=10008,
+        show_window=False,
+        seed=0,
+        framerate=60,
+    ):
+        self.proc = None
+        if env_path is not None:
+            self._launch_env(env_path, port, show_window, framerate)
+        else:
+            print(
+                "No game binary has been provided, please press PLAY in the Godot editor"
+            )
+
         self.port = port
         self.connection = self._start_server()
-        self.num_envs = 9
+        self.num_envs = None
         self._handshake()
         self._get_env_info()
 
@@ -34,7 +53,24 @@ class GodotEnv:
         return obs
 
     def close(self):
+        message = {
+            "type": "close",
+        }
+        self._send_as_json(message)
+        print("close message sent")
+        time.sleep(1.0)
         self.connection.close()
+
+    def _launch_env(self, env_path, port, show_window, framerate):
+
+        launch_cmd = f"{env_path} --fixed-fps {framerate} --port={port}"
+        if show_window == False:
+            launch_cmd += " --disable-render-loop --no-window"
+        launch_cmd = launch_cmd.split(" ")
+        self.proc = subprocess.Popen(
+            launch_cmd,
+            start_new_session=True,
+        )
 
     def _start_server(self):
         # Either launch a an exported Godot project or connect to a playing godot game
@@ -79,6 +115,8 @@ class GodotEnv:
         self.observation_space = spaces.Box(
             low=-1.0, high=1.0, shape=(json_dict["obs_size"],), dtype=np.float32
         )
+
+        self.num_envs = json_dict["n_agents"]
 
     def _send_as_json(self, dictionary):
         message_json = json.dumps(dictionary)
