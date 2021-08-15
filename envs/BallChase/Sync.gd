@@ -1,5 +1,5 @@
 extends Node
-
+# --fixed-fps 2000 --disable-render-loop
 var action_repeat = 8
 var n_action_steps = 0
 
@@ -45,12 +45,25 @@ func _handshake():
         print("WARNING: major verison mismatching ", minor_version, " ", MINOR_VERSION)
 
 func _get_dict_json_message():
-    # returns a dictionartary from of the most recent message
+    # returns a dictionary from of the most recent message
     # this is not waiting
     while client.get_available_bytes() == 0:
+        if client.get_status() == 3:
+            print("server disconnected status 3, closing")
+            get_tree().quit()
+
+        if !client.is_connected_to_host():
+            print("server disconnected, closing")
+            get_tree().quit()
         OS.delay_usec(10)
+        
     var message = client.get_string()
     var json_data = JSON.parse(message).result
+    
+    if json_data["type"] == "close":
+        print("received close message, closing game")
+        get_tree().quit()
+        return null
     
     return json_data
 
@@ -77,13 +90,24 @@ func connect_to_server():
     client.set_no_delay(true)
     #set_process(true)
     var ip = "localhost"
-    var port = 10008
+    var port = _get_port()
     var connect = client.connect_to_host(ip, port)
     
     print(connect, client.get_status())
     
-    return client.get_status() == 2;
-
+    return client.get_status() == 2
+    
+func _get_port():
+    print("getting command line arguments")
+    var arguments = {}
+    for argument in OS.get_cmdline_args():
+        # Parse valid command-line arguments into a dictionary
+        if argument.find("=") > -1:
+            var key_value = argument.split("=")
+            arguments[key_value[0].lstrip("--")] = key_value[1]
+    print("got port ", arguments.get("port", 10008))
+    
+    return int(arguments.get("port", 10008))
 
 func disconnect_from_server():
     client.disconnect_from_host()
@@ -117,6 +141,9 @@ func _physics_process(delta):
         _send_dict_as_json_message(message)
         
         var response = _get_dict_json_message()
+        if response == null:
+            get_tree().set_pause(false) 
+            return
         var action = response["action"]
         _set_agent_actions(action)
         
