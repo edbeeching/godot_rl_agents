@@ -30,7 +30,19 @@ position = Vector2( 22.6274, 1516.04 )
 position = Vector2( 1372.63, 1514.25 )
 
 [node name="BallChase9" parent="." instance=ExtResource( 1 )]
-position = Vector2( 2696.56, 1512.78 )
+position = Vector2( 4079.23, -5.30884 )
+
+[node name="BallChase10" parent="." instance=ExtResource( 1 )]
+position = Vector2( 4086.36, 750.172 )
+
+[node name="BallChase11" parent="." instance=ExtResource( 1 )]
+position = Vector2( 4072.11, 1512.78 )
+
+[node name="BallChase12" parent="." instance=ExtResource( 1 )]
+position = Vector2( 38.1223, 2289.64 )
+
+[node name="BallChase13" parent="." instance=ExtResource( 1 )]
+position = Vector2( 2689.43, 1519.91 )
 
 [node name="Sync" type="Node" parent="."]
 script = ExtResource( 2 )

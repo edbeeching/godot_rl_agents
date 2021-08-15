@@ -36,6 +36,9 @@ func _physics_process(delta):
     if n_steps > max_steps:
         done = true
         just_hit_wall = true
+        
+    if Input.is_action_just_pressed("r_key"):
+        reset()
 
 func reset():
     fruit_just_entered = false
