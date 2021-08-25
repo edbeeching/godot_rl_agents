@@ -5,12 +5,13 @@ var n_action_steps = 0
 
 const MAJOR_VERSION := "0"
 const MINOR_VERSION := "1" 
-
+const DEFAULT_PORT := 10008
 var client
 var connected = false
 var message_center
 var should_connect = true
 var agents
+var need_to_send_obs = false
 onready var start_time = OS.get_ticks_msec()
 
 func _ready():
@@ -40,9 +41,9 @@ func _handshake():
     var major_version = json_dict["major_version"]
     var minor_version = json_dict["minor_version"]
     if major_version != MAJOR_VERSION:
-        print("WARNING: major verison mismatching ", major_version, " ", MAJOR_VERSION)  
+        print("WARNING: major verison mismatch ", major_version, " ", MAJOR_VERSION)  
     if minor_version != MINOR_VERSION:
-        print("WARNING: major verison mismatching ", minor_version, " ", MINOR_VERSION)
+        print("WARNING: major verison mismatch ", minor_version, " ", MINOR_VERSION)
 
 func _get_dict_json_message():
     # returns a dictionary from of the most recent message
@@ -51,19 +52,35 @@ func _get_dict_json_message():
         if client.get_status() == 3:
             print("server disconnected status 3, closing")
             get_tree().quit()
+            return null
 
         if !client.is_connected_to_host():
             print("server disconnected, closing")
             get_tree().quit()
+            return null
         OS.delay_usec(10)
         
     var message = client.get_string()
     var json_data = JSON.parse(message).result
     
-    if json_data["type"] == "close":
-        print("received close message, closing game")
-        get_tree().quit()
-        return null
+#    if json_data["type"] == "close":
+#        print("received close message, closing game")
+#        get_tree().quit()
+#        return null
+#
+#    if json_data["type"] == "reset":
+#        print("received reset message")
+#        _reset_all_agents()
+#        print("agents reset")
+#        var obs = _get_obs_from_agents()
+#
+#        var reply = {
+#            "type": "reset",
+#            "obs": obs,
+#        }
+#        _send_dict_as_json_message(reply)
+#        print("reply sent")
+#        return _get_dict_json_message() # get the action for the reset obs
     
     return json_data
 
@@ -105,9 +122,10 @@ func _get_port():
         if argument.find("=") > -1:
             var key_value = argument.split("=")
             arguments[key_value[0].lstrip("--")] = key_value[1]
-    print("got port ", arguments.get("port", 10008))
+            
+    print("got port ", arguments.get("port", DEFAULT_PORT))
     
-    return int(arguments.get("port", 10008))
+    return int(arguments.get("port", DEFAULT_PORT))
 
 func disconnect_from_server():
     client.disconnect_from_host()
@@ -118,42 +136,71 @@ func _physics_process(delta):
     if n_action_steps % action_repeat != 0:
         n_action_steps += 1
         return
-        
-    var relative = agents[0].fruit.position - agents[0].position
-    #print(((relative.x / 1280)) , " " , ((relative.y / 720)) )    
+         
     n_action_steps += 1
     
     if connected:
         get_tree().set_pause(true) 
         
-        var reward = _get_reward_from_agents()
-        var done = _get_done_from_agents()
-        _reset_agents_if_done() # this ensures the new observation is from the next env instance
+        if need_to_send_obs:
+            need_to_send_obs = false
+            var reward = _get_reward_from_agents()
+            var done = _get_done_from_agents()
+            _reset_agents_if_done() # this ensures the new observation is from the next env instance
+            
+            var obs = _get_obs_from_agents()
+            
+            var reply = {
+                "type": "step",
+                "obs": obs,
+                "reward": reward,
+                "done": done
+            }
+            _send_dict_as_json_message(reply)
         
-        var obs = _get_obs_from_agents()
-        
-        var message = {
-            "type": "step",
-            "obs": obs,
-            "reward": reward,
-            "done": done
-        }
-        _send_dict_as_json_message(message)
-        
-        var response = _get_dict_json_message()
-        if response == null:
-            get_tree().set_pause(false) 
-            return
-        var action = response["action"]
-        _set_agent_actions(action)
-        
-        get_tree().set_pause(false) 
+        var handled = handle_message()
     else:
         _reset_agents_if_done()
+
+func handle_message() -> bool:
+    # get json message: reset, step, close
+    var message = _get_dict_json_message()
+    if message["type"] == "close":
+        print("received close message, closing game")
+        get_tree().quit()
+        get_tree().set_pause(false) 
+        return true
+        
+    if message["type"] == "reset":
+        print("received reset")
+        _reset_all_agents()
+        var obs = _get_obs_from_agents()
+        var reply = {
+            "type": "reset",
+            "obs": obs
+        }
+        _send_dict_as_json_message(reply)   
+        print("send reset reply")   
+        return handle_message()
+    
+    if message["type"] == "action":
+        print("received action")
+        var action = message["action"]
+        _set_agent_actions(action) 
+        need_to_send_obs = true
+        get_tree().set_pause(false) 
+        return true
+        
+    print("message was not handled")
+    return false
 
 func _reset_agents_if_done():
      for agent in agents:
         agent.reset_if_done()
+
+func _reset_all_agents():
+    for agent in agents:
+        agent.reset()   
 
 func _get_obs_from_agents():
     var obs = []
