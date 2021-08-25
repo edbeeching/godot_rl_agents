@@ -15,6 +15,9 @@ var _velocity := Vector2.ZERO
 var _action = Vector2.ZERO
 var _heuristic = "player"
 onready var fruit = $"../Fruit"
+onready var raycast_sensor = $"RaycastSensor"
+onready var walls := $"../Walls"
+onready var colision_shape := $"CollisionShape2D"
 var fruit_just_entered = false
 var just_hit_wall = false
 var done = false
@@ -22,6 +25,10 @@ var best_fruit_distance = 10000.0
 
 var n_steps = 0
 var max_steps = 500
+
+
+func _ready():
+    reset()
 
 func _physics_process(delta):
     var direction = get_direction()
@@ -46,13 +53,35 @@ func reset():
     done = false
     _velocity = Vector2.ZERO
     _action = Vector2.ZERO
-    position.x = rand_range(_bounds.position.x, _bounds.end.x)
-    position.y = rand_range(_bounds.position.y, _bounds.end.y)	
-    fruit.position.x = rand_range(_bounds.position.x, _bounds.end.x)
-    fruit.position.y = rand_range(_bounds.position.y, _bounds.end.y)
+    
+    position = _calculate_new_position()
+    fruit.position = _calculate_new_position()
+    
+#    position.x = rand_range(_bounds.position.x, _bounds.end.x)
+#    position.y = rand_range(_bounds.position.y, _bounds.end.y)	
+#    fruit.position.x = rand_range(_bounds.position.x, _bounds.end.x)
+#    fruit.position.y = rand_range(_bounds.position.y, _bounds.end.y)
     best_fruit_distance = position.distance_to(fruit.position)
     n_steps = 0 
 
+func _calculate_new_position() -> Vector2:
+    var new_position := Vector2.ZERO
+    new_position.x = rand_range(_bounds.position.x, _bounds.end.x)
+    new_position.y = rand_range(_bounds.position.y, _bounds.end.y)	
+   
+    var radius = colision_shape.shape.get_radius()
+    var rect = Rect2(new_position-Vector2(radius, radius), 
+    Vector2(radius*2, radius*2)
+    )    
+    for wall in walls.get_children():
+        #wall = wall as Area2D
+        var cr = wall.get_node("ColorRect")
+        var rect2 = Rect2(cr.get_position()+wall.position, cr.get_size())
+        if rect.intersects(rect2):
+            return _calculate_new_position()
+    
+    return new_position
+    
     
 func get_direction():
     if done:
@@ -80,14 +109,20 @@ func reset_if_done():
 func get_obs():
     
     var relative = fruit.position - position
-    relative = relative.normalized()
-    var result = []
-#    result.append(((position.x / WIDTH)-0.5) * 2)
-#    result.append(((position.y / HEIGHT)-0.5) * 2)  
+    var distance = relative.length() / 1500.0 
+    relative = relative.normalized() 
+    var result := []
+    result.append(((position.x / WIDTH)-0.5) * 2)
+    result.append(((position.y / HEIGHT)-0.5) * 2)  
     result.append(relative.x)
     result.append(relative.y)
+    result.append(distance)
+    var raycast_obs = raycast_sensor.get_raycast_buffer()
+    result.append_array(raycast_obs)
+    
 #    result.append(((relative.x / WIDTH)-0.5) * 2)
 #    result.append(((relative.y / HEIGHT)-0.5) * 2)  
+# perform raycast here
     return result
     
 func get_reward():
@@ -116,7 +151,6 @@ func shaping_reward():
     return s_reward
     
 func set_heuristic(heuristic):
-    print("setting heuristic")
     self._heuristic = heuristic
 
 func get_obs_size():
