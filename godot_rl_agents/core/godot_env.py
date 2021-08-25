@@ -40,6 +40,8 @@ class GodotEnv:
         self._send_as_json(message)
         response = self._get_json_dict()
 
+        # print(np.array(response["done"]))
+
         return (
             np.array(response["obs"]),
             response["reward"],
@@ -48,8 +50,17 @@ class GodotEnv:
         )
 
     def reset(self):
-        message = self._get_json_dict()
-        obs = np.array(message["obs"])
+        # may need to clear message buffer
+        # there will be a the next obs to collect
+        # _ = self._get_json_dict()
+        # self._clear_socket()
+        message = {
+            "type": "reset",
+        }
+        self._send_as_json(message)
+        response = self._get_json_dict()
+        assert response["type"] == "reset"
+        obs = np.array(response["obs"])
         return obs
 
     def close(self):
@@ -62,8 +73,8 @@ class GodotEnv:
         self.connection.close()
 
     def _launch_env(self, env_path, port, show_window, framerate):
-
-        launch_cmd = f"{env_path} --fixed-fps {framerate} --port={port}"
+        # --fixed-fps {framerate}
+        launch_cmd = f"{env_path} --port={port}"
         if show_window == False:
             launch_cmd += " --disable-render-loop --no-window"
         launch_cmd = launch_cmd.split(" ")
@@ -86,6 +97,7 @@ class GodotEnv:
         # Listen for incoming connections
         sock.listen(1)
         connection, client_address = sock.accept()
+        #        connection.setblocking(False) TODO
         print("connection established")
         return connection
 
@@ -128,8 +140,20 @@ class GodotEnv:
         return json.loads(data)
 
     def _get_obs(self):
-
         return self._get_data()
+
+    def _clear_socket(self):
+
+        self.connection.setblocking(False)
+        try:
+            while True:
+                data = self.connection.recv(4)
+                if not data:
+                    break
+        except BlockingIOError as e:
+            # print("BlockingIOError expection on clear")
+            pass
+        self.connection.setblocking(True)
 
     def _get_data(self):
         data = self.connection.recv(4)
