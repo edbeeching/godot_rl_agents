@@ -172,7 +172,6 @@ func handle_message() -> bool:
         return true
         
     if message["type"] == "reset":
-        print("received reset")
         _reset_all_agents()
         var obs = _get_obs_from_agents()
         var reply = {
@@ -180,11 +179,9 @@ func handle_message() -> bool:
             "obs": obs
         }
         _send_dict_as_json_message(reply)   
-        print("send reset reply")   
         return handle_message()
     
     if message["type"] == "action":
-        print("received action")
         var action = message["action"]
         _set_agent_actions(action) 
         need_to_send_obs = true
