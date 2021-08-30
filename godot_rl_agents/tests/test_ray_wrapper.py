@@ -16,6 +16,8 @@ from ray.rllib.utils.typing import (
     EnvType,
     PartialTrainerConfigDict,
 )
+from ray.rllib.agents import impala
+
 from godot_rl_agents.core.godot_env import GodotEnv
 
 
@@ -23,7 +25,7 @@ class RayVectorGodotEnv(VectorEnv):
     def __init__(
         self,
         env_path=None,
-        port=10010,
+        port=10008,
         seed=0,
         show_window=False,
         framerate=60,
@@ -68,55 +70,54 @@ class RayVectorGodotEnv(VectorEnv):
 if __name__ == "__main__":
     ray.init()
     tune.register_env(
-        "godot_ball_chase",
+        "jumper",
         lambda c: RayVectorGodotEnv(
             env_path=c["filename"],
-            seed=c["seed"],
             config=c,
-            port=c.worker_index + 10008,
+            port=c.worker_index + 12010,
             show_window=True,
+            framerate=30,
         ),
     )
     config = {
-        "env": "godot_ball_chase",
+        "env": "jumper",
         "env_config": {
-            "filename": "envs/build/BallChase/ball_chase_20210823.x86_64",
+            "filename": "envs/build/Jumper/jumper.x86_64",
+            # "filename": None,
             "seed": None,
         },
         # For running in editor, force to use just one Worker (we only have
         # one Unity running)!
         "num_workers": 4,
-        "num_envs_per_worker": 13,
+        "num_envs_per_worker": 16,
         # "remote_worker_envs": True,
         # Other settings.
         "lr": 0.0003,
         "lambda": 0.95,
         "gamma": 0.99,
-        "sgd_minibatch_size": 32,
-        "train_batch_size": 256,
+        "sgd_minibatch_size": 128,
+        "train_batch_size": 1024,
         "batch_mode": "truncate_episodes",
         # Use GPUs iff `RLLIB_NUM_GPUS` env var set to > 0.
-        "num_gpus": 1,
-        "num_sgd_iter": 16,
-        "rollout_fragment_length": 4,
+        "num_gpus": 0,
+        "num_sgd_iter": 8,
+        "rollout_fragment_length": 32,
         "clip_param": 0.2,
-        # Multi-agent setup for the particular env.
-        # "multiagent": {
-        #     "policies": policy_space,
-        #     "policy_mapping_fn": policy_mapping_fn,
-        # },
+        "entropy_coeff": 0.001,
         "model": {
-            "fcnet_hiddens": [256, 256],
+            "fcnet_hiddens": [64, 64],
         },
         "framework": "torch",
         "no_done_at_end": True,
         "soft_horizon": True,
     }
+
     stop = {
         "training_iteration": 200,
-        "timesteps_total": 100000,
-        "episode_reward_mean": 50.0,
+        "timesteps_total": 1000000,
+        "episode_reward_mean": 400.0,
     }
+    print(config)
     # Run the experiment.
     results = tune.run(
         "PPO",
