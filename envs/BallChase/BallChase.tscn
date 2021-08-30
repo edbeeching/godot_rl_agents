@@ -23,14 +23,14 @@ extents = Vector2( 620, 10 )
 extents = Vector2( 620, 10 )
 
 [sub_resource type="RectangleShape2D" id=7]
-extents = Vector2( 320, 60 )
+extents = Vector2( 29.169, 143.153 )
 
 [node name="BallChase" type="Node2D"]
 
 [node name="Player" type="KinematicBody2D" parent="." groups=[
 "AGENT",
 ]]
-position = Vector2( 214.986, 219.352 )
+position = Vector2( 214.986, 217.671 )
 script = ExtResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
@@ -193,17 +193,32 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Obstacle2" type="Area2D" parent="Walls"]
-position = Vector2( 669.715, 348.871 )
+[node name="Obstacle4" type="Area2D" parent="Walls"]
+position = Vector2( 896, 328 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Obstacle2"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Obstacle4"]
 shape = SubResource( 7 )
 
-[node name="ColorRect" type="ColorRect" parent="Walls/Obstacle2"]
-margin_left = -320.0
-margin_top = -60.0
-margin_right = 320.0
-margin_bottom = 60.0
+[node name="ColorRect" type="ColorRect" parent="Walls/Obstacle4"]
+margin_left = -35.0
+margin_top = -143.0
+margin_right = 29.0
+margin_bottom = 153.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Obstacle5" type="Area2D" parent="Walls"]
+position = Vector2( 360, 328 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Obstacle5"]
+shape = SubResource( 7 )
+
+[node name="ColorRect" type="ColorRect" parent="Walls/Obstacle5"]
+margin_left = -35.0
+margin_top = -143.0
+margin_right = 29.0
+margin_bottom = 153.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -224,4 +239,5 @@ __meta__ = {
 [connection signal="body_entered" from="Walls/RightWall" to="Player" method="_on_RightWall_body_entered"]
 [connection signal="body_entered" from="Walls/TopWall" to="Player" method="_on_TopWall_body_entered"]
 [connection signal="body_entered" from="Walls/BottomWall" to="Player" method="_on_BottomWall_body_entered"]
-[connection signal="body_entered" from="Walls/Obstacle2" to="Player" method="_on_BottomWall_body_entered"]
+[connection signal="body_entered" from="Walls/Obstacle4" to="Player" method="_on_BottomWall_body_entered"]
+[connection signal="body_entered" from="Walls/Obstacle5" to="Player" method="_on_BottomWall_body_entered"]

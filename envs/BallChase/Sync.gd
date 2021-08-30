@@ -63,25 +63,6 @@ func _get_dict_json_message():
     var message = client.get_string()
     var json_data = JSON.parse(message).result
     
-#    if json_data["type"] == "close":
-#        print("received close message, closing game")
-#        get_tree().quit()
-#        return null
-#
-#    if json_data["type"] == "reset":
-#        print("received reset message")
-#        _reset_all_agents()
-#        print("agents reset")
-#        var obs = _get_obs_from_agents()
-#
-#        var reply = {
-#            "type": "reset",
-#            "obs": obs,
-#        }
-#        _send_dict_as_json_message(reply)
-#        print("reply sent")
-#        return _get_dict_json_message() # get the action for the reset obs
-    
     return json_data
 
 func _send_dict_as_json_message(dict):

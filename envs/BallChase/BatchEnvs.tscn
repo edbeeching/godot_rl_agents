@@ -44,6 +44,15 @@ position = Vector2( 3615.34, 3213.28 )
 [node name="BallChase13" parent="." instance=ExtResource( 1 )]
 position = Vector2( 0.55542, 4196.78 )
 
+[node name="BallChase14" parent="." instance=ExtResource( 1 )]
+position = Vector2( 1854.64, 4158.68 )
+
+[node name="BallChase15" parent="." instance=ExtResource( 1 )]
+position = Vector2( 3721.42, 4260.28 )
+
+[node name="BallChase16" parent="." instance=ExtResource( 1 )]
+position = Vector2( 5473.92, 4285.68 )
+
 [node name="Sync" type="Node" parent="."]
 script = ExtResource( 2 )
 
