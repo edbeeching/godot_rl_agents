@@ -7,17 +7,20 @@ from gym import spaces
 
 
 class GodotEnv:
-    MAJOR_VERSION = 0
-    MINOR_VERSION = 1
+    MAJOR_VERSION = "0"
+    MINOR_VERSION = "1"
+    DEFAULT_PORT = 11008
 
     def __init__(
         self,
         env_path=None,
-        port=10008,
+        port=11008,
         show_window=False,
         seed=0,
         framerate=60,
     ):
+        if env_path is None:
+            port = GodotEnv.DEFAULT_PORT
         self.proc = None
         if env_path is not None:
             self._launch_env(env_path, port, show_window, framerate)
@@ -74,7 +77,7 @@ class GodotEnv:
 
     def _launch_env(self, env_path, port, show_window, framerate):
         # --fixed-fps {framerate}
-        launch_cmd = f"{env_path} --port={port}"
+        launch_cmd = f"{env_path} --port={port} -fixed-fps {framerate}"
         if show_window == False:
             launch_cmd += " --disable-render-loop --no-window"
         launch_cmd = launch_cmd.split(" ")
@@ -87,7 +90,7 @@ class GodotEnv:
         # Either launch a an exported Godot project or connect to a playing godot game
         # connect to playing godot game
 
-        print("waiting for remote GODOT connection")
+        print(f"waiting for remote GODOT connection on port {self.port}")
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
         # Bind the socket to the port
@@ -104,8 +107,8 @@ class GodotEnv:
     def _handshake(self):
         message = {
             "type": "handshake",
-            "major_version": "0",
-            "minor_version": "1",
+            "major_version": GodotEnv.MAJOR_VERSION,
+            "minor_version": GodotEnv.MINOR_VERSION,
         }
 
         self._send_as_json(message)
@@ -116,13 +119,20 @@ class GodotEnv:
 
         json_dict = self._get_json_dict()
         assert json_dict["type"] == "env_info"
-        n_actions = json_dict["action_size"]
-        if json_dict["action_type"] == "discrete":
-            self.action_space = spaces.Discrete(n_actions)
-        elif json_dict["action_type"] == "continuous":
-            self.action_space = spaces.Box(
-                low=-1.0, high=1.0, shape=(n_actions,)
-            )
+
+        # actions can be "single" for a single action head
+        # or "multi" for several outputeads
+        if json_dict["action_space"]["num_spaces"] == "single":
+            n_actions = json_dict["action_space"]["size"]
+            if json_dict["action_space"]["action_type"] == "discrete":
+                self.action_space = spaces.Discrete(n_actions)
+            elif json_dict["action_space"]["action_type"] == "continuous":
+                self.action_space = spaces.Box(
+                    low=-1.0, high=1.0, shape=(n_actions,)
+                )
+        else:
+            # TODO: implement multiple actions
+            raise NotImplementedError
 
         self.observation_space = spaces.Box(
             low=-1.0, high=1.0, shape=(json_dict["obs_size"],), dtype=np.float32
