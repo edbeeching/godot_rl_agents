@@ -35,15 +35,27 @@ class GodotEnv:
         self._handshake()
         self._get_env_info()
 
+    def from_numpy(self, action):
+        result = []
+
+        for a in action:
+            d = {}
+            for k, v in a.items():
+                if isinstance(v, np.ndarray):
+                    d[k] = v.tolist()
+                else:
+                    d[k] = int(v)
+            result.append(d)
+
+        return result
+
     def step(self, action):
         message = {
             "type": "action",
-            "action": action.tolist(),
+            "action": self.from_numpy(action),
         }
         self._send_as_json(message)
         response = self._get_json_dict()
-
-        # print(np.array(response["done"]))
 
         return (
             np.array(response["obs"]),
@@ -122,18 +134,16 @@ class GodotEnv:
 
         # actions can be "single" for a single action head
         # or "multi" for several outputeads
-        if json_dict["action_space"]["num_spaces"] == "single":
-            n_actions = json_dict["action_space"]["size"]
-            if json_dict["action_space"]["action_type"] == "discrete":
-                self.action_space = spaces.Discrete(n_actions)
-            elif json_dict["action_space"]["action_type"] == "continuous":
-                self.action_space = spaces.Box(
-                    low=-1.0, high=1.0, shape=(n_actions,)
+        action_spaces = {}
+        print("action space", json_dict["action_space"])
+        for k, v in json_dict["action_space"].items():
+            if v["action_type"] == "discrete":
+                action_spaces[k] = spaces.Discrete(v["size"])
+            elif v["action_type"] == "continuous":
+                action_spaces[k] = spaces.Box(
+                    low=-1.0, high=1.0, shape=(v["size"],)
                 )
-        else:
-            # TODO: implement multiple actions
-            raise NotImplementedError
-
+        self.action_space = spaces.Dict(action_spaces)
         self.observation_space = spaces.Box(
             low=-1.0, high=1.0, shape=(json_dict["obs_size"],), dtype=np.float32
         )
