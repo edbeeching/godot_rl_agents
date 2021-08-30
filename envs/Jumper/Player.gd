@@ -103,8 +103,8 @@ func reset():
     best_goal_distance = translation.distance_to(end_position.translation)
     
 func set_action(action):
-    move_action = action[0]
-    jump_action = action[1] > 0.0
+    move_action = action["move"][0]
+    jump_action = action["jump"] == 1
     
 func reset_if_done():
     if done:
@@ -154,29 +154,15 @@ func get_obs_size():
    
 func get_action_space():
     return {
-        "num_spaces": "single",
-        "size": 2,
-        "action_type":"continuous"
+        "move" : {
+             "size": 1,
+            "action_type": "continuous"
+           },
+        "jump": {
+            "size": 2,
+            "action_type": "discrete"
+           }
        }
-    
-#        {
-#        "num": "multi",
-#        "0":{
-#        "num": "single",
-#        "size": 1,
-#        "type":"continuous"
-#           },
-#        "1":{
-#            "num": "single",
-#            "size": 1,
-#            "type":"discrete"
-#           }
-    
-func get_action_size():
-    return 2
-    
-func get_action_type():
-    return "continuous"
 
 func get_done():
     return done

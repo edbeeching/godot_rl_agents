@@ -75,8 +75,7 @@ func _send_env_info():
     var message = {
         "type" : "env_info",
         "obs_size": agents[0].get_obs_size(),
-        "action_size": agents[0].get_action_size(),
-        "action_type": agents[0].get_action_type(),
+        "action_space":agents[0].get_action_space(),
         "n_agents": len(agents)
        }
     _send_dict_as_json_message(message)

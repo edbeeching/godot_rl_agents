@@ -99,8 +99,8 @@ func get_direction():
     return direction
     
 func set_action(action):
-    _action.x = action[0]
-    _action.y = action[1]
+    _action.x = action["move"][0]
+    _action.y = action["move"][1]
     
 func reset_if_done():
     if done:
@@ -156,11 +156,13 @@ func set_heuristic(heuristic):
 func get_obs_size():
     return len(get_obs())
     
-func get_action_size():
-    return 2
-    
-func get_action_type():
-    return "continuous"
+func get_action_space():
+    return {
+        "move" : {
+             "size": 2,
+            "action_type": "continuous"
+           }
+       }   
 
 func get_done():
     return done
