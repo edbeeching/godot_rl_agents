@@ -1,0 +1,221 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Player.gd" type="Script" id=1]
+[ext_resource path="res://RaycastSensor.gd" type="Script" id=2]
+
+[sub_resource type="CapsuleShape" id=4]
+
+[sub_resource type="CapsuleMesh" id=5]
+
+[sub_resource type="SpatialMaterial" id=9]
+albedo_color = Color( 0.109804, 0.317647, 0.458824, 1 )
+
+[sub_resource type="Environment" id=8]
+ambient_light_color = Color( 0.847059, 0.796078, 0.796078, 1 )
+
+[sub_resource type="BoxShape" id=10]
+extents = Vector3( 20, 1, 1000 )
+
+[sub_resource type="CubeMesh" id=6]
+size = Vector3( 8, 2, 8 )
+
+[sub_resource type="BoxShape" id=7]
+extents = Vector3( 4, 1, 4 )
+
+[sub_resource type="BoxShape" id=11]
+extents = Vector3( 4, 1, 4 )
+
+[node name="Spatial" type="Spatial"]
+
+[node name="Player" type="KinematicBody" parent="." groups=[
+"AGENT",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0 )
+script = ExtResource( 1 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Player"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
+shape = SubResource( 4 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Player"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
+mesh = SubResource( 5 )
+material/0 = SubResource( 9 )
+
+[node name="Camera" type="Camera" parent="Player"]
+transform = Transform( 1, -1.54268e-08, 5.75737e-08, 0, 0.965926, 0.258819, -5.96046e-08, -0.258819, 0.965926, 0, 4, 10 )
+environment = SubResource( 8 )
+current = true
+
+[node name="RaycastSensor" type="Spatial" parent="Player"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -1 )
+script = ExtResource( 2 )
+
+[node name="RayCast" type="RayCast" parent="Player/RaycastSensor"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.76837e-07, 0 )
+enabled = true
+cast_to = Vector3( 0, 20, 0 )
+
+[node name="RayCast2" type="RayCast" parent="Player/RaycastSensor"]
+transform = Transform( 1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, -4.76837e-07, 0 )
+enabled = true
+cast_to = Vector3( 0, 20, 0 )
+
+[node name="RayCast3" type="RayCast" parent="Player/RaycastSensor"]
+transform = Transform( 1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, -4.76837e-07, 0 )
+enabled = true
+cast_to = Vector3( 0, 20, 0 )
+
+[node name="RayCast4" type="RayCast" parent="Player/RaycastSensor"]
+transform = Transform( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, -4.76837e-07, 0 )
+enabled = true
+cast_to = Vector3( 0, 20, 0 )
+
+[node name="RayCast5" type="RayCast" parent="Player/RaycastSensor"]
+transform = Transform( 1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, -4.76837e-07, 0 )
+enabled = true
+cast_to = Vector3( 0, 20, 0 )
+
+[node name="RayCast6" type="RayCast" parent="Player/RaycastSensor"]
+transform = Transform( 1, 0, 0, 0, 0.258819, 0.965926, 0, -0.965926, 0.258819, 0, -4.76837e-07, 0 )
+enabled = true
+cast_to = Vector3( 0, 20, 0 )
+
+[node name="RayCast7" type="RayCast" parent="Player/RaycastSensor"]
+transform = Transform( 1, 0, 0, 0, -5.96046e-08, 1, 0, -1, -5.96046e-08, 0, -4.76837e-07, 0 )
+enabled = true
+cast_to = Vector3( 0, 20, 0 )
+
+[node name="RayCast8" type="RayCast" parent="Player/RaycastSensor"]
+transform = Transform( 1, 0, 0, 0, -0.258819, 0.965926, 0, -0.965926, -0.258819, 0, -4.76837e-07, 0 )
+enabled = true
+cast_to = Vector3( 0, 20, 0 )
+
+[node name="RayCast9" type="RayCast" parent="Player/RaycastSensor"]
+transform = Transform( 1, 0, 0, 0, -0.5, 0.866025, 0, -0.866025, -0.5, 0, -4.76837e-07, 0 )
+enabled = true
+cast_to = Vector3( 0, 20, 0 )
+
+[node name="RayCast10" type="RayCast" parent="Player/RaycastSensor"]
+transform = Transform( 1, 0, 0, 0, -0.707107, 0.707107, 0, -0.707107, -0.707107, 0, -4.76837e-07, 0 )
+enabled = true
+cast_to = Vector3( 0, 20, 0 )
+
+[node name="RayCast11" type="RayCast" parent="Player/RaycastSensor"]
+transform = Transform( 1, 0, 0, 0, -0.866025, 0.5, 0, -0.5, -0.866025, 0, -4.76837e-07, 0 )
+enabled = true
+cast_to = Vector3( 0, 20, 0 )
+
+[node name="RayCast12" type="RayCast" parent="Player/RaycastSensor"]
+transform = Transform( 1, 0, 0, 0, -0.965926, 0.258819, 0, -0.258819, -0.965926, 0, -4.76837e-07, 0 )
+enabled = true
+cast_to = Vector3( 0, 20, 0 )
+
+[node name="RayCast13" type="RayCast" parent="Player/RaycastSensor"]
+transform = Transform( 1, 0, 0, 0, -1, -5.96046e-08, 0, 5.96046e-08, -1, 0, -4.76837e-07, 0 )
+enabled = true
+cast_to = Vector3( 0, 20, 0 )
+
+[node name="DirectionalLight2" type="DirectionalLight" parent="."]
+transform = Transform( 1, 0, 0, 0, -0.258819, 0.965926, 0, -0.965926, -0.258819, 0, 21, 29 )
+shadow_enabled = true
+
+[node name="ResetTriggerBox" type="Area" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -17, 0 )
+
+[node name="CollisionShape" type="CollisionShape" parent="ResetTriggerBox"]
+shape = SubResource( 10 )
+
+[node name="Pads" type="Spatial" parent="."]
+
+[node name="StaticBody4" type="StaticBody" parent="Pads"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 3.6, 0, 2, -61 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Pads/StaticBody4"]
+mesh = SubResource( 6 )
+material/0 = null
+
+[node name="CollisionShape" type="CollisionShape" parent="Pads/StaticBody4"]
+shape = SubResource( 7 )
+
+[node name="StaticBody2" type="StaticBody" parent="Pads"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 3.8, 0, 2, -10 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Pads/StaticBody2"]
+mesh = SubResource( 6 )
+material/0 = null
+
+[node name="CollisionShape" type="CollisionShape" parent="Pads/StaticBody2"]
+shape = SubResource( 7 )
+
+[node name="StaticBody3" type="StaticBody" parent="Pads"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -36 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Pads/StaticBody3"]
+mesh = SubResource( 6 )
+material/0 = null
+
+[node name="CollisionShape" type="CollisionShape" parent="Pads/StaticBody3"]
+shape = SubResource( 7 )
+
+[node name="StaticBody5" type="StaticBody" parent="Pads"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 2.6, 0, 2, -89 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Pads/StaticBody5"]
+mesh = SubResource( 6 )
+material/0 = null
+
+[node name="CollisionShape" type="CollisionShape" parent="Pads/StaticBody5"]
+shape = SubResource( 7 )
+
+[node name="StaticBody6" type="StaticBody" parent="Pads"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 2.8, 0, 2, -117 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Pads/StaticBody6"]
+mesh = SubResource( 6 )
+material/0 = null
+
+[node name="CollisionShape" type="CollisionShape" parent="Pads/StaticBody6"]
+shape = SubResource( 7 )
+
+[node name="StaticBody7" type="StaticBody" parent="Pads"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -138 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Pads/StaticBody7"]
+mesh = SubResource( 6 )
+material/0 = null
+
+[node name="CollisionShape" type="CollisionShape" parent="Pads/StaticBody7"]
+shape = SubResource( 7 )
+
+[node name="StaticBody8" type="StaticBody" parent="Pads"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -153 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Pads/StaticBody8"]
+mesh = SubResource( 6 )
+material/0 = null
+
+[node name="CollisionShape" type="CollisionShape" parent="Pads/StaticBody8"]
+shape = SubResource( 7 )
+
+[node name="StaticBody9" type="StaticBody" parent="Pads"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -166 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Pads/StaticBody9"]
+mesh = SubResource( 6 )
+material/0 = null
+
+[node name="CollisionShape" type="CollisionShape" parent="Pads/StaticBody9"]
+shape = SubResource( 7 )
+
+[node name="EndTrigger" type="Area" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -166 )
+
+[node name="CollisionShape" type="CollisionShape" parent="EndTrigger"]
+shape = SubResource( 11 )
+
+[node name="EndPosition" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, -191 )
+
+[connection signal="body_entered" from="ResetTriggerBox" to="Player" method="_on_Area_body_entered"]
+[connection signal="body_entered" from="EndTrigger" to="Player" method="_on_EndTrigger_body_entered"]
