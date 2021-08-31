@@ -7,6 +7,7 @@ extends KinematicBody2D
 const pad = 100
 const WIDTH = 1280
 const HEIGHT = 720
+const MAX_FRUIT = 10
 var _bounds := Rect2(pad,pad,WIDTH-2*pad,HEIGHT-2*pad)
 
 export var speed := 500
@@ -22,7 +23,7 @@ var fruit_just_entered = false
 var just_hit_wall = false
 var done = false
 var best_fruit_distance = 10000.0
-
+var fruit_count = 0
 var n_steps = 0
 var max_steps = 500
 
@@ -51,11 +52,12 @@ func reset():
     fruit_just_entered = false
     just_hit_wall = false
     done = false
+    fruit_count = 0
     _velocity = Vector2.ZERO
     _action = Vector2.ZERO
     
     position = _calculate_new_position()
-    fruit.position = _calculate_new_position()
+    spawn_fruit()
     
 #    position.x = rand_range(_bounds.position.x, _bounds.end.x)
 #    position.y = rand_range(_bounds.position.y, _bounds.end.y)	
@@ -167,26 +169,30 @@ func get_action_space():
 func get_done():
     return done
 
-func _on_Fruit_body_entered(body):
-    done = true
+func spawn_fruit():
+    fruit.position = _calculate_new_position()
+
+func fruit_collected():
     fruit_just_entered = true
+    fruit_count += 1
+    spawn_fruit()
+    if fruit_count > MAX_FRUIT:
+        done = true
+
+    
+func wall_hit():
+    done = true
+    just_hit_wall = true
+
+func _on_Fruit_body_entered(body):
+    fruit_collected()
 
 
 func _on_LeftWall_body_entered(body):
-    done = true
-    just_hit_wall = true
-
-
+    wall_hit()
 func _on_RightWall_body_entered(body):
-    done = true
-    just_hit_wall = true
-
-
+    wall_hit()
 func _on_TopWall_body_entered(body):
-    done = true
-    just_hit_wall = true
-
-
+    wall_hit()
 func _on_BottomWall_body_entered(body):
-    done = true
-    just_hit_wall = true
+   wall_hit()
