@@ -5,36 +5,47 @@ import pytest
 @pytest.mark.parametrize(
     "env_path,port",
     [
-        ("envs/build/BallChase/ball_chase.x86_64", 11008),
-        ("envs/build/BallChase/jumper.x86_64", 11009),
+        (
+            "envs/example_envs/builds/BallChase/ball_chase.x86_64",
+            12008,
+        ),
+        (
+            "envs/example_envs/builds/Jumper/jumper.x86_64",
+            12009,
+        ),
+        (
+            "envs/test_envs/builds/test_env_identity/TestEnvIdentity.x86_64",
+            12010,
+        ),
     ],
 )
 def test_env(env_path, port):
-    env = GodotEnv(env_path=env_path)
+    env = GodotEnv(env_path=env_path, port=port)
 
     action_space = env.action_space
     observation_space = env.observation_space
     n_envs = env.num_envs
 
-    obs = env.reset()
-    assert len(obs) == n_envs
+    for j in range(2):
+        obs = env.reset()
+        assert len(obs) == n_envs
+        for i in range(10):
+            action = [action_space.sample() for _ in range(n_envs)]
+            obs, reward, done, info = env.step(action)
 
-    obs, reward, done, info = env.step()
+            assert len(obs) == n_envs
+            assert len(reward) == n_envs
+            assert len(done) == n_envs
+            assert len(info) == n_envs
 
-    assert len(obs) == n_envs
-    assert len(reward) == n_envs
-    assert len(done) == n_envs
-    assert len(info) == n_envs
-
-    assert isinstance(
-        reward[0], (float)
-    ), "The reward returned by 'step()' must be a float"
-    assert isinstance(done[0], (bool)), "The 'done' signal must be a boolean"
-    assert isinstance(
-        info[0], (dict)
-    ), "The 'info' returned by 'step()' must be a python dictionary"
-
-    # check n-envs
-    # check reset returns an obs
+            assert isinstance(
+                reward[0], (float, int)
+            ), f"The reward returned by 'step()' must be a float or int, and is {reward[0]} of type {type(reward[0])}"
+            assert isinstance(
+                done[0], bool
+            ), f"The 'done' signal {done[0]}  {type(done[0])} must be a boolean"
+            assert isinstance(
+                info[0], dict
+            ), "The 'info' returned by 'step()' must be a python dictionary"
 
     env.close()
