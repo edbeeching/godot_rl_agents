@@ -22,13 +22,13 @@ if __name__ == "__main__":
             config=c,
             port=c.worker_index + 12010,
             show_window=True,
-            framerate=30,
+            framerate=None,
         ),
     )
     config = {
         "env": "godot",
         "env_config": {
-            "filename": "envs/build/BallChase/ball_chase.x86_64",
+            "filename": "envs/example_envs/builds/Jumper/jumper.x86_64",
             # "filename": None,
             "seed": None,
         },

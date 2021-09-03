@@ -4,6 +4,7 @@ import socket
 import json
 import numpy as np
 from gym import spaces
+import atexit
 
 
 class GodotEnv:
@@ -17,7 +18,7 @@ class GodotEnv:
         port=11008,
         show_window=False,
         seed=0,
-        framerate=60,
+        framerate=None,
     ):
         if env_path is None:
             port = GodotEnv.DEFAULT_PORT
@@ -34,6 +35,8 @@ class GodotEnv:
         self.num_envs = None
         self._handshake()
         self._get_env_info()
+
+        atexit.register(self._close)
 
     def from_numpy(self, action):
         result = []
@@ -60,7 +63,7 @@ class GodotEnv:
         return (
             np.array(response["obs"]),
             response["reward"],
-            np.array(response["done"]),
+            np.array(response["done"]).tolist(),
             [{}] * len(response["done"]),
         )
 
@@ -86,13 +89,25 @@ class GodotEnv:
         print("close message sent")
         time.sleep(1.0)
         self.connection.close()
+        try:
+            atexit.unregister(self._close)
+        except Exception as e:
+            print("exception unregistering close method", e)
+
+    def _close(self):
+        print("exit was not clean, using atexit to close env")
+        self.close()
 
     def _launch_env(self, env_path, port, show_window, framerate):
         # --fixed-fps {framerate}
-        launch_cmd = f"{env_path} --port={port} -fixed-fps {framerate}"
+        launch_cmd = f"{env_path} --port={port}"
+
         if show_window == False:
             launch_cmd += " --disable-render-loop --no-window"
+        if framerate is not None:
+            launch_cmd += f" --fixed-fps {framerate}"
         launch_cmd = launch_cmd.split(" ")
+        print(launch_cmd)
         self.proc = subprocess.Popen(
             launch_cmd,
             start_new_session=True,
