@@ -1,6 +1,6 @@
 extends Node
 # --fixed-fps 2000 --disable-render-loop
-var action_repeat = 8
+export var action_repeat := 8
 var n_action_steps = 0
 
 const MAJOR_VERSION := "0"
