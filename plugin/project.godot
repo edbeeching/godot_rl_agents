@@ -11,11 +11,12 @@ config_version=4
 [application]
 
 config/name="GodotRLAgents"
+run/main_scene="res://GodotRLAgents.tscn"
 config/icon="res://icon.png"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/godel_rl_agents/plugin.cfg", "res://addons/godot_rl_agents/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/godot_rl_agents/plugin.cfg" )
 
 [physics]
 

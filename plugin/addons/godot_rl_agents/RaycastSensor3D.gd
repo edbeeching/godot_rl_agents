@@ -21,5 +21,5 @@ func _get_raycast_distance(rc : RayCast) -> float :
         return 0.0
          
     var distance = (get_translation() - rc.get_collision_point()).length()
-    distance = clamp(distance, 0.0, 200.0)
-    return (200.0 - distance) / 200.0
+    distance = clamp(distance, 0.0, 40.0)
+    return (40.0 - distance) / 40.0
