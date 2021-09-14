@@ -38,7 +38,7 @@ func get_obs() -> Array:
     return obs
 
 func get_reward() -> float:
-    return float(_action == state)*0.1
+    return float(_action == state)
     
      
 func get_action_space():
