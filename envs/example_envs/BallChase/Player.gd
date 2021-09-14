@@ -28,6 +28,11 @@ var fruit_count = 0
 var n_steps = 0
 var max_steps = 500
 
+onready var emitter = $"../Particles2D"
+
+func emit():
+    emitter.set_position(fruit.position)
+    emitter.set_emitting(true) 
 
 func _ready():
     reset()
@@ -173,6 +178,7 @@ func spawn_fruit():
     fruit.position = _calculate_new_position()
 
 func fruit_collected():
+    emit()
     fruit_just_entered = true
     fruit_count += 1
     spawn_fruit()
