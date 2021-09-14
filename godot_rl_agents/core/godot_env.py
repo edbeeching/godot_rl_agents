@@ -136,7 +136,7 @@ class GodotEnv:
         print(launch_cmd)
         self.proc = subprocess.Popen(
             launch_cmd,
-            # start_new_session=True,
+            start_new_session=True,
             # shell=True,
         )
 
@@ -153,8 +153,9 @@ class GodotEnv:
 
         # Listen for incoming connections
         sock.listen(1)
+        sock.settimeout(GodotEnv.DEFAULT_TIMEOUT)
         connection, client_address = sock.accept()
-        connection.settimeout(GodotEnv.DEFAULT_TIMEOUT)
+        # connection.settimeout(GodotEnv.DEFAULT_TIMEOUT)
         #        connection.setblocking(False) TODO
         print("connection established")
         return connection
