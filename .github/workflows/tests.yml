@@ -22,5 +22,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install tox tox-gh-actions
+    - name: Required for headless testing of Godot envs
+      uses: GabrielBB/xvfb-action@v1
     - name: Test with tox
       run: tox
