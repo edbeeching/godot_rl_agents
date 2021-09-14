@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://addons/godot_rl_agents/RaycastSensor2D.tscn" type="PackedScene" id=2]
@@ -30,6 +30,38 @@ extents = Vector2( 620, 10 )
 [sub_resource type="RectangleShape2D" id=8]
 extents = Vector2( 29.169, 143.153 )
 
+[sub_resource type="Environment" id=9]
+background_mode = 4
+tonemap_mode = 3
+glow_enabled = true
+glow_levels/1 = true
+glow_levels/2 = true
+glow_levels/3 = false
+glow_levels/4 = true
+glow_levels/5 = false
+glow_intensity = 0.1
+glow_strength = 1.17
+glow_bloom = 0.09
+glow_blend_mode = 0
+
+[sub_resource type="ParticlesMaterial" id=10]
+emission_shape = 1
+emission_sphere_radius = 1.0
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 500.0
+initial_velocity_random = 0.24
+orbit_velocity = 0.0
+orbit_velocity_random = 1.0
+angle = -88.9
+angle_random = 1.0
+scale = 12.0
+scale_random = 0.2
+color = Color( 0.51086, 0.1804, 0.82, 1 )
+hue_variation = 0.2
+hue_variation_random = 0.2
+
 [node name="BallChase" type="Node2D"]
 
 [node name="Player" type="KinematicBody2D" parent="." groups=[
@@ -44,7 +76,7 @@ shape = SubResource( 1 )
 [node name="Trail2D" type="Line2D" parent="Player"]
 width = 64.0
 width_curve = SubResource( 2 )
-default_color = Color( 0.141176, 0.537255, 0.776471, 1 )
+default_color = Color( 0.886275, 0.952941, 0.894118, 1 )
 sharp_limit = 4.0
 antialiased = true
 script = ExtResource( 4 )
@@ -56,7 +88,7 @@ segments = 100
 script = ExtResource( 3 )
 centered = true
 num_sides = 16
-polygon_color = Color( 0.141176, 0.537255, 0.776471, 1 )
+polygon_color = Color( 0.886275, 0.952941, 0.894118, 1 )
 border_size = 0.0
 collision_shape = false
 
@@ -74,7 +106,8 @@ shape = SubResource( 3 )
 script = ExtResource( 3 )
 centered = true
 num_sides = 16
-polygon_color = Color( 0.776471, 0.141176, 0.619608, 1 )
+polygon_color = Color( 0.933333, 0.301961, 0.552941, 1 )
+border_size = 0.0
 collision_shape = false
 
 [node name="Walls" type="Node2D" parent="."]
@@ -90,6 +123,7 @@ margin_left = -10.0
 margin_top = -360.0
 margin_right = 10.0
 margin_bottom = 360.0
+color = Color( 0.27451, 0.529412, 0.560784, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -105,6 +139,7 @@ margin_left = -10.0
 margin_top = -360.0
 margin_right = 10.0
 margin_bottom = 360.0
+color = Color( 0.27451, 0.529412, 0.560784, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -120,6 +155,7 @@ margin_left = -620.0
 margin_top = -10.0
 margin_right = 620.0
 margin_bottom = 10.0
+color = Color( 0.27451, 0.529412, 0.560784, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -135,6 +171,7 @@ margin_left = -620.0
 margin_top = -10.0
 margin_right = 620.0
 margin_bottom = 10.0
+color = Color( 0.27451, 0.529412, 0.560784, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -150,6 +187,7 @@ margin_left = -35.0
 margin_top = -143.0
 margin_right = 29.0
 margin_bottom = 153.0
+color = Color( 0.27451, 0.529412, 0.560784, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -165,22 +203,36 @@ margin_left = -35.0
 margin_top = -143.0
 margin_right = 29.0
 margin_bottom = 153.0
+color = Color( 0.27451, 0.529412, 0.560784, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="BackGround" type="CanvasLayer" parent="."]
+layer = -2
 
 [node name="ColorRect" type="ColorRect" parent="BackGround"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0.172549, 0.172549, 0.172549, 1 )
+color = Color( 0.2, 0.172549, 0.313726, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 9 )
+
+[node name="Particles2D" type="Particles2D" parent="."]
+position = Vector2( 617.202, 244.87 )
+emitting = false
+amount = 64
+lifetime = 0.2
+one_shot = true
+explosiveness = 0.56
+process_material = SubResource( 10 )
+
 [connection signal="body_entered" from="Fruit" to="Player" method="_on_Fruit_body_entered"]
+[connection signal="body_entered" from="Fruit" to="Fruit" method="_on_Fruit_body_entered"]
 [connection signal="body_entered" from="Walls/LeftWall" to="Player" method="_on_LeftWall_body_entered"]
 [connection signal="body_entered" from="Walls/RightWall" to="Player" method="_on_RightWall_body_entered"]
 [connection signal="body_entered" from="Walls/TopWall" to="Player" method="_on_TopWall_body_entered"]
