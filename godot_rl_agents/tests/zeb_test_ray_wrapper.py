@@ -28,7 +28,7 @@ if __name__ == "__main__":
     config = {
         "env": "godot",
         "env_config": {
-            "filename": "envs/example_envs/builds/Jumper/jumper.x86_64",
+            "filename": "envs/example_envs/builds/JumperHard/jumper_hard.x86_64",
             # "filename": None,
             "seed": None,
         },
@@ -51,7 +51,7 @@ if __name__ == "__main__":
         "clip_param": 0.2,
         "entropy_coeff": 0.001,
         "model": {
-            "fcnet_hiddens": [64, 64],
+            "fcnet_hiddens": [256, 256],
         },
         "framework": "torch",
         "no_done_at_end": True,
