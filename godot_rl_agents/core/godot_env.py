@@ -1,4 +1,8 @@
+import os
 import time
+import pathlib
+
+from sys import platform
 import subprocess
 import socket
 import json
@@ -20,10 +24,12 @@ class GodotEnv:
         seed=0,
         framerate=None,
     ):
+
         if env_path is None:
             port = GodotEnv.DEFAULT_PORT
         self.proc = None
         if env_path is not None:
+            self.check_platform(env_path)
             self._launch_env(env_path, port, show_window, framerate)
         else:
             print(
@@ -37,6 +43,25 @@ class GodotEnv:
         self._get_env_info()
 
         atexit.register(self._close)
+
+    def check_platform(self, filename: str):
+
+        if platform == "linux" or platform == "linux2":
+            assert (
+                pathlib.Path(filename).suffix == ".x86_64"
+            ), f"incorrect file suffix for fileman {filename} suffix {pathlib.Path(filename).suffix }"
+        elif platform == "darwin":
+            assert 0, "mac is not supported, yet"
+            # OS X
+        elif platform == "win32":
+            # Windows...
+            assert (
+                pathlib.Path(filename).suffix == ".exe"
+            ), f"incorrect file suffix for fileman {filename} suffix {pathlib.Path(filename).suffix }"
+        else:
+            assert 0, f"unknown filetype {pathlib.Path(filename).suffix}"
+
+        assert os.path.exists(filename)
 
     def from_numpy(self, action):
         result = []
@@ -110,7 +135,8 @@ class GodotEnv:
         print(launch_cmd)
         self.proc = subprocess.Popen(
             launch_cmd,
-            start_new_session=True,
+            # start_new_session=True,
+            # shell=True,
         )
 
     def _start_server(self):
