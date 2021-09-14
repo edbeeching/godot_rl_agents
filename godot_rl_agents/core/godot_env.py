@@ -15,6 +15,7 @@ class GodotEnv:
     MAJOR_VERSION = "0"
     MINOR_VERSION = "1"
     DEFAULT_PORT = 11008
+    DEFAULT_TIMEOUT = 60
 
     def __init__(
         self,
@@ -153,6 +154,7 @@ class GodotEnv:
         # Listen for incoming connections
         sock.listen(1)
         connection, client_address = sock.accept()
+        connection.settimeout(GodotEnv.DEFAULT_TIMEOUT)
         #        connection.setblocking(False) TODO
         print("connection established")
         return connection
@@ -217,13 +219,18 @@ class GodotEnv:
         self.connection.setblocking(True)
 
     def _get_data(self):
-        data = self.connection.recv(4)
-        if not data:
-            time.sleep(0.000001)
-            return self._get_data()
-        length = int.from_bytes(data, "little")
-        string = self.connection.recv(length).decode()
-        return string
+        try:
+            data = self.connection.recv(4)
+            if not data:
+                time.sleep(0.000001)
+                return self._get_data()
+            length = int.from_bytes(data, "little")
+            string = self.connection.recv(length).decode()
+            return string
+        except socket.timeout as e:
+            print("env timed out", e)
+
+        return None
 
     def _send_string(self, string):
         message = len(string).to_bytes(4, "little") + bytes(string.encode())
