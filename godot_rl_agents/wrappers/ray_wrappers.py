@@ -21,7 +21,7 @@ class RayVectorGodotEnv(VectorEnv):
         port=10008,
         seed=0,
         show_window=False,
-        framerate=60,
+        framerate=None,
         timeout_wait=60,
         config=None,
     ) -> None:
