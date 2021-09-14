@@ -15,14 +15,16 @@ This document provides non-exaustive list of features the will be implemented in
 - [ ] Training with Stable baselines 3
 - [ ] Command line interface for training
 - [ ] Testing with pytest
-  - [ ] Simple test envs: Identity learning, bandits, etc
+  - [ ] Simple test envs: 
+    - [x] Identity learning, 
+    - [ ] bandits, etc
 - [ ] Discrete, continous and combinations of the two
 - [x] Automatic port choice with CLA
 - [ ] Examples 
 - [ ] Installation instuctions
 - [x] Compiled envs at higher framerates
-- [ ] Benchmarking of env interaction speed
-- [ ] Godot RL Agents Plugin
+- [x] Benchmarking of env interaction speed
+- [x] Godot RL Agents Plugin
 
 
 ## Version 0.2
