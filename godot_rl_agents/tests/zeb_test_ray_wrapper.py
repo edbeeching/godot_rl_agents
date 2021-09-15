@@ -10,21 +10,13 @@ from ray.rllib.agents import impala
 
 from ray.tune.logger import pretty_print
 import ray.rllib.agents.ppo as ppo
-from godot_rl_agents.wrappers.ray_wrappers import RayVectorGodotEnv
+from godot_rl_agents.core.utils import register_env
 
 
 if __name__ == "__main__":
     ray.init()
-    tune.register_env(
-        "godot",
-        lambda c: RayVectorGodotEnv(
-            env_path=c["filename"],
-            config=c,
-            port=c.worker_index + 12010,
-            show_window=True,
-            framerate=None,
-        ),
-    )
+    register_env()
+
     config = {
         "env": "godot",
         "env_config": {
