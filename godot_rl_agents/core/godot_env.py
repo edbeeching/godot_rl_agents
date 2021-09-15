@@ -133,8 +133,6 @@ class GodotEnv:
         if framerate is not None:
             launch_cmd += f" --fixed-fps {framerate}"
         launch_cmd = launch_cmd.split(" ")
-        print(launch_cmd)
-        print(os.listdir(os.curdir))
         self.proc = subprocess.Popen(
             launch_cmd,
             start_new_session=True,
