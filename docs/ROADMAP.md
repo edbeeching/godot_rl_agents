@@ -4,11 +4,11 @@ This document provides non-exaustive list of features the will be implemented in
 ## Version 0.1 (beta release)
 
 - [ ] 3 Example games
-  - [x] Ball Change (2D)
+  - [x] Ball Chase (2D)
   - [x] Jumper (3D)
   - [ ] Flyer (3D)
 - [ ] Polish of example games
-  - [ ] Ball Change (2D)
+  - [x] Ball Chase (2D)
   - [ ] Jumper (3D)
   - [ ] Flyer (3D)
 - [x] Training with Ray RLLib
@@ -16,9 +16,9 @@ This document provides non-exaustive list of features the will be implemented in
 - [ ] Command line interface for training
 - [ ] Testing with pytest
   - [ ] Simple test envs: 
-    - [x] Identity learning, 
+    - [x] Identity learning
     - [ ] bandits, etc
-- [ ] Discrete, continous and combinations of the two
+- [x] Discrete, continous and combinations of the two
 - [x] Automatic port choice with CLA
 - [ ] Examples 
 - [ ] Installation instuctions
@@ -30,14 +30,14 @@ This document provides non-exaustive list of features the will be implemented in
 ## Version 0.2
 - [ ] Variable sized observations (Attention over)
 - [ ] Memory-based agents
-- [ ] Continuous integration with Travis
+- [x] Continuous integration with Travis
 - [ ] Load trained model inside Godot Engine for inference (C# lib for torch)
 - [ ] Extend the 2D and 3D sensor plugins
 ## Version 0.3
 
 - [ ] Multi-agent
 - [ ] C# implementations of sync GDScript code
-- [ ] Camera observations, CNN fo trainig
+- [ ] Camera observations, CNN fo training
 ## Version 0.4
 ## Version 0.5
 ## Version 0.6
