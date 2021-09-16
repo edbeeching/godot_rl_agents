@@ -1,53 +1,109 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Plane.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/texture_08.png" type="Texture" id=2]
 [ext_resource path="res://Plane.gd" type="Script" id=3]
+[ext_resource path="res://PlaneModel.gd" type="Script" id=4]
+[ext_resource path="res://Goal.tscn" type="PackedScene" id=5]
 
-[sub_resource type="SphereMesh" id=1]
-
-[sub_resource type="SpatialMaterial" id=2]
-
-[sub_resource type="SpatialMaterial" id=3]
+[sub_resource type="SpatialMaterial" id=1]
 flags_world_triplanar = true
 albedo_texture = ExtResource( 2 )
 uv1_scale = Vector3( 0.5, 0.5, 0.5 )
 uv1_triplanar = true
 
+[sub_resource type="CylinderShape" id=2]
+height = 7.77792
+
 [node name="TestPlane" type="Spatial"]
-
-[node name="MeshInstance" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 18.4812 )
-visible = false
-mesh = SubResource( 1 )
-material/0 = SubResource( 2 )
-
-[node name="Plane" parent="." instance=ExtResource( 1 )]
-transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 34.4356, -3 )
-script = ExtResource( 3 )
-
-[node name="Propeller_1" parent="Plane/RootNode (gltf orientation matrix)/RootNode (model correction matrix)/12cc6a9ff2ae45b08826ba235d9cb8b7fbx/Node/RootNode" index="0"]
-transform = Transform( 0.133918, 0.990992, 0, -0.990992, 0.133918, 0, 0, 0, 1, 0.873349, -46.0248, 401.434 )
-
-[node name="AnimationPlayer" parent="Plane" index="1"]
-method_call_mode = 1
-
-[node name="Camera" type="Camera" parent="Plane"]
-transform = Transform( -100, -4.17272e-06, 2.13795e-13, -4.03054e-06, 96.5926, 25.8819, -1.07998e-06, 25.8819, -96.5926, 0, 400, -1339.93 )
 
 [node name="CSGCombiner" type="CSGCombiner" parent="."]
 
+[node name="Goals" type="Node" parent="CSGCombiner"]
+
+[node name="Goal" parent="CSGCombiner/Goals" instance=ExtResource( 5 )]
+
+[node name="Goal2" parent="CSGCombiner/Goals" instance=ExtResource( 5 )]
+transform = Transform( 0.965926, 0.258819, 1.13133e-08, 0, -4.37114e-08, 1, 0.258819, -0.965926, -4.2222e-08, 0, 34, -75 )
+
+[node name="Goal3" parent="CSGCombiner/Goals" instance=ExtResource( 5 )]
+transform = Transform( 0.707107, 0.707107, 3.09086e-08, 0, -4.37114e-08, 1, 0.707107, -0.707107, -3.09086e-08, 70, 34, -134 )
+
 [node name="CSGBox" type="CSGBox" parent="CSGCombiner"]
-width = 100.0
+width = 1000.0
 height = 1.0
-depth = 100.0
-material = SubResource( 3 )
+depth = 1000.0
+material = SubResource( 1 )
 
-[node name="CSGTorus" type="CSGTorus" parent="CSGCombiner"]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 34, 11 )
-inner_radius = 8.0
-outer_radius = 10.0
-sides = 16
-ring_sides = 4
+[node name="CSGBox2" type="CSGBox" parent="CSGCombiner"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 53, 26, 0 )
+width = 10.0
+height = 50.0
+depth = 10.0
 
-[editable path="Plane"]
+[node name="CSGBox3" type="CSGBox" parent="CSGCombiner"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -106, 26, 0 )
+width = 10.0
+height = 50.0
+depth = 10.0
+
+[node name="CSGBox4" type="CSGBox" parent="CSGCombiner"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 153, 26, 89 )
+width = 10.0
+height = 50.0
+depth = 10.0
+
+[node name="CSGBox5" type="CSGBox" parent="CSGCombiner"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 26, 357 )
+width = 10.0
+height = 50.0
+depth = 10.0
+
+[node name="CSGBox6" type="CSGBox" parent="CSGCombiner"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -275, 26, -228 )
+width = 10.0
+height = 50.0
+depth = 10.0
+
+[node name="CSGBox7" type="CSGBox" parent="CSGCombiner"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 26, -210 )
+width = 10.0
+height = 50.0
+depth = 10.0
+
+[node name="CSGBox8" type="CSGBox" parent="CSGCombiner"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -74, 26, 91 )
+width = 10.0
+height = 50.0
+depth = 10.0
+
+[node name="CSGBox9" type="CSGBox" parent="CSGCombiner"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 53, 26, 315 )
+width = 10.0
+height = 50.0
+depth = 10.0
+
+[node name="Plane" type="KinematicBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 33, 0 )
+script = ExtResource( 3 )
+turn_speed = 2.0
+level_speed = 2.0
+
+[node name="PlaneModel" parent="Plane" instance=ExtResource( 1 )]
+script = ExtResource( 4 )
+
+[node name="Propeller_1" parent="Plane/PlaneModel/RootNode (gltf orientation matrix)/RootNode (model correction matrix)/12cc6a9ff2ae45b08826ba235d9cb8b7fbx/Node/RootNode" index="0"]
+transform = Transform( 0.133918, 0.990992, 0, -0.990992, 0.133918, 0, 0, 0, 1, 0.873349, -46.0248, 401.434 )
+
+[node name="AnimationPlayer" parent="Plane/PlaneModel" index="1"]
+method_call_mode = 1
+
+[node name="CollisionShape" type="CollisionShape" parent="Plane"]
+transform = Transform( 1, 0, 0, 0, -0.00176279, -0.999998, 0, 0.999998, -0.00176279, 0, -0.43198, 0.299141 )
+shape = SubResource( 2 )
+
+[node name="Camera" type="Camera" parent="Plane"]
+transform = Transform( 1, 1.91005e-08, 8.4444e-08, -4.03054e-08, 0.965926, 0.258819, -7.66231e-08, -0.258819, 0.965926, 1.17141e-06, 6, 22.3993 )
+far = 1000.0
+
+[editable path="Plane/PlaneModel"]

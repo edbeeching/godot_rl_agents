@@ -5,6 +5,9 @@
 [node name="Plane" instance=ExtResource( 1 )]
 transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
 
+[node name="RootNode (gltf orientation matrix)" parent="." index="0"]
+transform = Transform( -1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, 0, 0, 0 )
+
 [node name="Propeller_1" parent="RootNode (gltf orientation matrix)/RootNode (model correction matrix)/12cc6a9ff2ae45b08826ba235d9cb8b7fbx/Node/RootNode" index="0"]
 transform = Transform( -0.791092, -0.611698, 0, 0.611698, -0.791092, 0, 0, 0, 1, 0.873349, -46.0248, 401.434 )
 
@@ -12,5 +15,5 @@ transform = Transform( -0.791092, -0.611698, 0, 0.611698, -0.791092, 0, 0, 0, 1,
 transform = Transform( 0.879922, 0.00248785, -0.475112, 0.0222404, 0.998674, 0.0464192, 0.474598, -0.051412, 0.8787, 0, 0, 0 )
 visible = false
 
-[node name="Shadow_Plane" parent="RootNode (gltf orientation matrix)/RootNode (model correction matrix)/12cc6a9ff2ae45b08826ba235d9cb8b7fbx/Node/RootNode/Physical_Sky" index="0"]
+[node name="Shadow_Plane" parent="RootNode (gltf orientation matrix)/RootNode (model correction matrix)/12cc6a9ff2ae45b08826ba235d9cb8b7fbx/Node/RootNode/Physical_Sky" index="1"]
 visible = false
