@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 
@@ -8,11 +8,17 @@ extents = Vector3( 200, 1, 200 )
 [sub_resource type="CubeMesh" id=2]
 size = Vector3( 8, 2, 8 )
 
-[sub_resource type="BoxShape" id=3]
-extents = Vector3( 4, 1, 4 )
+[sub_resource type="SpatialMaterial" id=3]
+albedo_color = Color( 0.447059, 0.533333, 0.65098, 1 )
 
 [sub_resource type="BoxShape" id=4]
+extents = Vector3( 4, 1, 4 )
+
+[sub_resource type="BoxShape" id=5]
 extents = Vector3( 3, 2, 3 )
+
+[sub_resource type="SpatialMaterial" id=6]
+albedo_color = Color( 0.447059, 0.533333, 0.65098, 1 )
 
 [node name="JumperHard" type="Spatial"]
 
@@ -32,17 +38,17 @@ shape = SubResource( 1 )
 
 [node name="MeshInstance" type="MeshInstance" parent="Pads/FirstPad/Pad"]
 mesh = SubResource( 2 )
-material/0 = null
+material/0 = SubResource( 3 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Pads/FirstPad/Pad"]
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 
 [node name="Trigger" type="Area" parent="Pads/FirstPad"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Pads/FirstPad/Trigger"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
-shape = SubResource( 4 )
+shape = SubResource( 5 )
 
 [node name="SecondPad" type="Spatial" parent="Pads"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13 )
@@ -51,16 +57,16 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13 )
 
 [node name="MeshInstance" type="MeshInstance" parent="Pads/SecondPad/Pad"]
 mesh = SubResource( 2 )
-material/0 = null
+material/0 = SubResource( 6 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Pads/SecondPad/Pad"]
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 
 [node name="Trigger" type="Area" parent="Pads/SecondPad"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Pads/SecondPad/Trigger"]
-shape = SubResource( 4 )
+shape = SubResource( 5 )
 
 [node name="EndPosition" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, -191 )

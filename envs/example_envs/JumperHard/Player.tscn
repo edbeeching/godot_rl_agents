@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://addons/godot_rl_agents/RaycastSensor3D.tscn" type="PackedScene" id=3]
@@ -10,8 +10,20 @@
 [sub_resource type="SpatialMaterial" id=3]
 albedo_color = Color( 0.109804, 0.317647, 0.458824, 1 )
 
-[sub_resource type="Environment" id=4]
+[sub_resource type="ProceduralSky" id=4]
+sky_top_color = Color( 0.458824, 0.498039, 0.513726, 1 )
+sky_horizon_color = Color( 0.719818, 0.767557, 0.804688, 1 )
+ground_bottom_color = Color( 0.0980392, 0.133333, 0.168627, 1 )
+
+[sub_resource type="Environment" id=5]
+background_mode = 2
+background_sky = SubResource( 4 )
+background_sky_custom_fov = 1.1
 ambient_light_color = Color( 1, 1, 1, 1 )
+ambient_light_energy = 0.79
+ambient_light_sky_contribution = 0.83
+tonemap_mode = 3
+glow_intensity = 0.65
 
 [node name="Player" type="KinematicBody" groups=[
 "AGENT",
@@ -30,27 +42,22 @@ material/0 = SubResource( 3 )
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, -1.54268e-08, 5.75736e-08, -1.54268e-08, 0.866025, 0.5, -5.75736e-08, -0.5, 0.866025, 0, 10, 13 )
-environment = SubResource( 4 )
+environment = SubResource( 5 )
 
 [node name="RaycastSensor3D" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 5, 0 )
 
 [node name="RaycastSensor3D2" parent="." instance=ExtResource( 3 )]
 transform = Transform( 0.866025, 2.18557e-08, -0.5, 0.5, -3.78552e-08, 0.866025, 0, -1, -4.37114e-08, 2.38419e-07, 9, 0 )
-visible = false
 
 [node name="RaycastSensor3D3" parent="." instance=ExtResource( 3 )]
 transform = Transform( 0.866025, -2.18557e-08, 0.5, -0.5, -3.78552e-08, 0.866025, 0, -1, -4.37114e-08, 0, 9, 0 )
-visible = false
 
 [node name="RaycastSensor3D4" parent="." instance=ExtResource( 3 )]
 transform = Transform( -4.37114e-08, -1, -4.37114e-08, 0, -4.37114e-08, 1, -1, 4.37114e-08, 1.91069e-15, 0, 9, 0 )
-visible = false
 
 [node name="RaycastSensor3D5" parent="." instance=ExtResource( 3 )]
 transform = Transform( -4.37114e-08, -1, -4.37114e-08, 0.5, -5.97109e-08, 0.866025, -0.866025, 1.59995e-08, 0.5, 0, 9, -2.38419e-07 )
-visible = false
 
 [node name="RaycastSensor3D6" parent="." instance=ExtResource( 3 )]
 transform = Transform( -4.37114e-08, -1, -4.37114e-08, -0.5, -1.59995e-08, 0.866025, -0.866025, 5.97109e-08, -0.5, 0, 9, 2.38419e-07 )
-visible = false
