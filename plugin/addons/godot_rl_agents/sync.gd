@@ -13,17 +13,9 @@ var should_connect = true
 var agents
 var need_to_send_obs = false
 onready var start_time = OS.get_ticks_msec()
-
+var initialized = false
 func _ready():
-    _get_agents()
-    
-    connected = connect_to_server()
-    if connected:
-        _set_heuristic("model")
-        _handshake()
-        _send_env_info()
-    else:
-        _set_heuristic("human")
+    pass
         
         
 func _get_agents():
@@ -111,8 +103,23 @@ func _get_port():
 
 func disconnect_from_server():
     client.disconnect_from_host()
+
+func _initialize():
+    _get_agents()
+    
+    connected = connect_to_server()
+    if connected:
+        _set_heuristic("model")
+        _handshake()
+        _send_env_info()
+    else:
+        _set_heuristic("human")  
+    initialized = true  
+
+func _physics_process(delta):   
+    if !initialized:
+        _initialize()
  
-func _physics_process(delta):    
     # two modes, human control, agent control
     # pause tree, send obs, get actions, set actions, unpause tree
     if n_action_steps % action_repeat != 0:
