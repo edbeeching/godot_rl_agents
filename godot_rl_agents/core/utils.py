@@ -1,5 +1,6 @@
 from ray import tune
 from godot_rl_agents.wrappers.ray_wrappers import RayVectorGodotEnv
+from godot_rl_agents.core.godot_env import GodotEnv
 
 
 def register_env():
@@ -8,8 +9,10 @@ def register_env():
         lambda c: RayVectorGodotEnv(
             env_path=c["env_path"],
             config=c,
-            port=c.worker_index + 12011,  # TODO change to default port
-            show_window=True,
-            framerate=None,
+            port=c.worker_index
+            + GodotEnv.DEFAULT_PORT
+            + 10,  # TODO change to default port
+            show_window=c["show_window"],
+            framerate=c["framerate"],
         ),
     )

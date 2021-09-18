@@ -33,6 +33,21 @@ def get_args(parser_creator=None):
         help="The yaml config file used to specify parameters for training",
     )
 
+    parser.add_argument(
+        "-c",
+        "--restore",
+        default=None,
+        type=str,
+        help="the location of a checkpoint to restore from",
+    )
+    parser.add_argument(
+        "-e",
+        "--eval",
+        default=0,
+        type=int,
+        help="whether to eval the model. 0 for train, 1 for eval",
+    )
+
     return parser.parse_args()
 
 
@@ -42,18 +57,25 @@ if __name__ == "__main__":
     with open(args.config_file) as f:
         exp = yaml.safe_load(f)
     register_env()
+    print(exp)
+    exp["config"]["env_config"]["env_path"] = args.env_path
+    checkpoint_freq = 10
 
-    exp["config"]["env_config"] = {
-        "env_path": args.env_path,
-    }
+    if args.eval:
+        checkpoint_freq = 0
+        exp["config"]["env_config"]["show_window"] = True
+        exp["config"]["env_config"]["framerate"] = None
+        exp["config"]["lr"] = 0.0
+        exp["config"]["num_sgd_iter"] = 1
+        exp["config"]["num_workers"] = 1
 
     results = tune.run(
         exp["algorithm"],
         config=exp["config"],
         stop=exp["stop"],
         verbose=3,
-        checkpoint_freq=5,
+        checkpoint_freq=checkpoint_freq,
         checkpoint_at_end=True,
-        restore=None,
+        restore=args.restore,
     )
     ray.shutdown()
