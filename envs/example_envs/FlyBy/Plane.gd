@@ -38,7 +38,8 @@ func _physics_process(delta):
 #        $Mesh/Body.rotation.y = 0
 #    else:
 #        # Roll the body based on the turn input 
-    $PlaneModel.rotation.y = lerp($PlaneModel.rotation.y, turn_input, level_speed * delta)
+    $PlaneModel.rotation.z = lerp($PlaneModel.rotation.z, turn_input, level_speed * delta)
+    $PlaneModel.rotation.x = lerp($PlaneModel.rotation.x, pitch_input, level_speed * delta)
     
     # Accelerate/decelerate
     forward_speed = lerp(forward_speed, target_speed, acceleration * delta)
