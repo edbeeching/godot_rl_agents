@@ -82,6 +82,8 @@ func _send_env_info():
 
 
 func connect_to_server():
+    print("Waiting for one second to allow server to start")
+    OS.delay_msec(1000)
     print("trying to connect to server")
     client = StreamPeerTCP.new()
     client.set_no_delay(true)
