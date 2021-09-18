@@ -3,17 +3,19 @@ This document provides non-exaustive list of features the will be implemented in
 
 ## Version 0.1 (beta release)
 
-- [ ] 3 Example games
+- [ ] 4 Example games
   - [x] Ball Chase (2D)
+  - [ ] Asteroid (2D)
   - [x] Jumper (3D)
   - [ ] Flyer (3D)
 - [ ] Polish of example games
   - [x] Ball Chase (2D)
-  - [ ] Jumper (3D)
+  - [ ] Asteroid (2D)
+  - [ ] Jumper (3D) (needs animated robot)
   - [ ] Flyer (3D)
 - [x] Training with Ray RLLib
 - [ ] Training with Stable baselines 3
-- [ ] Command line interface for training
+- [x] Command line interface for training
 - [ ] Testing with pytest
   - [ ] Simple test envs: 
     - [x] Identity learning
