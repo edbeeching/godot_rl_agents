@@ -29,13 +29,21 @@ var pitch_input = 0
 var done = false
 var _heuristic = "human"
 var best_goal_distance := 10000.0
+var transform_backup = null
 
 func _ready():
+    transform_backup = transform
     pass
     
 func reset():
     cur_goal = environment.get_next_goal(null)
-    translation = Vector3(0,27,0)
+    transform_backup = transform_backup
+#    print("basis",transform.basis)
+    translation.x = 0 + rand_range(-2,2)
+    translation.y = 27 + rand_range(-2,2)
+    translation.z = 0 + rand_range(-2,2)
+    velocity = Vector3.ZERO
+#    print("basis",transform.basis)
     rotation = Vector3.ZERO
     found_goal = false
     exited_arena = false 
@@ -125,42 +133,37 @@ func set_action(action):
     pitch_input = action["pitch"][0]
 
 func _physics_process(delta):
+    #print(translation)
     if cur_goal == null:
         reset()
     set_input()
     if Input.is_action_just_pressed("r_key"):
         reset()
     # Rotate the transform based on the input values
-    transform.basis = transform.basis.rotated(transform.basis.x, pitch_input * pitch_speed * delta)
+    transform.basis = transform.basis.rotated(transform.basis.x.normalized(), pitch_input * pitch_speed * delta)
     transform.basis = transform.basis.rotated(Vector3.UP, turn_input * turn_speed * delta)
-
+    print(transform.basis)
     $PlaneModel.rotation.z = lerp($PlaneModel.rotation.z, turn_input, level_speed * delta)
     $PlaneModel.rotation.x = lerp($PlaneModel.rotation.x, pitch_input, level_speed * delta)
-    
-    # Accelerate/decelerate
-    forward_speed = lerp(forward_speed, target_speed, acceleration * delta)
+
     # Movement is always forward
-    velocity = -transform.basis.z * max_flight_speed
+    velocity = -transform.basis.z.normalized() * max_flight_speed
     # Handle landing/taking off
-    velocity = move_and_slide(velocity, Vector3.UP)
-    get_obs()
+    move_and_slide(velocity, Vector3.UP)
         
 func set_input():
     if _heuristic == "model":
-        pass
+        return
     else:
         turn_input = Input.get_action_strength("roll_left") - Input.get_action_strength("roll_right")
         pitch_input = Input.get_action_strength("pitch_up") - Input.get_action_strength("pitch_down")
 
 
 func goal_reached(goal):
-    print("goal_reached")
     if goal == cur_goal:
         found_goal = true
-        print("goal is current goal")
         cur_goal = environment.get_next_goal(cur_goal)
     
 func exited_game_area():
-    print("agent left play area")
     done = true
     exited_arena = true
