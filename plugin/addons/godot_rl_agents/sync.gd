@@ -6,17 +6,18 @@ var n_action_steps = 0
 const MAJOR_VERSION := "0"
 const MINOR_VERSION := "1" 
 const DEFAULT_PORT := 11008
+const DEFAULT_SEED := 1
 var client
 var connected = false
 var message_center
 var should_connect = true
 var agents
 var need_to_send_obs = false
+var args = null
 onready var start_time = OS.get_ticks_msec()
 var initialized = false
 func _ready():
     pass
-        
         
 func _get_agents():
     agents = get_tree().get_nodes_in_group("AGENT")
@@ -87,8 +88,8 @@ func connect_to_server():
     print(connect, client.get_status())
     
     return client.get_status() == 2
-    
-func _get_port():
+
+func _get_args():
     print("getting command line arguments")
     var arguments = {}
     for argument in OS.get_cmdline_args():
@@ -97,9 +98,16 @@ func _get_port():
             var key_value = argument.split("=")
             arguments[key_value[0].lstrip("--")] = key_value[1]
             
-    print("got port ", arguments.get("port", DEFAULT_PORT))
+    return arguments   
+
+func _get_port():    
+    return int(args.get("port", DEFAULT_PORT))
+
+func _set_seed():
+    var _seed = int(args.get("env_seed", DEFAULT_SEED))
+    seed(_seed)
     
-    return int(arguments.get("port", DEFAULT_PORT))
+    print(args, " seed set to ", _seed, " ", randi())
 
 func disconnect_from_server():
     client.disconnect_from_host()
@@ -107,6 +115,7 @@ func disconnect_from_server():
 func _initialize():
     _get_agents()
     
+    args = _get_args()
     connected = connect_to_server()
     if connected:
         _set_heuristic("model")
@@ -114,6 +123,8 @@ func _initialize():
         _send_env_info()
     else:
         _set_heuristic("human")  
+        
+    _set_seed()
     initialized = true  
 
 func _physics_process(delta):   
