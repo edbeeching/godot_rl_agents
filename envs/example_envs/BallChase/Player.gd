@@ -26,7 +26,7 @@ var done = false
 var best_fruit_distance = 10000.0
 var fruit_count = 0
 var n_steps = 0
-var max_steps = 500
+var max_steps = 5000
 
 onready var emitter = $"../Particles2D"
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://addons/godot_rl_agents/RaycastSensor2D.tscn" type="PackedScene" id=2]
@@ -33,7 +33,6 @@ extents = Vector2( 29.169, 143.153 )
 [sub_resource type="Environment" id=9]
 background_mode = 4
 tonemap_mode = 3
-glow_enabled = true
 glow_levels/1 = true
 glow_levels/2 = true
 glow_levels/3 = false
@@ -44,11 +43,18 @@ glow_strength = 1.17
 glow_bloom = 0.09
 glow_blend_mode = 0
 
-[sub_resource type="ParticlesMaterial" id=10]
-emission_shape = 1
-emission_sphere_radius = 1.0
+[sub_resource type="Gradient" id=10]
+colors = PoolColorArray( 0.509804, 0.180392, 0.819608, 1, 1, 1, 1, 1 )
+
+[sub_resource type="GradientTexture" id=11]
+gradient = SubResource( 10 )
+
+[sub_resource type="ParticlesMaterial" id=12]
+lifetime_randomness = 0.21
+trail_divisor = 2
 flag_disable_z = true
 spread = 180.0
+flatness = 0.84
 gravity = Vector3( 0, 0, 0 )
 initial_velocity = 500.0
 initial_velocity_random = 0.24
@@ -58,7 +64,7 @@ angle = -88.9
 angle_random = 1.0
 scale = 12.0
 scale_random = 0.2
-color = Color( 0.51086, 0.1804, 0.82, 1 )
+color_ramp = SubResource( 11 )
 hue_variation = 0.2
 hue_variation_random = 0.2
 
@@ -226,13 +232,12 @@ environment = SubResource( 9 )
 position = Vector2( 617.202, 244.87 )
 emitting = false
 amount = 64
-lifetime = 0.2
+lifetime = 0.4
 one_shot = true
 explosiveness = 0.56
-process_material = SubResource( 10 )
+process_material = SubResource( 12 )
 
 [connection signal="body_entered" from="Fruit" to="Player" method="_on_Fruit_body_entered"]
-[connection signal="body_entered" from="Fruit" to="Fruit" method="_on_Fruit_body_entered"]
 [connection signal="body_entered" from="Walls/LeftWall" to="Player" method="_on_LeftWall_body_entered"]
 [connection signal="body_entered" from="Walls/RightWall" to="Player" method="_on_RightWall_body_entered"]
 [connection signal="body_entered" from="Walls/TopWall" to="Player" method="_on_TopWall_body_entered"]
