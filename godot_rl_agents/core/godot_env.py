@@ -31,7 +31,7 @@ class GodotEnv:
         self.proc = None
         if env_path is not None:
             self.check_platform(env_path)
-            self._launch_env(env_path, port, show_window, framerate)
+            self._launch_env(env_path, port, show_window, framerate, seed)
         else:
             print(
                 "No game binary has been provided, please press PLAY in the Godot editor"
@@ -124,14 +124,15 @@ class GodotEnv:
         print("exit was not clean, using atexit to close env")
         self.close()
 
-    def _launch_env(self, env_path, port, show_window, framerate):
+    def _launch_env(self, env_path, port, show_window, framerate, seed):
         # --fixed-fps {framerate}
-        launch_cmd = f"{env_path} --port={port}"
+        launch_cmd = f"{env_path} --port={port} --env_seed={seed}"
 
         if show_window == False:
             launch_cmd += " --disable-render-loop --no-window"
         if framerate is not None:
             launch_cmd += f" --fixed-fps {framerate}"
+
         launch_cmd = launch_cmd.split(" ")
         self.proc = subprocess.Popen(
             launch_cmd,

@@ -9,10 +9,9 @@ def register_env():
         lambda c: RayVectorGodotEnv(
             env_path=c["env_path"],
             config=c,
-            port=c.worker_index
-            + GodotEnv.DEFAULT_PORT
-            + 10,  # TODO change to default port
+            port=c.worker_index + GodotEnv.DEFAULT_PORT + 10,
             show_window=c["show_window"],
             framerate=c["framerate"],
+            seed=c.worker_index + c["seed"],
         ),
     )

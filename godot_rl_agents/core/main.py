@@ -20,7 +20,8 @@ def get_args(parser_creator=None):
 
     parser.add_argument(
         "--env_path",
-        default="envs/example_envs/builds/JumperHard/jumper_hard.x86_64",
+        # default="envs/example_envs/builds/JumperHard/jumper_hard.x86_64",
+        default=None,
         type=str,
         help="The Godot binary to use, do no include for in editor training",
     )
@@ -68,6 +69,7 @@ if __name__ == "__main__":
         exp["config"]["lr"] = 0.0
         exp["config"]["num_sgd_iter"] = 1
         exp["config"]["num_workers"] = 1
+        exp["stop"]["training_iteration"] = 999999
 
     results = tune.run(
         exp["algorithm"],
