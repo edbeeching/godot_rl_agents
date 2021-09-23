@@ -1,0 +1,80 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://assets/SBS - Seamless Space Backgrounds - Large 1024x1024/Large 1024x1024/Starfields/Starfield 2 - 1024x1024.png" type="Texture" id=1]
+[ext_resource path="res://addons/godot_rl_agents/sync.gd" type="Script" id=2]
+[ext_resource path="res://Team1Player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Team2Player.tscn" type="PackedScene" id=4]
+[ext_resource path="res://SpaceShooter.gd" type="Script" id=5]
+
+[sub_resource type="Environment" id=1]
+background_mode = 4
+tonemap_mode = 1
+tonemap_exposure = 2.63
+tonemap_white = 1.77
+glow_enabled = true
+glow_bloom = 0.46
+
+[node name="SpaceShooter" type="Node2D"]
+script = ExtResource( 5 )
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.2, 0.2 )
+motion_mirroring = Vector2( 1024, 1024 )
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/ParallaxLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -1.41418
+margin_right = 1024.0
+margin_bottom = 1022.59
+texture = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 1 )
+
+[node name="Team1" type="Node" parent="."]
+
+[node name="Team1Player" parent="Team1" groups=[
+"AGENT",
+] instance=ExtResource( 3 )]
+position = Vector2( 394.12, 219.309 )
+controlled = true
+
+[node name="Camera2D" type="Camera2D" parent="Team1/Team1Player"]
+current = true
+
+[node name="Team1Player2" parent="Team1" instance=ExtResource( 3 )]
+
+[node name="Team1Player3" parent="Team1" instance=ExtResource( 3 )]
+
+[node name="Team1Player4" parent="Team1" instance=ExtResource( 3 )]
+
+[node name="Team2" type="Node" parent="."]
+
+[node name="Team2Player" parent="Team2" groups=[
+"AGENT",
+] instance=ExtResource( 4 )]
+position = Vector2( 622.965, 164.217 )
+
+[node name="Team2Player2" parent="Team2" groups=[
+"AGENT",
+] instance=ExtResource( 4 )]
+position = Vector2( 622.965, 164.217 )
+
+[node name="Team2Player3" parent="Team2" groups=[
+"AGENT",
+] instance=ExtResource( 4 )]
+position = Vector2( 622.965, 164.217 )
+
+[node name="Team2Player4" parent="Team2" groups=[
+"AGENT",
+] instance=ExtResource( 4 )]
+position = Vector2( 622.965, 164.217 )
+
+[node name="Sync" type="Node" parent="."]
+script = ExtResource( 2 )
