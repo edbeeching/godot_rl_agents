@@ -22,6 +22,7 @@ class RayVectorGodotEnv(VectorEnv):
         seed=0,
         show_window=False,
         framerate=None,
+        action_repeat=None,
         timeout_wait=60,
         config=None,
     ) -> None:
@@ -32,6 +33,7 @@ class RayVectorGodotEnv(VectorEnv):
             seed=seed,
             show_window=show_window,
             framerate=framerate,
+            action_repeat=action_repeat,
         )
         super().__init__(
             observation_space=self._env.observation_space,

@@ -13,5 +13,6 @@ def register_env():
             show_window=c["show_window"],
             framerate=c["framerate"],
             seed=c.worker_index + c["seed"],
+            action_repeat=c["framerate"],
         ),
     )

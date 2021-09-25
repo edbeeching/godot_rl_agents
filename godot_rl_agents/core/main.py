@@ -44,9 +44,9 @@ def get_args(parser_creator=None):
     parser.add_argument(
         "-e",
         "--eval",
-        default=0,
-        type=int,
-        help="whether to eval the model. 0 for train, 1 for eval",
+        default=False,
+        action="store_true",
+        help="whether to eval the model",
     )
 
     return parser.parse_args()
@@ -58,8 +58,12 @@ if __name__ == "__main__":
     with open(args.config_file) as f:
         exp = yaml.safe_load(f)
     register_env()
-    print(exp)
+
     exp["config"]["env_config"]["env_path"] = args.env_path
+    if args.env_path is None:
+        print("SETTING WORKS TO 1")
+        exp["config"]["num_workers"] = 1
+
     checkpoint_freq = 10
 
     if args.eval:
@@ -70,6 +74,8 @@ if __name__ == "__main__":
         exp["config"]["num_sgd_iter"] = 1
         exp["config"]["num_workers"] = 1
         exp["stop"]["training_iteration"] = 999999
+
+    print(exp)
 
     results = tune.run(
         exp["algorithm"],

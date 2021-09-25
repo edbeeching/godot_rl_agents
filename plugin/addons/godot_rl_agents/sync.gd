@@ -7,6 +7,7 @@ const MAJOR_VERSION := "0"
 const MINOR_VERSION := "1" 
 const DEFAULT_PORT := 11008
 const DEFAULT_SEED := 1
+const DEFAULT_ACTION_REPEAT := 8
 var client
 var connected = false
 var message_center
@@ -109,6 +110,10 @@ func _set_seed():
     
     print(args, " seed set to ", _seed, " ", randi())
 
+func _set_action_repeat():
+    action_repeat = int(args.get("action_repeat", DEFAULT_ACTION_REPEAT))
+    
+
 func disconnect_from_server():
     client.disconnect_from_host()
 
@@ -125,6 +130,7 @@ func _initialize():
         _set_heuristic("human")  
         
     _set_seed()
+    _set_action_repeat()
     initialized = true  
 
 func _physics_process(delta):   
