@@ -65,7 +65,7 @@ if __name__ == "__main__":
         exp["config"]["num_workers"] = 1
 
     checkpoint_freq = 10
-
+    checkpoint_at_end = True
     if args.eval:
         checkpoint_freq = 0
         exp["config"]["env_config"]["show_window"] = True
@@ -73,6 +73,7 @@ if __name__ == "__main__":
         exp["config"]["lr"] = 0.0
         exp["config"]["num_sgd_iter"] = 1
         exp["config"]["num_workers"] = 1
+        exp["config"]["explore"] = False
         exp["stop"]["training_iteration"] = 999999
 
     print(exp)
@@ -83,7 +84,7 @@ if __name__ == "__main__":
         stop=exp["stop"],
         verbose=3,
         checkpoint_freq=checkpoint_freq,
-        checkpoint_at_end=True,
+        checkpoint_at_end=not args.eval,
         restore=args.restore,
     )
     ray.shutdown()
