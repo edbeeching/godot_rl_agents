@@ -30,7 +30,7 @@ func add_ammo():
     ammo = min(ammo, MAX_AMMO)
     
 func reset():
-    ammo = MAX_AMMO
+    ammo = 0 # starts loading from onset to stop bursting at beging of episode
 
 
 func _on_Timer_timeout():

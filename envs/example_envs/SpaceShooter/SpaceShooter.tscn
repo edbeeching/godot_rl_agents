@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://assets/SBS - Seamless Space Backgrounds - Large 1024x1024/Large 1024x1024/Starfields/Starfield 2 - 1024x1024.png" type="Texture" id=1]
+[ext_resource path="res://assets/Starfield 2 - 1024x1024.png" type="Texture" id=1]
 [ext_resource path="res://addons/godot_rl_agents/sync.gd" type="Script" id=2]
 [ext_resource path="res://Team1Player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Team2Player.tscn" type="PackedScene" id=4]
@@ -39,9 +39,7 @@ environment = SubResource( 1 )
 
 [node name="Team1" type="Node" parent="."]
 
-[node name="Team1Player" parent="Team1" groups=[
-"AGENT",
-] instance=ExtResource( 3 )]
+[node name="Team1Player" parent="Team1" instance=ExtResource( 3 )]
 position = Vector2( 394.12, 219.309 )
 controlled = true
 
@@ -53,6 +51,14 @@ current = true
 [node name="Team1Player3" parent="Team1" instance=ExtResource( 3 )]
 
 [node name="Team1Player4" parent="Team1" instance=ExtResource( 3 )]
+
+[node name="Team1Player5" parent="Team1" instance=ExtResource( 3 )]
+
+[node name="Team1Player6" parent="Team1" instance=ExtResource( 3 )]
+
+[node name="Team1Player7" parent="Team1" instance=ExtResource( 3 )]
+
+[node name="Team1Player8" parent="Team1" instance=ExtResource( 3 )]
 
 [node name="Team2" type="Node" parent="."]
 
@@ -72,6 +78,26 @@ position = Vector2( 622.965, 164.217 )
 position = Vector2( 622.965, 164.217 )
 
 [node name="Team2Player4" parent="Team2" groups=[
+"AGENT",
+] instance=ExtResource( 4 )]
+position = Vector2( 622.965, 164.217 )
+
+[node name="Team2Player5" parent="Team2" groups=[
+"AGENT",
+] instance=ExtResource( 4 )]
+position = Vector2( 622.965, 164.217 )
+
+[node name="Team2Player6" parent="Team2" groups=[
+"AGENT",
+] instance=ExtResource( 4 )]
+position = Vector2( 622.965, 164.217 )
+
+[node name="Team2Player7" parent="Team2" groups=[
+"AGENT",
+] instance=ExtResource( 4 )]
+position = Vector2( 622.965, 164.217 )
+
+[node name="Team2Player8" parent="Team2" groups=[
 "AGENT",
 ] instance=ExtResource( 4 )]
 position = Vector2( 622.965, 164.217 )

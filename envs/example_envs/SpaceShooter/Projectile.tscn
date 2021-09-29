@@ -2,7 +2,7 @@
 
 [ext_resource path="res://addons/regular_polygon2d_node/RegularPolygon2D.gd" type="Script" id=1]
 [ext_resource path="res://Projectile.gd" type="Script" id=2]
-[ext_resource path="res://assets/Lunar Lander Assets 24-11-20/Lunar Lander Upload/Effects/Fx_01.png" type="Texture" id=3]
+[ext_resource path="res://assets/projectile_red.png" type="Texture" id=3]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 7.02791

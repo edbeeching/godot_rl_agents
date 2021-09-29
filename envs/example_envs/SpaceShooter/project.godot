@@ -32,13 +32,20 @@ config/icon="res://icon.png"
 
 [display]
 
-window/size/always_on_top=true
 window/stretch/mode="2d"
 window/stretch/aspect="keep"
 
 [editor_plugins]
 
 enabled=PoolStringArray( "res://addons/godot_rl_agents/plugin.cfg", "res://addons/regular_polygon2d_node/plugin.cfg" )
+
+[input]
+
+r_key={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":82,"unicode":0,"echo":false,"script":null)
+ ]
+}
 
 [physics]
 
