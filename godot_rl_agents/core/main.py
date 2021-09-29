@@ -1,5 +1,6 @@
 import numpy as np
 import argparse
+import pathlib
 import ray
 from ray import tune
 from ray.rllib.utils.annotations import override
@@ -60,6 +61,12 @@ if __name__ == "__main__":
     register_env()
 
     exp["config"]["env_config"]["env_path"] = args.env_path
+    if args.env_path is not None:
+        run_name = exp["algorithm"] + "/" + pathlib.Path(args.env_path).stem
+    else:
+        run_name = exp["algorithm"] + "/editor"
+    print("run_name", run_name)
+
     if args.env_path is None:
         print("SETTING WORKS TO 1")
         exp["config"]["num_workers"] = 1
@@ -73,6 +80,9 @@ if __name__ == "__main__":
         exp["config"]["lr"] = 0.0
         exp["config"]["num_sgd_iter"] = 1
         exp["config"]["num_workers"] = 1
+        exp["config"]["train_batch_size"] = 8192
+        exp["config"]["sgd_minibatch_size"] = 1
+
         exp["config"]["explore"] = False
         exp["stop"]["training_iteration"] = 999999
 
@@ -80,6 +90,7 @@ if __name__ == "__main__":
 
     results = tune.run(
         exp["algorithm"],
+        name=run_name,
         config=exp["config"],
         stop=exp["stop"],
         verbose=3,
