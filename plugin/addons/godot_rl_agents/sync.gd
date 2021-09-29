@@ -80,14 +80,14 @@ func connect_to_server():
     OS.delay_msec(1000)
     print("trying to connect to server")
     client = StreamPeerTCP.new()
-    client.set_no_delay(true)
+    
     #set_process(true)
     var ip = "localhost"
     var port = _get_port()
     var connect = client.connect_to_host(ip, port)
     
     print(connect, client.get_status())
-    
+    client.set_no_delay(true) # TODO check if this improves performance or not
     return client.get_status() == 2
 
 func _get_args():
@@ -107,8 +107,6 @@ func _get_port():
 func _set_seed():
     var _seed = int(args.get("env_seed", DEFAULT_SEED))
     seed(_seed)
-    
-    print(args, " seed set to ", _seed, " ", randi())
 
 func _set_action_repeat():
     action_repeat = int(args.get("action_repeat", DEFAULT_ACTION_REPEAT))
