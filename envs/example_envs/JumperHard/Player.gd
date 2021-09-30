@@ -21,6 +21,7 @@ onready var raycast_sensor5 = $"RaycastSensor3D5"
 onready var raycast_sensor6 = $"RaycastSensor3D6"
 onready var first_jump_pad = $"../Pads/FirstPad"
 onready var second_jump_pad = $"../Pads/SecondPad"
+onready var robot = $Robot
 
 var next = 1
 var done = false
@@ -39,23 +40,11 @@ var _goal_vec = null
 func _ready():
     reset()
 
-func _process(delta):
+func _process(_delta):
     if _goal_vec != null:
         DebugDraw.draw_line_3d(translation, translation + (_goal_vec*10), Color(1, 1, 0))
 
-func _physics_process(delta):
-#    if Input.is_action_pressed("move_forwards"):
-#        move_vec.z -= 1
-#    if Input.is_action_pressed("move_backwards"):
-#        move_vec.z += 1
-#    if Input.is_action_pressed("move_right"):
-#        move_vec.x += 1
-#    if Input.is_action_pressed("move_left"):
-#        move_vec.x -= 1    
-#    if Input.is_action_pressed("turn_right"):
-#        rotation_degrees.y -= LOOK_SENS
-#    if Input.is_action_pressed("turn_left"):
-#        rotation_degrees.y += LOOK_SENS
+func _physics_process(_delta):
     move_vec *= 0
     move_vec = get_move_vec()
     #move_vec = move_vec.normalized()
@@ -70,15 +59,29 @@ func _physics_process(delta):
     rotation_degrees.y += turn_vec*TURN_SENS
  
     grounded = is_on_floor()
+
     y_velo -= GRAVITY
     var just_jumped = false
     if grounded and get_jump_action():
+        robot.set_animation("jump-up-cycle")
         just_jumped = true
         y_velo = JUMP_FORCE
+        grounded = false
     if grounded and y_velo <= 0:
         y_velo = -0.1
     if y_velo < -MAX_FALL_SPEED:
         y_velo = -MAX_FALL_SPEED
+    
+    if y_velo < 0 and !grounded :
+        robot.set_animation("falling-cycle")
+    
+    var horizontal_speed = Vector2(move_vec.x, move_vec.z)
+    if horizontal_speed.length() < 0.1 and grounded:
+        robot.set_animation("idle")
+    elif horizontal_speed.length() < 1.0 and grounded:
+        robot.set_animation("walk-cycle")    
+    elif horizontal_speed.length() >= 1.0 and grounded:
+        robot.set_animation("run-cycle")
     
     if Input.is_action_just_pressed("r_key"):
         reset()

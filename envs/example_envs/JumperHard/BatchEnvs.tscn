@@ -5,10 +5,6 @@
 
 [node name="BatchEnvs" type="Spatial"]
 
-[node name="DirectionalLight" type="DirectionalLight" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.258819, 0.965926, 0, -0.965926, 0.258819, 0, 97, 0 )
-shadow_enabled = true
-
 [node name="Spatial" type="Spatial" parent="."]
 
 [node name="JumperHard" parent="Spatial" instance=ExtResource( 1 )]

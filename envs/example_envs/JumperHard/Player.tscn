@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
+[ext_resource path="res://Robot.tscn" type="PackedScene" id=2]
 [ext_resource path="res://addons/godot_rl_agents/RaycastSensor3D.tscn" type="PackedScene" id=3]
 
 [sub_resource type="CapsuleShape" id=1]
@@ -37,6 +38,7 @@ shape = SubResource( 1 )
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
+visible = false
 mesh = SubResource( 2 )
 material/0 = SubResource( 3 )
 
@@ -61,3 +63,6 @@ transform = Transform( -4.37114e-08, -1, -4.37114e-08, 0.5, -5.97109e-08, 0.8660
 
 [node name="RaycastSensor3D6" parent="." instance=ExtResource( 3 )]
 transform = Transform( -4.37114e-08, -1, -4.37114e-08, -0.5, -1.59995e-08, 0.866025, -0.866025, 5.97109e-08, -0.5, 0, 9, 2.38419e-07 )
+
+[node name="Robot" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.43952, 0.0576344 )
