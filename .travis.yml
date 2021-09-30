@@ -1,7 +1,7 @@
 language: python
 python:
 
-  - "3.6"
+#  - "3.6" remove due to build issue in travis, will be addressed in a future version
   - "3.8"
 # command to install dependencies
 install:
