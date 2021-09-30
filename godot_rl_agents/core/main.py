@@ -53,7 +53,7 @@ def get_args(parser_creator=None):
     return parser.parse_args()
 
 
-if __name__ == "__main__":
+def main():
     ray.init()
     args = get_args()
     with open(args.config_file) as f:
@@ -81,7 +81,7 @@ if __name__ == "__main__":
         exp["config"]["num_sgd_iter"] = 1
         exp["config"]["num_workers"] = 1
         exp["config"]["train_batch_size"] = 8192
-        exp["config"]["sgd_minibatch_size"] = 1
+        exp["config"]["sgd_minibatch_size"] = 2
 
         exp["config"]["explore"] = False
         exp["stop"]["training_iteration"] = 999999
@@ -99,3 +99,7 @@ if __name__ == "__main__":
         restore=args.restore,
     )
     ray.shutdown()
+
+
+if __name__ == "__main__":
+    main()
