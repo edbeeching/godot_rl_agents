@@ -28,12 +28,18 @@ if __name__ == "__main__":
     N_STEPS = 100
     env_path = "envs/example_envs/builds/BallChase/ball_chase.x86_64"
 
+    results = {}
+
     for framerate, port in zip(framerates, ports):
 
         env = GodotEnv(
-            env_path=env_path, port=port, framerate=framerate, show_window=True
+            env_path=env_path,
+            port=port,
+            framerate=framerate,
+            show_window=show_window,
         )
         obs = env.reset()
+
         n_envs = env.num_envs
         action_space = env.action_space
         start = time.time()
@@ -46,8 +52,9 @@ if __name__ == "__main__":
 
         ips = total_steps / (time.time() - start)
 
-        print(
-            f"Average IPS of {ips} in {total_steps} steps in {time.time() - start} seconds  at framerate of {framerate}"
-        )
+        results[framerate] = ips
 
         env.close()
+
+    for framerate, ips in results.items():
+        print(f"Average IPS of {ips} in at framerate of {framerate}")
