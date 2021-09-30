@@ -8,7 +8,7 @@
 [ext_resource path="res://cartoon_plane/material.material" type="Material" id=6]
 [ext_resource path="res://cartoon_plane/Body.material" type="Material" id=7]
 
-[sub_resource type="ArrayMesh" id=30]
+[sub_resource type="ArrayMesh" id=1]
 resource_name = "Propeller_1_Red_0"
 surfaces/0 = {
 "aabb": AABB( -10.4768, -12.5615, -10.4974, 23.4268, 24.6324, 27.1286 ),
@@ -68,7 +68,7 @@ surfaces/0 = {
 "vertex_count": 168
 }
 
-[sub_resource type="ArrayMesh" id=31]
+[sub_resource type="ArrayMesh" id=5]
 resource_name = "Wheel_Gum_0"
 surfaces/0 = {
 "aabb": AABB( -10.6518, -7.77584, -10.6518, 21.3037, 15.5517, 21.3037 ),
@@ -398,12 +398,13 @@ tracks/0/keys = PoolRealArray( 0, 1, 0.873349, -46.0248, 401.434, 0, 0, 0, 1, 1,
 height = 7.77792
 
 [sub_resource type="ProceduralSky" id=28]
-sky_top_color = Color( 0.847059, 0.87451, 0.890196, 1 )
-sky_horizon_color = Color( 0.921569, 0.937255, 0.952941, 1 )
+sky_top_color = Color( 0.435294, 0.666667, 0.784314, 1 )
 
 [sub_resource type="Environment" id=29]
 background_mode = 2
 background_sky = SubResource( 28 )
+tonemap_mode = 3
+glow_enabled = true
 
 [node name="Plane" type="KinematicBody" groups=[
 "AGENT",
@@ -433,7 +434,7 @@ transform = Transform( 1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0 )
 transform = Transform( -0.791092, -0.611698, 0, 0.611698, -0.791092, 0, 0, 0, 1, 0.873349, -46.0248, 401.434 )
 
 [node name="Propeller_1_Red_0" type="MeshInstance" parent="PlaneModel/RootNode (gltf orientation matrix)/RootNode (model correction matrix)/12cc6a9ff2ae45b08826ba235d9cb8b7fbx/Node/RootNode/Propeller_1"]
-mesh = SubResource( 30 )
+mesh = SubResource( 1 )
 material/0 = null
 
 [node name="Propeller_1_Body_0" type="MeshInstance" parent="PlaneModel/RootNode (gltf orientation matrix)/RootNode (model correction matrix)/12cc6a9ff2ae45b08826ba235d9cb8b7fbx/Node/RootNode/Propeller_1"]
@@ -481,7 +482,7 @@ material/0 = null
 transform = Transform( 0, 1, -3.24994e-18, -1, 0, -2.77556e-17, -2.77556e-17, 3.24994e-18, 1, 0.622358, -32.4898, -2.84217e-14 )
 
 [node name="Wheel_Gum_0" type="MeshInstance" parent="PlaneModel/RootNode (gltf orientation matrix)/RootNode (model correction matrix)/12cc6a9ff2ae45b08826ba235d9cb8b7fbx/Node/RootNode/Plane/Wheel_Back/Wheel"]
-mesh = SubResource( 31 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="Wheel_1" type="Spatial" parent="PlaneModel/RootNode (gltf orientation matrix)/RootNode (model correction matrix)/12cc6a9ff2ae45b08826ba235d9cb8b7fbx/Node/RootNode/Plane"]
@@ -624,4 +625,4 @@ shape = SubResource( 27 )
 transform = Transform( 1, 1.91005e-08, 8.4444e-08, -4.03054e-08, 0.965926, 0.258819, -7.66231e-08, -0.258819, 0.965926, 1.17141e-06, 6, 22.3993 )
 environment = SubResource( 29 )
 current = true
-far = 1000.0
+far = 500.0

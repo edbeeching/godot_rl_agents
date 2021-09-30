@@ -21,7 +21,9 @@ func get_next_goal(current_goal):
             break
             
     return goals[index]
-            
+
+func get_last_goal():
+    return goals[-1]
             
 
 

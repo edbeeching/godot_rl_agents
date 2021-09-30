@@ -38,12 +38,10 @@ func _ready():
 func reset():
     cur_goal = environment.get_next_goal(null)
     transform_backup = transform_backup
-#    print("basis",transform.basis)
     translation.x = 0 + rand_range(-2,2)
     translation.y = 27 + rand_range(-2,2)
     translation.z = 0 + rand_range(-2,2)
     velocity = Vector3.ZERO
-#    print("basis",transform.basis)
     rotation = Vector3.ZERO
     found_goal = false
     exited_arena = false 
@@ -99,7 +97,6 @@ func get_reward():
 func shaping_reward():
     var s_reward = 0.0
     var goal_distance = to_local(cur_goal.translation).length()
-    #print(goal_distance)
     if goal_distance < best_goal_distance:
         s_reward += best_goal_distance - goal_distance
         best_goal_distance = goal_distance
@@ -133,7 +130,6 @@ func set_action(action):
     pitch_input = action["pitch"][0]
 
 func _physics_process(delta):
-    #print(translation)
     if cur_goal == null:
         reset()
     set_input()
@@ -142,7 +138,6 @@ func _physics_process(delta):
     # Rotate the transform based on the input values
     transform.basis = transform.basis.rotated(transform.basis.x.normalized(), pitch_input * pitch_speed * delta)
     transform.basis = transform.basis.rotated(Vector3.UP, turn_input * turn_speed * delta)
-    print(transform.basis)
     $PlaneModel.rotation.z = lerp($PlaneModel.rotation.z, turn_input, level_speed * delta)
     $PlaneModel.rotation.x = lerp($PlaneModel.rotation.x, pitch_input, level_speed * delta)
 
@@ -160,8 +155,11 @@ func set_input():
 
 
 func goal_reached(goal):
+    
     if goal == cur_goal:
         found_goal = true
+        if goal ==  environment.get_last_goal():
+            done = true
         cur_goal = environment.get_next_goal(cur_goal)
     
 func exited_game_area():
