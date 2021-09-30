@@ -30,6 +30,8 @@ var done = false
 var _heuristic = "human"
 var best_goal_distance := 10000.0
 var transform_backup = null
+var n_steps = 0
+const MAX_STEPS = 200000
 
 func _ready():
     transform_backup = transform
@@ -43,6 +45,7 @@ func reset():
     translation.z = 0 + rand_range(-2,2)
     velocity = Vector3.ZERO
     rotation = Vector3.ZERO
+    n_steps = 0
     found_goal = false
     exited_arena = false 
     done = false
@@ -145,6 +148,9 @@ func _physics_process(delta):
     velocity = -transform.basis.z.normalized() * max_flight_speed
     # Handle landing/taking off
     move_and_slide(velocity, Vector3.UP)
+    n_steps += 1
+    if n_steps > MAX_STEPS:
+        done = true
         
 func set_input():
     if _heuristic == "model":
@@ -155,11 +161,10 @@ func set_input():
 
 
 func goal_reached(goal):
-    
     if goal == cur_goal:
         found_goal = true
-        if goal ==  environment.get_last_goal():
-            done = true
+#        if goal ==  environment.get_last_goal():
+#            done = true
         cur_goal = environment.get_next_goal(cur_goal)
     
 func exited_game_area():

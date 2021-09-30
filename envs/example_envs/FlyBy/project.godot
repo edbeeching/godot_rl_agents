@@ -11,12 +11,12 @@ config_version=4
 [application]
 
 config/name="FlyBy"
-run/main_scene="res://TestPlane.tscn"
+run/main_scene="res://FlyBy.tscn"
 config/icon="res://icon.png"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/godot_rl_agents/plugin.cfg" )
+enabled=PoolStringArray(  )
 
 [input]
 
