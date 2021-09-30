@@ -154,8 +154,8 @@ class GodotEnv:
         print(f"waiting for remote GODOT connection on port {self.port}")
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-        # Bind the socket to the port
-        server_address = ("localhost", self.port)
+        # Bind the socket to the port, "localhost" was not working on windows VM, had to use the IP
+        server_address = ("127.0.0.1", self.port)
         sock.bind(server_address)
 
         # Listen for incoming connections
