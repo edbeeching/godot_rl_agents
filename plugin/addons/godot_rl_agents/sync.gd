@@ -81,8 +81,8 @@ func connect_to_server():
     print("trying to connect to server")
     client = StreamPeerTCP.new()
     
-    #set_process(true)
-    var ip = "localhost"
+    #set_process(true)"localhost" was not working on windows VM, had to use the IP
+    var ip = "127.0.0.1"
     var port = _get_port()
     var connect = client.connect_to_host(ip, port)
     
