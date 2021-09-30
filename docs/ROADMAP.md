@@ -32,6 +32,7 @@ This document provides non-exaustive list of features the will be implemented in
 - [x] Compiled envs at higher framerates
 - [x] Benchmarking of env interaction speed
 - [x] Godot RL Agents Plugin
+- [ ] semi automatic naming of runs
 
 
 ## Version 0.2
