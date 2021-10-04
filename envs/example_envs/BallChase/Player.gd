@@ -26,7 +26,7 @@ var done = false
 var best_fruit_distance = 10000.0
 var fruit_count = 0
 var n_steps = 0
-var max_steps = 5000
+var max_steps = 20000
 
 onready var emitter = $"../Particles2D"
 
@@ -182,8 +182,8 @@ func fruit_collected():
     fruit_just_entered = true
     fruit_count += 1
     spawn_fruit()
-    if fruit_count > MAX_FRUIT:
-        done = true
+#    if fruit_count > MAX_FRUIT:
+#        done = true
 
     
 func wall_hit():

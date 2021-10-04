@@ -24,7 +24,7 @@ window/stretch/aspect="keep"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/Trail/plugin.cfg", "res://addons/regular_polygon2d_node/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/Trail/plugin.cfg", "res://addons/godot_rl_agents/plugin.cfg", "res://addons/regular_polygon2d_node/plugin.cfg" )
 
 [input]
 
