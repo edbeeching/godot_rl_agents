@@ -6,15 +6,15 @@ import pytest
     "env_path,port",
     [
         (
-            "envs/example_envs/builds/BallChase/ball_chase.x86_64",
+            "envs/builds/BallChase/ball_chase.x86_64",
             12008,
         ),
         (
-            "envs/example_envs/builds/Jumper/jumper.x86_64",
+            "envs/builds/Jumper/jumper.x86_64",
             12009,
         ),
         (
-            "envs/test_envs/builds/test_env_identity/TestEnvIdentity.x86_64",
+            "envs/builds/test_env_identity/TestEnvIdentity.x86_64",
             12010,
         ),
     ],
