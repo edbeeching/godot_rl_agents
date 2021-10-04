@@ -19,7 +19,7 @@ uv1_triplanar = true
 albedo_color = Color( 0.0196078, 0.0313726, 0.0313726, 1 )
 
 [sub_resource type="BoxShape" id=4]
-extents = Vector3( 300, 100, 300 )
+extents = Vector3( 250, 51, 251 )
 
 [sub_resource type="CubeMesh" id=5]
 size = Vector3( 500, 100, 2 )
@@ -235,7 +235,7 @@ directional_shadow_max_distance = 4000.0
 script = ExtResource( 2 )
 
 [node name="CollisionShape" type="CollisionShape" parent="GameArea"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 9 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 41, 1 )
 shape = SubResource( 4 )
 
 [node name="Sync" type="Node" parent="."]

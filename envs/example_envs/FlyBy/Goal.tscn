@@ -7,7 +7,7 @@ flags_transparent = true
 albedo_color = Color( 0.372549, 0.0823529, 0.109804, 0.705882 )
 
 [sub_resource type="CylinderShape" id=2]
-radius = 8.0
+radius = 5.0
 height = 1.0
 
 [node name="Goal" type="CSGTorus"]

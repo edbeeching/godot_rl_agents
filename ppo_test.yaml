@@ -3,7 +3,7 @@ algorithm: PPO
 
 stop:
     episode_reward_mean: 5000
-    training_iteration: 10000
+    training_iteration: 1000
     timesteps_total: 200000000
 
 config:
@@ -15,14 +15,14 @@ config:
         seed: 0
     framework: torch  
     lambda: 0.95
-    gamma: 0.99
+    gamma: 0.95
 
-    vf_clip_param: 1.0
+    vf_clip_param: 100.0
     clip_param: 0.2
-    entropy_coeff: 0.0001
+    entropy_coeff: 0.001
     entropy_coeff_schedule: null
-    train_batch_size: 8192
-    sgd_minibatch_size: 1024
+    train_batch_size: 1024
+    sgd_minibatch_size: 128
     num_sgd_iter: 16
     num_workers: 4
     lr: 0.0003
@@ -31,7 +31,7 @@ config:
     rollout_fragment_length: 32
     num_gpus: 1
     model:
-        fcnet_hiddens: [32, 32] 
+        fcnet_hiddens: [256, 256] 
         use_lstm: false
         lstm_cell_size : 32
         num_framestacks: 4

@@ -81,7 +81,7 @@ def main():
         exp["config"]["num_sgd_iter"] = 1
         exp["config"]["num_workers"] = 1
         exp["config"]["train_batch_size"] = 8192
-        exp["config"]["sgd_minibatch_size"] = 2
+        exp["config"]["sgd_minibatch_size"] = 128
 
         exp["config"]["explore"] = False
         exp["stop"]["training_iteration"] = 999999
