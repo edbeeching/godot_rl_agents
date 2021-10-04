@@ -10,7 +10,7 @@ import pytest
             12008,
         ),
         (
-            "envs/builds/Jumper/jumper.x86_64",
+            "envs/builds/JumperHard/jumper.x86_64",
             12009,
         ),
         (
