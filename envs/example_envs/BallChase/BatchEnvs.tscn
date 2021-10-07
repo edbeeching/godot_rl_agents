@@ -9,55 +9,53 @@
 [node name="BallChase" parent="." instance=ExtResource( 1 )]
 
 [node name="BallChase2" parent="." instance=ExtResource( 1 )]
-position = Vector2( 1844.71, 17.2395 )
+position = Vector2( 1305.28, 0 )
 
 [node name="BallChase3" parent="." instance=ExtResource( 1 )]
-position = Vector2( 3568.25, 18.4385 )
+position = Vector2( 2610.56, 0 )
 
 [node name="BallChase4" parent="." instance=ExtResource( 1 )]
-position = Vector2( -4.63428, 1092.28 )
+position = Vector2( 0, 755.953 )
 
 [node name="BallChase5" parent="." instance=ExtResource( 1 )]
-position = Vector2( 1858.2, 1066.82 )
+position = Vector2( 1305.28, 755.953 )
 
 [node name="BallChase6" parent="." instance=ExtResource( 1 )]
-position = Vector2( 3564.57, 1064.57 )
+position = Vector2( 2615.6, 755.953 )
 
 [node name="BallChase7" parent="." instance=ExtResource( 1 )]
-position = Vector2( -6.73053, 2134.9 )
+position = Vector2( -6.73053, 1499.22 )
 
 [node name="BallChase8" parent="." instance=ExtResource( 1 )]
-position = Vector2( 1838.54, 2183.91 )
+position = Vector2( 1313.05, 1497.38 )
 
 [node name="BallChase9" parent="." instance=ExtResource( 1 )]
-position = Vector2( 3580, 2188.26 )
+position = Vector2( 2622.25, 1501.73 )
 
 [node name="BallChase10" parent="." instance=ExtResource( 1 )]
-position = Vector2( 18.6528, 3223.12 )
+position = Vector2( 1.70138, 2248.41 )
 
 [node name="BallChase11" parent="." instance=ExtResource( 1 )]
-position = Vector2( 1845.79, 3172.98 )
+position = Vector2( 1311.82, 2240.65 )
 
 [node name="BallChase12" parent="." instance=ExtResource( 1 )]
-position = Vector2( 3615.34, 3213.28 )
+position = Vector2( 2623.68, 2247.05 )
 
 [node name="BallChase13" parent="." instance=ExtResource( 1 )]
-position = Vector2( 0.55542, 4196.78 )
+position = Vector2( 3915.78, 0 )
 
 [node name="BallChase14" parent="." instance=ExtResource( 1 )]
-position = Vector2( 1854.64, 4158.68 )
+position = Vector2( 3922.71, 751.447 )
 
 [node name="BallChase15" parent="." instance=ExtResource( 1 )]
-position = Vector2( 3721.42, 4260.28 )
+position = Vector2( 3924.84, 1505.68 )
 
 [node name="BallChase16" parent="." instance=ExtResource( 1 )]
-position = Vector2( 5473.92, 4285.68 )
+position = Vector2( 3922.87, 2243.04 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2( 1296.75, 726.118 )
 offset = Vector2( 640, 360 )
 current = true
-zoom = Vector2( 3, 3 )
 script = ExtResource( 3 )
 
 [node name="Sync" type="Node" parent="."]

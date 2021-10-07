@@ -72,11 +72,14 @@ func reset():
     best_fruit_distance = position.distance_to(fruit.position)
     n_steps = 0 
 
-func _calculate_new_position() -> Vector2:
+func _calculate_new_position(position: Vector2=Vector2.ZERO) -> Vector2:
     var new_position := Vector2.ZERO
     new_position.x = rand_range(_bounds.position.x, _bounds.end.x)
     new_position.y = rand_range(_bounds.position.y, _bounds.end.y)	
-   
+    
+    if (position - new_position).length() < 4.0*colision_shape.shape.get_radius():
+        return _calculate_new_position(position)
+
     var radius = colision_shape.shape.get_radius()
     var rect = Rect2(new_position-Vector2(radius, radius), 
     Vector2(radius*2, radius*2)
@@ -175,7 +178,7 @@ func get_done():
     return done
 
 func spawn_fruit():
-    fruit.position = _calculate_new_position()
+    fruit.position = _calculate_new_position(position)
 
 func fruit_collected():
     emit()
