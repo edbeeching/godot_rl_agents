@@ -3,14 +3,14 @@ This document provides non-exaustive list of features the will be implemented in
 
 ## Version 0.1 (beta release)
 
-- [ ] 4 Example games
+- [x] 4 Example games
   - [x] Ball Chase (2D)
-  - [ ] Asteroid (2D)
+  - [x] SpaceShooter (2D)
   - [x] Jumper (3D)
   - [x] Flyer (3D)
-- [ ] Polish of example games
+- [x] Polish of example games
   - [x] Ball Chase (2D)
-  - [ ] Asteroid (2D)
+  - [x] SpaceShooter (2D)
   - [x] Jumper (3D) (needs animated robot)
   - [x] Flyer (3D) (could add foliage)
 - [x] Training with Ray RLLib
@@ -27,12 +27,13 @@ This document provides non-exaustive list of features the will be implemented in
 - [ ] CI test on windows
 - [x] Discrete, continous and combinations of the two
 - [x] Automatic port choice with CLA
-- [ ] Examples 
+- [ ] Examples intructions
 - [ ] Installation instuctions
 - [x] Compiled envs at higher framerates
 - [x] Benchmarking of env interaction speed
 - [x] Godot RL Agents Plugin
 - [ ] semi automatic naming of runs
+- [ ] trailer
 
 
 ## Version 0.2
