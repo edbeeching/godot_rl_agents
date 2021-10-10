@@ -9,6 +9,8 @@ This repository provides:
 * A suite of AI sensors to augment your agent's capacity to observe the game world
 * Godot and Godot RL agents are completely free and open source under the very permissive MIT license. No strings attached, no royalties, nothing. 
 
+docs/v0.1.0_trailer.mp4
+
 ## Contents
 <!-- no toc -->
 1. [Motivation](#motivation)
