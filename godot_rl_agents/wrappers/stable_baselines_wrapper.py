@@ -1,3 +1,4 @@
+from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env.base_vec_env import VecEnv
 
 from godot_rl_agents.core.godot_env import GodotEnv
@@ -48,3 +49,20 @@ class StableBaselinesGodotEnv(VecEnv):
 
     def step_wait(self):
         raise NotImplementedError()
+
+
+if __name__ == "__main__":
+
+    env = StableBaselinesGodotEnv()
+
+    model = PPO(
+        "MlpPolicy",
+        env,
+        ent_coef=0.0001,
+        verbose=2,
+        n_steps=32,
+        tensorboard_log="logs/log",
+    )
+    model.learn(20000)
+    print("closing env")
+    env.close()
