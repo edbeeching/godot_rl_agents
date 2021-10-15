@@ -1,0 +1,37 @@
+{
+  "batch_mode": "truncate_episodes",
+  "clip_param": 0.2,
+  "entropy_coeff": 0.0001,
+  "entropy_coeff_schedule": null,
+  "env": "godot",
+  "env_config": {
+    "action_repeat": null,
+    "env_path": "envs/example_envs/builds/SpaceShooter/space_shooter.x86_64",
+    "framerate": null,
+    "seed": 0,
+    "show_window": false
+  },
+  "framework": "torch",
+  "gamma": 0.99,
+  "lambda": 0.95,
+  "lr": 0.0003,
+  "model": {
+    "fcnet_hiddens": [
+      32,
+      32
+    ],
+    "lstm_cell_size": 32,
+    "num_framestacks": 4,
+    "use_lstm": false
+  },
+  "no_done_at_end": true,
+  "num_envs_per_worker": 16,
+  "num_gpus": 1,
+  "num_sgd_iter": 16,
+  "num_workers": 4,
+  "rollout_fragment_length": 32,
+  "sgd_minibatch_size": 1024,
+  "soft_horizon": true,
+  "train_batch_size": 8192,
+  "vf_clip_param": 1.0
+}
