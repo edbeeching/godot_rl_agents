@@ -26,7 +26,7 @@ https://edbeeching.github.io/docs/v0.1.0_trailer.mp4
   
 
 ### Motivation
-Over the next decade, advances in AI algorithms notable in the fields of Machine Learning and Deep Reinforcement Learning are primed to revolutionize the Video Game industry. Customizable enemies, worlds and story telling will lead to diverse gameplay experiences and new genres of games. Currently the field is dominated by large organizations and pay to use engines that have the budget to create such AI enhanced agents. The objective of the Godot RL Agents package is to lower the bar of accessability so that game developers can take their idea from creation to publication end-to-end with an open source and free package.
+Over the next decade advances in AI algorithms, notably in the fields of Machine Learning and Deep Reinforcement Learning, are primed to revolutionize the Video Game industry. Customizable enemies, worlds and story telling will lead to diverse gameplay experiences and new genres of games. Currently the field is dominated by large organizations and pay to use engines that have the budget to create such AI enhanced agents. The objective of the Godot RL Agents package is to lower the bar of accessability so that game developers can take their idea from creation to publication end-to-end with an open source and free package.
 ### Citing Godot RL Agents
 ```
 @article{beeching2021godotrlagents,
@@ -42,7 +42,6 @@ Please follow the [installation instructions](docs/INSTALLATION.md) to install G
 We provide several reference implementations and instructions to implement your own environment, please refer to the [Examples](docs/EXAMPLE_ENVIRONMENTS.md) documentation.
 ### Creating custom environments
 Once you have studied the example environments, you can follow the instructions in [Custom environments](docs/CUSTOM_ENV.md) in order to make your own. 
-# link to custom env tutorial
 ### Roadmap
 We have number features that will soon be available in versions 0.2.0 and 0.3.0. 
 Refer to the [Roadmap](docs/ROADMAP.md) for more information.
