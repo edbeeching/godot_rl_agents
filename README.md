@@ -37,17 +37,35 @@ Over the next decade, advances in AI algorithms notable in the fields of Machine
 }
 ```
 ### Installation
-Godot RL agents requires current support Linux development and requires python 3.6, if you are new to python, we strongly recommend using conda
+Please follow the [installation instructions](docs/INSTALLATION.md) to install Godot RL agents.
 ### Examples
-We provide several reference implementations and instructions to implement your own environment, plesae refer to the examples document.
-### Documentation
+We provide several reference implementations and instructions to implement your own environment, please refer to the [Examples](docs/EXAMPLE_ENVIRONMENTS.md) documentation.
+### Creating custom environments
+Once you have studied the example environments, you can follow the instructions in [Custom environments](docs/CUSTOM_ENV.md) in order to make your own. 
+# link to custom env tutorial
 ### Roadmap
+We have number features that will soon be available in versions 0.2.0 and 0.3.0. 
+Refer to the [Roadmap](docs/ROADMAP.md) for more information.
+
+
 ### FAQ
+1. Why have we developed Godot RL Agents?
+   We want to provide users with the flexibility
+2. How can I contribute to Godot RL Agents.
+   Please try it out, find bugs and either raise an issue or if you fix them yourself, submit a pull request.
+3. When will you be providing Mac support
+   I would like to provide this ASAP but I do not own a mac so I cannot perform any manual testing of the codebase.
+4. Can you help with my game project? 
+   I the game example do not provide enough information, reach out to us on github and we may be able to provide some advice.
+5. How similar is this tool to Unity ML agents:
+   We are inspired by the the Unity ML agents toolkit and make no effort to hide it.
+
 ### Licence
-### Acknowledgments
-We thank the authors of the Godot Engine for providing such a powerful and flexible game engine for AI agent development.
-We thank the developers at Ray 
-We thank the creators of the Unity ML Agents Toolkit, which inspired us to create this work
+Godot RL Agents is MIT licensed. See the [LICENSE file](LICENSE) for details.
 
 "Cartoon Plane" (https://skfb.ly/UOLT) by antonmoek is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+### Acknowledgments
+We thank the authors of the Godot Engine for providing such a powerful and flexible game engine for AI agent development.
+We thank the developers at Ray and Stable baselines for creating easy to use and powerful RL training frameworks.
+We thank the creators of the Unity ML Agents Toolkit, which inspired us to create this work
 ### References

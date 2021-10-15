@@ -17,7 +17,7 @@ config:
     lambda: 0.95
     gamma: 0.95
 
-    vf_clip_param: 100.0
+    vf_clip_param: 1.0
     clip_param: 0.2
     entropy_coeff: 0.001
     entropy_coeff_schedule: null

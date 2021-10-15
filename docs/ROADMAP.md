@@ -16,10 +16,11 @@ This document provides non-exaustive list of features the will be implemented in
 - [x] Training with Ray RLLib
 - [ ] Training with Stable baselines 3
 - [x] Command line interface for training
+- [x] Benchmarking environments
 - [ ] Testing with pytest
   - [ ] Testing of wrappers
     - [ ] Stable baselines
-    - [ ] Ray
+    - [x] Ray
     - [ ] GYM (vec env)
   - [ ] Simple test envs: 
     - [x] Identity learning
@@ -27,13 +28,13 @@ This document provides non-exaustive list of features the will be implemented in
 - [ ] CI test on windows
 - [x] Discrete, continous and combinations of the two
 - [x] Automatic port choice with CLA
-- [ ] Examples intructions
-- [ ] Installation instuctions
+- [x] Examples intructions
+- [x] Installation instuctions
 - [x] Compiled envs at higher framerates
 - [x] Benchmarking of env interaction speed
 - [x] Godot RL Agents Plugin
-- [ ] semi automatic naming of runs
-- [ ] trailer
+- [x] semi automatic naming of runs
+- [x] trailer
 
 
 ## Version 0.2
@@ -50,7 +51,7 @@ This document provides non-exaustive list of features the will be implemented in
 
 - [ ] Multi-agent
 - [ ] C# implementations of sync GDScript code
-- [ ] Camera observations, CNN fo training
+- [ ] Camera observations, CNN for training
 ## Version 0.4
 ## Version 0.5
 ## Version 0.6
