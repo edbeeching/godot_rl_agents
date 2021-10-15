@@ -79,9 +79,7 @@ func _physics_process(delta):
 
         if position.distance_to(move_target) > 5:
             velocity = move_and_slide(velocity)
-       
-    
-    o = get_obs()     
+            
     shoot() 
     check_if_out_of_bounds()
     if Input.is_action_just_pressed("r_key"):
