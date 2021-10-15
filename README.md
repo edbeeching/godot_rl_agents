@@ -29,12 +29,15 @@ https://edbeeching.github.io/docs/v0.1.0_trailer.mp4
 Over the next decade advances in AI algorithms, notably in the fields of Machine Learning and Deep Reinforcement Learning, are primed to revolutionize the Video Game industry. Customizable enemies, worlds and story telling will lead to diverse gameplay experiences and new genres of games. Currently the field is dominated by large organizations and pay to use engines that have the budget to create such AI enhanced agents. The objective of the Godot RL Agents package is to lower the bar of accessability so that game developers can take their idea from creation to publication end-to-end with an open source and free package.
 ### Citing Godot RL Agents
 ```
-@article{beeching2021godotrlagents,
-  title     =     {Godot RL agents},
-  author    =     {Edward Beeching},
-  journal   =     {arXiv preprint arXiv:},
-  year      =     {2021}
+@misc{beeching2021godotrlagents,
+  author = {Edward Beeching},
+  title = {Godot RL agents},
+  year = {2021},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/edbeeching/godot_rl_agents}},
 }
+
 ```
 ### Installation
 Please follow the [installation instructions](docs/INSTALLATION.md) to install Godot RL agents.
