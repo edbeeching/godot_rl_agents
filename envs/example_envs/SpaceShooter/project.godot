@@ -37,7 +37,7 @@ window/stretch/aspect="keep"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/godot_rl_agents/plugin.cfg", "res://addons/regular_polygon2d_node/plugin.cfg" )
+enabled=PoolStringArray(  )
 
 [input]
 
