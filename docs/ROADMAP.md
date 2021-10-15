@@ -14,7 +14,7 @@ This document provides non-exaustive list of features the will be implemented in
   - [x] Jumper (3D) (needs animated robot)
   - [x] Flyer (3D) (could add foliage)
 - [x] Training with Ray RLLib
-- [ ] Training with Stable baselines 3
+- [x] Training with Stable baselines 3
 - [x] Command line interface for training
 - [x] Benchmarking environments
 - [ ] Testing with pytest
@@ -47,6 +47,7 @@ This document provides non-exaustive list of features the will be implemented in
 - [ ] Extend the 2D and 3D sensor plugins
 - [ ] Headless training (for clusters)
 - [ ] Docker file (for clusters)
+- [ ] Add "call" functionality to call Godot methods from python
 ## Version 0.3
 
 - [ ] Multi-agent
