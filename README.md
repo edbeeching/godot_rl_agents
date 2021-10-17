@@ -52,14 +52,17 @@ Refer to the [Roadmap](docs/ROADMAP.md) for more information.
 
 ### FAQ
 1. Why have we developed Godot RL Agents?
-   We want to provide users with the flexibility
-2. How can I contribute to Godot RL Agents.
+  The objectives of the framework are to:
+* Provide a free and open source tool for Deep RL research and game development.
+* Enable game creators to imbue their non-player characters with unique * behaviors.
+* Allow for automated gameplay testing through interaction with an RL agent.
+1. How can I contribute to Godot RL Agents?
    Please try it out, find bugs and either raise an issue or if you fix them yourself, submit a pull request.
-3. When will you be providing Mac support
+2. When will you be providing Mac support?
    I would like to provide this ASAP but I do not own a mac so I cannot perform any manual testing of the codebase.
-4. Can you help with my game project? 
-   I the game example do not provide enough information, reach out to us on github and we may be able to provide some advice.
-5. How similar is this tool to Unity ML agents:
+3. Can you help with my game project? 
+   If the game example do not provide enough information, reach out to us on github and we may be able to provide some advice.
+4. How similar is this tool to Unity ML agents?
    We are inspired by the the Unity ML agents toolkit and make no effort to hide it.
 
 ### Licence
@@ -69,5 +72,5 @@ Godot RL Agents is MIT licensed. See the [LICENSE file](LICENSE) for details.
 ### Acknowledgments
 We thank the authors of the Godot Engine for providing such a powerful and flexible game engine for AI agent development.
 We thank the developers at Ray and Stable baselines for creating easy to use and powerful RL training frameworks.
-We thank the creators of the Unity ML Agents Toolkit, which inspired us to create this work
+We thank the creators of the Unity ML Agents Toolkit, which inspired us to create this work.
 ### References
