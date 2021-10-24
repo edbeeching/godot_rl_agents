@@ -40,6 +40,9 @@ func get_obs() -> Array:
 func get_reward() -> float:
     return float(_action == state)
     
+func remote_callable():
+    print("calling fn from remote")
+    return 1
      
 func get_action_space():
     return {

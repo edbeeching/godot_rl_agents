@@ -184,6 +184,17 @@ func handle_message() -> bool:
         }
         _send_dict_as_json_message(reply)   
         return handle_message()
+        
+    if message["type"] == "call":
+        var method = message["method"]
+        var returns = _call_method_on_agents(method)
+        var reply = {
+            "type": "call",
+            "returns": returns
+        }
+        print("calling method from Python")
+        _send_dict_as_json_message(reply)   
+        return handle_message()
     
     if message["type"] == "action":
         var action = message["action"]
@@ -194,6 +205,14 @@ func handle_message() -> bool:
         
     print("message was not handled")
     return false
+
+func _call_method_on_agents(method):
+    var returns = []
+    for agent in agents:
+        returns.append(agent.call(method))
+        
+    return returns
+
 
 func _reset_agents_if_done():
      for agent in agents:

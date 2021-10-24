@@ -110,6 +110,16 @@ class GodotEnv:
         obs = np.array(response["obs"])
         return obs
 
+    def call(self, method):
+        message = {
+            "type": "call",
+            "method": method,
+        }
+        self._send_as_json(message)
+        response = self._get_json_dict()
+
+        return response["returns"]
+
     def close(self):
         message = {
             "type": "close",
