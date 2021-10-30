@@ -37,9 +37,9 @@ func get_obs():
     pass
 
 func get_reward():
-    reward = 0
+    var reward = 0
     # What behavior do you want to reward, kills? penalties for death, key waypoints
-    return return + shaping_reward()
+    return reward + shaping_reward()
 
 func shaping_reward():
     # can a sparse reward like kills, death be broken down into denser rewards such as hits taken/given, or distance from the target
