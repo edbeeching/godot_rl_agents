@@ -133,7 +133,9 @@ func get_obs():
 #    result.append(((relative.x / WIDTH)-0.5) * 2)
 #    result.append(((relative.y / HEIGHT)-0.5) * 2)  
 # perform raycast here
-    return result
+    return {
+        "obs": result,
+       }
     
 func get_reward():
     var reward = 0.0
@@ -165,6 +167,14 @@ func set_heuristic(heuristic):
 
 func get_obs_size():
     return len(get_obs())
+    
+func get_obs_space():
+    return {
+        "obs": {
+            "size": len(get_obs()["obs"]),
+            "space": "box"
+           }
+       }
     
 func get_action_space():
     return {
