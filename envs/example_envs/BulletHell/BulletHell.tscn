@@ -1,0 +1,110 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://BulletSpawner.tscn" type="PackedScene" id=2]
+[ext_resource path="res://PathFollow.gd" type="Script" id=3]
+[ext_resource path="res://BulletHolder.gd" type="Script" id=4]
+
+[sub_resource type="CubeMesh" id=1]
+size = Vector3( 200, 2, 200 )
+
+[sub_resource type="SpatialMaterial" id=10]
+albedo_color = Color( 0.219608, 0.219608, 0.219608, 1 )
+
+[sub_resource type="BoxShape" id=3]
+extents = Vector3( 22, 2, 1 )
+
+[sub_resource type="CubeMesh" id=4]
+size = Vector3( 44, 4, 2 )
+
+[sub_resource type="BoxShape" id=5]
+extents = Vector3( 22, 2, 1 )
+
+[sub_resource type="CubeMesh" id=6]
+size = Vector3( 2, 4, 40 )
+
+[sub_resource type="BoxShape" id=7]
+extents = Vector3( 1, 2, 20 )
+
+[sub_resource type="BoxShape" id=8]
+extents = Vector3( 1, 2, 20 )
+
+[sub_resource type="Curve3D" id=9]
+_data = {
+"points": PoolVector3Array( 0, 0, 0, 0, 0, 0, -15, 0, -16, 0, 0, 0, 0, 0, 0, 17, 0, -17, 0, 0, 0, 0, 0, 0, 17, 0, 17, 0, 0, 0, 0, 0, 0, -18, 0, 17, 0, 0, 0, 0, 0, 0, -15, 0, -16 ),
+"tilts": PoolRealArray( 0, 0, 0, 0, 0 )
+}
+
+[node name="BulletHell" type="Spatial"]
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0 )
+mesh = SubResource( 1 )
+material/0 = SubResource( 10 )
+
+[node name="Walls" type="Spatial" parent="."]
+
+[node name="TopWall" type="StaticBody" parent="Walls"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -21 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Walls/TopWall"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Walls/TopWall"]
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="BottomWall" type="StaticBody" parent="Walls"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 21 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Walls/BottomWall"]
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="CollisionShape" type="CollisionShape" parent="Walls/BottomWall"]
+shape = SubResource( 5 )
+
+[node name="LeftWall" type="StaticBody" parent="Walls"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -21, 0, 0 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Walls/LeftWall"]
+mesh = SubResource( 6 )
+material/0 = null
+
+[node name="CollisionShape" type="CollisionShape" parent="Walls/LeftWall"]
+shape = SubResource( 7 )
+
+[node name="RightWall" type="StaticBody" parent="Walls"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 21, 0, 0 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Walls/RightWall"]
+shape = SubResource( 8 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Walls/RightWall"]
+mesh = SubResource( 6 )
+material/0 = null
+
+[node name="Player" parent="." groups=[
+"AGENT",
+"player",
+] instance=ExtResource( 1 )]
+bullet_spawner_path = NodePath("../Path/PathFollow/BulletSpawner")
+bullet_holder_path = NodePath("../BulletHolder")
+
+[node name="Path" type="Path" parent="."]
+curve = SubResource( 9 )
+
+[node name="PathFollow" type="PathFollow" parent="Path"]
+transform = Transform( 0.999994, 0, 0.00341796, 0, 1, 0, -0.00341796, 0, 0.999994, -15, 0, -16 )
+script = ExtResource( 3 )
+
+[node name="BulletSpawner" parent="Path/PathFollow" instance=ExtResource( 2 )]
+node_path = NodePath("../../../BulletHolder")
+path_path = NodePath("..")
+
+[node name="BulletHolder" type="Spatial" parent="."]
+script = ExtResource( 4 )
+
+[node name="DirectionalLight" type="DirectionalLight" parent="."]
+transform = Transform( 0.933013, -0.314705, -0.174494, 0.185295, 0.00448725, 0.982673, -0.308469, -0.949179, 0.0625, 0, 33, 21 )
+shadow_enabled = true
