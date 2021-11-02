@@ -30,6 +30,10 @@ config/name="BulletHell"
 run/main_scene="res://BulletHell.tscn"
 config/icon="res://icon.png"
 
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/godot_rl_agents/plugin.cfg" )
+
 [input]
 
 move_left={

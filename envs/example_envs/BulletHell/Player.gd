@@ -86,12 +86,21 @@ func get_obs():
 # The observation of the agent, think of what is the key information that is needed to perform the task, try to have things in coordinates that a relative to the play
     # get a variable sized vector of observations from the bullet holder
     var obs = []
-    obs.append(bullet_spawner.translation - translation)
+    var bs = bullet_spawner.translation - translation
+    obs.append([
+        clamp(bs.x/40.0,-1.0,1.0),
+        clamp(bs.y/40.0,-1.0,1.0),
+        clamp(bs.z/40.0,-1.0,1.0),
+    ])
     var bullets = bullet_holder.get_bullets()
     for b in bullets:
-        obs.append(b.translation - translation)
-    
-    return obs
+        var bs2 = b.translation - translation
+        obs.append([
+            clamp(bs2.x/40.0,-1.0,1.0),
+            clamp(bs2.y/40.0,-1.0,1.0),
+            clamp(bs2.z/40.0,-1.0,1.0),
+        ])
+    return {"obs": obs}
 
 func get_reward():
     var reward = 0
@@ -112,7 +121,18 @@ func set_heuristic(heuristic):
 func get_obs_size():
     # nothing to change here
     return len(get_obs())
-   
+    
+func get_obs_space():
+    # typs of obs space: box, discrete, repeated (for variable length observations)
+    return {
+        "obs": {
+            "size": len(get_obs()["obs"][0]),
+            "space": "repeated",
+            "subspace": "box",
+            "max_length": 100
+           }
+       }
+     
 func get_action_space():
     # Define the action space of you agent, below is an example, GDRL allows for discrete and continuous state spaces (assuming the RL algorithm allows it)
     return {

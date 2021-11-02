@@ -31,7 +31,9 @@ func _process(delta):
                 node_ref.add_child(b)
             else:
                 owner.add_child(b)
-            b.transform = global_transform
+            b.transform = transform
+            b.translation = get_parent().translation
+            
             b.velocity = -b.transform.basis.z * b.speed 
             rotate_y(deg2rad(30))     
         

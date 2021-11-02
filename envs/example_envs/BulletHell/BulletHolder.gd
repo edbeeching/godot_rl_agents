@@ -2,10 +2,8 @@ class_name BulletHolder
 
 extends Spatial
 
-
-
 func get_bullets():
-    pass
+    return get_children().slice(0, 98)
 
 func add_bullet():
     pass
