@@ -8,6 +8,7 @@ import socket
 import json
 import numpy as np
 from gym import spaces
+from ray.rllib.utils.spaces.repeated import Repeated
 import atexit
 
 
@@ -90,7 +91,7 @@ class GodotEnv:
         response = self._get_json_dict()
 
         return (
-            np.array(response["obs"]),
+            response["obs"],
             response["reward"],
             np.array(response["done"]).tolist(),
             [{}] * len(response["done"]),
@@ -204,10 +205,39 @@ class GodotEnv:
                 action_spaces[k] = spaces.Box(
                     low=-1.0, high=1.0, shape=(v["size"],)
                 )
+            else:
+                print(f"action space {v['action_type']} is not supported")
+                assert 0, f"action space {v['action_type']} is not supported"
         self.action_space = spaces.Dict(action_spaces)
-        self.observation_space = spaces.Box(
-            low=-1.0, high=1.0, shape=(json_dict["obs_size"],), dtype=np.float32
-        )
+
+        observation_spaces = {}
+        print("observation space", json_dict["observation_space"])
+        for k, v in json_dict["observation_space"].items():
+            if v["space"] == "box":
+                observation_spaces[k] = spaces.Box(
+                    low=-1.0,
+                    high=1.0,
+                    shape=(v["size"],),
+                    dtype=np.float32,
+                )
+            elif v["space"] == "discrete":
+                observation_spaces[k] = spaces.Discrete(v["size"])
+            elif v["space"] == "repeated":
+                assert "max_length" in v
+                if v["subspace"] == "box":
+                    subspace = observation_spaces[k] = spaces.Box(
+                        low=-1.0,
+                        high=1.0,
+                        shape=(v["size"],),
+                        dtype=np.float32,
+                    )
+                elif v["subspace"] == "discrete":
+                    subspace = spaces.Discrete(v["size"])
+                observation_spaces[k] = Repeated(subspace, v["max_length"])
+            else:
+                print(f"observation space {v['space']} is not supported")
+                assert 0, f"observation space {v['space']} is not supported"
+        self.observation_space = spaces.Dict(observation_spaces)
 
         self.num_envs = json_dict["n_agents"]
 
@@ -256,3 +286,11 @@ class GodotEnv:
 
     def _send_action(self, action):
         self._send_string(action)
+
+
+if __name__ == "__main__":
+    env = GodotEnv()
+
+    obs = env.reset()
+
+    print(obs)
