@@ -16,7 +16,7 @@ For the current version, we provide 4 example environments, located in **envs/ex
 **Reward function:**
 * Dense reward based on decrease in euclidean distance to next platform
 
-* Sparse reward of 10.0 
+* Sparse reward of 10.0 when the agent reaches the next platform
 * Penalty of -10.0 when the agent falls off the platform
 
 **Reset condition:**
