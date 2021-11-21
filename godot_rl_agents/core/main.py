@@ -68,7 +68,7 @@ def main():
     print("run_name", run_name)
 
     if args.env_path is None:
-        print("SETTING WORKS TO 1")
+        print("SETTING WORKERS TO 1")
         exp["config"]["num_workers"] = 1
 
     checkpoint_freq = 10

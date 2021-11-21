@@ -34,7 +34,10 @@ func reset_if_done():
 
 func get_obs():
 # The observation of the agent, think of what is the key information that is needed to perform the task, try to have things in coordinates that a relative to the play
+
+# return a dictionary with the "obs" as a key, you can have several keys
     pass
+    
 
 func get_reward():
     var reward = 0
@@ -54,6 +57,15 @@ func get_obs_size():
     # nothing to change here
     return len(get_obs())
    
+func get_obs_space():
+    # typs of obs space: box, discrete, repeated (for variable length observations)
+    return {
+        "obs": {
+            "size": len(get_obs()["obs"]),
+            "space": "box"
+           }
+       }
+
 func get_action_space():
     # Define the action space of you agent, below is an example, GDRL allows for discrete and continuous state spaces (assuming the RL algorithm allows it)
     return {

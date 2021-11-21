@@ -55,6 +55,5 @@ class RayVectorGodotEnv(VectorEnv):
         return [self._env]
 
     def reset_at(self, index: Optional[int]) -> EnvObsType:
-        # obs = self.vector_reset()
-
+        # the env is reset automatically, no need to reset it
         return self.obs[index]
