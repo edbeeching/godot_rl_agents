@@ -195,8 +195,18 @@ func get_obs():
 #    obs.append_array(raycast_sensor5.get_raycast_buffer())
 #    obs.append_array(raycast_sensor6.get_raycast_buffer())
     
-    return obs
-
+    return {
+        "obs": obs,
+       }
+    
+func get_obs_space():
+    # typs of obs space: box, discrete, repeated
+    return {
+        "obs": {
+            "size": len(get_obs()["obs"]),
+            "space": "box"
+           }
+       }
 func get_reward():
     var reward = 0.0
     reward -= 0.01 # step penalty
