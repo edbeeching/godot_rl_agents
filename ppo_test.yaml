@@ -35,5 +35,5 @@ config:
         use_lstm: false
         lstm_cell_size : 32
         num_framestacks: 4
-    no_done_at_end: true
-    soft_horizon: true
+    no_done_at_end: false
+    soft_horizon: false
