@@ -100,6 +100,7 @@ func get_obs():
             clamp(bs2.y/40.0,-1.0,1.0),
             clamp(bs2.z/40.0,-1.0,1.0),
         ])
+    print("send obs", obs)
     return {"obs": obs}
 
 func get_reward():

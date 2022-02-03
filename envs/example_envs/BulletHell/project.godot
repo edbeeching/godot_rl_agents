@@ -27,7 +27,7 @@ _global_script_class_icons={
 [application]
 
 config/name="BulletHell"
-run/main_scene="res://BulletHell.tscn"
+run/main_scene="res://BatchEnvs.tscn"
 config/icon="res://icon.png"
 
 [editor_plugins]
