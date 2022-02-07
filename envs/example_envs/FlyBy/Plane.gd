@@ -82,7 +82,7 @@ func get_obs():
         next_goal_distance / 50.0
        ]
     
-    return obs
+    return {"obs":obs}
 
 func get_reward():
     var reward = 0.0
@@ -112,7 +112,15 @@ func set_heuristic(heuristic):
 
 func get_obs_size():
     return len(get_obs())
-   
+    
+func get_obs_space():
+    # typs of obs space: box, discrete, repeated
+    return {
+        "obs": {
+            "size": len(get_obs()["obs"]),
+            "space": "box"
+           }
+       }   
 func get_action_space():
     return {
         "turn" : {
