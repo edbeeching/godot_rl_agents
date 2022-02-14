@@ -6,7 +6,8 @@ from godot_rl_agents.core.godot_env import GodotEnv
 if __name__ == "__main__":
 
     env = GodotEnv(env_path=None, port=10008)
-
+    print("observation space", env.observation_space)
+    print("action space", env.action_space)
     print("RESET ENV 1")
     obs = env.reset()
     for i in range(10):

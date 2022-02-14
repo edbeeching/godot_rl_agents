@@ -138,9 +138,7 @@ class GodotEnv:
         print("exit was not clean, using atexit to close env")
         self.close()
 
-    def _launch_env(
-        self, env_path, port, show_window, framerate, seed, action_repeat
-    ):
+    def _launch_env(self, env_path, port, show_window, framerate, seed, action_repeat):
         # --fixed-fps {framerate}
         launch_cmd = f"{env_path} --port={port} --env_seed={seed}"
 
@@ -202,9 +200,7 @@ class GodotEnv:
             if v["action_type"] == "discrete":
                 action_spaces[k] = spaces.Discrete(v["size"])
             elif v["action_type"] == "continuous":
-                action_spaces[k] = spaces.Box(
-                    low=-1.0, high=1.0, shape=(v["size"],)
-                )
+                action_spaces[k] = spaces.Box(low=-1.0, high=1.0, shape=(v["size"],))
             else:
                 print(f"action space {v['action_type']} is not supported")
                 assert 0, f"action space {v['action_type']} is not supported"
@@ -217,7 +213,7 @@ class GodotEnv:
                 observation_spaces[k] = spaces.Box(
                     low=-1.0,
                     high=1.0,
-                    shape=(v["size"],),
+                    shape=v["size"],
                     dtype=np.float32,
                 )
             elif v["space"] == "discrete":
@@ -228,7 +224,7 @@ class GodotEnv:
                     subspace = observation_spaces[k] = spaces.Box(
                         low=-1.0,
                         high=1.0,
-                        shape=(v["size"],),
+                        shape=v["size"],
                         dtype=np.float32,
                     )
                 elif v["subspace"] == "discrete":
@@ -240,6 +236,10 @@ class GodotEnv:
         self.observation_space = spaces.Dict(observation_spaces)
 
         self.num_envs = json_dict["n_agents"]
+
+    @staticmethod
+    def decode_2d_obs_from_string(hex_string, shape, ):
+        return np.frombuffer(bytes.fromhex(hex_string), dtype=np.float16).reshape(shape).astype(np.float32)[:,:,:3]
 
     def _send_as_json(self, dictionary):
         message_json = json.dumps(dictionary)
@@ -290,7 +290,11 @@ class GodotEnv:
 
 if __name__ == "__main__":
     env = GodotEnv()
-
+    print("observation space", env.observation_space)
+    print("action space", env.action_space)
     obs = env.reset()
-
     print(obs)
+    for i in range(1):
+        obs, reward, done, info = env.step([env.action_space.sample()])
+        print(obs)
+    env.close()
