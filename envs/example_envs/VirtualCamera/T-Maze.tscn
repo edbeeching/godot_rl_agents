@@ -1,0 +1,99 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://VirtualCamera.tscn" type="PackedScene" id=2]
+
+[sub_resource type="CubeMesh" id=1]
+size = Vector3( 20, 0.1, 20 )
+
+[sub_resource type="SpatialMaterial" id=9]
+albedo_color = Color( 0.584314, 0.580392, 0.580392, 1 )
+
+[sub_resource type="ConcavePolygonShape" id=2]
+data = PoolVector3Array( -10, 0.05, 10, 10, 0.05, 10, -10, -0.05, 10, 10, 0.05, 10, 10, -0.05, 10, -10, -0.05, 10, 10, 0.05, -10, -10, 0.05, -10, 10, -0.05, -10, -10, 0.05, -10, -10, -0.05, -10, 10, -0.05, -10, 10, 0.05, 10, 10, 0.05, -10, 10, -0.05, 10, 10, 0.05, -10, 10, -0.05, -10, 10, -0.05, 10, -10, 0.05, -10, -10, 0.05, 10, -10, -0.05, -10, -10, 0.05, 10, -10, -0.05, 10, -10, -0.05, -10, 10, 0.05, 10, -10, 0.05, 10, 10, 0.05, -10, -10, 0.05, 10, -10, 0.05, -10, 10, 0.05, -10, -10, -0.05, 10, 10, -0.05, 10, -10, -0.05, -10, 10, -0.05, 10, 10, -0.05, -10, -10, -0.05, -10 )
+
+[sub_resource type="CubeMesh" id=3]
+size = Vector3( 20, 5, 2 )
+
+[sub_resource type="SpatialMaterial" id=8]
+albedo_color = Color( 0.541176, 0.247059, 0.760784, 1 )
+
+[sub_resource type="ConcavePolygonShape" id=4]
+data = PoolVector3Array( -10, 2.5, 1, 10, 2.5, 1, -10, -2.5, 1, 10, 2.5, 1, 10, -2.5, 1, -10, -2.5, 1, 10, 2.5, -1, -10, 2.5, -1, 10, -2.5, -1, -10, 2.5, -1, -10, -2.5, -1, 10, -2.5, -1, 10, 2.5, 1, 10, 2.5, -1, 10, -2.5, 1, 10, 2.5, -1, 10, -2.5, -1, 10, -2.5, 1, -10, 2.5, -1, -10, 2.5, 1, -10, -2.5, -1, -10, 2.5, 1, -10, -2.5, 1, -10, -2.5, -1, 10, 2.5, 1, -10, 2.5, 1, 10, 2.5, -1, -10, 2.5, 1, -10, 2.5, -1, 10, 2.5, -1, -10, -2.5, 1, 10, -2.5, 1, -10, -2.5, -1, 10, -2.5, 1, 10, -2.5, -1, -10, -2.5, -1 )
+
+[sub_resource type="SpatialMaterial" id=7]
+albedo_color = Color( 0.0627451, 0.670588, 0.215686, 1 )
+
+[sub_resource type="SpatialMaterial" id=6]
+albedo_color = Color( 0.137255, 0.34902, 0.909804, 1 )
+
+[sub_resource type="SpatialMaterial" id=5]
+albedo_color = Color( 0.784314, 0.129412, 0.129412, 1 )
+
+[node name="T-Maze" type="Spatial"]
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+
+[node name="VirtualCamera" parent="Player" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, -2 )
+
+[node name="Camera" type="Camera" parent="Player"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, -2 )
+current = true
+
+[node name="Walls" type="Spatial" parent="."]
+
+[node name="MeshInstance" type="MeshInstance" parent="Walls"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0 )
+mesh = SubResource( 1 )
+skeleton = NodePath("../..")
+material/0 = SubResource( 9 )
+
+[node name="StaticBody" type="StaticBody" parent="Walls/MeshInstance"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Walls/MeshInstance/StaticBody"]
+shape = SubResource( 2 )
+
+[node name="MeshInstance2" type="MeshInstance" parent="Walls"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -11 )
+mesh = SubResource( 3 )
+skeleton = NodePath("../..")
+material/0 = SubResource( 8 )
+
+[node name="StaticBody" type="StaticBody" parent="Walls/MeshInstance2"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Walls/MeshInstance2/StaticBody"]
+shape = SubResource( 4 )
+
+[node name="MeshInstance3" type="MeshInstance" parent="Walls"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 11 )
+mesh = SubResource( 3 )
+skeleton = NodePath("../..")
+material/0 = SubResource( 7 )
+
+[node name="StaticBody" type="StaticBody" parent="Walls/MeshInstance3"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Walls/MeshInstance3/StaticBody"]
+shape = SubResource( 4 )
+
+[node name="MeshInstance4" type="MeshInstance" parent="Walls"]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 11, 2.5, 0 )
+mesh = SubResource( 3 )
+skeleton = NodePath("../..")
+material/0 = SubResource( 6 )
+
+[node name="StaticBody" type="StaticBody" parent="Walls/MeshInstance4"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Walls/MeshInstance4/StaticBody"]
+shape = SubResource( 4 )
+
+[node name="MeshInstance5" type="MeshInstance" parent="Walls"]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -11, 2.5, 0 )
+mesh = SubResource( 3 )
+skeleton = NodePath("../..")
+material/0 = SubResource( 5 )
+
+[node name="StaticBody" type="StaticBody" parent="Walls/MeshInstance5"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Walls/MeshInstance5/StaticBody"]
+shape = SubResource( 4 )
