@@ -5,7 +5,7 @@ const JUMP_FORCE = 30
 const GRAVITY = 0.98
 const MAX_FALL_SPEED = 30
 const TURN_SENS = 2.0
-const MAX_STEPS = 10
+const MAX_STEPS = 10000
  
 onready var cam = $Camera
 var move_vec = Vector3()
@@ -18,8 +18,8 @@ onready var virtual_camera = $VirtualCamera
 var next = 1
 var done = false
 var needs_reset = false
-var just_reached_end = false
-var just_reached_next = false
+var just_reached_negative = false
+var just_reached_positive = false
 var just_fell_off = false
 var best_goal_distance := 10000.0
 var grounded := false
@@ -35,7 +35,6 @@ func _ready():
 
 func _physics_process(_delta):
 
-    
     if needs_reset:
         needs_reset = false
         reset()
@@ -44,6 +43,7 @@ func _physics_process(_delta):
     move_vec *= 0
     move_vec = get_move_vec()
     #move_vec = move_vec.normalized()
+    
     move_vec = move_vec.rotated(Vector3(0, 1, 0), rotation.y)
     move_vec *= MOVE_SPEED
     move_vec.y = y_velo
@@ -58,11 +58,7 @@ func _physics_process(_delta):
 
     y_velo -= GRAVITY
     var just_jumped = false
-    if grounded and get_jump_action():
-        robot.set_animation("jump-up-cycle")
-        just_jumped = true
-        y_velo = JUMP_FORCE
-        grounded = false
+
     if grounded and y_velo <= 0:
         y_velo = -0.1
     if y_velo < -MAX_FALL_SPEED:
@@ -74,10 +70,10 @@ func _physics_process(_delta):
     var horizontal_speed = Vector2(move_vec.x, move_vec.z)
     if horizontal_speed.length() < 0.1 and grounded:
         robot.set_animation("idle")
-    elif horizontal_speed.length() < 1.0 and grounded:
+    elif horizontal_speed.length() >=1.0 and grounded:
         robot.set_animation("walk-cycle")    
-    elif horizontal_speed.length() >= 1.0 and grounded:
-        robot.set_animation("run-cycle")
+#    elif horizontal_speed.length() >= 1.0 and grounded:
+#        robot.set_animation("run-cycle")
     
     if Input.is_action_just_pressed("r_key"):
         reset()
@@ -88,7 +84,7 @@ func _physics_process(_delta):
         done = true
      
     
-    reset_if_done()
+    #reset_if_done()
 
 func get_move_vec() -> Vector3:
     if done:
@@ -116,35 +112,24 @@ func get_turn_vec() -> float:
     var rotation_amount = Input.get_action_strength("turn_left") - Input.get_action_strength("turn_right")
 
     return rotation_amount
-    
-func get_jump_action() -> bool:
-    return false
-    
-#    if done:
-#        jump_action = false
-#        return jump_action
-#
-#    if _heuristic == "model":
-#        return jump_action  
-#
-#    return Input.is_action_just_pressed("jump")
+
   
 func reset():
+    needs_reset = false
     next = 1
     n_steps = 0
     #done = false
-    just_reached_end = false
-    just_fell_off = false
+    just_reached_negative = false
+    just_reached_positive = false
     jump_action = false
      # Replace with function body.
-    #set_translation(Vector3(0,5,0))
+    set_translation(Vector3(0,1.5,0))
     rotation_degrees.y = rand_range(-180,180)
     y_velo = 0.1
     
 func set_action(action):
     move_action = action["move"][0]
     turn_action = action["turn"][0]
-    jump_action = action["jump"] == 1
     
 func reset_if_done():
     if done:
@@ -184,13 +169,11 @@ func get_obs_space():
 func get_reward():
     var reward = 0.0
     reward -= 0.01 # step penalty
-    if just_reached_next:
-        reward += 100.0
-        just_reached_next = false
     
-    if just_fell_off:
+    if just_reached_negative:
         reward -= 1.0
-        just_fell_off = false
+    if just_reached_positive:
+        reward += 1.0
     
     reward += shaping_reward()
     return reward
@@ -215,10 +198,6 @@ func get_action_space():
         "turn" : {
              "size": 1,
             "action_type": "continuous"
-           },
-        "jump": {
-            "size": 2,
-            "action_type": "discrete"
            }
        }
 
@@ -238,3 +217,15 @@ func calculate_translation(other_pad_translation : Vector3) -> Vector3:
     
     return new_translation
 
+
+
+func _on_NegativeGoal_body_entered(body: Node) -> void:
+    just_reached_negative = true
+    done = true
+    needs_reset = true
+
+
+func _on_PositiveGoal_body_entered(body: Node) -> void:
+    just_reached_positive = true
+    done = true
+    needs_reset = true
