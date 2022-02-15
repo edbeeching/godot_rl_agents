@@ -272,7 +272,6 @@ class GodotEnv:
 
     def _get_json_dict(self):
         data = self._get_data()
-
         return json.loads(data)
 
     def _get_obs(self):
@@ -298,7 +297,12 @@ class GodotEnv:
                 time.sleep(0.000001)
                 return self._get_data()
             length = int.from_bytes(data, "little")
-            string = self.connection.recv(length).decode()
+            string = ""
+            while (
+                len(string) != length
+            ):  # TODO: refactor as string concatenation could be slow
+                string += self.connection.recv(length).decode()
+            print(length, len(string))
             return string
         except socket.timeout as e:
             print("env timed out", e)
@@ -321,11 +325,14 @@ if __name__ == "__main__":
     print("action space", env.action_space)
     obs = env.reset()
 
-    for i in range(30):
+    for i in range(1000):
+
         # env.reset()
-        obs, reward, done, info = env.step([env.action_space.sample()])
+        obs, reward, done, info = env.step(
+            [env.action_space.sample() for _ in range(env.num_envs)]
+        )
         # print(obs, done)
-        plt.imshow(obs[0]["camera_2d"][:, :, :3])
-        plt.show()
+        # plt.imshow(obs[0]["camera_2d"][:, :, :3])
+        # plt.show()
         # print(obs)
     env.close()
