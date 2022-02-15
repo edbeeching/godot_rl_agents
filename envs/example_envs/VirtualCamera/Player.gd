@@ -1,11 +1,11 @@
 extends KinematicBody
- 
+class_name Player
 const MOVE_SPEED = 12
 const JUMP_FORCE = 30
 const GRAVITY = 0.98
 const MAX_FALL_SPEED = 30
 const TURN_SENS = 2.0
-const MAX_STEPS = 20000
+const MAX_STEPS = 10
  
 onready var cam = $Camera
 var move_vec = Vector3()
@@ -17,6 +17,7 @@ onready var virtual_camera = $VirtualCamera
 
 var next = 1
 var done = false
+var needs_reset = false
 var just_reached_end = false
 var just_reached_next = false
 var just_fell_off = false
@@ -29,9 +30,17 @@ var jump_action := false
 var n_steps = 0
 
 func _ready():
-    reset()
+    return
+    #reset()
 
 func _physics_process(_delta):
+
+    
+    if needs_reset:
+        needs_reset = false
+        reset()
+        return
+    
     move_vec *= 0
     move_vec = get_move_vec()
     #move_vec = move_vec.normalized()
@@ -77,12 +86,9 @@ func _physics_process(_delta):
         
     if n_steps >= MAX_STEPS:
         done = true
-    get_obs()
+     
     
-    #print(get_reward())
-    #get_reward()
-    #get_obs()
-    #var reward = get_reward()
+    reset_if_done()
 
 func get_move_vec() -> Vector3:
     if done:
@@ -126,7 +132,7 @@ func get_jump_action() -> bool:
 func reset():
     next = 1
     n_steps = 0
-    done = false
+    #done = false
     just_reached_end = false
     just_fell_off = false
     jump_action = false
@@ -154,7 +160,8 @@ func get_obs():
     #print(virtual_camera.get_camera_pixel_encoding())
     return {
         "obs_1d": obs,
-        "camera_2d": virtual_camera.get_camera_pixel_encoding()
+        "camera_2d": virtual_camera.get_camera_pixel_encoding(),
+        "steps": n_steps
        }
     
 func get_obs_space():
@@ -167,8 +174,13 @@ func get_obs_space():
         "camera_2d":{
             "size": virtual_camera.get_camera_shape(),
             "space":"box"
+           },
+        "steps":{
+            "size": [1],
+            "space": "box"
            }
        }
+    
 func get_reward():
     var reward = 0.0
     reward -= 0.01 # step penalty
@@ -212,6 +224,9 @@ func get_action_space():
 
 func get_done():
     return done
+    
+func set_done_false():
+    done = false
 
 
 func calculate_translation(other_pad_translation : Vector3) -> Vector3:

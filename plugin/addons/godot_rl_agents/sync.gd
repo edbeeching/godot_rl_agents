@@ -17,8 +17,13 @@ var need_to_send_obs = false
 var args = null
 onready var start_time = OS.get_ticks_msec()
 var initialized = false
+var just_reset = false
 func _ready():
-    pass
+    yield(get_tree().root, "ready")
+    get_tree().set_pause(true) 
+    _initialize()
+    yield(get_tree().create_timer(1.0), "timeout")
+    get_tree().set_pause(false) 
         
 func _get_agents():
     agents = get_tree().get_nodes_in_group("AGENT")
@@ -38,6 +43,8 @@ func _handshake():
         print("WARNING: major verison mismatch ", major_version, " ", MAJOR_VERSION)  
     if minor_version != MINOR_VERSION:
         print("WARNING: major verison mismatch ", minor_version, " ", MINOR_VERSION)
+        
+    print("handshake complete")
 
 func _get_dict_json_message():
     # returns a dictionary from of the most recent message
@@ -132,10 +139,7 @@ func _initialize():
     _set_action_repeat()
     initialized = true  
 
-func _physics_process(delta):   
-    if !initialized:
-        _initialize()
- 
+func _physics_process(delta): 
     # two modes, human control, agent control
     # pause tree, send obs, get actions, set actions, unpause tree
     if n_action_steps % action_repeat != 0:
@@ -147,11 +151,23 @@ func _physics_process(delta):
     if connected:
         get_tree().set_pause(true) 
         
+        if just_reset:
+            just_reset = false
+            var obs = _get_obs_from_agents()
+        
+            var reply = {
+                "type": "reset",
+                "obs": obs
+            }
+            _send_dict_as_json_message(reply)
+            get_tree().set_pause(false) 
+            return
+        
         if need_to_send_obs:
             need_to_send_obs = false
             var reward = _get_reward_from_agents()
             var done = _get_done_from_agents()
-            _reset_agents_if_done() # this ensures the new observation is from the next env instance
+            #_reset_agents_if_done() # this ensures the new observation is from the next env instance : NEEDS REFACTOR
             
             var obs = _get_obs_from_agents()
             
@@ -177,14 +193,20 @@ func handle_message() -> bool:
         return true
         
     if message["type"] == "reset":
+        print("resetting all agents")
         _reset_all_agents()
-        var obs = _get_obs_from_agents()
-        var reply = {
-            "type": "reset",
-            "obs": obs
-        }
-        _send_dict_as_json_message(reply)   
-        return handle_message()
+        just_reset = true
+        get_tree().set_pause(false) 
+        #print("resetting forcing draw")
+#        VisualServer.force_draw()
+#        var obs = _get_obs_from_agents()
+#        print("obs ", obs)
+#        var reply = {
+#            "type": "reset",
+#            "obs": obs
+#        }
+#        _send_dict_as_json_message(reply)   
+        return true
         
     if message["type"] == "call":
         var method = message["method"]
@@ -221,7 +243,8 @@ func _reset_agents_if_done():
 
 func _reset_all_agents():
     for agent in agents:
-        agent.reset()   
+        agent.needs_reset = true
+        #agent.reset()   
 
 func _get_obs_from_agents():
     var obs = []
@@ -238,7 +261,9 @@ func _get_reward_from_agents():
 func _get_done_from_agents():
     var dones = [] 
     for agent in agents:
-        dones.append(agent.get_done())
+        var done = agent.get_done()
+        if done: agent.set_done_false()
+        dones.append(done)
     return dones    
     
 func _set_agent_actions(actions):

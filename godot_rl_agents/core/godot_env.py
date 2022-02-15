@@ -6,6 +6,7 @@ from sys import platform
 import subprocess
 import socket
 import json
+from urllib import response
 import numpy as np
 from gym import spaces
 from ray.rllib.utils.spaces.repeated import Repeated
@@ -90,12 +91,25 @@ class GodotEnv:
         self._send_as_json(message)
         response = self._get_json_dict()
 
+        response["obs"] = self._process_obs(response["obs"])
+
         return (
             response["obs"],
             response["reward"],
             np.array(response["done"]).tolist(),
             [{}] * len(response["done"]),
         )
+
+    def _process_obs(self, response_obs: dict):
+
+        for k in response_obs[0].keys():
+            if "2d" in k:
+                for sub in response_obs:
+                    sub[k] = self.decode_2d_obs_from_string(
+                        sub[k], self.observation_space[k].shape
+                    )
+
+        return response_obs
 
     def reset(self):
         # may need to clear message buffer
@@ -138,7 +152,9 @@ class GodotEnv:
         print("exit was not clean, using atexit to close env")
         self.close()
 
-    def _launch_env(self, env_path, port, show_window, framerate, seed, action_repeat):
+    def _launch_env(
+        self, env_path, port, show_window, framerate, seed, action_repeat
+    ):
         # --fixed-fps {framerate}
         launch_cmd = f"{env_path} --port={port} --env_seed={seed}"
 
@@ -200,7 +216,9 @@ class GodotEnv:
             if v["action_type"] == "discrete":
                 action_spaces[k] = spaces.Discrete(v["size"])
             elif v["action_type"] == "continuous":
-                action_spaces[k] = spaces.Box(low=-1.0, high=1.0, shape=(v["size"],))
+                action_spaces[k] = spaces.Box(
+                    low=-1.0, high=1.0, shape=(v["size"],)
+                )
             else:
                 print(f"action space {v['action_type']} is not supported")
                 assert 0, f"action space {v['action_type']} is not supported"
@@ -238,8 +256,15 @@ class GodotEnv:
         self.num_envs = json_dict["n_agents"]
 
     @staticmethod
-    def decode_2d_obs_from_string(hex_string, shape, ):
-        return np.frombuffer(bytes.fromhex(hex_string), dtype=np.float16).reshape(shape).astype(np.float32)[:,:,:3]
+    def decode_2d_obs_from_string(
+        hex_string,
+        shape,
+    ):
+        return (
+            np.frombuffer(bytes.fromhex(hex_string), dtype=np.float16)
+            .reshape(shape)
+            .astype(np.float32)[:, :, :3]
+        )
 
     def _send_as_json(self, dictionary):
         message_json = json.dumps(dictionary)
@@ -289,12 +314,18 @@ class GodotEnv:
 
 
 if __name__ == "__main__":
+    import matplotlib.pyplot as plt
+
     env = GodotEnv()
     print("observation space", env.observation_space)
     print("action space", env.action_space)
     obs = env.reset()
-    print(obs)
-    for i in range(1):
+
+    for i in range(30):
+        # env.reset()
         obs, reward, done, info = env.step([env.action_space.sample()])
-        print(obs)
+        # print(obs, done)
+        plt.imshow(obs[0]["camera_2d"][:, :, :3])
+        plt.show()
+        # print(obs)
     env.close()
