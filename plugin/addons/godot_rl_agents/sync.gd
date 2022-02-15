@@ -8,7 +8,7 @@ const MINOR_VERSION := "1"
 const DEFAULT_PORT := 11008
 const DEFAULT_SEED := 1
 const DEFAULT_ACTION_REPEAT := 8
-var client
+var client : StreamPeerTCP = null
 var connected = false
 var message_center
 var should_connect = true
@@ -239,7 +239,8 @@ func _call_method_on_agents(method):
 
 func _reset_agents_if_done():
      for agent in agents:
-        agent.reset_if_done()
+        if agent.get_done(): 
+            agent.set_done_false()
 
 func _reset_all_agents():
     for agent in agents:
