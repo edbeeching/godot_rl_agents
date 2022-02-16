@@ -12,11 +12,11 @@ script = ExtResource( 1 )
 remote_path = NodePath("../Viewport/Camera")
 
 [node name="Viewport" type="Viewport" parent="."]
-size = Vector2( 64, 64 )
+size = Vector2( 16, 16 )
 render_target_update_mode = 3
 
 [node name="Camera" type="Camera" parent="Viewport"]
-near = 0.2
+near = 0.5
 
 [node name="Control" type="Control" parent="."]
 anchor_right = 1.0
@@ -26,11 +26,11 @@ __meta__ = {
 }
 
 [node name="TextureRect" type="ColorRect" parent="Control"]
-margin_left = 1082.0
-margin_top = 592.0
-margin_right = 1140.0
-margin_bottom = 626.0
-rect_scale = Vector2( 3, 3 )
+margin_left = 1096.0
+margin_top = 534.0
+margin_right = 1114.0
+margin_bottom = 552.0
+rect_scale = Vector2( 10, 10 )
 color = Color( 0.00784314, 0.00784314, 0.00784314, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -38,5 +38,5 @@ __meta__ = {
 
 [node name="CameraTexture" type="Sprite" parent="Control/TextureRect"]
 texture = SubResource( 1 )
-offset = Vector2( 29, 17 )
+offset = Vector2( 9, 9 )
 flip_v = true
