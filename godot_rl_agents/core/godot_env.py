@@ -121,6 +121,7 @@ class GodotEnv:
         }
         self._send_as_json(message)
         response = self._get_json_dict()
+        response["obs"] = self._process_obs(response["obs"])
         assert response["type"] == "reset"
         obs = np.array(response["obs"])
         return obs
@@ -152,9 +153,7 @@ class GodotEnv:
         print("exit was not clean, using atexit to close env")
         self.close()
 
-    def _launch_env(
-        self, env_path, port, show_window, framerate, seed, action_repeat
-    ):
+    def _launch_env(self, env_path, port, show_window, framerate, seed, action_repeat):
         # --fixed-fps {framerate}
         launch_cmd = f"{env_path} --port={port} --env_seed={seed}"
 
@@ -216,9 +215,7 @@ class GodotEnv:
             if v["action_type"] == "discrete":
                 action_spaces[k] = spaces.Discrete(v["size"])
             elif v["action_type"] == "continuous":
-                action_spaces[k] = spaces.Box(
-                    low=-1.0, high=1.0, shape=(v["size"],)
-                )
+                action_spaces[k] = spaces.Box(low=-1.0, high=1.0, shape=(v["size"],))
             else:
                 print(f"action space {v['action_type']} is not supported")
                 assert 0, f"action space {v['action_type']} is not supported"
@@ -263,7 +260,7 @@ class GodotEnv:
         return (
             np.frombuffer(bytes.fromhex(hex_string), dtype=np.float16)
             .reshape(shape)
-            .astype(np.float32)[:, :, :3]
+            .astype(np.float32)[:, :, :]  # TODO remove the alpha channel
         )
 
     def _send_as_json(self, dictionary):
@@ -302,7 +299,7 @@ class GodotEnv:
                 len(string) != length
             ):  # TODO: refactor as string concatenation could be slow
                 string += self.connection.recv(length).decode()
-            print(length, len(string))
+
             return string
         except socket.timeout as e:
             print("env timed out", e)
