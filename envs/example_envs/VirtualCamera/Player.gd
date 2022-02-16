@@ -29,11 +29,18 @@ var turn_action := 0.0
 var jump_action := false
 var n_steps = 0
 
+var reward = 0.0
+
 func _ready():
     return
     #reset()
 
 func _physics_process(_delta):
+    reward = 0.0
+    n_steps +=1    
+    if n_steps >= MAX_STEPS:
+        done = true
+        needs_reset = true
 
     if needs_reset:
         needs_reset = false
@@ -75,16 +82,11 @@ func _physics_process(_delta):
 #    elif horizontal_speed.length() >= 1.0 and grounded:
 #        robot.set_animation("run-cycle")
     
+    update_reward()
+    
     if Input.is_action_just_pressed("r_key"):
         reset()
         
-    n_steps +=1
-        
-    if n_steps >= MAX_STEPS:
-        done = true
-     
-    
-    #reset_if_done()
 
 func get_move_vec() -> Vector3:
     if done:
@@ -136,46 +138,28 @@ func reset_if_done():
         reset()
 
 func get_obs():
-    var obs = []
-    obs.append_array([move_vec.x/MOVE_SPEED,
-                      move_vec.y/MAX_FALL_SPEED,
-                      move_vec.z/MOVE_SPEED])
-
-    obs.append(grounded)
     #print(virtual_camera.get_camera_pixel_encoding())
     return {
-        "obs_1d": obs,
         "camera_2d": virtual_camera.get_camera_pixel_encoding(),
-        "steps": n_steps
        }
     
 func get_obs_space():
     # typs of obs space: box, discrete, repeated
     return {
-        "obs_1d": {
-            "size": [len(get_obs()["obs_1d"])],
-            "space": "box"
-           },
         "camera_2d":{
             "size": virtual_camera.get_camera_shape(),
             "space":"box"
            },
-        "steps":{
-            "size": [1],
-            "space": "box"
-           }
        }
     
-func get_reward():
-    var reward = 0.0
+    
+func update_reward():
     reward -= 0.01 # step penalty
-    
-    if just_reached_negative:
-        reward -= 1.0
-    if just_reached_positive:
-        reward += 1.0
-    
     reward += shaping_reward()
+    
+    
+    
+func get_reward():
     return reward
     
 func shaping_reward():
@@ -220,12 +204,12 @@ func calculate_translation(other_pad_translation : Vector3) -> Vector3:
 
 
 func _on_NegativeGoal_body_entered(body: Node) -> void:
-    just_reached_negative = true
+    reward -= 1.0
     done = true
-    needs_reset = true
+    reset()
 
 
 func _on_PositiveGoal_body_entered(body: Node) -> void:
-    just_reached_positive = true
+    reward += 1.0
     done = true
-    needs_reset = true
+    reset()
