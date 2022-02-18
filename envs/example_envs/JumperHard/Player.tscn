@@ -26,9 +26,7 @@ ambient_light_sky_contribution = 0.83
 tonemap_mode = 3
 glow_intensity = 0.65
 
-[node name="Player" type="KinematicBody" groups=[
-"AGENT",
-]]
+[node name="Player" type="KinematicBody" groups=["AGENT"]]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0 )
 script = ExtResource( 1 )
 

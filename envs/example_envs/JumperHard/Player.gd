@@ -10,7 +10,7 @@ const MAX_STEPS = 20000
 onready var cam = $Camera
 var move_vec = Vector3()
 var y_velo = 0
-
+var needs_reset = false
 # RL related variables
 onready var end_position = $"../EndPosition"
 onready var raycast_sensor = $"RaycastSensor3D"
@@ -36,6 +36,7 @@ var turn_action := 0.0
 var jump_action := false
 var n_steps = 0
 var _goal_vec = null
+var reward = 0.0
 
 func _ready():
     reset()
@@ -45,6 +46,19 @@ func _process(_delta):
         DebugDraw.draw_line_3d(translation, translation + (_goal_vec*10), Color(1, 1, 0))
 
 func _physics_process(_delta):
+    
+    #reward = 0.0
+    n_steps +=1    
+    if n_steps >= MAX_STEPS:
+        done = true
+        needs_reset = true
+
+    if needs_reset:
+        needs_reset = false
+        reset()
+        return
+    
+    
     move_vec *= 0
     move_vec = get_move_vec()
     #move_vec = move_vec.normalized()
@@ -83,19 +97,11 @@ func _physics_process(_delta):
     elif horizontal_speed.length() >= 1.0 and grounded:
         robot.set_animation("run-cycle")
     
+    update_reward()
+    
     if Input.is_action_just_pressed("r_key"):
         reset()
         
-    n_steps +=1
-        
-    if n_steps >= MAX_STEPS:
-        done = true
-    get_obs()
-    
-    #print(get_reward())
-    #get_reward()
-    #get_obs()
-    #var reward = get_reward()
 
 func get_move_vec() -> Vector3:
     if done:
@@ -135,11 +141,11 @@ func get_jump_action() -> bool:
     return Input.is_action_just_pressed("jump")
   
 func reset():
+    needs_reset = false
     next = 1
     n_steps = 0
     first_jump_pad.translation = Vector3.ZERO
     second_jump_pad.translation = Vector3(0,0,-12)
-    done = false
     just_reached_end = false
     just_fell_off = false
     jump_action = false
@@ -203,23 +209,19 @@ func get_obs_space():
     # typs of obs space: box, discrete, repeated
     return {
         "obs": {
-            "size": len(get_obs()["obs"]),
+            "size": [len(get_obs()["obs"])],
             "space": "box"
            }
        }
-func get_reward():
-    var reward = 0.0
+    
+func update_reward():
     reward -= 0.01 # step penalty
-    if just_reached_next:
-        reward += 100.0
-        just_reached_next = false
-    
-    if just_fell_off:
-        reward -= 1.0
-        just_fell_off = false
-    
     reward += shaping_reward()
-    return reward
+    
+func get_reward():
+    var current_reward = reward
+    reward = 0 # reset the reward to zero on every decision step
+    return current_reward
     
 func shaping_reward():
     var s_reward = 0.0
@@ -266,7 +268,8 @@ func get_action_space():
 
 func get_done():
     return done
-
+func set_done_false():
+    done = false
 
 func calculate_translation(other_pad_translation : Vector3) -> Vector3:
     var new_translation := Vector3.ZERO
@@ -281,7 +284,8 @@ func calculate_translation(other_pad_translation : Vector3) -> Vector3:
 func _on_First_Pad_Trigger_body_entered(body):
     if next != 0:
         return
-    just_reached_next = true
+    print("trigger reward")
+    reward += 100.0
     next = 1
     reset_best_goal_distance()
     second_jump_pad.translation = calculate_translation(first_jump_pad.translation)
@@ -289,7 +293,8 @@ func _on_First_Pad_Trigger_body_entered(body):
 func _on_Second_Trigger_body_entered(body):
     if next != 1:
         return
-    just_reached_next = true
+    print("trigger reward")
+    reward += 100.0
     next = 0
     reset_best_goal_distance()
     first_jump_pad.translation = calculate_translation(second_jump_pad.translation)
@@ -298,4 +303,4 @@ func _on_Second_Trigger_body_entered(body):
 
 func _on_ResetTriggerBox_body_entered(body):
      done = true
-     just_fell_off = true
+     reset()
