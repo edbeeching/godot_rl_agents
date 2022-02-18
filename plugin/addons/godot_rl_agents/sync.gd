@@ -257,6 +257,7 @@ func _get_reward_from_agents():
     var rewards = [] 
     for agent in agents:
         rewards.append(agent.get_reward())
+        agent.zero_reward()
     return rewards    
     
 func _get_done_from_agents():

@@ -36,7 +36,7 @@ func _ready():
     #reset()
 
 func _physics_process(_delta):
-    reward = 0.0
+    
     n_steps +=1    
     if n_steps >= MAX_STEPS:
         done = true
@@ -161,6 +161,9 @@ func update_reward():
     
 func get_reward():
     return reward
+    
+func zero_reward():
+    reward = 0.0
     
 func shaping_reward():
     var s_reward = 0.0
