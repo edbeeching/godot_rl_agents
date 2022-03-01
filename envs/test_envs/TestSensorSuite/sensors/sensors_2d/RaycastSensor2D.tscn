@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://sensors/sensors_2d/RaycastSensor2D.gd" type="Script" id=1]
+
+[node name="RaycastSensor2D" type="Node2D"]
+script = ExtResource( 1 )
+ray_length = 25
+cone_width = 270.0
