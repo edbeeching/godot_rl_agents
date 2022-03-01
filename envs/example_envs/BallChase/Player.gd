@@ -26,18 +26,30 @@ var done = false
 var best_fruit_distance = 10000.0
 var fruit_count = 0
 var n_steps = 0
-var max_steps = 20000
-
+var MAX_STEPS = 20000
+var needs_reset = false
 onready var emitter = $"../Particles2D"
+var reward = 0.0
 
 func emit():
     emitter.set_position(fruit.position)
     emitter.set_emitting(true) 
 
 func _ready():
+    raycast_sensor.activate()
     reset()
 
 func _physics_process(delta):
+    n_steps +=1    
+    if n_steps >= MAX_STEPS:
+        done = true
+        needs_reset = true
+
+    if needs_reset:
+        needs_reset = false
+        reset()
+        return
+    
     var direction = get_direction()
     if direction.length() > 1.0:
         direction = direction.normalized()
@@ -46,18 +58,16 @@ func _physics_process(delta):
     _velocity += (target_velocity - _velocity) * friction
     _velocity = move_and_slide(_velocity)
     
-    n_steps += 1
-    if n_steps > max_steps:
-        done = true
-        just_hit_wall = true
+    update_reward()
         
     if Input.is_action_just_pressed("r_key"):
         reset()
 
 func reset():
+    needs_reset = false
     fruit_just_entered = false
     just_hit_wall = false
-    done = false
+    #done = false
     fruit_count = 0
     _velocity = Vector2.ZERO
     _action = Vector2.ZERO
@@ -127,29 +137,24 @@ func get_obs():
     result.append(relative.x)
     result.append(relative.y)
     result.append(distance)
-    var raycast_obs = raycast_sensor.get_raycast_buffer()
+    var raycast_obs = raycast_sensor.get_observation()
     result.append_array(raycast_obs)
-    
-#    result.append(((relative.x / WIDTH)-0.5) * 2)
-#    result.append(((relative.y / HEIGHT)-0.5) * 2)  
-# perform raycast here
+
     return {
         "obs": result,
        }
     
-func get_reward():
-    var reward = 0.0
+    
+func update_reward():
     reward -= 0.01 # step penalty
-    if fruit_just_entered:
-        reward += 10.0
-        fruit_just_entered = false
-    
-    if just_hit_wall:
-        reward -= 10.0
-        just_hit_wall = false
-    
     reward += shaping_reward()
+    
+func zero_reward():
+    reward = 0.0   
+     
+func get_reward():
     return reward
+
     
 func shaping_reward():
     var s_reward = 0.0
@@ -165,14 +170,11 @@ func shaping_reward():
 func set_heuristic(heuristic):
     self._heuristic = heuristic
 
-func get_obs_size():
-    return len(get_obs())
-    
 func get_obs_space():
     # typs of obs space: box, discrete, repeated
     return {
         "obs": {
-            "size": len(get_obs()["obs"]),
+            "size": [len(get_obs()["obs"])],
             "space": "box"
            }
        }
@@ -187,6 +189,9 @@ func get_action_space():
 
 func get_done():
     return done
+    
+func set_done_false():
+    done = false
 
 func spawn_fruit():
     fruit.position = _calculate_new_position(position)
@@ -194,6 +199,7 @@ func spawn_fruit():
 func fruit_collected():
     emit()
     fruit_just_entered = true
+    reward += 10.0
     fruit_count += 1
     spawn_fruit()
 #    if fruit_count > MAX_FRUIT:
@@ -202,7 +208,9 @@ func fruit_collected():
     
 func wall_hit():
     done = true
+    reward -= 10.0
     just_hit_wall = true
+    reset()
 
 func _on_Fruit_body_entered(body):
     fruit_collected()

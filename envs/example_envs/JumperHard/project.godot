@@ -8,6 +8,28 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Node2D",
+"class": "ISensor2D",
+"language": "GDScript",
+"path": "res://addons/godot_rl_agents/sensors/sensors_2d/ISensor2D.gd"
+}, {
+"base": "ISensor",
+"class": "RayCastSensor3D",
+"language": "GDScript",
+"path": "res://addons/godot_rl_agents/sensors/sensors_3d/RayCastSensor3D.gd"
+}, {
+"base": "ISensor2D",
+"class": "RaycastSensor2D",
+"language": "GDScript",
+"path": "res://addons/godot_rl_agents/sensors/sensors_2d/RaycastSensor2D.gd"
+} ]
+_global_script_class_icons={
+"ISensor2D": "",
+"RayCastSensor3D": "",
+"RaycastSensor2D": ""
+}
+
 [application]
 
 config/name="JumperHard"

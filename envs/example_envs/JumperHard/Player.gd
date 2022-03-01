@@ -249,6 +249,9 @@ func set_heuristic(heuristic):
 
 func get_obs_size():
     return len(get_obs())
+    
+func zero_reward():
+    reward = 0
    
 func get_action_space():
     return {
@@ -284,7 +287,6 @@ func calculate_translation(other_pad_translation : Vector3) -> Vector3:
 func _on_First_Pad_Trigger_body_entered(body):
     if next != 0:
         return
-    print("trigger reward")
     reward += 100.0
     next = 1
     reset_best_goal_distance()
@@ -293,7 +295,6 @@ func _on_First_Pad_Trigger_body_entered(body):
 func _on_Second_Trigger_body_entered(body):
     if next != 1:
         return
-    print("trigger reward")
     reward += 100.0
     next = 0
     reset_best_goal_distance()
