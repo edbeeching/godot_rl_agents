@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://sensors/sensors_3d/RayCastSensor3D.gd" type="Script" id=1]
+
+[node name="RayCastSensor3D" type="Spatial"]
+script = ExtResource( 1 )
