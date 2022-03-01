@@ -75,7 +75,7 @@ func _send_env_info():
     
     var message = {
         "type" : "env_info",
-        "obs_size": agents[0].get_obs_size(),
+        #"obs_size": agents[0].get_obs_size(),
         "observation_space": agents[0].get_obs_space(),
         "action_space":agents[0].get_action_space(),
         "n_agents": len(agents)
