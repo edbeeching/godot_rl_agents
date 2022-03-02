@@ -66,12 +66,6 @@ func _spawn_nodes():
             #angle_h = 0.0
             var ray = RayCast.new()
             var cast_to = to_spherical_coords(ray_length, angle_w, angle_h)
-#            var cast_to = Vector3(
-#                ray_length * sin(deg2rad(angle_w)),
-#                ray_length * sin(deg2rad(angle_h)),
-#                ray_length*cos(deg2rad(angle_w))*cos(deg2rad(angle_h))
-#                #ray_length*sin(deg2rad(angle_w)) + ray_length*sin(deg2rad(angle_h))
-#            )  
             ray.set_cast_to(cast_to)
             points.append(cast_to)
             
@@ -81,15 +75,6 @@ func _spawn_nodes():
             add_child(ray)
             rays.append(ray)
             ray.force_raycast_update()
-#            if Engine.editor_hint:
-#                geo = ImmediateGeometry.new()
-#
-#
-#
-#                $Lines.add_point(
-#                    Vector3.ZERO,
-#                    cast_to
-#                )
             
     if Engine.editor_hint:
         _create_debug_lines(points)
@@ -106,9 +91,6 @@ func _create_debug_lines(points):
         geo.add_vertex(Vector3.ZERO)
         geo.add_vertex(point)
     geo.end()
-    
-    var mat = geo.get_surface_material(0)
-    mat.albedo_color = Color(randf(), randf(), randf())
     
 
 func display():
