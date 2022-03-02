@@ -10,11 +10,21 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Node2D",
+"class": "DrawLine3D",
+"language": "GDScript",
+"path": "res://addons/godot_rl_agents/sensors/sensors_3d/DrawLine3D.gd"
+}, {
+"base": "Node2D",
 "class": "ISensor2D",
 "language": "GDScript",
 "path": "res://addons/godot_rl_agents/sensors/sensors_2d/ISensor2D.gd"
 }, {
-"base": "ISensor",
+"base": "Spatial",
+"class": "ISensor3D",
+"language": "GDScript",
+"path": "res://addons/godot_rl_agents/sensors/sensors_3d/ISensor3D.gd"
+}, {
+"base": "ISensor3D",
 "class": "RayCastSensor3D",
 "language": "GDScript",
 "path": "res://addons/godot_rl_agents/sensors/sensors_3d/RayCastSensor3D.gd"
@@ -25,7 +35,9 @@ _global_script_classes=[ {
 "path": "res://addons/godot_rl_agents/sensors/sensors_2d/RaycastSensor2D.gd"
 } ]
 _global_script_class_icons={
+"DrawLine3D": "",
 "ISensor2D": "",
+"ISensor3D": "",
 "RayCastSensor3D": "",
 "RaycastSensor2D": ""
 }
