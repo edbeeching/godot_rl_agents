@@ -123,3 +123,28 @@ func to_spherical_coords(r, inc, azimuth) -> Vector3:
         r*sin(deg2rad(azimuth)),
         r*cos(deg2rad(inc))*cos(deg2rad(azimuth))       
        )
+    
+    
+    
+func get_observation() -> Array:
+    if self._obs == null:
+        #print("obs was null, forcing raycast update")
+        return self.calculate_raycasts()
+    return self._obs
+    
+
+func calculate_raycasts() -> Array:
+    var result = []
+    for ray in rays:
+        ray.force_raycast_update()
+        var distance = _get_raycast_distance(ray)
+        result.append(distance)
+    return result
+
+func _get_raycast_distance(ray : RayCast) -> float : 
+    if !ray.is_colliding():
+        return 0.0
+        
+    var distance = (global_transform.origin - ray.get_collision_point()).length()
+    distance = clamp(distance, 0.0, ray_length)
+    return (ray_length - distance) / ray_length
