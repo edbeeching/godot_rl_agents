@@ -2,7 +2,7 @@ extends ISensor2D
 class_name RaycastSensor2D
 tool
 
-export(float,1, 36,2.0) var n_rays := 4.0 setget set_n_rays
+export(float,2, 36,2.0) var n_rays := 16.0 setget set_n_rays
 export(float,5,200,5.0) var ray_length := 200 setget set_ray_length
 export(float,5,360,5.0) var cone_width := 360.0 setget set_cone_width
 export var debug_draw := false setget set_debug_draw
@@ -42,8 +42,8 @@ func _spawn_nodes():
     rays = []
         
     _angles = []
-    var step = cone_width / (n_rays+1)
-    var start = cone_width / (n_rays+1) - cone_width/2
+    var step = cone_width / (n_rays)
+    var start = step/2 - cone_width/2
     
     for i in n_rays:
         var angle = start + i * step

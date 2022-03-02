@@ -1,5 +1,5 @@
-extends Node2D
-class_name ISensor2D
+extends Spatial
+class_name ISensor3D
 
 var _obs = null
 var _active := false
