@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://Robot.tscn" type="PackedScene" id=2]
-[ext_resource path="res://addons/godot_rl_agents/sensors/sensors_3d/RayCastSensor3D.gd" type="Script" id=3]
+[ext_resource path="res://addons/godot_rl_agents/sensors/sensors_3d/RaycastSensor3D.gd" type="Script" id=3]
 
 [sub_resource type="CapsuleShape" id=1]
 

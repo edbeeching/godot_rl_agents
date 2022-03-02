@@ -27,7 +27,7 @@ _global_script_classes=[ {
 "base": "ISensor3D",
 "class": "RayCastSensor3D",
 "language": "GDScript",
-"path": "res://addons/godot_rl_agents/sensors/sensors_3d/RayCastSensor3D.gd"
+"path": "res://addons/godot_rl_agents/sensors/sensors_3d/RaycastSensor3D.gd"
 }, {
 "base": "ISensor2D",
 "class": "RaycastSensor2D",

@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://Robot.tscn" type="PackedScene" id=2]
-[ext_resource path="res://addons/godot_rl_agents/sensors/sensors_3d/RayCastSensor3D.gd" type="Script" id=3]
+[ext_resource path="res://addons/godot_rl_agents/sensors/sensors_3d/RaycastSensor3D.gd" type="Script" id=3]
 
 [sub_resource type="CapsuleShape" id=1]
 
@@ -48,10 +48,7 @@ environment = SubResource( 5 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.43952, 0.0576344 )
 
 [node name="RayCastSensor3D" type="Spatial" parent="."]
-transform = Transform( -1, 0, -8.74228e-08, 7.57103e-08, 0.5, -0.866025, 4.37114e-08, -0.866025, -0.5, 0.0414619, 9.77506, 1 )
+transform = Transform( -1, 0, -8.74228e-08, 7.57103e-08, 0.5, -0.866025, 4.37114e-08, -0.866025, -0.5, 0, 6, -1 )
 script = ExtResource( 3 )
-n_rays_width = 8.0
-n_rays_height = 8.0
-ray_length = 20.0
-cone_width = 30.0
-cone_height = 40.0
+n_rays_width = 12.0
+n_rays_height = 12.0
