@@ -1,3 +1,25 @@
+"""
+This is the main entrypoint to the Godot RL Agents interface
+
+Example usage is best found in the documentation: 
+https://github.com/edbeeching/godot_rl_agents/blob/main/docs/EXAMPLE_ENVIRONMENTS.md
+
+Hyperparameters and training algorithm can be defined in a .yaml file, see ppo_test.yaml as an example.
+
+
+Interactive Training:
+With the Godot editor open, type gdrl in the terminal to launch training and 
+then press PLAY in the Godot editor. Training can be stopped with CTRL+C or
+by pressing STOP in the editor.
+
+
+Training with an exported executable:
+
+gdrl --env_path path/to/exported/executable ---config_path path/to/yaml/file
+
+
+"""
+
 import argparse
 
 from godot_rl_agents.wrappers.ray_wrapper import rllib_training
@@ -24,7 +46,6 @@ def get_args():
     )
 
     parser.add_argument(
-        "-f",
         "--config_file",
         default="ppo_test.yaml",
         type=str,
@@ -32,14 +53,12 @@ def get_args():
     )
 
     parser.add_argument(
-        "-c",
         "--restore",
         default=None,
         type=str,
         help="the location of a checkpoint to restore from",
     )
     parser.add_argument(
-        "-e",
         "--eval",
         default=False,
         action="store_true",
