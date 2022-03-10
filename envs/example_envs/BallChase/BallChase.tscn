@@ -1,7 +1,7 @@
 [gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
-[ext_resource path="res://addons/godot_rl_agents/RaycastSensor2D.tscn" type="PackedScene" id=2]
+[ext_resource path="res://addons/godot_rl_agents/sensors/sensors_2d/RaycastSensor2D.gd" type="Script" id=2]
 [ext_resource path="res://addons/regular_polygon2d_node/RegularPolygon2D.gd" type="Script" id=3]
 [ext_resource path="res://addons/Trail/trail_2d.gd" type="Script" id=4]
 
@@ -70,9 +70,7 @@ hue_variation_random = 0.2
 
 [node name="BallChase" type="Node2D"]
 
-[node name="Player" type="KinematicBody2D" parent="." groups=[
-"AGENT",
-]]
+[node name="Player" type="KinematicBody2D" parent="." groups=["AGENT"]]
 position = Vector2( 281.728, 162.943 )
 script = ExtResource( 1 )
 
@@ -98,7 +96,9 @@ polygon_color = Color( 0.886275, 0.952941, 0.894118, 1 )
 border_size = 0.0
 collision_shape = false
 
-[node name="RaycastSensor2D" parent="Player" instance=ExtResource( 2 )]
+[node name="RaycastSensor2D" type="Node2D" parent="Player"]
+script = ExtResource( 2 )
+n_rays = 32.0
 
 [node name="Fruit" type="Area2D" parent="."]
 position = Vector2( 1095.01, 578.224 )

@@ -13,7 +13,7 @@ var y_velo = 0
 
 # RL related variables
 onready var robot = $Robot
-onready var virtual_camera = $VirtualCamera
+onready var virtual_camera = $RGBCameraSensor3D
 
 var next = 1
 var done = false

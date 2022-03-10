@@ -1,0 +1,49 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://addons/godot_rl_agents/sensors/sensors_3d/RaycastSensor3D.gd" type="Script" id=1]
+
+[node name="RaycastSensor3D" type="Spatial"]
+script = ExtResource( 1 )
+n_rays_width = 4.0
+n_rays_height = 2.0
+ray_length = 11.0
+
+[node name="node_0 2" type="RayCast" parent="."]
+enabled = true
+cast_to = Vector3( -4.06608, -2.84701, 9.81639 )
+collide_with_areas = true
+
+[node name="node_0 3" type="RayCast" parent="."]
+enabled = true
+cast_to = Vector3( -4.06608, 2.84701, 9.81639 )
+collide_with_areas = true
+
+[node name="node_1 0" type="RayCast" parent="."]
+enabled = true
+cast_to = Vector3( -1.38686, -2.84701, 10.5343 )
+collide_with_areas = true
+
+[node name="node_1 1" type="RayCast" parent="."]
+enabled = true
+cast_to = Vector3( -1.38686, 2.84701, 10.5343 )
+collide_with_areas = true
+
+[node name="node_2 0" type="RayCast" parent="."]
+enabled = true
+cast_to = Vector3( 1.38686, -2.84701, 10.5343 )
+collide_with_areas = true
+
+[node name="node_2 1" type="RayCast" parent="."]
+enabled = true
+cast_to = Vector3( 1.38686, 2.84701, 10.5343 )
+collide_with_areas = true
+
+[node name="node_3 0" type="RayCast" parent="."]
+enabled = true
+cast_to = Vector3( 4.06608, -2.84701, 9.81639 )
+collide_with_areas = true
+
+[node name="node_3 1" type="RayCast" parent="."]
+enabled = true
+cast_to = Vector3( 4.06608, 2.84701, 9.81639 )
+collide_with_areas = true
