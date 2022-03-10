@@ -33,7 +33,7 @@ albedo_color = Color( 0.784314, 0.129412, 0.129412, 1 )
 [sub_resource type="BoxShape" id=10]
 extents = Vector3( 0.4, 1, 8.97105 )
 
-[node name="T-Maze" type="Spatial"]
+[node name="ColorRoom" type="Spatial"]
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 
