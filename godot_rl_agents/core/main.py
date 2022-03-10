@@ -1,24 +1,42 @@
-import numpy as np
+"""
+This is the main entrypoint to the Godot RL Agents interface
+
+Example usage is best found in the documentation: 
+https://github.com/edbeeching/godot_rl_agents/blob/main/docs/EXAMPLE_ENVIRONMENTS.md
+
+Hyperparameters and training algorithm can be defined in a .yaml file, see ppo_test.yaml as an example.
+
+
+Interactive Training:
+With the Godot editor open, type gdrl in the terminal to launch training and 
+then press PLAY in the Godot editor. Training can be stopped with CTRL+C or
+by pressing STOP in the editor.
+
+
+Training with an exported executable:
+
+gdrl --env_path path/to/exported/executable ---config_path path/to/yaml/file
+
+
+"""
+
 import argparse
-import pathlib
-import ray
-from ray import tune
-from ray.rllib.utils.annotations import override
-from ray.rllib.utils.typing import MultiAgentDict, PolicyID, AgentID
+
+from godot_rl_agents.wrappers.ray_wrapper import rllib_training
+from godot_rl_agents.wrappers.stable_baselines_wrapper import stable_baselines_training
 
 
-from ray.rllib.agents import impala
-
-from ray.tune.logger import pretty_print
-import ray.rllib.agents.ppo as ppo
-from godot_rl_agents.wrappers.ray_wrappers import RayVectorGodotEnv
-import yaml
-from godot_rl_agents.core.utils import register_env
-
-
-def get_args(parser_creator=None):
+def get_args():
     parser = argparse.ArgumentParser()
 
+    parser.add_argument
+
+    parser.add_argument(
+        "--trainer",
+        default="rllib",
+        type=str,
+        help="Which trainer framework to use (rllib or stable-baselines)",
+    )
     parser.add_argument(
         "--env_path",
         # default="envs/example_envs/builds/JumperHard/jumper_hard.x86_64",
@@ -28,7 +46,6 @@ def get_args(parser_creator=None):
     )
 
     parser.add_argument(
-        "-f",
         "--config_file",
         default="ppo_test.yaml",
         type=str,
@@ -36,14 +53,12 @@ def get_args(parser_creator=None):
     )
 
     parser.add_argument(
-        "-c",
         "--restore",
         default=None,
         type=str,
         help="the location of a checkpoint to restore from",
     )
     parser.add_argument(
-        "-e",
         "--eval",
         default=False,
         action="store_true",
@@ -54,51 +69,15 @@ def get_args(parser_creator=None):
 
 
 def main():
-    ray.init()
     args = get_args()
-    with open(args.config_file) as f:
-        exp = yaml.safe_load(f)
-    register_env()
-
-    exp["config"]["env_config"]["env_path"] = args.env_path
-    if args.env_path is not None:
-        run_name = exp["algorithm"] + "/" + pathlib.Path(args.env_path).stem
+    if args.trainer == "rllib":
+        training_function = rllib_training
+    elif args.trainer == "stable-baselines":
+        training_function = stable_baselines_training
     else:
-        run_name = exp["algorithm"] + "/editor"
-    print("run_name", run_name)
+        raise NotImplementedError
 
-    if args.env_path is None:
-        print("SETTING WORKERS TO 1")
-        exp["config"]["num_workers"] = 1
-
-    checkpoint_freq = 10
-    checkpoint_at_end = True
-    if args.eval:
-        checkpoint_freq = 0
-        exp["config"]["env_config"]["show_window"] = True
-        exp["config"]["env_config"]["framerate"] = None
-        exp["config"]["lr"] = 0.0
-        exp["config"]["num_sgd_iter"] = 1
-        exp["config"]["num_workers"] = 1
-        exp["config"]["train_batch_size"] = 8192
-        exp["config"]["sgd_minibatch_size"] = 128
-
-        exp["config"]["explore"] = False
-        exp["stop"]["training_iteration"] = 999999
-
-    print(exp)
-
-    results = tune.run(
-        exp["algorithm"],
-        name=run_name,
-        config=exp["config"],
-        stop=exp["stop"],
-        verbose=3,
-        checkpoint_freq=checkpoint_freq,
-        checkpoint_at_end=not args.eval,
-        restore=args.restore,
-    )
-    ray.shutdown()
+    training_function(args)
 
 
 if __name__ == "__main__":

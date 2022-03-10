@@ -1,5 +1,5 @@
 from ray import tune
-from godot_rl_agents.wrappers.ray_wrappers import RayVectorGodotEnv
+from godot_rl_agents.wrappers.ray_wrapper import RayVectorGodotEnv
 from godot_rl_agents.core.godot_env import GodotEnv
 
 
