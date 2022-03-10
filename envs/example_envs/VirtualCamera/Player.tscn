@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://Robot.tscn" type="PackedScene" id=2]
+[ext_resource path="res://addons/godot_rl_agents/sensors/sensors_3d/RGBCameraSensor3D.tscn" type="PackedScene" id=3]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 1.6
@@ -28,3 +29,6 @@ material/0 = SubResource( 3 )
 
 [node name="Robot" parent="." instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.43952, 0.0576344 )
+
+[node name="RGBCameraSensor3D" parent="." instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -1 )

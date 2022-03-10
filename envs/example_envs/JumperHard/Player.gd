@@ -1,24 +1,19 @@
 extends KinematicBody
- 
+
 const MOVE_SPEED = 12
 const JUMP_FORCE = 30
 const GRAVITY = 0.98
 const MAX_FALL_SPEED = 30
 const TURN_SENS = 2.0
 const MAX_STEPS = 20000
- 
+
 onready var cam = $Camera
 var move_vec = Vector3()
 var y_velo = 0
 var needs_reset = false
 # RL related variables
 onready var end_position = $"../EndPosition"
-onready var raycast_sensor = $"RaycastSensor3D"
-onready var raycast_sensor2 = $"RaycastSensor3D2"
-onready var raycast_sensor3 = $"RaycastSensor3D3"
-onready var raycast_sensor4 = $"RaycastSensor3D4"
-onready var raycast_sensor5 = $"RaycastSensor3D5"
-onready var raycast_sensor6 = $"RaycastSensor3D6"
+onready var raycast_sensor = $"RayCastSensor3D"
 onready var first_jump_pad = $"../Pads/FirstPad"
 onready var second_jump_pad = $"../Pads/SecondPad"
 onready var robot = $Robot
@@ -39,6 +34,7 @@ var _goal_vec = null
 var reward = 0.0
 
 func _ready():
+    raycast_sensor.activate()
     reset()
 
 func _process(_delta):
@@ -194,12 +190,7 @@ func get_obs():
                       goal_vector.z])
     #obs.append_array([translation.x,translation.y,translation.z])
     obs.append(grounded)
-    obs.append_array(raycast_sensor.get_raycast_buffer())
-#    obs.append_array(raycast_sensor2.get_raycast_buffer())
-#    obs.append_array(raycast_sensor3.get_raycast_buffer())
-#    obs.append_array(raycast_sensor4.get_raycast_buffer())
-#    obs.append_array(raycast_sensor5.get_raycast_buffer())
-#    obs.append_array(raycast_sensor6.get_raycast_buffer())
+    obs.append_array(raycast_sensor.get_observation())
     
     return {
         "obs": obs,
@@ -249,6 +240,9 @@ func set_heuristic(heuristic):
 
 func get_obs_size():
     return len(get_obs())
+    
+func zero_reward():
+    reward = 0
    
 func get_action_space():
     return {
@@ -284,7 +278,6 @@ func calculate_translation(other_pad_translation : Vector3) -> Vector3:
 func _on_First_Pad_Trigger_body_entered(body):
     if next != 0:
         return
-    print("trigger reward")
     reward += 100.0
     next = 1
     reset_best_goal_distance()
@@ -293,7 +286,6 @@ func _on_First_Pad_Trigger_body_entered(body):
 func _on_Second_Trigger_body_entered(body):
     if next != 1:
         return
-    print("trigger reward")
     reward += 100.0
     next = 0
     reset_best_goal_distance()

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://T-Maze.tscn" type="PackedScene" id=1]
+[ext_resource path="res://ColorRoom.tscn" type="PackedScene" id=1]
 [ext_resource path="res://addons/godot_rl_agents/sync.gd" type="Script" id=2]
 
 [node name="Env" type="Spatial"]
