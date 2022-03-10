@@ -1,11 +1,11 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://addons/godot_rl_agents/sensors/sensors_3d/VirtualCamera3D.gd" type="Script" id=1]
+[ext_resource path="res://addons/godot_rl_agents/sensors/sensors_3d/RGBCameraSensor3D.gd" type="Script" id=1]
 
 [sub_resource type="ViewportTexture" id=1]
 viewport_path = NodePath("Viewport")
 
-[node name="VirtualCamera3D" type="Spatial"]
+[node name="RGBCameraSensor3D" type="Spatial"]
 script = ExtResource( 1 )
 
 [node name="RemoteTransform" type="RemoteTransform" parent="."]
@@ -19,7 +19,6 @@ render_target_update_mode = 3
 near = 0.5
 
 [node name="Control" type="Control" parent="."]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 __meta__ = {

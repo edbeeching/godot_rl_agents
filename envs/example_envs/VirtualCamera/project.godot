@@ -29,10 +29,10 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Player.gd"
 }, {
-"base": "ISensor3D",
-"class": "RGBSensor3D",
+"base": "Spatial",
+"class": "RGBCameraSensor3D",
 "language": "GDScript",
-"path": "res://addons/godot_rl_agents/sensors/sensors_3d/RGBSensor3D.gd"
+"path": "res://addons/godot_rl_agents/sensors/sensors_3d/RGBCameraSensor3D.gd"
 }, {
 "base": "ISensor3D",
 "class": "RayCastSensor3D",
@@ -43,21 +43,15 @@ _global_script_classes=[ {
 "class": "RaycastSensor2D",
 "language": "GDScript",
 "path": "res://addons/godot_rl_agents/sensors/sensors_2d/RaycastSensor2D.gd"
-}, {
-"base": "Spatial",
-"class": "VirtualCamera3D",
-"language": "GDScript",
-"path": "res://addons/godot_rl_agents/sensors/sensors_3d/VirtualCamera3D.gd"
 } ]
 _global_script_class_icons={
 "DrawLine3D": "",
 "ISensor2D": "",
 "ISensor3D": "",
 "Player": "",
-"RGBSensor3D": "",
+"RGBCameraSensor3D": "",
 "RayCastSensor3D": "",
-"RaycastSensor2D": "",
-"VirtualCamera3D": ""
+"RaycastSensor2D": ""
 }
 
 [application]
