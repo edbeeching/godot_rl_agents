@@ -42,7 +42,7 @@ tensorboard --logdir /PATH/TO/LOG/DIR
 ### Pretrained models:
 We provide pretrained models while can be visualized with the following command:
 ```
-gdrl --env_path envs/builds/JumperHard/jumper_hard.x86_64 -e --restore envs/checkpoints/jumper_hard/checkpoint_004000/checkpoint-4000
+gdrl --env_path envs/builds/JumperHard/jumper_hard.x86_64 --eval --restore envs/checkpoints/jumper_hard/checkpoint_004000/checkpoint-4000
 
 ```
 
@@ -81,7 +81,7 @@ tensorboard --logdir /PATH/TO/LOG/DIR
 ### Pretrained models:
 We provide pretrained models while can be visualized with the following command:
 ```
-gdrl --env_path envs/builds/BallChase/ball_chase.x86_64 -e --restore envs/checkpoints/ball_chase/checkpoint_001000/checkpoint-1000
+gdrl --env_path envs/builds/BallChase/ball_chase.x86_64 --eval --restore envs/checkpoints/ball_chase/checkpoint_001000/checkpoint-1000
 
 ```
 
@@ -118,7 +118,7 @@ tensorboard --logdir /PATH/TO/LOG/DIR
 ### Pretrained models:
 We provide pretrained models while can be visualized with the following command:
 ```
-gdrl --env_path envs/builds/FlyBy/fly_by.x86_64 -e --restore envs/checkpoints/fly_by/checkpoint_000940/checkpoint-940
+gdrl --env_path envs/builds/FlyBy/fly_by.x86_64 --eval --restore envs/checkpoints/fly_by/checkpoint_000940/checkpoint-940
 
 ```
 
@@ -144,7 +144,7 @@ gdrl --env_path envs/builds/FlyBy/fly_by.x86_64 -e --restore envs/checkpoints/fl
 * Dying
   
 **Action space**:
-* Continuous action space: A scalar indication the angle which the play should move toward and a scalar value indication the angle the player should fire towards
+* Continuous action space: A scalar indicating the angle which the play should move toward and a scalar value indication the angle the player should fire towards
 
 ### Example training:
 The agent can be trained with the following command:
@@ -159,6 +159,6 @@ tensorboard --logdir /PATH/TO/LOG/DIR
 ### Pretrained models:
 We provide pretrained models while can be visualized with the following command:
 ```
-gdrl --env_path envs/builds/SpaceShooter/space_shooter.x86_64 -e --restore envs/checkpoints/space_shooter/checkpoint_002000/checkpoint-2000
+gdrl --env_path envs/builds/SpaceShooter/space_shooter.x86_64 --eval --restore envs/checkpoints/space_shooter/checkpoint_002000/checkpoint-2000
 
 ```
