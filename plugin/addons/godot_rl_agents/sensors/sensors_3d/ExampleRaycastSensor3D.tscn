@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://sensors/sensors_3d/RayCastSensor3D.tscn" type="PackedScene" id=1]
+[ext_resource path="res://addons/godot_rl_agents/sensors/sensors_3d/ExampleRaycastSensor3D.tscn" type="PackedScene" id=1]
 
 [node name="ExampleRaycastSensor3D" type="Spatial"]
 

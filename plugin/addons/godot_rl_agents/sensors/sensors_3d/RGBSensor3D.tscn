@@ -1,0 +1,50 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://addons/godot_rl_agents/sensors/sensors_3d/RGBSensor3D.gd" type="Script" id=1]
+[ext_resource path="res://addons/godot_rl_agents/sensors/sensors_3d/VirtualCamera3D.gd" type="Script" id=2]
+[ext_resource path="res://addons/godot_rl_agents/sensors/sensors_3d/VirtualCamera3D.tscn" type="PackedScene" id=3]
+
+[sub_resource type="ViewportTexture" id=1]
+viewport_path = NodePath("Viewport")
+
+[node name="RGBSensor3D" type="Spatial"]
+script = ExtResource( 1 )
+width = 36
+
+[node name="VirtualCamera3D2" parent="." instance=ExtResource( 3 )]
+script = ExtResource( 2 )
+
+[node name="RemoteTransform" parent="VirtualCamera3D2" index="0"]
+remote_path = NodePath("../Viewport/Camera")
+
+[node name="Viewport" parent="VirtualCamera3D2" index="1"]
+size = Vector2( 16, 16 )
+render_target_update_mode = 3
+
+[node name="Camera" parent="VirtualCamera3D2/Viewport" index="0"]
+near = 0.5
+
+[node name="Control" parent="VirtualCamera3D2" index="2"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" parent="VirtualCamera3D2/Control" index="0"]
+margin_left = 1096.0
+margin_top = 534.0
+margin_right = 1114.0
+margin_bottom = 552.0
+rect_scale = Vector2( 10, 10 )
+color = Color( 0.00784314, 0.00784314, 0.00784314, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CameraTexture" parent="VirtualCamera3D2/Control/TextureRect" index="0"]
+texture = SubResource( 1 )
+offset = Vector2( 9, 9 )
+flip_v = true
+
+[editable path="VirtualCamera3D2"]

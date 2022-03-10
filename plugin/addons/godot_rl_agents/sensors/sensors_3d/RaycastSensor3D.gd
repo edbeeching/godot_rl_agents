@@ -38,7 +38,8 @@ func set_cone_height(value):
 
 
 func _ready() -> void:
-   _spawn_nodes()
+    pass
+   #_spawn_nodes()
 
 
 func _spawn_nodes():
@@ -73,11 +74,12 @@ func _spawn_nodes():
             ray.enabled  = true
             ray.collide_with_areas = true
             add_child(ray)
+            ray.set_owner(get_tree().edited_scene_root)
             rays.append(ray)
             ray.force_raycast_update()
             
-    if Engine.editor_hint:
-        _create_debug_lines(points)
+#    if Engine.editor_hint:
+#        _create_debug_lines(points)
         
 func _create_debug_lines(points):
     if not geo: 
