@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/addon_icon.png-2d24406bd6bf77fc3e722876f638b278.stex"
+path="res://.import/hugging_face.png-69e4ecef812280000bfa8f1097f6683d.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/regular_polygon2d_node/addon_icon.png"
-dest_files=[ "res://.import/addon_icon.png-2d24406bd6bf77fc3e722876f638b278.stex" ]
+source_file="res://assets/hugging_face.png"
+dest_files=[ "res://.import/hugging_face.png-69e4ecef812280000bfa8f1097f6683d.stex" ]
 
 [params]
 
