@@ -9,7 +9,7 @@
     "env_path": "envs/builds/JumperHard/jumper_hard.x86_64",
     "framerate": null,
     "seed": 0,
-    "show_window": false
+    "show_window": true
   },
   "framework": "torch",
   "gamma": 0.95,
@@ -20,7 +20,7 @@
       256,
       256
     ],
-    "num_framestacks": 4
+    "framestack": 4
   },
   "no_done_at_end": true,
   "num_envs_per_worker": 16,
