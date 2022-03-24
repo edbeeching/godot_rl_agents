@@ -11,7 +11,7 @@ config:
     env_config:
         framerate: null
         action_repeat: null
-        show_window: true
+        show_window: false
         seed: 0
     framework: torch  
     lambda: 0.95
