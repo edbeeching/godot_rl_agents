@@ -32,12 +32,17 @@ var best_goal_distance := 10000.0
 var transform_backup = null
 var n_steps = 0
 const MAX_STEPS = 200000
+var needs_reset = false
+var reward = 0.0
+
 
 func _ready():
     transform_backup = transform
     pass
     
 func reset():
+    needs_reset = false
+    
     cur_goal = environment.get_next_goal(null)
     transform_backup = transform_backup
     translation.x = 0 + rand_range(-2,2)
@@ -55,7 +60,13 @@ func reset():
 func reset_if_done():
     if done:
         reset()
-
+        
+func get_done():
+    return done
+    
+func set_done_false():
+    done = false
+    
 func get_obs():
     if cur_goal == null:
         reset()
@@ -84,17 +95,12 @@ func get_obs():
     
     return {"obs":obs}
 
-func get_reward():
-    var reward = 0.0
+
+func update_reward():
     reward -= 0.01 # step penalty
-    if found_goal:
-        reward += 100.0
-        found_goal = false 
-    if exited_arena:
-        reward -= 10.0
-        exited_arena = false
-    
     reward += shaping_reward()
+
+func get_reward():
     return reward
     
 func shaping_reward():
@@ -110,14 +116,12 @@ func shaping_reward():
 func set_heuristic(heuristic):
     self._heuristic = heuristic
 
-func get_obs_size():
-    return len(get_obs())
     
 func get_obs_space():
     # typs of obs space: box, discrete, repeated
     return {
         "obs": {
-            "size": len(get_obs()["obs"]),
+            "size": [len(get_obs()["obs"])],
             "space": "box"
            }
        }   
@@ -133,14 +137,21 @@ func get_action_space():
            }
        }
 
-func get_done():
-    return done
-
 func set_action(action):
     turn_input = action["turn"][0]
     pitch_input = action["pitch"][0]
 
 func _physics_process(delta):
+    n_steps +=1    
+    if n_steps >= MAX_STEPS:
+        done = true
+        needs_reset = true
+
+    if needs_reset:
+        needs_reset = false
+        reset()
+        return
+    
     if cur_goal == null:
         reset()
     set_input()
@@ -157,9 +168,12 @@ func _physics_process(delta):
     # Handle landing/taking off
     move_and_slide(velocity, Vector3.UP)
     n_steps += 1
-    if n_steps > MAX_STEPS:
-        done = true
         
+    update_reward()
+        
+func zero_reward():
+    reward = 0.0  
+    
 func set_input():
     if _heuristic == "model":
         return
@@ -170,11 +184,11 @@ func set_input():
 
 func goal_reached(goal):
     if goal == cur_goal:
-        found_goal = true
-#        if goal ==  environment.get_last_goal():
-#            done = true
+        reward += 100.0
         cur_goal = environment.get_next_goal(cur_goal)
     
 func exited_game_area():
     done = true
+    reward -= 10.0
     exited_arena = true
+    reset()

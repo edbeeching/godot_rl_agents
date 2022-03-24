@@ -11,7 +11,7 @@ config:
     env_config:
         framerate: null
         action_repeat: null
-        show_window: true
+        show_window: false
         seed: 0
     framework: torch  
     lambda: 0.95
@@ -32,6 +32,6 @@ config:
     num_gpus: 1
     model:
         fcnet_hiddens: [256, 256] 
-        num_framestacks: 4
+        framestack: 4
     no_done_at_end: true
     soft_horizon: true

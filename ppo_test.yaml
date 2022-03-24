@@ -34,6 +34,6 @@ config:
         fcnet_hiddens: [256, 256] 
         use_lstm: false
         lstm_cell_size : 32
-        num_framestacks: 4
+        framestack: 4
     no_done_at_end: false
     soft_horizon: false

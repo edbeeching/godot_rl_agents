@@ -9,26 +9,27 @@ Please ensure to download a release version of Godot RL agents as the main branc
 | Release v0.1.0 |    17/10/2021    | [v0.1.0](https://github.com/edbeeching/godot_rl_agents/releases/tag/v0.1.0) |
 
 ## Windows
-Unless you are an experienced python3 user, we recommend installing using
-[conda](https://docs.conda.io/en/latest/miniconda.html)
+The [conda](https://docs.conda.io/en/latest/miniconda.html) package manager is used to install all packages.
+Execute the following commands from a terminal window (e.g powershell)
+Make sure you are inside the godot_rl_agents directory
 ```
-conda create -n your_env_name python=3.8 
-conda activate your_env_name
+conda create env
+conda activate gdrl_conda
 conda install -c conda-forge brotlipy # this may we required on windows
-cd godot_rl_agents
-pip install -r requirements.txt
-pip install -e .
+
+pip install .
 ```
 
 ## Linux
-Unless you are an experienced python3 user, we recommend installing using
-[conda](https://docs.conda.io/en/latest/miniconda.html)
+The [conda](https://docs.conda.io/en/latest/miniconda.html) package manager is used to install all packages.
+Execute the following commands from a terminal window
+Make sure you are inside the godot_rl_agents directory
 ```
-conda create -n your_env_name python=3.8 
-conda activate your_env_name
-cd godot_rl_agents
-pip install -r requirements.txt
-pip install -e .
+conda create env
+conda activate gdrl_conda
+conda install -c conda-forge brotlipy # this may we required on windows
+
+pip install .
 ```
 
 # After Installation

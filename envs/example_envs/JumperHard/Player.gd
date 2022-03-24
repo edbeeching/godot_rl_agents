@@ -165,20 +165,14 @@ func get_obs():
     var goal_vector = Vector3.ZERO
     if next == 0:
         goal_distance = translation.distance_to(first_jump_pad.translation)
-        #goal_vector = to_local(first_jump_pad.translation)#.normalized()
         goal_vector = (first_jump_pad.translation - translation).normalized()
         
     if next == 1:
         goal_distance = translation.distance_to(second_jump_pad.translation)
-        #goal_vector = to_local(second_jump_pad.translation)#.normalized()
-        
         goal_vector = (second_jump_pad.translation - translation).normalized()
     
-    #print(goal_vector) 
     goal_vector = goal_vector.rotated(Vector3.UP, -deg2rad(rotation_degrees.y))
     
- #print(goal_vector)
-    #print(goal_vector.length())
     goal_distance = clamp(goal_distance, 0.0, 20.0)
     var obs = []
     obs.append_array([move_vec.x/MOVE_SPEED,
@@ -188,7 +182,6 @@ func get_obs():
                       goal_vector.x, 
                       goal_vector.y, 
                       goal_vector.z])
-    #obs.append_array([translation.x,translation.y,translation.z])
     obs.append(grounded)
     obs.append_array(raycast_sensor.get_observation())
     
@@ -262,6 +255,7 @@ func get_action_space():
 
 func get_done():
     return done
+    
 func set_done_false():
     done = false
 

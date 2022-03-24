@@ -195,6 +195,7 @@ func set_done_false():
 
 func spawn_fruit():
     fruit.position = _calculate_new_position(position)
+    best_fruit_distance = position.distance_to(fruit.position)
 
 func fruit_collected():
     emit()

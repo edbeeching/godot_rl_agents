@@ -42,7 +42,7 @@ tensorboard --logdir /PATH/TO/LOG/DIR
 ### Pretrained models:
 We provide pretrained models while can be visualized with the following command:
 ```
-gdrl --env_path envs/builds/JumperHard/jumper_hard.x86_64 --eval --restore envs/checkpoints/jumper_hard/checkpoint_004000/checkpoint-4000
+gdrl --env_path envs/builds/JumperHard/jumper_hard.x86_64 --eval --restore envs/checkpoints/jumper_hard/checkpoint_000500/checkpoint-500
 
 ```
 
@@ -81,7 +81,7 @@ tensorboard --logdir /PATH/TO/LOG/DIR
 ### Pretrained models:
 We provide pretrained models while can be visualized with the following command:
 ```
-gdrl --env_path envs/builds/BallChase/ball_chase.x86_64 --eval --restore envs/checkpoints/ball_chase/checkpoint_001000/checkpoint-1000
+gdrl --env_path envs/builds/BallChase/ball_chase.x86_64 --eval --restore envs/checkpoints/ball_chase/checkpoint_000100/checkpoint-100
 
 ```
 
@@ -118,7 +118,7 @@ tensorboard --logdir /PATH/TO/LOG/DIR
 ### Pretrained models:
 We provide pretrained models while can be visualized with the following command:
 ```
-gdrl --env_path envs/builds/FlyBy/fly_by.x86_64 --eval --restore envs/checkpoints/fly_by/checkpoint_000940/checkpoint-940
+gdrl --env_path envs/builds/FlyBy/fly_by.x86_64 --eval --restore envs/checkpoints/fly_by/checkpoint_000500/checkpoint-500
 
 ```
 
