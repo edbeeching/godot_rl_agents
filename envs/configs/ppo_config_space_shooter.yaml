@@ -32,6 +32,6 @@ config:
     num_gpus: 1
     model:
         fcnet_hiddens: [32, 32] 
-        num_framestacks: 4
+        framestack: 4
     no_done_at_end: true
     soft_horizon: true
