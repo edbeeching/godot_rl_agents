@@ -13,7 +13,7 @@ The [conda](https://docs.conda.io/en/latest/miniconda.html) package manager is u
 Execute the following commands from a terminal window (e.g powershell)
 Make sure you are inside the godot_rl_agents directory
 ```
-conda create env
+conda env create
 conda activate gdrl_conda
 conda install -c conda-forge brotlipy # this may we required on windows
 
@@ -25,7 +25,7 @@ The [conda](https://docs.conda.io/en/latest/miniconda.html) package manager is u
 Execute the following commands from a terminal window
 Make sure you are inside the godot_rl_agents directory
 ```
-conda create env
+conda env create 
 conda activate gdrl_conda
 conda install -c conda-forge brotlipy # this may we required on windows
 
