@@ -44,7 +44,7 @@ class GodotEnv:
 
         self.port = port
         self.connection = self._start_server(self.port)
-        self.num_envs = None
+        self.n_agents = None
         self._handshake(self.connection)
         self._get_env_info(self.connection)
 
@@ -254,7 +254,7 @@ class GodotEnv:
                 assert 0, f"observation space {v['space']} is not supported"
         self.observation_space = spaces.Dict(observation_spaces)
 
-        self.num_envs = json_dict["n_agents"]
+        self.n_agents = json_dict["n_agents"]
 
     @staticmethod
     def decode_2d_obs_from_string(
@@ -334,7 +334,7 @@ if __name__ == "__main__":
         print(i)
         # env.reset()
         obs, reward, done, info = env.step(
-            [env.action_space.sample() for _ in range(env.num_envs)]
+            [env.action_space.sample() for _ in range(env.n_agents)]
         )
 
         print(obs.shape)
