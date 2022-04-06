@@ -34,7 +34,7 @@ class GodotEnv:
         self.proc = None
         if env_path is not None:
             self.check_platform(env_path)
-            self._launch_env(
+            self.proc = self._launch_env(
                 env_path, port, show_window, framerate, seed, action_repeat
             )
         else:
@@ -43,10 +43,10 @@ class GodotEnv:
             )
 
         self.port = port
-        self.connection = self._start_server()
+        self.connection = self._start_server(self.port)
         self.num_envs = None
-        self._handshake()
-        self._get_env_info()
+        self._handshake(self.connection)
+        self._get_env_info(self.connection)
 
         atexit.register(self._close)
 
@@ -88,8 +88,8 @@ class GodotEnv:
             "type": "action",
             "action": self.from_numpy(action),
         }
-        self._send_as_json(message)
-        response = self._get_json_dict()
+        self._send_as_json(message, self.connection)
+        response = self._get_json_dict(self.connection)
 
         response["obs"] = self._process_obs(response["obs"])
 
@@ -119,11 +119,11 @@ class GodotEnv:
         message = {
             "type": "reset",
         }
-        self._send_as_json(message)
-        response = self._get_json_dict()
+        self._send_as_json(message, self.connection)
+        response = self._get_json_dict(self.connection)
         response["obs"] = self._process_obs(response["obs"])
         assert response["type"] == "reset"
-        obs = np.array(response["obs"])
+        obs = response["obs"]
         return obs
 
     def call(self, method):
@@ -140,7 +140,7 @@ class GodotEnv:
         message = {
             "type": "close",
         }
-        self._send_as_json(message)
+        self._send_as_json(message, self.connection)
         print("close message sent")
         time.sleep(1.0)
         self.connection.close()
@@ -153,33 +153,36 @@ class GodotEnv:
         print("exit was not clean, using atexit to close env")
         self.close()
 
-    def _launch_env(self, env_path, port, show_window, framerate, seed, action_repeat):
+    @staticmethod
+    def _launch_env(env_path, port, show_window, framerate, seed, action_repeat):
         # --fixed-fps {framerate}
         launch_cmd = f"{env_path} --port={port} --env_seed={seed}"
 
         if show_window == False:
-            launch_cmd += " --disable-render-loop --no-window"
+            launch_cmd += " --no-window" # TODO Render loop is disabled to enable virtual cameras --disable-render-loop
         if framerate is not None:
             launch_cmd += f" --fixed-fps {framerate}"
         if action_repeat is not None:
             launch_cmd += f" --action_repeat {action_repeat}"
 
         launch_cmd = launch_cmd.split(" ")
-        self.proc = subprocess.Popen(
+        proc = subprocess.Popen(
             launch_cmd,
             start_new_session=True,
             # shell=True,
         )
+        return proc
 
-    def _start_server(self):
+    @staticmethod
+    def _start_server(port):
         # Either launch a an exported Godot project or connect to a playing godot game
         # connect to playing godot game
 
-        print(f"waiting for remote GODOT connection on port {self.port}")
+        print(f"waiting for remote GODOT connection on port {port}")
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
         # Bind the socket to the port, "localhost" was not working on windows VM, had to use the IP
-        server_address = ("127.0.0.1", self.port)
+        server_address = ("127.0.0.1", port)
         sock.bind(server_address)
 
         # Listen for incoming connections
@@ -191,20 +194,21 @@ class GodotEnv:
         print("connection established")
         return connection
 
-    def _handshake(self):
+    @staticmethod
+    def _handshake(conn):
         message = {
             "type": "handshake",
             "major_version": GodotEnv.MAJOR_VERSION,
             "minor_version": GodotEnv.MINOR_VERSION,
         }
 
-        self._send_as_json(message)
+        GodotEnv._send_as_json(message, conn)
 
-    def _get_env_info(self):
+    def _get_env_info(self, conn):
         message = {"type": "env_info"}
-        self._send_as_json(message)
+        self._send_as_json(message, conn)
 
-        json_dict = self._get_json_dict()
+        json_dict = self._get_json_dict(conn)
         assert json_dict["type"] == "env_info"
 
         # actions can be "single" for a single action head
@@ -263,16 +267,17 @@ class GodotEnv:
             .astype(np.float32)[:, :, :]  # TODO remove the alpha channel
         )
 
-    def _send_as_json(self, dictionary):
+    @staticmethod
+    def _send_as_json(dictionary, conn):
         message_json = json.dumps(dictionary)
-        self._send_string(message_json)
+        GodotEnv._send_string(message_json, conn)
 
-    def _get_json_dict(self):
-        data = self._get_data()
+    def _get_json_dict(self, conn):
+        data = self._get_data(conn)
         return json.loads(data)
 
     def _get_obs(self):
-        return self._get_data()
+        return self._get_data(self.connection)
 
     def _clear_socket(self):
 
@@ -287,9 +292,9 @@ class GodotEnv:
             pass
         self.connection.setblocking(True)
 
-    def _get_data(self):
+    def _get_data(self, conn):
         try:
-            data = self.connection.recv(4)
+            data = conn.recv(4)
             if not data:
                 time.sleep(0.000001)
                 return self._get_data()
@@ -298,7 +303,7 @@ class GodotEnv:
             while (
                 len(string) != length
             ):  # TODO: refactor as string concatenation could be slow
-                string += self.connection.recv(length).decode()
+                string += conn.recv(length).decode()
 
             return string
         except socket.timeout as e:
@@ -306,28 +311,33 @@ class GodotEnv:
 
         return None
 
-    def _send_string(self, string):
+    @staticmethod
+    def _send_string(string, conn):
         message = len(string).to_bytes(4, "little") + bytes(string.encode())
-        self.connection.sendall(message)
+        conn.sendall(message)
 
-    def _send_action(self, action):
-        self._send_string(action)
+    @staticmethod
+    def _send_action(action, conn):
+        GodotEnv._send_string(action, conn)
 
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
-    env = GodotEnv()
+    env = GodotEnv(env_path="envs/builds/VirtualCamera/virtual_camera.x86_64", action_repeat=1, show_window=True)
     print("observation space", env.observation_space)
     print("action space", env.action_space)
     obs = env.reset()
+    print(obs.shape)
 
     for i in range(1000):
-
+        print(i)
         # env.reset()
         obs, reward, done, info = env.step(
             [env.action_space.sample() for _ in range(env.num_envs)]
         )
+
+        print(obs.shape)
         # print(obs, done)
         # plt.imshow(obs[0]["camera_2d"][:, :, :3])
         # plt.show()
