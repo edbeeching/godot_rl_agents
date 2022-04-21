@@ -6,6 +6,7 @@ The framework has been most extensively tested on Linux, so if you find bugs ple
 Please ensure to download a release version of Godot RL agents as the main branch is subject to change and may be unstable.
 |  **Version**   | **Release Date** |                                **Download**                                 |
 | :------------: | :--------------: | :-------------------------------------------------------------------------: |
+| Release v0.2.2 |    21/04/2022    | [v0.2.2](https://github.com/edbeeching/godot_rl_agents/releases/tag/v0.2.2) |
 | Release v0.2.1 |    28/03/2022    | [v0.2.1](https://github.com/edbeeching/godot_rl_agents/releases/tag/v0.2.1) |
 | Release v0.2.0 |    24/03/2022    | [v0.2.0](https://github.com/edbeeching/godot_rl_agents/releases/tag/v0.2.0) |
 | Release v0.1.0 |    17/10/2021    | [v0.1.0](https://github.com/edbeeching/godot_rl_agents/releases/tag/v0.1.0) |
