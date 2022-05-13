@@ -159,7 +159,7 @@ class GodotEnv:
         launch_cmd = f"{env_path} --port={port} --env_seed={seed}"
 
         if show_window == False:
-            launch_cmd += " --no-window" # TODO Render loop is disabled to enable virtual cameras --disable-render-loop
+            launch_cmd += " --no-window --disable-render-loop" # TODO Render loop is disabled to enable virtual cameras --disable-render-loop
         if framerate is not None:
             launch_cmd += f" --fixed-fps {framerate}"
         if action_repeat is not None:

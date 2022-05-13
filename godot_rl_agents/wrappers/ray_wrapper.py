@@ -41,7 +41,7 @@ class RayVectorGodotEnv(VectorEnv):
         super().__init__(
             observation_space=self._env.observation_space,
             action_space=self._env.action_space,
-            num_envs=self._env.num_envs,
+            num_envs=self._env.n_agents,
         )
 
     def vector_reset(self) -> List[EnvObsType]:
