@@ -36,9 +36,6 @@ extents = Vector3( 0.4, 1, 8.97105 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 
-[node name="Camera" type="Camera" parent="Player"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, -0.199591 )
-
 [node name="Walls" type="Spatial" parent="."]
 
 [node name="MeshInstance" type="MeshInstance" parent="Walls"]

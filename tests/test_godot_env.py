@@ -24,7 +24,7 @@ def test_env(env_path, port):
 
     action_space = env.action_space
     observation_space = env.observation_space
-    n_envs = env.num_envs
+    n_envs = env.n_agents
 
     for j in range(2):
         obs = env.reset()

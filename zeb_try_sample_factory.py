@@ -32,12 +32,12 @@ def custom_parse_args(argv=None, evaluation=False):
 def make_godot_env_func(full_env_name, cfg=None, env_config=None):
 
     seed = 0
-    port = 21008
+    port = 11008
     if env_config:
         port += 1 + env_config.env_id
         seed += 1 + env_config.env_id
 
-    return StableBaselinesGodotEnv(env_path="envs/builds/BallChase/ball_chase_opt.x86_64", port=port, seed=seed)
+    return StableBaselinesGodotEnv(env_path="envs/builds/VirtualCamera/virtual_camera.x86_64", port=port, seed=seed, show_window=True)
 
 
 def add_extra_params_func(env, parser):

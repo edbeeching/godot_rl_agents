@@ -1,0 +1,40 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://StepTest.gd" type="Script" id=1]
+
+[sub_resource type="ViewportTexture" id=1]
+viewport_path = NodePath("Viewport2")
+
+[node name="StepTest" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="Viewport2" type="Viewport" parent="."]
+size = Vector2( 32, 32 )
+
+[node name="Camera" type="Camera" parent="Viewport2"]
+
+[node name="Camera2" type="Camera" parent="Viewport2"]
+transform = Transform( 1, 0, 0, 0, 0.707107, -0.707107, 0, 0.707107, 0.707107, 0, 0, 2 )
+
+[node name="Control" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="ColorRect" parent="Control"]
+margin_left = 1096.0
+margin_top = 534.0
+margin_right = 1114.0
+margin_bottom = 552.0
+rect_scale = Vector2( 10, 10 )
+color = Color( 0.00784314, 0.00784314, 0.00784314, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CameraTexture" type="Sprite" parent="Control/TextureRect"]
+texture = SubResource( 1 )
+offset = Vector2( 9, 9 )
+flip_v = true

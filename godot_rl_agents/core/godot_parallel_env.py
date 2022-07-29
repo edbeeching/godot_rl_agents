@@ -123,10 +123,10 @@ class GodotParallelEnv(GodotEnv):
 
 
 
-def benchmark(parallel_envs, action_repeat, framerate, steps):
+def benchmark(env_path, parallel_envs, action_repeat, framerate, steps):
 
 
-    env = GodotParallelEnv(env_path="envs/builds/VirtualCamera/virtual_camera_opt_32_256_no_render.x86_64", 
+    env = GodotParallelEnv(env_path=env_path, 
                             parallel_envs=parallel_envs,
                             action_repeat=action_repeat, 
                             framerate=1, 
@@ -134,9 +134,8 @@ def benchmark(parallel_envs, action_repeat, framerate, steps):
     start = time.time()
     obs = env.reset()
     total_agents = env.n_agents * env.parallel_envs
-
+    actions = [env.action_space.sample() for _ in range(total_agents)]
     for i in range(steps):
-        actions = [env.action_space.sample() for _ in range(total_agents)]
         obs, reward, done, info = env.step(actions)
 
     diff = time.time() - start
@@ -151,10 +150,35 @@ def benchmark(parallel_envs, action_repeat, framerate, steps):
 
 if __name__ == "__main__":
 
+    env_string = "envs/builds/VirtualCamera/virtual_camera_opt_{}.x86_64"
+    env_names = [ 
+        
+        # "64_32_render", #
+        # "64_128_render", #
+        # "64_128_no_render",#
+        # "16_32_no_render",#
+        # "16_64_no_render",#
+        # "16_128_no_render",#
+        "32_32_render",#
+        "32_64_render",#
+        "32_128_render",#
+        # "32_32_render", #
+        # "32_64_render", #
+        # "32_128_render", #
+        # "32_128_no_render", #
+        ]
+
     results  = {}
 
-    paras = [4,12,24]
-    for parallel_envs in paras:
-        results[parallel_envs] = benchmark(parallel_envs,1,None,50)
+    for name in env_names:
+        env_path = f"envs/builds/VirtualCamera/virtual_camera_opt_{name}.x86_64"
+
+        for processes in [4, 12, 24]:
+            test_name = f"{name}_{processes}"
+            print("running", test_name)
+            result = benchmark(env_path, processes, 1, None, 50)
+            results[test_name] = result
+            
 
     print(results)
+    

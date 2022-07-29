@@ -40,7 +40,7 @@ if __name__ == "__main__":
         )
         obs = env.reset()
 
-        n_envs = env.num_envs
+        n_envs = env.n_agents
         action_space = env.action_space
         start = time.time()
         for i in range(N_STEPS):

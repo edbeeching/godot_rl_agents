@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
     obs = env.reset()
     obs, reward, done, info = env.step(
-        [env.action_space.sample() for _ in range(env.num_envs)]
+        [env.action_space.sample() for _ in range(env.n_agents)]
     )
 
     returns = env.call("remote_callable")

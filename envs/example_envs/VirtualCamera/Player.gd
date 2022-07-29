@@ -6,13 +6,13 @@ const GRAVITY = 0.98
 const MAX_FALL_SPEED = 30
 const TURN_SENS = 2.0
 const MAX_STEPS = 10000
- 
-onready var cam = $Camera
+const RENDER = true
+#onready var cam = $Camera
 var move_vec = Vector3()
 var y_velo = 0
 
 # RL related variables
-onready var robot = $Robot
+# onready var robot = $Robot
 onready var virtual_camera = $RGBCameraSensor3D
 
 var next = 1
@@ -26,12 +26,13 @@ var grounded := false
 var _heuristic := "player"
 var move_action := 0.0
 var turn_action := 0.0
-var jump_action := false
+#var jump_action := false
 var n_steps = 0
-
 var reward = 0.0
 
 func _ready():
+    # Create a visual instance (for 3D).
+    
     return
     #reset()
 
@@ -71,14 +72,14 @@ func _physics_process(_delta):
     if y_velo < -MAX_FALL_SPEED:
         y_velo = -MAX_FALL_SPEED
     
-    if y_velo < 0 and !grounded :
-        robot.set_animation("falling-cycle")
-    
-    var horizontal_speed = Vector2(move_vec.x, move_vec.z)
-    if horizontal_speed.length() < 0.1 and grounded:
-        robot.set_animation("idle")
-    elif horizontal_speed.length() >=1.0 and grounded:
-        robot.set_animation("walk-cycle")    
+#    if y_velo < 0 and !grounded :
+#        robot.set_animation("falling-cycle")
+#
+#    var horizontal_speed = Vector2(move_vec.x, move_vec.z)
+#    if horizontal_speed.length() < 0.1 and grounded:
+#        robot.set_animation("idle")
+#    elif horizontal_speed.length() >=1.0 and grounded:
+#        robot.set_animation("walk-cycle")    
 #    elif horizontal_speed.length() >= 1.0 and grounded:
 #        robot.set_animation("run-cycle")
     
@@ -86,6 +87,8 @@ func _physics_process(_delta):
     
     if Input.is_action_just_pressed("r_key"):
         reset()
+        
+    virtual_camera.get_camera_pixel_encoding()
         
 
 func get_move_vec() -> Vector3:
@@ -123,7 +126,6 @@ func reset():
     #done = false
     just_reached_negative = false
     just_reached_positive = false
-    jump_action = false
      # Replace with function body.
     set_translation(Vector3(0,1.5,0))
     rotation_degrees.y = rand_range(-180,180)
@@ -139,15 +141,28 @@ func reset_if_done():
 
 func get_obs():
     #print(virtual_camera.get_camera_pixel_encoding())
-    return {
+    if RENDER:
+        return {
         "camera_2d": virtual_camera.get_camera_pixel_encoding(),
+        }
+    else:
+        return {
+        "camera_1d": [0,1],
        }
     
 func get_obs_space():
     # typs of obs space: box, discrete, repeated
-    return {
+    if RENDER:
+        return {
         "camera_2d":{
             "size": virtual_camera.get_camera_shape(),
+            "space":"box"
+           },
+        }
+    else:
+        return {
+        "camera_1d":{
+            "size": [2,],
             "space":"box"
            },
        }
@@ -178,14 +193,14 @@ func get_obs_size():
    
 func get_action_space():
     return {
-        "move" : {
-             "size": 1,
+        "move_turn" : {
+             "size": 2,
             "action_type": "continuous"
            },        
-        "turn" : {
-             "size": 1,
-            "action_type": "continuous"
-           }
+#        "turn" : {
+#             "size": 1,
+#            "action_type": "continuous"
+#           }
        }
 
 func get_done():

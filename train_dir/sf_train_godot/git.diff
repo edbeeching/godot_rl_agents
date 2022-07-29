@@ -1,0 +1,503 @@
+diff --git a/.vscode/settings.json b/.vscode/settings.json
+index de288e1..4e8dee4 100644
+--- a/.vscode/settings.json
++++ b/.vscode/settings.json
+@@ -1,3 +1,4 @@
+ {
+-    "python.formatting.provider": "black"
++    "editor.formatOnSave": true,
++    "python.formatting.provider": "black",
+ }
+\ No newline at end of file
+diff --git a/envs/builds/VirtualCamera/virtual_camera.pck b/envs/builds/VirtualCamera/virtual_camera.pck
+index e57d028..fd62976 100644
+Binary files a/envs/builds/VirtualCamera/virtual_camera.pck and b/envs/builds/VirtualCamera/virtual_camera.pck differ
+diff --git a/envs/builds/VirtualCamera/virtual_camera.x86_64 b/envs/builds/VirtualCamera/virtual_camera.x86_64
+index be71c1b..cadcb91 100755
+Binary files a/envs/builds/VirtualCamera/virtual_camera.x86_64 and b/envs/builds/VirtualCamera/virtual_camera.x86_64 differ
+diff --git a/envs/example_envs/VirtualCamera/ColorRoom.tscn b/envs/example_envs/VirtualCamera/ColorRoom.tscn
+index 7d1c1af..c8651fb 100644
+--- a/envs/example_envs/VirtualCamera/ColorRoom.tscn
++++ b/envs/example_envs/VirtualCamera/ColorRoom.tscn
+@@ -36,9 +36,6 @@ extents = Vector3( 0.4, 1, 8.97105 )
+ 
+ [node name="Player" parent="." instance=ExtResource( 1 )]
+ 
+-[node name="Camera" type="Camera" parent="Player"]
+-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, -0.199591 )
+-
+ [node name="Walls" type="Spatial" parent="."]
+ 
+ [node name="MeshInstance" type="MeshInstance" parent="Walls"]
+diff --git a/envs/example_envs/VirtualCamera/Env.tscn b/envs/example_envs/VirtualCamera/Env.tscn
+index 0d96db8..bffa885 100644
+--- a/envs/example_envs/VirtualCamera/Env.tscn
++++ b/envs/example_envs/VirtualCamera/Env.tscn
+@@ -30,33 +30,34 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, -25 )
+ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, -50 )
+ 
+ [node name="ColorRoom9" parent="." instance=ExtResource( 1 )]
+-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 38, 0, 25 )
++transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -64, 0, 25 )
+ 
+ [node name="ColorRoom10" parent="." instance=ExtResource( 1 )]
+-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 38, 0, 0 )
++transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -64, 0, 0 )
+ 
+ [node name="ColorRoom11" parent="." instance=ExtResource( 1 )]
+-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 38, 0, -25 )
++transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -64, 0, -25 )
+ 
+ [node name="ColorRoom12" parent="." instance=ExtResource( 1 )]
+-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 38, 0, -50 )
++transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -64, 0, -50 )
+ 
+ [node name="ColorRoom13" parent="." instance=ExtResource( 1 )]
+-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 63, 0, 25 )
++transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -39, 0, 25 )
+ 
+ [node name="ColorRoom14" parent="." instance=ExtResource( 1 )]
+-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 63, 0, 0 )
++transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -39, 0, 0 )
+ 
+ [node name="ColorRoom15" parent="." instance=ExtResource( 1 )]
+-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 63, 0, -25 )
++transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -39, 0, -25 )
+ 
+ [node name="ColorRoom16" parent="." instance=ExtResource( 1 )]
+-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 63, 0, -50 )
++transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -39, 0, -50 )
+ 
+ [node name="Sync" type="Node" parent="."]
+ process_priority = -1
+ script = ExtResource( 2 )
+ 
+ [node name="Camera" type="Camera" parent="."]
+-transform = Transform( 1, 0, 0, 0, 0.0220418, 0.999757, 0, -0.999757, 0.0220418, 25.3538, 75.4275, -10.0795 )
+-current = true
++pause_mode = 1
++transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 85, 0 )
++visible = false
+diff --git a/envs/example_envs/VirtualCamera/Player.gd b/envs/example_envs/VirtualCamera/Player.gd
+index a4ffd7b..ceb8c68 100644
+--- a/envs/example_envs/VirtualCamera/Player.gd
++++ b/envs/example_envs/VirtualCamera/Player.gd
+@@ -6,13 +6,13 @@ const GRAVITY = 0.98
+ const MAX_FALL_SPEED = 30
+ const TURN_SENS = 2.0
+ const MAX_STEPS = 10000
+- 
+-onready var cam = $Camera
++const RENDER = true
++#onready var cam = $Camera
+ var move_vec = Vector3()
+ var y_velo = 0
+ 
+ # RL related variables
+-onready var robot = $Robot
++# onready var robot = $Robot
+ onready var virtual_camera = $RGBCameraSensor3D
+ 
+ var next = 1
+@@ -26,12 +26,13 @@ var grounded := false
+ var _heuristic := "player"
+ var move_action := 0.0
+ var turn_action := 0.0
+-var jump_action := false
++#var jump_action := false
+ var n_steps = 0
+-
+ var reward = 0.0
+ 
+ func _ready():
++    # Create a visual instance (for 3D).
++    
+     return
+     #reset()
+ 
+@@ -71,14 +72,14 @@ func _physics_process(_delta):
+     if y_velo < -MAX_FALL_SPEED:
+         y_velo = -MAX_FALL_SPEED
+     
+-    if y_velo < 0 and !grounded :
+-        robot.set_animation("falling-cycle")
+-    
+-    var horizontal_speed = Vector2(move_vec.x, move_vec.z)
+-    if horizontal_speed.length() < 0.1 and grounded:
+-        robot.set_animation("idle")
+-    elif horizontal_speed.length() >=1.0 and grounded:
+-        robot.set_animation("walk-cycle")    
++#    if y_velo < 0 and !grounded :
++#        robot.set_animation("falling-cycle")
++#
++#    var horizontal_speed = Vector2(move_vec.x, move_vec.z)
++#    if horizontal_speed.length() < 0.1 and grounded:
++#        robot.set_animation("idle")
++#    elif horizontal_speed.length() >=1.0 and grounded:
++#        robot.set_animation("walk-cycle")    
+ #    elif horizontal_speed.length() >= 1.0 and grounded:
+ #        robot.set_animation("run-cycle")
+     
+@@ -87,6 +88,8 @@ func _physics_process(_delta):
+     if Input.is_action_just_pressed("r_key"):
+         reset()
+         
++    virtual_camera.get_camera_pixel_encoding()
++        
+ 
+ func get_move_vec() -> Vector3:
+     if done:
+@@ -123,7 +126,6 @@ func reset():
+     #done = false
+     just_reached_negative = false
+     just_reached_positive = false
+-    jump_action = false
+      # Replace with function body.
+     set_translation(Vector3(0,1.5,0))
+     rotation_degrees.y = rand_range(-180,180)
+@@ -139,17 +141,30 @@ func reset_if_done():
+ 
+ func get_obs():
+     #print(virtual_camera.get_camera_pixel_encoding())
+-    return {
++    if RENDER:
++        return {
+         "camera_2d": virtual_camera.get_camera_pixel_encoding(),
++        }
++    else:
++        return {
++        "camera_1d": [0,1],
+        }
+     
+ func get_obs_space():
+     # typs of obs space: box, discrete, repeated
+-    return {
++    if RENDER:
++        return {
+         "camera_2d":{
+             "size": virtual_camera.get_camera_shape(),
+             "space":"box"
+            },
++        }
++    else:
++        return {
++        "camera_1d":{
++            "size": [2,],
++            "space":"box"
++           },
+        }
+     
+     
+@@ -178,14 +193,14 @@ func get_obs_size():
+    
+ func get_action_space():
+     return {
+-        "move" : {
+-             "size": 1,
++        "move_turn" : {
++             "size": 2,
+             "action_type": "continuous"
+            },        
+-        "turn" : {
+-             "size": 1,
+-            "action_type": "continuous"
+-           }
++#        "turn" : {
++#             "size": 1,
++#            "action_type": "continuous"
++#           }
+        }
+ 
+ func get_done():
+diff --git a/envs/example_envs/VirtualCamera/Player.tscn b/envs/example_envs/VirtualCamera/Player.tscn
+index 7a7807a..15d3add 100644
+--- a/envs/example_envs/VirtualCamera/Player.tscn
++++ b/envs/example_envs/VirtualCamera/Player.tscn
+@@ -1,7 +1,6 @@
+-[gd_scene load_steps=7 format=2]
++[gd_scene load_steps=6 format=2]
+ 
+ [ext_resource path="res://Player.gd" type="Script" id=1]
+-[ext_resource path="res://Robot.tscn" type="PackedScene" id=2]
+ [ext_resource path="res://addons/godot_rl_agents/sensors/sensors_3d/RGBCameraSensor3D.tscn" type="PackedScene" id=3]
+ 
+ [sub_resource type="CapsuleShape" id=1]
+@@ -23,12 +22,8 @@ shape = SubResource( 1 )
+ 
+ [node name="MeshInstance" type="MeshInstance" parent="."]
+ transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
+-visible = false
+ mesh = SubResource( 2 )
+ material/0 = SubResource( 3 )
+ 
+-[node name="Robot" parent="." instance=ExtResource( 2 )]
+-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.43952, 0.0576344 )
+-
+ [node name="RGBCameraSensor3D" parent="." instance=ExtResource( 3 )]
+ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -1 )
+diff --git a/godot_rl_agents/core/godot_env.py b/godot_rl_agents/core/godot_env.py
+index 35c50a6..93e0a64 100644
+--- a/godot_rl_agents/core/godot_env.py
++++ b/godot_rl_agents/core/godot_env.py
+@@ -159,7 +159,7 @@ class GodotEnv:
+         launch_cmd = f"{env_path} --port={port} --env_seed={seed}"
+ 
+         if show_window == False:
+-            launch_cmd += " --no-window --disable-render-loop" # TODO Render loop is disabled to enable virtual cameras --disable-render-loop
++            launch_cmd += " --no-window" # TODO Render loop is enabled to enable virtual cameras --disable-render-loop
+         if framerate is not None:
+             launch_cmd += f" --fixed-fps {framerate}"
+         if action_repeat is not None:
+diff --git a/godot_rl_agents/core/godot_parallel_env.py b/godot_rl_agents/core/godot_parallel_env.py
+index 05a1d50..80727fe 100644
+--- a/godot_rl_agents/core/godot_parallel_env.py
++++ b/godot_rl_agents/core/godot_parallel_env.py
+@@ -123,10 +123,10 @@ class GodotParallelEnv(GodotEnv):
+ 
+ 
+ 
+-def benchmark(parallel_envs, action_repeat, framerate, steps):
++def benchmark(env_path, parallel_envs, action_repeat, framerate, steps):
+ 
+ 
+-    env = GodotParallelEnv(env_path="envs/builds/VirtualCamera/virtual_camera_opt_32_256_no_render.x86_64", 
++    env = GodotParallelEnv(env_path=env_path, 
+                             parallel_envs=parallel_envs,
+                             action_repeat=action_repeat, 
+                             framerate=1, 
+@@ -134,9 +134,8 @@ def benchmark(parallel_envs, action_repeat, framerate, steps):
+     start = time.time()
+     obs = env.reset()
+     total_agents = env.n_agents * env.parallel_envs
+-
++    actions = [env.action_space.sample() for _ in range(total_agents)]
+     for i in range(steps):
+-        actions = [env.action_space.sample() for _ in range(total_agents)]
+         obs, reward, done, info = env.step(actions)
+ 
+     diff = time.time() - start
+@@ -151,10 +150,35 @@ def benchmark(parallel_envs, action_repeat, framerate, steps):
+ 
+ if __name__ == "__main__":
+ 
++    env_string = "envs/builds/VirtualCamera/virtual_camera_opt_{}.x86_64"
++    env_names = [ 
++        
++        # "64_32_render", #
++        # "64_128_render", #
++        # "64_128_no_render",#
++        # "16_32_no_render",#
++        # "16_64_no_render",#
++        # "16_128_no_render",#
++        "32_32_render",#
++        "32_64_render",#
++        "32_128_render",#
++        # "32_32_render", #
++        # "32_64_render", #
++        # "32_128_render", #
++        # "32_128_no_render", #
++        ]
++
+     results  = {}
+ 
+-    paras = [4,12,24]
+-    for parallel_envs in paras:
+-        results[parallel_envs] = benchmark(parallel_envs,1,None,50)
++    for name in env_names:
++        env_path = f"envs/builds/VirtualCamera/virtual_camera_opt_{name}.x86_64"
++
++        for processes in [4, 12, 24]:
++            test_name = f"{name}_{processes}"
++            print("running", test_name)
++            result = benchmark(env_path, processes, 1, None, 50)
++            results[test_name] = result
++            
+ 
+     print(results)
++    
+diff --git a/godot_rl_agents/wrappers/stable_baselines_wrapper.py b/godot_rl_agents/wrappers/stable_baselines_wrapper.py
+index c9c21ab..8e1e6b2 100644
+--- a/godot_rl_agents/wrappers/stable_baselines_wrapper.py
++++ b/godot_rl_agents/wrappers/stable_baselines_wrapper.py
+@@ -5,17 +5,23 @@ from godot_rl_agents.core.godot_env import GodotEnv
+ import numpy as np
+ 
+ class StableBaselinesGodotEnv(VecEnv):
+-    def __init__(self, env_path=None, port=10008, seed=0):
+-        self.env = GodotEnv(env_path=env_path, port=port, seed=seed,framerate=5)
++    def __init__(self, env_path=None, port=10008, seed=0, show_window=False):
++        self.env = GodotEnv(env_path=env_path, port=port, seed=seed, show_window=show_window, framerate=5)
+         self.num_agents = self.env.n_agents
+ 
+         self._action_key = None
+         self._convert_action_space()
++        self._convert_observation_space()
+ 
+     def _convert_action_space(self):
+         assert len(self.env.action_space) == 1, "only single action spaces are supported by stable_baselines"
+         self._action_key = list(self.env.action_space.spaces.keys())[0]
+ 
++    def _convert_observation_space(self):
++        obs_space = self.env.observation_space["camera_2d"]
++        obs_space.shape = (obs_space.shape[2], obs_space.shape[0], obs_space.shape[1])
++        self._observation_space = obs_space
++
+     def step(self, action):
+ 
+         action = {
+@@ -40,7 +46,7 @@ class StableBaselinesGodotEnv(VecEnv):
+         
+         for d in lod:
+             for k,v in d.items():
+-                d[k] = np.array(v)
++                d[k] = np.array(v).transpose(1,2,0)
+ 
+         return lod
+ 
+@@ -57,7 +63,7 @@ class StableBaselinesGodotEnv(VecEnv):
+ 
+     @property
+     def observation_space(self):
+-        return self.env.observation_space
++        return self._observation_space
+ 
+     @property
+     def action_space(self):
+@@ -87,6 +93,9 @@ class StableBaselinesGodotEnv(VecEnv):
+     def step_wait(self):
+         raise NotImplementedError()
+ 
++    def reward_range(self):
++        return (-np.inf, np.inf)
++
+ 
+ def stable_baselines_training(args):
+     print(
+@@ -100,16 +109,17 @@ if __name__ == "__main__":
+     env = StableBaselinesGodotEnv()
+ 
+     print(env.action_space)
+-    obs = env.reset()
+-
+-    model = PPO(
+-        "MultiInputPolicy",
+-        env,
+-        ent_coef=0.0001,
+-        verbose=2,
+-        n_steps=32,
+-        tensorboard_log="logs/log",
+-    )
+-    model.learn(20000)
+-    print("closing env")
+-    env.close()
++    print(env.observation_space)
++    # obs = env.reset()
++
++    # model = PPO(
++    #     "MultiInputPolicy",
++    #     env,
++    #     ent_coef=0.0001,
++    #     verbose=2,
++    #     n_steps=32,
++    #     tensorboard_log="logs/log",
++    # )
++    # model.learn(20000)
++    # print("closing env")
++    # env.close()
+diff --git a/plugin/addons/godot_rl_agents/sensors/sensors_3d/RGBCameraSensor3D.gd b/plugin/addons/godot_rl_agents/sensors/sensors_3d/RGBCameraSensor3D.gd
+index ef38ac1..54508da 100644
+--- a/plugin/addons/godot_rl_agents/sensors/sensors_3d/RGBCameraSensor3D.gd
++++ b/plugin/addons/godot_rl_agents/sensors/sensors_3d/RGBCameraSensor3D.gd
+@@ -3,9 +3,23 @@ class_name RGBCameraSensor3D
+ var camera_pixels = null
+ 
+ onready var camera_texture := $Control/TextureRect/CameraTexture as Sprite
++onready var viewport = $Viewport
++
+ 
+ func get_camera_pixel_encoding():
+-    return camera_texture.get_texture().get_data().data["data"].hex_encode()
++#    var tex_id = viewport.get_texture().get_rid()
++#    var gl_id = VisualServer.texture_get_texid(tex_id)
++#    prints(tex_id.get_id(), gl_id, viewport.get_viewport_rid().get_id())
++    #print(viewport.get_texture().get_data().data["data"])
++    return viewport.get_texture().get_data().data["data"].hex_encode()
++    #return camera_texture.get_texture().get_data().data["data"].hex_encode()
++    # hex encode : 10.63 ms for 32 calls.
++    # data["data"] 8.28 ms
++    # get_data() 7.37 ms
++    # camera_texture.get_texture() 0.01 ms
++    
++    # camera_texture.get_texture().get_data() is the bottleneck
+ 
+ func get_camera_shape()-> Array:
+     return [$Viewport.size[0], $Viewport.size[1], 4]
++
+diff --git a/plugin/addons/godot_rl_agents/sensors/sensors_3d/RGBCameraSensor3D.tscn b/plugin/addons/godot_rl_agents/sensors/sensors_3d/RGBCameraSensor3D.tscn
+index de0e3ea..32fb308 100644
+--- a/plugin/addons/godot_rl_agents/sensors/sensors_3d/RGBCameraSensor3D.tscn
++++ b/plugin/addons/godot_rl_agents/sensors/sensors_3d/RGBCameraSensor3D.tscn
+@@ -17,6 +17,7 @@ render_target_update_mode = 3
+ 
+ [node name="Camera" type="Camera" parent="Viewport"]
+ near = 0.5
++far = 30.0
+ 
+ [node name="Control" type="Control" parent="."]
+ anchor_right = 1.0
+diff --git a/ppo_test.yaml b/ppo_test.yaml
+index 52723cf..56eebda 100644
+--- a/ppo_test.yaml
++++ b/ppo_test.yaml
+@@ -35,5 +35,6 @@ config:
+         use_lstm: false
+         lstm_cell_size : 32
+         framestack: 4
++        conv_filters: [[16, 3, 2], [16, 3, 2], [16, 3, 2]]
+     no_done_at_end: false
+     soft_horizon: false
+diff --git a/tests/test_call_method.py b/tests/test_call_method.py
+index bbe38f9..96ef567 100644
+--- a/tests/test_call_method.py
++++ b/tests/test_call_method.py
+@@ -13,7 +13,7 @@ if __name__ == "__main__":
+ 
+     obs = env.reset()
+     obs, reward, done, info = env.step(
+-        [env.action_space.sample() for _ in range(env.num_envs)]
++        [env.action_space.sample() for _ in range(env.n_agents)]
+     )
+ 
+     returns = env.call("remote_callable")
+diff --git a/tests/test_godot_env.py b/tests/test_godot_env.py
+index 6f7264a..bc25a5c 100644
+--- a/tests/test_godot_env.py
++++ b/tests/test_godot_env.py
+@@ -24,7 +24,7 @@ def test_env(env_path, port):
+ 
+     action_space = env.action_space
+     observation_space = env.observation_space
+-    n_envs = env.num_envs
++    n_envs = env.n_agents
+ 
+     for j in range(2):
+         obs = env.reset()
+diff --git a/zeb_try_sample_factory.py b/zeb_try_sample_factory.py
+index 9d2cfe5..289973d 100644
+--- a/zeb_try_sample_factory.py
++++ b/zeb_try_sample_factory.py
+@@ -32,12 +32,12 @@ def custom_parse_args(argv=None, evaluation=False):
+ def make_godot_env_func(full_env_name, cfg=None, env_config=None):
+ 
+     seed = 0
+-    port = 21008
++    port = 11008
+     if env_config:
+         port += 1 + env_config.env_id
+         seed += 1 + env_config.env_id
+ 
+-    return StableBaselinesGodotEnv(env_path="envs/builds/BallChase/ball_chase_opt.x86_64", port=port, seed=seed)
++    return StableBaselinesGodotEnv(env_path="envs/builds/VirtualCamera/virtual_camera.x86_64", port=port, seed=seed, show_window=True)
+ 
+ 
+ def add_extra_params_func(env, parser):

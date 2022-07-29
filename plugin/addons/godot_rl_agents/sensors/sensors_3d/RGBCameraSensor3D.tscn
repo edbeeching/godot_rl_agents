@@ -17,6 +17,7 @@ render_target_update_mode = 3
 
 [node name="Camera" type="Camera" parent="Viewport"]
 near = 0.5
+far = 30.0
 
 [node name="Control" type="Control" parent="."]
 anchor_right = 1.0
