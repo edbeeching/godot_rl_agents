@@ -38,7 +38,7 @@ title = {Godot Reinforcement Learning Agents},
 journal = {{arXiv preprint arXiv:2112.03636.},
 year = {2021}, 
 }
-}
+
 
 ```
 ### Installation
