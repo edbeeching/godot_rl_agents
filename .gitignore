@@ -144,3 +144,7 @@ envs/example_envs/SpaceShooter/assets/
 envs/example_envs/SpaceShooter/.import
 envs/example_envs/FlyBy/assets/
 envs/example_envs/FlyBy/.import
+envs/example_envs/BallChase/.godot/
+envs/example_envs/BallChase/.mono/
+envs/example_envs/SpaceShooter/.godot
+envs/example_envs/FlyBy/.godot
