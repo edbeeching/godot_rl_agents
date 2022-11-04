@@ -1,5 +1,5 @@
 extends Node2D
-tool
+@tool
 class_name DrawLine3D
 
 class Line:
@@ -8,7 +8,7 @@ class Line:
     var LineColor
     var Time
     
-    func _init(Start, End, LineColor, Time):
+    func _init(Start,End,LineColor,Time):
         self.Start = Start
         self.End = End
         self.LineColor = LineColor
@@ -63,15 +63,15 @@ func _process(delta):
 func geteditorcamera(camera_index):
     return editor_camera_3d
     
-func get_camera():
+func get_camera_3d():
     if Engine.editor_hint:
         return geteditorcamera(0)   
     else:
-        var Cam = get_viewport().get_camera()
+        var Cam = get_viewport().get_camera_3d()
         return Cam
 
 func _draw():
-    var Cam = get_camera()
+    var Cam = get_camera_3d()
     
     for i in range(len(Lines)):
         var ScreenPointStart = Cam.unproject_position(Lines[i].Start)
@@ -90,7 +90,7 @@ func _draw():
     var i = Lines.size() - 1
     while (i >= 0):
         if(Lines[i].Time < 0.0):
-            Lines.remove(i)
+            Lines.remove_at(i)
             RemovedLine = true
         i -= 1
 

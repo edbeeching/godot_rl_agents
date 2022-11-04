@@ -1,5 +1,5 @@
-extends ImmediateGeometry
-tool
+extends ImmediateMesh
+@tool
 
 var points := []
 
@@ -16,7 +16,7 @@ func add_point(start : Vector3, end: Vector3) ->void:
         var start_v = point[0]
         var end_v = point[1]
         #var result = space_state.intersect_ray(start_v, end_v)
-        set_color(Color.aqua)
+        set_color(Color.AQUA)
         add_vertex(start_v)
         add_vertex(end_v)
 #        if result:
@@ -26,7 +26,7 @@ func add_point(start : Vector3, end: Vector3) ->void:
     end()
 #
 #func _physics_process(delta) -> void:
-#    #var space_state = get_world().direct_space_state
+#    #var space_state = get_world_3d().direct_space_state
 #    clear()
 #    begin(Mesh.PRIMITIVE_LINES)
 #    for point in points:
@@ -35,7 +35,7 @@ func add_point(start : Vector3, end: Vector3) ->void:
 #        var end_v = point[1]
 #        print(start_v,end_v)
 #        #var result = space_state.intersect_ray(start_v, end_v)
-#        set_color(Color.yellow)
+#        set_color(Color.YELLOW)
 #        add_vertex(start_v)
 #        add_vertex(end_v)
 ##        if result:

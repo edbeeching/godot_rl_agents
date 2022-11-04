@@ -3,19 +3,19 @@
 [ext_resource path="res://addons/godot_rl_agents/sensors/sensors_3d/RGBCameraSensor3D.gd" type="Script" id=1]
 
 [sub_resource type="ViewportTexture" id=1]
-viewport_path = NodePath("Viewport")
+viewport_path = NodePath("SubViewport")
 
-[node name="RGBCameraSensor3D" type="Spatial"]
+[node name="RGBCameraSensor3D" type="Node3D"]
 script = ExtResource( 1 )
 
-[node name="RemoteTransform" type="RemoteTransform" parent="."]
-remote_path = NodePath("../Viewport/Camera")
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="."]
+remote_path = NodePath("../SubViewport/Camera3D")
 
-[node name="Viewport" type="Viewport" parent="."]
+[node name="SubViewport" type="SubViewport" parent="."]
 size = Vector2( 32, 32 )
 render_target_update_mode = 3
 
-[node name="Camera" type="Camera" parent="Viewport"]
+[node name="Camera3D" type="Camera3D" parent="SubViewport"]
 near = 0.5
 
 [node name="Control" type="Control" parent="."]
@@ -26,17 +26,17 @@ __meta__ = {
 }
 
 [node name="TextureRect" type="ColorRect" parent="Control"]
-margin_left = 1096.0
-margin_top = 534.0
-margin_right = 1114.0
-margin_bottom = 552.0
-rect_scale = Vector2( 10, 10 )
+offset_left = 1096.0
+offset_top = 534.0
+offset_right = 1114.0
+offset_bottom = 552.0
+scale = Vector2( 10, 10 )
 color = Color( 0.00784314, 0.00784314, 0.00784314, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CameraTexture" type="Sprite" parent="Control/TextureRect"]
+[node name="CameraTexture" type="Sprite2D" parent="Control/TextureRect"]
 texture = SubResource( 1 )
 offset = Vector2( 9, 9 )
 flip_v = true

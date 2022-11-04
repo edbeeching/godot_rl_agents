@@ -1,12 +1,12 @@
 extends ISensor3D
 class_name RayCastSensor3D
-tool
+@tool
 
-export(float,2, 16,2) var n_rays_width := 6.0 setget set_n_rays_width
-export(float,2, 16,2) var n_rays_height := 6.0 setget set_n_rays_height
-export(float,1.0,100,0.5) var ray_length := 10.0 setget set_ray_length
-export(float,10,360,10.0) var cone_width := 60.0 setget set_cone_width
-export(float,10,180,10.0) var cone_height := 60.0 setget set_cone_height
+@export var n_rays_width := 6.0 setget set_n_rays_width # (float,2, 16,2)
+@export var n_rays_height := 6.0 setget set_n_rays_height # (float,2, 16,2)
+@export var ray_length := 10.0 setget set_ray_length # (float,1.0,100,0.5)
+@export var cone_width := 60.0 setget set_cone_width # (float,10,360,10.0)
+@export var cone_height := 60.0 setget set_cone_height # (float,10,180,10.0)
 
 var rays := []
 var geo = null
@@ -65,9 +65,9 @@ func _spawn_nodes():
             var angle_w = horizontal_start + i * horizontal_step
             var angle_h = vertical_start + j * vertical_step
             #angle_h = 0.0
-            var ray = RayCast.new()
+            var ray = RayCast3D.new()
             var cast_to = to_spherical_coords(ray_length, angle_w, angle_h)
-            ray.set_cast_to(cast_to)
+            ray.set_target_position(cast_to)
             points.append(cast_to)
             
             ray.set_name("node_"+str(i)+" "+str(j))
@@ -83,13 +83,13 @@ func _spawn_nodes():
         
 func _create_debug_lines(points):
     if not geo: 
-        geo = ImmediateGeometry.new()
+        geo = ImmediateMesh.new()
         add_child(geo)
         
     geo.clear()
     geo.begin(Mesh.PRIMITIVE_LINES)
     for point in points:
-        geo.set_color(Color.aqua)
+        geo.set_color(Color.AQUA)
         geo.add_vertex(Vector3.ZERO)
         geo.add_vertex(point)
     geo.end()
@@ -103,9 +103,9 @@ func display():
     
 func to_spherical_coords(r, inc, azimuth) -> Vector3:
     return Vector3(
-        r*sin(deg2rad(inc))*cos(deg2rad(azimuth)),
-        r*sin(deg2rad(azimuth)),
-        r*cos(deg2rad(inc))*cos(deg2rad(azimuth))       
+        r*sin(deg_to_rad(inc))*cos(deg_to_rad(azimuth)),
+        r*sin(deg_to_rad(azimuth)),
+        r*cos(deg_to_rad(inc))*cos(deg_to_rad(azimuth))       
        )
     
     
@@ -125,7 +125,7 @@ func calculate_raycasts() -> Array:
         result.append(distance)
     return result
 
-func _get_raycast_distance(ray : RayCast) -> float : 
+func _get_raycast_distance(ray : RayCast3D) -> float : 
     if !ray.is_colliding():
         return 0.0
         

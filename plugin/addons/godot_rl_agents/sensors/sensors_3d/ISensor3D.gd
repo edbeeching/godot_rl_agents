@@ -1,4 +1,4 @@
-extends Spatial
+extends Node3D
 class_name ISensor3D
 
 var _obs = null
