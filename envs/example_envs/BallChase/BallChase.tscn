@@ -1,243 +1,167 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=13 format=3 uid="uid://bj8j0v5unredq"]
 
-[ext_resource path="res://Player.gd" type="Script" id=1]
-[ext_resource path="res://addons/godot_rl_agents/sensors/sensors_2d/RaycastSensor2D.gd" type="Script" id=2]
-[ext_resource path="res://addons/regular_polygon2d_node/RegularPolygon2D.gd" type="Script" id=3]
-[ext_resource path="res://addons/Trail/trail_2d.gd" type="Script" id=4]
+[ext_resource type="Script" path="res://Player.gd" id="1"]
+[ext_resource type="Script" path="res://addons/godot_rl_agents/sensors/sensors_2d/RaycastSensor2D.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://c77mj86i50gub" path="res://cherry.png" id="3_25acu"]
+[ext_resource type="Texture2D" uid="uid://cy4acafft8vjv" path="res://lollipopGreen.png" id="3_ty2qt"]
 
-[sub_resource type="CircleShape2D" id=1]
+[sub_resource type="CircleShape2D" id="1"]
 radius = 30.0
 
-[sub_resource type="Curve" id=2]
-min_value = 0.1
-_data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.91 ), 0.0, 0.0, 0, 0 ]
-
-[sub_resource type="CircleShape2D" id=3]
+[sub_resource type="CircleShape2D" id="3"]
 radius = 30.0
 
-[sub_resource type="RectangleShape2D" id=4]
-extents = Vector2( 10, 360 )
+[sub_resource type="RectangleShape2D" id="4"]
+size = Vector2(20, 720)
 
-[sub_resource type="RectangleShape2D" id=5]
-extents = Vector2( 10, 360 )
+[sub_resource type="RectangleShape2D" id="5"]
+size = Vector2(20, 720)
 
-[sub_resource type="RectangleShape2D" id=6]
-extents = Vector2( 620, 10 )
+[sub_resource type="RectangleShape2D" id="6"]
+size = Vector2(1240, 20)
 
-[sub_resource type="RectangleShape2D" id=7]
-extents = Vector2( 620, 10 )
+[sub_resource type="RectangleShape2D" id="7"]
+size = Vector2(1240, 20)
 
-[sub_resource type="RectangleShape2D" id=8]
-extents = Vector2( 29.169, 143.153 )
+[sub_resource type="RectangleShape2D" id="8"]
+size = Vector2(58.338, 286.306)
 
-[sub_resource type="Environment" id=9]
+[sub_resource type="Environment" id="9"]
 background_mode = 4
 tonemap_mode = 3
-glow_levels/1 = true
-glow_levels/2 = true
-glow_levels/3 = false
-glow_levels/4 = true
-glow_levels/5 = false
+glow_levels/1 = 1.0
+glow_levels/2 = 1.0
+glow_levels/3 = 0.0
+glow_levels/4 = 1.0
+glow_levels/5 = 0.0
 glow_intensity = 0.1
 glow_strength = 1.17
 glow_bloom = 0.09
 glow_blend_mode = 0
 
-[sub_resource type="Gradient" id=10]
-colors = PoolColorArray( 0.509804, 0.180392, 0.819608, 1, 1, 1, 1, 1 )
-
-[sub_resource type="GradientTexture" id=11]
-gradient = SubResource( 10 )
-
-[sub_resource type="ParticlesMaterial" id=12]
-lifetime_randomness = 0.21
-trail_divisor = 2
-flag_disable_z = true
-spread = 180.0
-flatness = 0.84
-gravity = Vector3( 0, 0, 0 )
-initial_velocity = 500.0
-initial_velocity_random = 0.24
-orbit_velocity = 0.0
-orbit_velocity_random = 1.0
-angle = -88.9
-angle_random = 1.0
-scale = 12.0
-scale_random = 0.2
-color_ramp = SubResource( 11 )
-hue_variation = 0.2
-hue_variation_random = 0.2
-
 [node name="BallChase" type="Node2D"]
 
-[node name="Player" type="KinematicBody2D" parent="." groups=["AGENT"]]
-position = Vector2( 281.728, 162.943 )
-script = ExtResource( 1 )
+[node name="Player" type="CharacterBody2D" parent="." groups=["AGENT"]]
+position = Vector2(281.728, 162.943)
+script = ExtResource("1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
-shape = SubResource( 1 )
-
-[node name="Trail2D" type="Line2D" parent="Player"]
-width = 64.0
-width_curve = SubResource( 2 )
-default_color = Color( 0.886275, 0.952941, 0.894118, 1 )
-sharp_limit = 4.0
-antialiased = true
-script = ExtResource( 4 )
-lifetime = 0.3
-distance = 0.0
-segments = 100
-
-[node name="RegularPolygon2D" type="Node2D" parent="Player"]
-script = ExtResource( 3 )
-centered = true
-num_sides = 16
-polygon_color = Color( 0.886275, 0.952941, 0.894118, 1 )
-border_size = 0.0
-collision_shape = false
+shape = SubResource("1")
 
 [node name="RaycastSensor2D" type="Node2D" parent="Player"]
-script = ExtResource( 2 )
+script = ExtResource("2")
 n_rays = 32.0
 
+[node name="Sprite2D" type="Sprite2D" parent="Player"]
+scale = Vector2(0.9, 0.9)
+texture = ExtResource("3_ty2qt")
+
 [node name="Fruit" type="Area2D" parent="."]
-position = Vector2( 1095.01, 578.224 )
+position = Vector2(1095.01, 578.224)
 collision_layer = 2
 collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Fruit"]
-shape = SubResource( 3 )
+shape = SubResource("3")
 
-[node name="RegularPolygon2D" type="Node2D" parent="Fruit"]
-script = ExtResource( 3 )
-centered = true
-num_sides = 16
-polygon_color = Color( 0.933333, 0.301961, 0.552941, 1 )
-border_size = 0.0
-collision_shape = false
+[node name="Sprite2D" type="Sprite2D" parent="Fruit"]
+position = Vector2(3.98999, -14.224)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("3_25acu")
 
 [node name="Walls" type="Node2D" parent="."]
 
 [node name="LeftWall" type="Area2D" parent="Walls"]
-position = Vector2( 10, 360 )
+position = Vector2(10, 360)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/LeftWall"]
-shape = SubResource( 4 )
+shape = SubResource("4")
 
 [node name="ColorRect" type="ColorRect" parent="Walls/LeftWall"]
-margin_left = -10.0
-margin_top = -360.0
-margin_right = 10.0
-margin_bottom = 360.0
-color = Color( 0.27451, 0.529412, 0.560784, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+offset_left = -10.0
+offset_top = -360.0
+offset_right = 10.0
+offset_bottom = 360.0
+color = Color(0.27451, 0.529412, 0.560784, 1)
 
 [node name="RightWall" type="Area2D" parent="Walls"]
-position = Vector2( 1270, 360 )
+position = Vector2(1270, 360)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/RightWall"]
-shape = SubResource( 5 )
+shape = SubResource("5")
 
 [node name="ColorRect" type="ColorRect" parent="Walls/RightWall"]
-margin_left = -10.0
-margin_top = -360.0
-margin_right = 10.0
-margin_bottom = 360.0
-color = Color( 0.27451, 0.529412, 0.560784, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+offset_left = -10.0
+offset_top = -360.0
+offset_right = 10.0
+offset_bottom = 360.0
+color = Color(0.27451, 0.529412, 0.560784, 1)
 
 [node name="TopWall" type="Area2D" parent="Walls"]
-position = Vector2( 640, 10 )
+position = Vector2(640, 10)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/TopWall"]
-shape = SubResource( 6 )
+shape = SubResource("6")
 
 [node name="ColorRect" type="ColorRect" parent="Walls/TopWall"]
-margin_left = -620.0
-margin_top = -10.0
-margin_right = 620.0
-margin_bottom = 10.0
-color = Color( 0.27451, 0.529412, 0.560784, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+offset_left = -620.0
+offset_top = -10.0
+offset_right = 620.0
+offset_bottom = 10.0
+color = Color(0.27451, 0.529412, 0.560784, 1)
 
 [node name="BottomWall" type="Area2D" parent="Walls"]
-position = Vector2( 640, 710 )
+position = Vector2(640, 710)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/BottomWall"]
-shape = SubResource( 7 )
+shape = SubResource("7")
 
 [node name="ColorRect" type="ColorRect" parent="Walls/BottomWall"]
-margin_left = -620.0
-margin_top = -10.0
-margin_right = 620.0
-margin_bottom = 10.0
-color = Color( 0.27451, 0.529412, 0.560784, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+offset_left = -620.0
+offset_top = -10.0
+offset_right = 620.0
+offset_bottom = 10.0
+color = Color(0.27451, 0.529412, 0.560784, 1)
 
 [node name="Obstacle4" type="Area2D" parent="Walls"]
-position = Vector2( 896, 328 )
+position = Vector2(896, 328)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Obstacle4"]
-shape = SubResource( 8 )
+shape = SubResource("8")
 
 [node name="ColorRect" type="ColorRect" parent="Walls/Obstacle4"]
-margin_left = -35.0
-margin_top = -143.0
-margin_right = 29.0
-margin_bottom = 153.0
-color = Color( 0.27451, 0.529412, 0.560784, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+offset_left = -35.0
+offset_top = -143.0
+offset_right = 29.0
+offset_bottom = 153.0
+color = Color(0.27451, 0.529412, 0.560784, 1)
 
 [node name="Obstacle5" type="Area2D" parent="Walls"]
-position = Vector2( 360, 328 )
+position = Vector2(360, 328)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Obstacle5"]
-shape = SubResource( 8 )
+shape = SubResource("8")
 
 [node name="ColorRect" type="ColorRect" parent="Walls/Obstacle5"]
-margin_left = -35.0
-margin_top = -143.0
-margin_right = 29.0
-margin_bottom = 153.0
-color = Color( 0.27451, 0.529412, 0.560784, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+offset_left = -35.0
+offset_top = -143.0
+offset_right = 29.0
+offset_bottom = 153.0
+color = Color(0.27451, 0.529412, 0.560784, 1)
 
 [node name="BackGround" type="CanvasLayer" parent="."]
 layer = -2
 
 [node name="ColorRect" type="ColorRect" parent="BackGround"]
+anchors_preset = -1
 anchor_right = 5.954
 anchor_bottom = 5.885
-margin_right = 15506.9
-margin_bottom = 7480.8
-color = Color( 0.2, 0.172549, 0.313726, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+offset_right = 15506.9
+offset_bottom = 7480.8
+color = Color(0.2, 0.172549, 0.313726, 1)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource( 9 )
-
-[node name="Particles2D" type="Particles2D" parent="."]
-position = Vector2( 617.202, 244.87 )
-emitting = false
-amount = 64
-lifetime = 0.4
-one_shot = true
-explosiveness = 0.56
-process_material = SubResource( 12 )
+environment = SubResource("9")
 
 [connection signal="body_entered" from="Fruit" to="Player" method="_on_Fruit_body_entered"]
 [connection signal="body_entered" from="Walls/LeftWall" to="Player" method="_on_LeftWall_body_entered"]
