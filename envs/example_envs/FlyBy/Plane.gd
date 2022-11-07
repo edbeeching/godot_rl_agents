@@ -160,8 +160,8 @@ func _physics_process(delta):
 	# Rotate the transform based checked the input values
 	transform.basis = transform.basis.rotated(transform.basis.x.normalized(), pitch_input * pitch_speed * delta)
 	transform.basis = transform.basis.rotated(Vector3.UP, turn_input * turn_speed * delta)
-	$PlaneModel.rotation.z = lerp($PlaneModel.rotation.z, turn_input, level_speed * delta)
-	$PlaneModel.rotation.x = lerp($PlaneModel.rotation.x, pitch_input, level_speed * delta)
+	$PlaneModel.rotation.z = lerp($PlaneModel.rotation.z, -float(turn_input), level_speed * delta)
+	$PlaneModel.rotation.x = lerp($PlaneModel.rotation.x, -float(pitch_input), level_speed * delta)
 
 	# Movement is always forward
 	velocity = -transform.basis.z.normalized() * max_flight_speed

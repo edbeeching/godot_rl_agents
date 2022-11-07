@@ -149,3 +149,5 @@ envs/example_envs/JumperHard/.godot/
 envs/example_envs/BallChase/.mono/
 envs/example_envs/SpaceShooter/.godot
 envs/example_envs/FlyBy/.godot
+
+*.import
