@@ -79,7 +79,7 @@ func _send_env_info():
 		"obs_size": agents[0].get_obs_size(),
 		"action_space":agents[0].get_action_space(),
 		"n_agents": len(agents)
-	   }
+		}
 	_send_dict_as_json_message(message)
 
 
@@ -118,7 +118,7 @@ func _physics_process(delta):
 	if n_action_steps % action_repeat != 0:
 		n_action_steps += 1
 		return
-		 
+		
 	n_action_steps += 1
 	
 	if connected:
@@ -174,7 +174,7 @@ func handle_message() -> bool:
 	return false
 
 func _reset_agents_if_done():
-	 for agent in agents:
+	for agent in agents:
 		agent.reset_if_done()
 
 func _reset_all_agents():

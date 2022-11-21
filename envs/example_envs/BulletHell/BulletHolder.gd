@@ -1,6 +1,6 @@
 class_name BulletHolder
 
-extends Spatial
+extends Node3D
 
 func get_bullets():
     return get_children().slice(0, 98)
