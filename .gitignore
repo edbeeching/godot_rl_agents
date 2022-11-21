@@ -139,6 +139,9 @@ Packaging Python Projects — Python Packaging User Guide.html
 godot-2d-space-game-master/
 
 .vscode/launch.json
+.vscode/
+.idea/
+train_dir/
 
 envs/example_envs/SpaceShooter/assets/
 envs/example_envs/SpaceShooter/.import
