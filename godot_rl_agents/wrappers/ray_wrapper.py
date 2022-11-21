@@ -65,7 +65,7 @@ class RayVectorGodotEnv(VectorEnv):
 from godot_rl_agents.core.utils import register_env
 
 
-def rllib_training(args):
+def rllib_training(args, extras):
     ray.init()
 
     with open(args.config_file) as f:

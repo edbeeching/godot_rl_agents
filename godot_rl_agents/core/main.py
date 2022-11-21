@@ -22,15 +22,24 @@ gdrl --env_path path/to/exported/executable ---config_path path/to/yaml/file
 
 import argparse
 
-from godot_rl_agents.wrappers.ray_wrapper import rllib_training
-from godot_rl_agents.wrappers.stable_baselines_wrapper import stable_baselines_training
-
+try:
+    from godot_rl_agents.wrappers.ray_wrapper import rllib_training
+except ImportError as e:
+    def rllib_training(args, extras):
+        print("Import error when trying due to use rllib, this is probably not installed try pip install ray[rllib]")
+try:
+    from godot_rl_agents.wrappers.stable_baselines_wrapper import stable_baselines_training
+except ImportError as e:
+    def stable_baselines_training(args, extras):
+        print("Import error when trying due to use sb3, this is probably not installed try pip install stable-baselines3")
+try:
+    from godot_rl_agents.wrappers.sample_factory_wrapper import sample_factory_training
+except ImportError as e:
+    def sample_factory_training(args, extras):
+        print("Import error when trying due to use sample-factory, this is probably not installed try pip install sample-factory")
 
 def get_args():
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument
-
+    parser = argparse.ArgumentParser(allow_abbrev=False)
     parser.add_argument(
         "--trainer",
         default="rllib",
@@ -42,16 +51,14 @@ def get_args():
         # default="envs/example_envs/builds/JumperHard/jumper_hard.x86_64",
         default=None,
         type=str,
-        help="The Godot binary to use, do no include for in editor training",
+        help="The Godot binary to use, do not include for in editor training",
     )
-
     parser.add_argument(
         "--config_file",
         default="ppo_test.yaml",
         type=str,
-        help="The yaml config file used to specify parameters for training",
+        help="The yaml config file used to specify parameters for training (used for rllib)",
     )
-
     parser.add_argument(
         "--restore",
         default=None,
@@ -65,19 +72,21 @@ def get_args():
         help="whether to eval the model",
     )
 
-    return parser.parse_args()
+    return parser.parse_known_args()
 
 
 def main():
-    args = get_args()
+    args, extras = get_args()
     if args.trainer == "rllib":
         training_function = rllib_training
-    elif args.trainer == "stable-baselines":
+    elif args.trainer == "sb3":
         training_function = stable_baselines_training
+    elif args.trainer == "sf2":
+        training_function = sample_factory_training
     else:
         raise NotImplementedError
 
-    training_function(args)
+    training_function(args, extras)
 
 
 if __name__ == "__main__":

@@ -51,7 +51,7 @@ class StableBaselinesGodotEnv(VecEnv):
         raise NotImplementedError()
 
 
-def stable_baselines_training(args):
+def stable_baselines_training(args, extras):
     print(
         "Stable-baselines3 is currently unsupported due to issue: https://github.com/DLR-RM/stable-baselines3/issues/731"
     )
