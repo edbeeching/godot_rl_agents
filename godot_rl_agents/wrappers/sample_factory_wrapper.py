@@ -53,8 +53,8 @@ def make_godot_env_func(full_env_name, cfg=None, env_config=None,  render_mode =
     if env_config:
         port += 1 + env_config.env_id
         seed += 1 + env_config.env_id
-
-    env = SampleFactoryEnvWrapper(env_path=None, port=port, seed=seed)
+    env = SampleFactoryEnvWrapper(env_path=None, 
+                                    port=port, seed=seed, show_window=True)
     
     return env
 
