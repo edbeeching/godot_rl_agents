@@ -8,7 +8,7 @@ const MINOR_VERSION := "1"
 const DEFAULT_PORT := 11008
 const DEFAULT_SEED := 1
 const DEFAULT_ACTION_REPEAT := 8
-var client : StreamPeerTCP = null
+var stream : StreamPeerTCP = null
 var connected = false
 var message_center
 var should_connect = true
@@ -49,22 +49,22 @@ func _handshake():
 func _get_dict_json_message():
 	# returns a dictionary from of the most recent message
 	# this is not waiting
-	while client.get_available_bytes() == 0:
-		client.poll()
-		if client.get_status() != 2:
+	while stream.get_available_bytes() == 0:
+		stream.poll()
+		if stream.get_status() != 2:
 			print("server disconnected status, closing")
 			get_tree().quit()
 			return null
 
 		OS.delay_usec(10)
 		
-	var message = client.get_string()
+	var message = stream.get_string()
 	var json_data = JSON.parse_string(message)
 	
 	return json_data
 
 func _send_dict_as_json_message(dict):
-	client.put_string(JSON.stringify(dict))
+	stream.put_string(JSON.stringify(dict))
 
 func _send_env_info():
 	var json_dict = _get_dict_json_message()
@@ -84,15 +84,15 @@ func connect_to_server():
 	print("Waiting for one second to allow server to start")
 	OS.delay_msec(1000)
 	print("trying to connect to server")
-	client = StreamPeerTCP.new()
+	stream = StreamPeerTCP.new()
 	
 	# "localhost" was not working on windows VM, had to use the IP
 	var ip = "127.0.0.1"
 	var port = _get_port()
-	var connect = client.connect_to_host(ip, port)
-	client.set_no_delay(true) # TODO check if this improves performance or not
-	client.poll()
-	return client.get_status() == 2
+	var connect = stream.connect_to_host(ip, port)
+	stream.set_no_delay(true) # TODO check if this improves performance or not
+	stream.poll()
+	return stream.get_status() == 2
 
 func _get_args():
 	print("getting command line arguments")
@@ -117,7 +117,7 @@ func _set_action_repeat():
 	
 
 func disconnect_from_server():
-	client.disconnect_from_host()
+	stream.disconnect_from_host()
 
 func _initialize():
 	_get_agents()
