@@ -10,27 +10,6 @@ import argparse
 
 
 class SampleFactoryEnvWrapper(GodotEnv):
-
-    # def __init__(
-    #     self,
-    #     env_path=None,
-    #     port=11008,
-    #     show_window=False,
-    #     seed=0,
-    #     framerate=None,
-    #     action_repeat=None,
-    # ):
-    #     super(SampleFactoryEnvWrapper).__init__(
-    #         self,
-    #         env_path=env_path,
-    #         port=port,
-    #         show_window=show_window,
-    #         seed=seed,
-    #         framerate=framerate,
-    #         action_repeat=action_repeat,
-    #     )
-
-
     @property
     def unwrapped(self):
         return self
@@ -159,13 +138,3 @@ def sample_factory_training(args, extras):
 
     status = run_rl(cfg)
     return status
-
-
-if __name__ == "__main__":
-
-
-    env = SampleFactoryEnvWrapper()
-    obs, info = env.reset()
-
-
-    print(env)
