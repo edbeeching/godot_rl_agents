@@ -6,7 +6,7 @@ from sample_factory.envs.env_utils import register_env
 from sample_factory.train import run_rl
 from godot_rl_agents.core.godot_env import GodotEnv
 import argparse
-
+from functools import partial
 
 
 class SampleFactoryEnvWrapper(GodotEnv):
@@ -47,20 +47,22 @@ class SampleFactoryEnvWrapper(GodotEnv):
         return lod
 
 
-def make_godot_env_func(full_env_name, cfg=None, env_config=None,  render_mode = None):
+def make_godot_env_func(env_path, full_env_name, cfg=None, env_config=None, render_mode=None):
     seed = 0
     port = 21008
     if env_config:
         port += 1 + env_config.env_id
         seed += 1 + env_config.env_id
-    env = SampleFactoryEnvWrapper(env_path=None, 
+    env = SampleFactoryEnvWrapper(env_path=env_path, 
                                     port=port, seed=seed, show_window=True)
-    
+
     return env
 
 
-def register_gdrl_env():
-    register_env("gdrl", make_godot_env_func)
+
+def register_gdrl_env(args):
+    make_env = partial(make_godot_env_func, args.env_path)
+    register_env("gdrl", make_env)
 
 
 def gdrl_override_defaults(_env, parser):
@@ -132,8 +134,7 @@ def parse_gdrl_args(argv=None, evaluation=False):
     return final_cfg
 
 def sample_factory_training(args, extras):
-    print(args, extras)
-    register_gdrl_env()
+    register_gdrl_env(args)
     cfg = parse_gdrl_args(argv=extras, evaluation=args.eval)
 
     status = run_rl(cfg)

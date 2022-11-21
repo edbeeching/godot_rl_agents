@@ -5,9 +5,9 @@ var n_action_steps = 0
 
 const MAJOR_VERSION := "0"
 const MINOR_VERSION := "3" 
-const DEFAULT_PORT := 11008
-const DEFAULT_SEED := 1
-const DEFAULT_ACTION_REPEAT := 8
+const DEFAULT_PORT := "11008"
+const DEFAULT_SEED := "1"
+const DEFAULT_ACTION_REPEAT := "8"
 var stream : StreamPeerTCP = null
 var connected = false
 var message_center
