@@ -15,7 +15,7 @@ import atexit
 
 class GodotEnv:
     MAJOR_VERSION = "0"
-    MINOR_VERSION = "1"
+    MINOR_VERSION = "3"
     DEFAULT_PORT = 11008
     DEFAULT_TIMEOUT = 60
 
@@ -70,17 +70,20 @@ class GodotEnv:
         assert os.path.exists(filename)
 
     def from_numpy(self, action):
+        # handles dict to tuple actions
         result = []
 
-        for a in action:
-            d = {}
-            for k, v in a.items():
-                if isinstance(v, np.ndarray):
-                    d[k] = v.tolist()
-                else:
-                    d[k] = int(v)
-            result.append(d)
+        for i in range(self.num_envs):
+            env_action = {}
 
+            for j,k in enumerate(self._action_space.keys()):
+                v = action[j][i]
+                if isinstance(v, np.ndarray):
+                    env_action[k] = v.tolist()
+                else:
+                    env_action[k] = int(v) # cannot serialize int32
+
+            result.append(env_action)
         return result
 
     def step(self, action):
@@ -97,6 +100,7 @@ class GodotEnv:
             response["obs"],
             response["reward"],
             np.array(response["done"]).tolist(),
+            np.array(response["done"]).tolist(), # TODO update API to term, trunc
             [{}] * len(response["done"]),
         )
 
@@ -111,11 +115,7 @@ class GodotEnv:
 
         return response_obs
 
-    def reset(self):
-        # may need to clear message buffer
-        # there will be a the next obs to collect
-        # _ = self._get_json_dict()
-        # self._clear_socket()
+    def reset(self, seed=None):
         message = {
             "type": "reset",
         }
@@ -123,8 +123,8 @@ class GodotEnv:
         response = self._get_json_dict()
         response["obs"] = self._process_obs(response["obs"])
         assert response["type"] == "reset"
-        obs = np.array(response["obs"])
-        return obs
+        obs = response["obs"]
+        return obs, {}
 
     def call(self, method):
         message = {
@@ -177,6 +177,7 @@ class GodotEnv:
 
         print(f"waiting for remote GODOT connection on port {self.port}")
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
         # Bind the socket to the port, "localhost" was not working on windows VM, had to use the IP
         server_address = ("127.0.0.1", self.port)
@@ -219,7 +220,7 @@ class GodotEnv:
             else:
                 print(f"action space {v['action_type']} is not supported")
                 assert 0, f"action space {v['action_type']} is not supported"
-        self.action_space = spaces.Dict(action_spaces)
+        self._action_space = spaces.Dict(action_spaces)
 
         observation_spaces = {}
         print("observation space", json_dict["observation_space"])
@@ -251,6 +252,14 @@ class GodotEnv:
         self.observation_space = spaces.Dict(observation_spaces)
 
         self.num_envs = json_dict["n_agents"]
+
+    @property
+    def action_space(self):
+        # sf2 requires a tuple obs space
+        tuple_action_space = spaces.Tuple(
+            [v for _,v in self._action_space.items()]
+        )
+        return tuple_action_space       
 
     @staticmethod
     def decode_2d_obs_from_string(

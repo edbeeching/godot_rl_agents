@@ -4,7 +4,7 @@ extends Node
 var n_action_steps = 0
 
 const MAJOR_VERSION := "0"
-const MINOR_VERSION := "1" 
+const MINOR_VERSION := "3" 
 const DEFAULT_PORT := 11008
 const DEFAULT_SEED := 1
 const DEFAULT_ACTION_REPEAT := 8
@@ -42,7 +42,7 @@ func _handshake():
 	if major_version != MAJOR_VERSION:
 		print("WARNING: major verison mismatch ", major_version, " ", MAJOR_VERSION)  
 	if minor_version != MINOR_VERSION:
-		print("WARNING: major verison mismatch ", minor_version, " ", MINOR_VERSION)
+		print("WARNING: minor verison mismatch ", minor_version, " ", MINOR_VERSION)
 		
 	print("handshake complete")
 
