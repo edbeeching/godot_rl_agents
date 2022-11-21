@@ -96,24 +96,37 @@ func connect_to_server():
 
 func _get_args():
 	print("getting command line arguments")
+#	var arguments = {}
+#	for argument in OS.get_cmdline_args():
+#		# Parse valid command-line arguments into a dictionary
+#		if argument.find("=") > -1:
+#			var key_value = argument.split("=")
+#			arguments[key_value[0].lstrip("--")] = key_value[1]
+			
 	var arguments = {}
 	for argument in OS.get_cmdline_args():
-		# Parse valid command-line arguments into a dictionary
+		print(argument)
 		if argument.find("=") > -1:
 			var key_value = argument.split("=")
 			arguments[key_value[0].lstrip("--")] = key_value[1]
+		else:
+			# Options without an argument will be present in the dictionary,
+			# with the value set to an empty string.
+			arguments[argument.lstrip("--")] = ""
+
+			
 			
 	return arguments   
 
 func _get_port():    
-	return int(args.get("port", DEFAULT_PORT))
+	return args.get("port", DEFAULT_PORT).to_int()
 
 func _set_seed():
-	var _seed = int(args.get("env_seed", DEFAULT_SEED))
+	var _seed = args.get("env_seed", DEFAULT_SEED).to_int()
 	seed(_seed)
 
 func _set_action_repeat():
-	action_repeat = int(args.get("action_repeat", DEFAULT_ACTION_REPEAT))
+	action_repeat = args.get("action_repeat", DEFAULT_ACTION_REPEAT).to_int()
 	
 
 func disconnect_from_server():
