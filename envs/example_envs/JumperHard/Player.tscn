@@ -28,8 +28,6 @@ script = ExtResource("1")
 shape = SubResource("CapsuleShape3D_k5nui")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-visible = false
 mesh = SubResource("2")
 
 [node name="Camera3D" type="Camera3D" parent="."]
