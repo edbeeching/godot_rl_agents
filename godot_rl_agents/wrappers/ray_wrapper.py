@@ -61,8 +61,19 @@ class RayVectorGodotEnv(VectorEnv):
         # the env is reset automatically, no need to reset it
         return self.obs[index]
 
-
-from godot_rl_agents.core.utils import register_env
+def register_env():
+    tune.register_env(
+        "godot",
+        lambda c: RayVectorGodotEnv(
+            env_path=c["env_path"],
+            config=c,
+            port=c.worker_index + GodotEnv.DEFAULT_PORT + 10,
+            show_window=c["show_window"],
+            framerate=c["framerate"],
+            seed=c.worker_index + c["seed"],
+            action_repeat=c["framerate"],
+        ),
+    )
 
 
 def rllib_training(args, extras):

@@ -5,6 +5,7 @@ from sample_factory.cfg.arguments import parse_full_cfg, parse_sf_args
 from sample_factory.envs.env_utils import register_env
 from sample_factory.train import run_rl
 from godot_rl_agents.core.godot_env import GodotEnv
+from godot_rl_agents.core.utils import lod_to_dol
 import argparse
 from functools import partial
 
@@ -20,22 +21,14 @@ class SampleFactoryEnvWrapper(GodotEnv):
 
     def reset(self, seed=None):
         obs, info = super().reset(seed=seed)
-        obs = self.lod_to_dol(obs)
+        obs = lod_to_dol(obs)
         return {k:np.array(v) for k,v in obs.items()}, info
     
     def step(self, action):
         obs, reward, term, trunc, info = super().step(action)
-        obs = self.lod_to_dol(obs)
+        obs = lod_to_dol(obs)
         return {k:np.array(v) for k,v in obs.items()}, np.array(reward), np.array(term), np.array(trunc), info  
 
-
-    @staticmethod
-    def lod_to_dol(lod):
-        return {k: [dic[k] for dic in lod] for k in lod[0]}
-
-    @staticmethod
-    def dol_to_lod(dol):
-        return [dict(zip(dol,t)) for t in zip(*dol.values())] 
 
     @staticmethod
     def to_numpy(lod):
