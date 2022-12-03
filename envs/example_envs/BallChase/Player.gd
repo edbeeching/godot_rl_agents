@@ -16,7 +16,7 @@ var _velocity := Vector2.ZERO
 var _action = Vector2.ZERO
 var _heuristic = "player"
 @onready var fruit = $"../Fruit"
-@onready var raycast_sensor = $"RaycastSensor2D"
+@onready var raycast_sensor : = $"RaycastSensor2D"
 @onready var walls := $"../Walls"
 @onready var colision_shape := $"CollisionShape2D"
 var fruit_just_entered = false
@@ -133,6 +133,7 @@ func get_obs():
 	result.append(relative.y)
 	result.append(distance)
 	var raycast_obs = raycast_sensor.get_observation()
+
 	result.append_array(raycast_obs)
 
 	return {

@@ -53,10 +53,6 @@ config/icon="res://icon.png"
 
 DebugDraw="*res://debug_draw.gd"
 
-[editor]
-
-run/main_run_args="--port=1234"
-
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/godot_rl_agents/plugin.cfg")
