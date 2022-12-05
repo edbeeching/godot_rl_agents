@@ -81,7 +81,7 @@ def main():
         training_function = rllib_training
     elif args.trainer == "sb3":
         training_function = stable_baselines_training
-    elif args.trainer == "sf2":
+    elif args.trainer == "sf":
         training_function = sample_factory_training
     else:
         raise NotImplementedError
