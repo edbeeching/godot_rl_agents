@@ -27,7 +27,7 @@ class SampleFactoryEnvWrapper(GodotEnv):
     def step(self, action):
         obs, reward, term, trunc, info = super().step(action)
         obs = lod_to_dol(obs)
-        return {k:np.array(v) for k,v in obs.items()}, np.array(reward), np.array(term), np.array(trunc), info  
+        return {k:np.array(v) for k,v in obs.items()}, np.array(reward), np.array(term), np.array(trunc)*0, info  
 
 
     @staticmethod
@@ -43,11 +43,14 @@ class SampleFactoryEnvWrapper(GodotEnv):
 def make_godot_env_func(env_path, full_env_name, cfg=None, env_config=None, render_mode=None):
     seed = 0
     port = 21008
+    show_window = False
     if env_config:
         port += 1 + env_config.env_id
         seed += 1 + env_config.env_id
+        print("env id", env_config.env_id)
+        show_window = env_config.env_id==0
     env = SampleFactoryEnvWrapper(env_path=env_path, 
-                                    port=port, seed=seed, show_window=True)
+                                    port=port, seed=seed, show_window=show_window)
 
     return env
 
@@ -68,7 +71,7 @@ def gdrl_override_defaults(_env, parser):
         use_record_episode_statistics=True,
         gamma=0.99,
         env_frameskip=1,
-        env_framestack=1,
+        env_framestack=4,
         num_workers=1,
         num_envs_per_worker=1,
         worker_num_splits=1,
@@ -85,11 +88,11 @@ def gdrl_override_defaults(_env, parser):
         rollout=32,
         max_grad_norm=0.5,
         num_epochs=10,
-        num_batches_per_epoch=2,
+        num_batches_per_epoch=8,
         ppo_clip_ratio=0.2,
         value_loss_coeff=0.5,
         exploration_loss="entropy",
-        exploration_loss_coeff=0.001,
+        exploration_loss_coeff=0.000,
         learning_rate=0.00025,
         lr_schedule="linear_decay",
         shuffle_minibatches=False,
