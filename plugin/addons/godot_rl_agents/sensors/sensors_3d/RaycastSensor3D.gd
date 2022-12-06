@@ -2,6 +2,8 @@ extends ISensor3D
 class_name RayCastSensor3D
 @tool
 
+
+
 @export var n_rays_width := 6.0:
 	get: return n_rays_width
 	set(value):
@@ -32,6 +34,17 @@ class_name RayCastSensor3D
 		cone_height = value
 		_update()
 
+@export var collide_with_bodies := true:
+	get: return collide_with_bodies
+	set(value):
+		collide_with_bodies = value
+		_update()
+		
+@export var collide_with_areas := false:
+	get: return collide_with_areas
+	set(value):
+		collide_with_areas = value
+		_update()
 var rays := []
 var geo = null
 
@@ -41,8 +54,7 @@ func _update():
 
 
 func _ready() -> void:
-	pass
-   #_spawn_nodes()
+	_spawn_nodes()
 
 
 func _spawn_nodes():
@@ -71,11 +83,13 @@ func _spawn_nodes():
 			var ray = RayCast3D.new()
 			var cast_to = to_spherical_coords(ray_length, angle_w, angle_h)
 			ray.set_target_position(cast_to)
+
 			points.append(cast_to)
 			
 			ray.set_name("node_"+str(i)+" "+str(j))
 			ray.enabled  = true
-			ray.collide_with_areas = true
+			ray.collide_with_bodies = collide_with_bodies
+			ray.collide_with_areas = collide_with_areas
 			add_child(ray)
 			ray.set_owner(get_tree().edited_scene_root)
 			rays.append(ray)
@@ -113,11 +127,7 @@ func to_spherical_coords(r, inc, azimuth) -> Vector3:
 	
 
 func get_observation() -> Array:
-	if self._obs == null:
-		#print("obs was null, forcing raycast update")
-		return self.calculate_raycasts()
-	return self._obs
-	
+	return self.calculate_raycasts()
 
 func calculate_raycasts() -> Array:
 	var result = []
