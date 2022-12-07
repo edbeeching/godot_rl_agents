@@ -1,14 +1,14 @@
-import os
-import time
-import pathlib
-
-from sys import platform
-import subprocess
-import socket
+import atexit
 import json
+import os
+import pathlib
+import socket
+import subprocess
+import time
+from sys import platform
+
 import numpy as np
 from gym import spaces
-import atexit
 
 
 class GodotEnv:
@@ -32,13 +32,9 @@ class GodotEnv:
         self.proc = None
         if env_path is not None:
             self.check_platform(env_path)
-            self._launch_env(
-                env_path, port, show_window, framerate, seed, action_repeat
-            )
+            self._launch_env(env_path, port, show_window, framerate, seed, action_repeat)
         else:
-            print(
-                "No game binary has been provided, please press PLAY in the Godot editor"
-            )
+            print("No game binary has been provided, please press PLAY in the Godot editor")
 
         self.port = port
         self.connection = self._start_server()
@@ -74,12 +70,12 @@ class GodotEnv:
         for i in range(self.num_envs):
             env_action = {}
 
-            for j,k in enumerate(self._action_space.keys()):
+            for j, k in enumerate(self._action_space.keys()):
                 v = action[j][i]
                 if isinstance(v, np.ndarray):
                     env_action[k] = v.tolist()
                 else:
-                    env_action[k] = int(v) # cannot serialize int32
+                    env_action[k] = int(v)  # cannot serialize int32
 
             result.append(env_action)
         return result
@@ -98,7 +94,7 @@ class GodotEnv:
             response["obs"],
             response["reward"],
             np.array(response["done"]).tolist(),
-            np.array(response["done"]).tolist(), # TODO update API to term, trunc
+            np.array(response["done"]).tolist(),  # TODO update API to term, trunc
             [{}] * len(response["done"]),
         )
 
@@ -107,9 +103,7 @@ class GodotEnv:
         for k in response_obs[0].keys():
             if "2d" in k:
                 for sub in response_obs:
-                    sub[k] = self.decode_2d_obs_from_string(
-                        sub[k], self.observation_space[k].shape
-                    )
+                    sub[k] = self.decode_2d_obs_from_string(sub[k], self.observation_space[k].shape)
 
         return response_obs
 
@@ -254,10 +248,8 @@ class GodotEnv:
     @property
     def action_space(self):
         # sf2 requires a tuple obs space
-        tuple_action_space = spaces.Tuple(
-            [v for _,v in self._action_space.items()]
-        )
-        return tuple_action_space       
+        tuple_action_space = spaces.Tuple([v for _, v in self._action_space.items()])
+        return tuple_action_space
 
     @staticmethod
     def decode_2d_obs_from_string(
@@ -302,9 +294,7 @@ class GodotEnv:
                 return self._get_data()
             length = int.from_bytes(data, "little")
             string = ""
-            while (
-                len(string) != length
-            ):  # TODO: refactor as string concatenation could be slow
+            while len(string) != length:  # TODO: refactor as string concatenation could be slow
                 string += self.connection.recv(length).decode()
 
             return string
@@ -332,9 +322,7 @@ if __name__ == "__main__":
     for i in range(1000):
 
         # env.reset()
-        obs, reward, done, info = env.step(
-            [env.action_space.sample() for _ in range(env.num_envs)]
-        )
+        obs, reward, done, info = env.step([env.action_space.sample() for _ in range(env.num_envs)])
         # print(obs, done)
         # plt.imshow(obs[0]["camera_2d"][:, :, :3])
         # plt.show()

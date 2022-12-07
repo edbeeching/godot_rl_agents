@@ -1,25 +1,20 @@
 import logging
-import numpy as np
-import gym
 
-from ray.rllib.utils.annotations import override
-from ray.rllib.utils.framework import try_import_torch
-from ray.rllib.models.torch.torch_modelv2 import TorchModelV2
-from ray.rllib.models.torch.misc import (
-    SlimFC,
-    AppendBiasLayer,
-    normc_initializer,
-)
-from ray.rllib.utils.typing import Dict, TensorType, List, ModelConfigDict
-from ray.rllib.models.torch.modules import (
-    GRUGate,
-    RelativeMultiHeadAttention,
-    SkipConnection,
-)
-from ray.rllib.policy.view_requirement import ViewRequirement
+import gym
+import numpy as np
 from gym.spaces import Box, Discrete, MultiDiscrete
 from ray.rllib.models.torch.fcnet import FullyConnectedNetwork as TorchFCNet
+from ray.rllib.models.torch.misc import (AppendBiasLayer, SlimFC,
+                                         normc_initializer)
+from ray.rllib.models.torch.modules import (GRUGate,
+                                            RelativeMultiHeadAttention,
+                                            SkipConnection)
+from ray.rllib.models.torch.torch_modelv2 import TorchModelV2
 from ray.rllib.policy.sample_batch import SampleBatch
+from ray.rllib.policy.view_requirement import ViewRequirement
+from ray.rllib.utils.annotations import override
+from ray.rllib.utils.framework import try_import_torch
+from ray.rllib.utils.typing import Dict, List, ModelConfigDict, TensorType
 
 torch, nn = try_import_torch()
 logger = logging.getLogger(__name__)
@@ -41,9 +36,7 @@ class MyAttentionModel(TorchModelV2, nn.Module):
         name: str,
     ):
 
-        TorchModelV2.__init__(
-            self, obs_space, action_space, num_outputs, model_config, name
-        )
+        TorchModelV2.__init__(self, obs_space, action_space, num_outputs, model_config, name)
 
         nn.Module.__init__(self)
         # simple baseline, fc all inputs and sum then value and policy head
@@ -59,9 +52,7 @@ class MyAttentionModel(TorchModelV2, nn.Module):
         # print("action space", action_space, self.action_dim, num_outputs)
         prev_layer_size = 3  # int(np.product(obs_space.shape))
         # obs_space["obs"]["max_length"] = 1
-        self.model = TorchFCNet(
-            obs_space, action_space, num_outputs, model_config, name
-        )
+        self.model = TorchFCNet(obs_space, action_space, num_outputs, model_config, name)
         print(self.model)
 
         print(obs_space, prev_layer_size, self.num_outputs)

@@ -1,13 +1,15 @@
+import argparse
 import sys
+from functools import partial
+
 import numpy as np
 from gym import spaces
 from sample_factory.cfg.arguments import parse_full_cfg, parse_sf_args
 from sample_factory.envs.env_utils import register_env
 from sample_factory.train import run_rl
+
 from godot_rl_agents.core.godot_env import GodotEnv
 from godot_rl_agents.core.utils import lod_to_dol
-import argparse
-from functools import partial
 
 
 class SampleFactoryEnvWrapper(GodotEnv):
@@ -15,26 +17,25 @@ class SampleFactoryEnvWrapper(GodotEnv):
     def unwrapped(self):
         return self
 
-    @property 
+    @property
     def num_agents(self):
         return self.num_envs
 
     def reset(self, seed=None):
         obs, info = super().reset(seed=seed)
         obs = lod_to_dol(obs)
-        return {k:np.array(v) for k,v in obs.items()}, info
-    
+        return {k: np.array(v) for k, v in obs.items()}, info
+
     def step(self, action):
         obs, reward, term, trunc, info = super().step(action)
         obs = lod_to_dol(obs)
-        return {k:np.array(v) for k,v in obs.items()}, np.array(reward), np.array(term), np.array(trunc)*0, info  
-
+        return {k: np.array(v) for k, v in obs.items()}, np.array(reward), np.array(term), np.array(trunc) * 0, info
 
     @staticmethod
     def to_numpy(lod):
-        
+
         for d in lod:
-            for k,v in d.items():
+            for k, v in d.items():
                 d[k] = np.array(v)
 
         return lod
@@ -48,12 +49,10 @@ def make_godot_env_func(env_path, full_env_name, cfg=None, env_config=None, rend
         port += 1 + env_config.env_id
         seed += 1 + env_config.env_id
         print("env id", env_config.env_id)
-        show_window = env_config.env_id==0
-    env = SampleFactoryEnvWrapper(env_path=env_path, 
-                                    port=port, seed=seed, show_window=show_window)
+        show_window = env_config.env_id == 0
+    env = SampleFactoryEnvWrapper(env_path=env_path, port=port, seed=seed, show_window=show_window)
 
     return env
-
 
 
 def register_gdrl_env(args):
@@ -103,7 +102,7 @@ def gdrl_override_defaults(_env, parser):
         serial_mode=False,
         async_rl=True,
         experiment_summaries_interval=3,
-        adam_eps=1e-5, 
+        adam_eps=1e-5,
     )
 
 
@@ -121,13 +120,13 @@ def add_gdrl_env_args(_env, p: argparse.ArgumentParser, evaluation=False):
     )
 
 
-
 def parse_gdrl_args(argv=None, evaluation=False):
     parser, partial_cfg = parse_sf_args(argv=argv, evaluation=evaluation)
     add_gdrl_env_args(partial_cfg.env, parser, evaluation=evaluation)
     gdrl_override_defaults(partial_cfg.env, parser)
     final_cfg = parse_full_cfg(parser, argv)
     return final_cfg
+
 
 def sample_factory_training(args, extras):
     register_gdrl_env(args)

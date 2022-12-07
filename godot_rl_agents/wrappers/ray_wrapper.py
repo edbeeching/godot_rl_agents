@@ -1,20 +1,14 @@
+import pathlib
 from typing import Callable, List, Optional, Tuple
 
-
 import numpy as np
-
-from ray.rllib.env.vector_env import VectorEnv
-from ray.rllib.utils.typing import (
-    EnvActionType,
-    EnvInfoDict,
-    EnvObsType,
-)
-from godot_rl_agents.core.godot_env import GodotEnv
-import pathlib
 import ray
-from ray import tune
-
 import yaml
+from ray import tune
+from ray.rllib.env.vector_env import VectorEnv
+from ray.rllib.utils.typing import EnvActionType, EnvInfoDict, EnvObsType
+
+from godot_rl_agents.core.godot_env import GodotEnv
 
 
 class RayVectorGodotEnv(VectorEnv):
@@ -60,6 +54,7 @@ class RayVectorGodotEnv(VectorEnv):
     def reset_at(self, index: Optional[int]) -> EnvObsType:
         # the env is reset automatically, no need to reset it
         return self.obs[index]
+
 
 def register_env():
     tune.register_env(

@@ -25,18 +25,32 @@ import argparse
 try:
     from godot_rl_agents.wrappers.ray_wrapper import rllib_training
 except ImportError as e:
+
     def rllib_training(args, extras):
         print("Import error when trying due to use rllib, this is probably not installed try pip install ray[rllib]")
+
+
 try:
-    from godot_rl_agents.wrappers.stable_baselines_wrapper import stable_baselines_training
+    from godot_rl_agents.wrappers.stable_baselines_wrapper import \
+        stable_baselines_training
 except ImportError as e:
+
     def stable_baselines_training(args, extras):
-        print("Import error when trying due to use sb3, this is probably not installed try pip install stable-baselines3")
+        print(
+            "Import error when trying due to use sb3, this is probably not installed try pip install stable-baselines3"
+        )
+
+
 try:
-    from godot_rl_agents.wrappers.sample_factory_wrapper import sample_factory_training
+    from godot_rl_agents.wrappers.sample_factory_wrapper import \
+        sample_factory_training
 except ImportError as e:
+
     def sample_factory_training(args, extras):
-        print("Import error when trying due to use sample-factory, this is probably not installed try pip install sample-factory")
+        print(
+            "Import error when trying due to use sample-factory, this is probably not installed try pip install sample-factory"
+        )
+
 
 def get_args():
     parser = argparse.ArgumentParser(allow_abbrev=False)

@@ -1,5 +1,6 @@
-from godot_rl_agents.core.godot_env import GodotEnv
 import pytest
+
+from godot_rl_agents.core.godot_env import GodotEnv
 
 
 @pytest.mark.parametrize(
@@ -41,11 +42,7 @@ def test_env(env_path, port):
             assert isinstance(
                 reward[0], (float, int)
             ), f"The reward returned by 'step()' must be a float or int, and is {reward[0]} of type {type(reward[0])}"
-            assert isinstance(
-                done[0], bool
-            ), f"The 'done' signal {done[0]}  {type(done[0])} must be a boolean"
-            assert isinstance(
-                info[0], dict
-            ), "The 'info' returned by 'step()' must be a python dictionary"
+            assert isinstance(done[0], bool), f"The 'done' signal {done[0]}  {type(done[0])} must be a boolean"
+            assert isinstance(info[0], dict), "The 'info' returned by 'step()' must be a python dictionary"
 
     env.close()
