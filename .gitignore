@@ -155,3 +155,5 @@ envs/example_envs/SpaceShooter/.godot
 envs/example_envs/FlyBy/.godot
 
 *.import
+
+editor/
