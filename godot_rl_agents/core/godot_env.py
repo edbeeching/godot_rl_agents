@@ -6,10 +6,8 @@ from sys import platform
 import subprocess
 import socket
 import json
-from urllib import response
 import numpy as np
 from gym import spaces
-from ray.rllib.utils.spaces.repeated import Repeated
 import atexit
 
 
@@ -234,18 +232,18 @@ class GodotEnv:
                 )
             elif v["space"] == "discrete":
                 observation_spaces[k] = spaces.Discrete(v["size"])
-            elif v["space"] == "repeated":
-                assert "max_length" in v
-                if v["subspace"] == "box":
-                    subspace = observation_spaces[k] = spaces.Box(
-                        low=-1.0,
-                        high=1.0,
-                        shape=v["size"],
-                        dtype=np.float32,
-                    )
-                elif v["subspace"] == "discrete":
-                    subspace = spaces.Discrete(v["size"])
-                observation_spaces[k] = Repeated(subspace, v["max_length"])
+            # elif v["space"] == "repeated": TODO: Add repeated spaces back when we have support and a good example
+            #     assert "max_length" in v
+            #     if v["subspace"] == "box":
+            #         subspace = observation_spaces[k] = spaces.Box(
+            #             low=-1.0,
+            #             high=1.0,
+            #             shape=v["size"],
+            #             dtype=np.float32,
+            #         )
+            #     elif v["subspace"] == "discrete":
+            #         subspace = spaces.Discrete(v["size"])
+            #     observation_spaces[k] = Repeated(subspace, v["max_length"])
             else:
                 print(f"observation space {v['space']} is not supported")
                 assert 0, f"observation space {v['space']} is not supported"

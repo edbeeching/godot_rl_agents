@@ -43,8 +43,8 @@ setup(
     url="https://github.com/edbeeching/godot_rl_agents",
     download_url="hhttps://github.com/edbeeching/godot_rl_agents/tags",
     license="MIT",
-    package_dir={"": "./"},
-    packages=find_packages(where="./", include="godot_rl_agents*"),
+    package_dir={"": "godot_rl_agents"},
+    packages=find_packages(where="godot_rl_agents"),
     install_requires=REQUIRED_PKGS,
     extras_require=EXTRAS_REQUIRE,
     classifiers=[
