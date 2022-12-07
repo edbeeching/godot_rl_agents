@@ -7,7 +7,7 @@ from ray.rllib.utils.annotations import override
 from ray.rllib.utils.typing import AgentID, MultiAgentDict, PolicyID
 from ray.tune.logger import pretty_print
 
-from godot_rl_agents.wrappers.ray_wrappers import RayVectorGodotEnv
+from godot_rl.wrappers.ray_wrappers import RayVectorGodotEnv
 
 if __name__ == "__main__":
     ray.init()

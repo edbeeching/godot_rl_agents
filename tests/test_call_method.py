@@ -1,6 +1,6 @@
 import time
 
-from godot_rl_agents.core.godot_env import GodotEnv
+from godot_rl.core.godot_env import GodotEnv
 
 if __name__ == "__main__":
     show_window = False

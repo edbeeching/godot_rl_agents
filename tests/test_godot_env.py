@@ -1,6 +1,6 @@
 import pytest
 
-from godot_rl_agents.core.godot_env import GodotEnv
+from godot_rl.core.godot_env import GodotEnv
 
 
 @pytest.mark.parametrize(
