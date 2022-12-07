@@ -60,4 +60,10 @@ setup(
     keywords="godot simulation environments machine learning reinforcement learning deep learning video games",
     zip_safe=False,  # Required for mypy to find the py.typed file
     python_requires=">=3.8",
+
+    entry_points={
+    'console_scripts': [
+        'gdrl = godot_rl_agents.main:main',
+    ]
+    }
 )
