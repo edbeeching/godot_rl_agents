@@ -1,14 +1,12 @@
 from distutils.core import setup
 from setuptools import find_packages
-
-__version__ = "0.3.0"  # expected format is one of x.y.z.dev0, or x.y.z.rc1 or x.y.z (no to dashes, yes to dots)
+# https://packaging.python.org/en/latest/tutorials/packaging-projects/
+# https://packaging.python.org/en/latest/guides/distributing-packages-using-setuptools/
+__version__ = "0.3.0.a2"  # expected format is one of x.y.z.dev0, or x.y.z.rc1 or x.y.z (no to dashes, yes to dots)
 
 REQUIRED_PKGS = [
     "numpy",
-    "torch",
     "huggingface_hub>=0.10",  # For sharing objects, environments & trained RL policies
-    "gym==0.21",  # For RL action spaces and API
-    "stable-baselines3"
 ]
 
 
@@ -18,7 +16,7 @@ TESTS_REQUIRE = [
     "pytest",
     "pytest-xdist",
 ]
-SB3_REQUIRE = ["stable-baselines3"]
+SB3_REQUIRE = ["gym==0.21", "stable-baselines3"]
 RLLIB_REQUIRE = ["ray[rllib]"]
 SAMPLE_FACTORY_REQUIRE = ["sample-factory", "gym==0.26.2"]
 QUALITY_REQUIRE = ["black[jupyter]~=22.0", "flake8>=3.8.3", "isort>=5.0.0", "pyyaml>=5.3.1"]
@@ -33,7 +31,7 @@ EXTRAS_REQUIRE = {
 
 
 setup(
-    name="godot_rl_agents",
+    name="godot_rl",
     version=__version__,
     description="A Deep Reinforcement Learning package for the Godot game engine",
     long_description=open("README.md", encoding="utf-8").read(),
@@ -41,10 +39,10 @@ setup(
     author="Edward Beeching.",
     author_email="edbeeching@gmail.com",
     url="https://github.com/edbeeching/godot_rl_agents",
-    download_url="hhttps://github.com/edbeeching/godot_rl_agents/tags",
+    download_url="https://github.com/edbeeching/godot_rl_agents/tags",
     license="MIT",
-    package_dir={"": "godot_rl_agents"},
-    packages=find_packages(where="godot_rl_agents"),
+    package_dir={"": "godot_rl"},
+    packages=find_packages(where="godot_rl"),
     install_requires=REQUIRED_PKGS,
     extras_require=EXTRAS_REQUIRE,
     classifiers=[
@@ -63,7 +61,7 @@ setup(
 
     entry_points={
     'console_scripts': [
-        'gdrl = godot_rl_agents.main:main',
+        'gdrl = godot_rl.main:main',
     ]
     }
 )
