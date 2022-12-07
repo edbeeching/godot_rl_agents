@@ -42,7 +42,7 @@ def get_args():
     parser = argparse.ArgumentParser(allow_abbrev=False)
     parser.add_argument(
         "--trainer",
-        default="rllib",
+        default="sb3",
         type=str,
         help="Which trainer framework to use (rllib or stable-baselines)",
     )

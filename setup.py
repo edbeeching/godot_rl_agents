@@ -20,12 +20,15 @@ TESTS_REQUIRE = [
 ]
 SB3_REQUIRE = ["stable-baselines3"]
 RLLIB_REQUIRE = ["ray[rllib]"]
-SAMPLE_FACTORY_REQUIRE = ["sample-factory"]
+SAMPLE_FACTORY_REQUIRE = ["sample-factory", "gym==0.26.2"]
 QUALITY_REQUIRE = ["black[jupyter]~=22.0", "flake8>=3.8.3", "isort>=5.0.0", "pyyaml>=5.3.1"]
 
 EXTRAS_REQUIRE = {
     "dev": DEV_REQUIRE + TESTS_REQUIRE + QUALITY_REQUIRE,
     "test": TESTS_REQUIRE,
+    "sb3":SB3_REQUIRE,
+    "rllib":RLLIB_REQUIRE,
+    "sf":SAMPLE_FACTORY_REQUIRE,
 }
 
 
@@ -54,7 +57,7 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
     ],
-    keywords="simulation environments machine learning reinforcement learning deep learning video games godot",
+    keywords="godot simulation environments machine learning reinforcement learning deep learning video games",
     zip_safe=False,  # Required for mypy to find the py.typed file
     python_requires=">=3.8",
 )
