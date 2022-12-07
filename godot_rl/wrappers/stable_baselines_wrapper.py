@@ -3,8 +3,8 @@ import numpy as np
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env.base_vec_env import VecEnv
 
-from godot_rl_agents.core.godot_env import GodotEnv
-from godot_rl_agents.core.utils import lod_to_dol
+from godot_rl.core.godot_env import GodotEnv
+from godot_rl.core.utils import lod_to_dol
 
 
 class StableBaselinesGodotEnv(VecEnv):

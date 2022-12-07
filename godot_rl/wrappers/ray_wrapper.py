@@ -8,7 +8,7 @@ from ray import tune
 from ray.rllib.env.vector_env import VectorEnv
 from ray.rllib.utils.typing import EnvActionType, EnvInfoDict, EnvObsType
 
-from godot_rl_agents.core.godot_env import GodotEnv
+from godot_rl.core.godot_env import GodotEnv
 
 
 class RayVectorGodotEnv(VectorEnv):

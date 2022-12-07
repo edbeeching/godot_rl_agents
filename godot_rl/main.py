@@ -23,32 +23,32 @@ gdrl --env_path path/to/exported/executable ---config_path path/to/yaml/file
 import argparse
 
 try:
-    from godot_rl_agents.wrappers.ray_wrapper import rllib_training
+    from godot_rl.wrappers.ray_wrapper import rllib_training
 except ImportError as e:
 
     def rllib_training(args, extras):
-        print("Import error when trying due to use rllib, this is probably not installed try pip install ray[rllib]")
+        print("Import error when trying to use rllib, this is probably not installed try pip install ray[rllib]")
 
 
 try:
-    from godot_rl_agents.wrappers.stable_baselines_wrapper import \
+    from godot_rl.wrappers.stable_baselines_wrapper import \
         stable_baselines_training
 except ImportError as e:
 
     def stable_baselines_training(args, extras):
         print(
-            "Import error when trying due to use sb3, this is probably not installed try pip install stable-baselines3"
+            "Import error when trying to use sb3, this is probably not installed try pip install stable-baselines3"
         )
 
 
 try:
-    from godot_rl_agents.wrappers.sample_factory_wrapper import \
+    from godot_rl.wrappers.sample_factory_wrapper import \
         sample_factory_training
 except ImportError as e:
 
     def sample_factory_training(args, extras):
         print(
-            "Import error when trying due to use sample-factory, this is probably not installed try pip install sample-factory"
+            "Import error when trying to use sample-factory, this is probably not installed try pip install sample-factory"
         )
 
 

@@ -8,8 +8,8 @@ from sample_factory.cfg.arguments import parse_full_cfg, parse_sf_args
 from sample_factory.envs.env_utils import register_env
 from sample_factory.train import run_rl
 
-from godot_rl_agents.core.godot_env import GodotEnv
-from godot_rl_agents.core.utils import lod_to_dol
+from godot_rl.core.godot_env import GodotEnv
+from godot_rl.core.utils import lod_to_dol
 
 
 class SampleFactoryEnvWrapper(GodotEnv):
