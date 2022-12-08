@@ -35,6 +35,3 @@ def download_editor():
         zipObj.extractall('editor/')
     print(f"cleaning up")
     os.remove(FILENAME)
-
-if __name__ == "__main__":
-    download_editor()
