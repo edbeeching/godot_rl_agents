@@ -53,7 +53,8 @@ def make_godot_env_func(env_path, full_env_name, cfg=None, env_config=None, rend
         port += 1 + env_config.env_id
         seed += 1 + env_config.env_id
         print("env id", env_config.env_id)
-        show_window = env_config.env_id == 0
+        if cfg.viz:
+            show_window = env_config.env_id == 0
     env = SampleFactoryEnvWrapper(env_path=env_path, port=port, seed=seed, show_window=show_window)
 
     return env
@@ -122,6 +123,12 @@ def add_gdrl_env_args(_env, p: argparse.ArgumentParser, evaluation=False):
         type=int,
         help="Num agents in each envpool (if used)",
     )
+    p.add_argument(
+        "--viz",
+        default=False,
+        action="store_true",
+        help="Whether to visualize one process",
+    )
 
 
 def parse_gdrl_args(argv=None, evaluation=False):
@@ -142,6 +149,6 @@ def sample_factory_training(args, extras):
 def sample_factory_enjoy(args, extras):
     register_gdrl_env(args)
     cfg = parse_gdrl_args(argv=extras, evaluation=args.eval)
-
+    
     status = enjoy(cfg)
     return status
