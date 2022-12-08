@@ -53,7 +53,8 @@ def make_godot_env_func(env_path, full_env_name, cfg=None, env_config=None, rend
         port += 1 + env_config.env_id
         seed += 1 + env_config.env_id
         print("env id", env_config.env_id)
-        if cfg.viz:
+        if cfg.viz:#
+            print("creating viz env")
             show_window = env_config.env_id == 0
     env = SampleFactoryEnvWrapper(env_path=env_path, port=port, seed=seed, show_window=show_window)
 
