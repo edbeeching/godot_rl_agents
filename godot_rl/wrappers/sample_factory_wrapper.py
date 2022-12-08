@@ -7,6 +7,7 @@ from gym import spaces
 from sample_factory.cfg.arguments import parse_full_cfg, parse_sf_args
 from sample_factory.envs.env_utils import register_env
 from sample_factory.train import run_rl
+from sample_factory.enjoy import enjoy
 
 from godot_rl.core.godot_env import GodotEnv
 from godot_rl.core.utils import lod_to_dol
@@ -39,6 +40,9 @@ class SampleFactoryEnvWrapper(GodotEnv):
                 d[k] = np.array(v)
 
         return lod
+
+    def render():
+        return
 
 
 def make_godot_env_func(env_path, full_env_name, cfg=None, env_config=None, render_mode=None):
@@ -133,4 +137,11 @@ def sample_factory_training(args, extras):
     cfg = parse_gdrl_args(argv=extras, evaluation=args.eval)
 
     status = run_rl(cfg)
+    return status
+
+def sample_factory_enjoy(args, extras):
+    register_gdrl_env(args)
+    cfg = parse_gdrl_args(argv=extras, evaluation=args.eval)
+
+    status = enjoy(cfg)
     return status

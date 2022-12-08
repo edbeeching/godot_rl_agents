@@ -43,7 +43,7 @@ except ImportError as e:
 
 try:
     from godot_rl.wrappers.sample_factory_wrapper import \
-        sample_factory_training
+        sample_factory_training, sample_factory_enjoy
 except ImportError as e:
 
     def sample_factory_training(args, extras):
@@ -97,6 +97,8 @@ def main():
         training_function = stable_baselines_training
     elif args.trainer == "sf":
         training_function = sample_factory_training
+    elif args.trainer == "sf_enjoy":
+        training_function = sample_factory_enjoy
     else:
         raise NotImplementedError
 
