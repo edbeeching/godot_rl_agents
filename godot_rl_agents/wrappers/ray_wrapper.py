@@ -2,6 +2,7 @@ from typing import Callable, List, Optional, Tuple
 
 
 import numpy as np
+import torch
 
 from ray.rllib.env.vector_env import VectorEnv
 from ray.rllib.utils.typing import (
@@ -11,6 +12,8 @@ from ray.rllib.utils.typing import (
 )
 from godot_rl_agents.core.godot_env import GodotEnv
 import pathlib
+#import PPOTrainer
+from ray.rllib.agents.ppo import PPOTrainer
 import ray
 from ray import tune
 
@@ -85,7 +88,7 @@ def rllib_training(args):
 
     checkpoint_freq = 10
     checkpoint_at_end = True
-    if args.eval:
+    if args.eval or args.export:
         checkpoint_freq = 0
         exp["config"]["env_config"]["show_window"] = True
         exp["config"]["env_config"]["framerate"] = None
@@ -97,6 +100,7 @@ def rllib_training(args):
 
         exp["config"]["explore"] = False
         exp["stop"]["training_iteration"] = 999999
+
 
     print(exp)
 
@@ -110,4 +114,25 @@ def rllib_training(args):
         checkpoint_at_end=not args.eval,
         restore=args.restore,
     )
+    if args.export:
+        best_checkpoint = results.get_best_checkpoint(results.trials[0], mode="max")
+        print(f".. best checkpoint was: {best_checkpoint}")
+        new_trainer = PPOTrainer(config=exp["config"])
+        new_trainer.restore(best_checkpoint)
+        policy = new_trainer.get_policy()
+        model = policy.model
+        torch.onnx.export(
+            model,
+            torch.rand(1, 3, 64, 64),
+            "model.onnx",
+            export_params=True,
+            opset_version=11,
+            do_constant_folding=True,
+            input_names=["input"],
+            output_names=["output"],
+            dynamic_axes={"input": {0: "batch_size"}, "output": {0: "batch_size"}},
+            )
+  
     ray.shutdown()
+
+  

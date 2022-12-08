@@ -64,6 +64,12 @@ def get_args():
         action="store_true",
         help="whether to eval the model",
     )
+    parser.add_argument(
+        "--export",
+        default=False,
+        action="store_true",
+        help="whether to export the model",
+    )
 
     return parser.parse_args()
 
