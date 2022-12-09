@@ -1,8 +1,11 @@
 extends ISensor3D
 class_name RayCastSensor3D
 @tool
-
-
+@export_flags_3d_physics var collision_mask = 1:
+	get: return collision_mask
+	set(value):
+		collision_mask = value
+		_update()
 
 @export var n_rays_width := 6.0:
 	get: return n_rays_width
@@ -54,6 +57,7 @@ func _update():
 
 
 func _ready() -> void:
+	
 	_spawn_nodes()
 
 
@@ -90,6 +94,7 @@ func _spawn_nodes():
 			ray.enabled  = true
 			ray.collide_with_bodies = collide_with_bodies
 			ray.collide_with_areas = collide_with_areas
+			ray.collision_mask = collision_mask
 			add_child(ray)
 			ray.set_owner(get_tree().edited_scene_root)
 			rays.append(ray)
