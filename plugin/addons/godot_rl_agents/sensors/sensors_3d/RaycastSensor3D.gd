@@ -6,6 +6,7 @@ class_name RayCastSensor3D
 	set(value):
 		collision_mask = value
 		_update()
+		
 
 @export var n_rays_width := 6.0:
 	get: return n_rays_width
@@ -57,13 +58,11 @@ func _update():
 
 
 func _ready() -> void:
-	
 	_spawn_nodes()
-
 
 func _spawn_nodes():
 	print("spawning nodes")
-	for ray in rays:
+	for ray in get_children():
 		ray.queue_free()
 	if geo:
 		geo.clear()
@@ -75,8 +74,7 @@ func _spawn_nodes():
 	
 	var horizontal_start = horizontal_step/2 - cone_width/2
 	var vertical_start = vertical_step/2 - cone_height/2   
-	
-	
+
 	var points = []
 	
 	for i in n_rays_width:
@@ -115,13 +113,10 @@ func _create_debug_lines(points):
 		geo.add_vertex(Vector3.ZERO)
 		geo.add_vertex(point)
 	geo.end()
-	
 
 func display():
 	if geo:
 		geo.display()
-		
-	
 	
 func to_spherical_coords(r, inc, azimuth) -> Vector3:
 	return Vector3(
@@ -130,16 +125,20 @@ func to_spherical_coords(r, inc, azimuth) -> Vector3:
 		r*cos(deg_to_rad(inc))*cos(deg_to_rad(azimuth))       
 	)
 	
-
 func get_observation() -> Array:
 	return self.calculate_raycasts()
 
 func calculate_raycasts() -> Array:
 	var result = []
 	for ray in rays:
+		ray.set_enabled(true)
 		ray.force_raycast_update()
 		var distance = _get_raycast_distance(ray)
+		var hit_collision_layer = ray.get_collider().collision_layer
+		print(hit_collision_layer)
 		result.append(distance)
+
+		ray.set_enabled(false)
 	return result
 
 func _get_raycast_distance(ray : RayCast3D) -> float : 
