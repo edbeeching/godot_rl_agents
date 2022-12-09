@@ -49,6 +49,9 @@ class_name RayCastSensor3D
 	set(value):
 		collide_with_areas = value
 		_update()
+		
+@export var class_sensor := false
+		
 var rays := []
 var geo = null
 
@@ -134,10 +137,14 @@ func calculate_raycasts() -> Array:
 		ray.set_enabled(true)
 		ray.force_raycast_update()
 		var distance = _get_raycast_distance(ray)
-		var hit_collision_layer = ray.get_collider().collision_layer
-		print(hit_collision_layer)
-		result.append(distance)
 
+		result.append(distance)
+		if class_sensor:
+			var hit_class = [0, 0]
+			if ray.get_collider():
+				var hit_collision_layer = ray.get_collider().collision_layer
+				hit_class[hit_collision_layer-1] = 1
+			result.append_array(hit_class)
 		ray.set_enabled(false)
 	return result
 

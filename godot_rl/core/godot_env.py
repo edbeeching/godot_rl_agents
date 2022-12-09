@@ -312,7 +312,6 @@ class GodotEnv:
 
 
 if __name__ == "__main__":
-    import matplotlib.pyplot as plt
 
     env = GodotEnv()
     print("observation space", env.observation_space)
@@ -320,9 +319,11 @@ if __name__ == "__main__":
     obs = env.reset()
 
     for i in range(1000):
-
+        action = [env.action_space.sample() for _ in range(env.num_envs)]
+        action = list(zip(*action))
+        
         # env.reset()
-        obs, reward, done, info = env.step([env.action_space.sample() for _ in range(env.num_envs)])
+        obs, reward, term, trunc, info = env.step(action)
         # print(obs, done)
         # plt.imshow(obs[0]["camera_2d"][:, :, :3])
         # plt.show()
