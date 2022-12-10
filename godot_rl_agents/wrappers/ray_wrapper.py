@@ -101,6 +101,10 @@ def rllib_training(args):
         exp["config"]["explore"] = False
         exp["stop"]["training_iteration"] = 999999
 
+    
+
+
+
 
     print(exp)
 
@@ -115,23 +119,37 @@ def rllib_training(args):
         restore=args.restore,
     )
     if args.export:
-        best_checkpoint = results.get_best_checkpoint(results.trials[0], mode="max")
-        print(f".. best checkpoint was: {best_checkpoint}")
+        #get path from the config file and remove the file name
+        path = args.restore #full path with file name 
+        path = path.split("/") #split the path into a list
+        path = path[:-1] #remove the file name from the list
+        #duplicate the last element of the list
+        path.append(path[-1])
+        #change format from checkpoint_000500 to checkpoint-500
+        temp = path[-1].split("_")
+        temp = temp[-1]
+        #parse the number
+        temp = int(temp)
+        #back to string
+        temp = str(temp)
+        #join the string with the new format
+        path[-1] = "checkpoint-" + temp
+
+        path = "/".join(path) #join the list into a string
+        #best_checkpoint = results.get_best_checkpoint(results.trials[0], mode="max")
+        #print(f".. best checkpoint was: {best_checkpoint}")
         new_trainer = PPOTrainer(config=exp["config"])
-        new_trainer.restore(best_checkpoint)
+        new_trainer.restore(path)
         policy = new_trainer.get_policy()
         model = policy.model
-        torch.onnx.export(
-            model,
-            torch.rand(1, 3, 64, 64),
-            "model.onnx",
-            export_params=True,
-            opset_version=11,
-            do_constant_folding=True,
-            input_names=["input"],
-            output_names=["output"],
-            dynamic_axes={"input": {0: "batch_size"}, "output": {0: "batch_size"}},
-            )
+        #export the model to onnx using torch.onnx.export
+        #dummy_input = torch.randn(1, 3, 84, 84)
+        #input is dictionary with key "obs" and value is a tensor of shape [...,8]
+        tensor = torch.randn([1, 2, 4, 6, 8, 10, 12, 14])
+        dummy_input = {"obs":  tensor}
+        torch.onnx.export(model, dummy_input, "model.onnx", verbose=True,
+        dynamic_axes={"input": {0: "batch_size"}, "output": {0: "batch_size"}})
+
   
     ray.shutdown()
 
