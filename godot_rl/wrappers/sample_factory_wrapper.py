@@ -1,7 +1,7 @@
 import argparse
 import sys
 from functools import partial
-
+import random
 import numpy as np
 from gym import spaces
 from sample_factory.cfg.arguments import parse_full_cfg, parse_sf_args
@@ -47,7 +47,8 @@ class SampleFactoryEnvWrapper(GodotEnv):
 
 def make_godot_env_func(env_path, full_env_name, cfg=None, env_config=None, render_mode=None):
     seed = 0
-    port = 21008
+    port = 21008 + cfg.base_port
+    print("BASE PORT ", cfg.base_port)
     show_window = False
     if env_config:
         port += 1 + env_config.env_id
@@ -117,6 +118,7 @@ def add_gdrl_env_args(_env, p: argparse.ArgumentParser, evaluation=False):
         # apparently env.render(mode="human") is not supported anymore and we need to specify the render mode in
         # the env ctor
         p.add_argument("--render_mode", default="human", type=str, help="")
+    p.add_argument("--base_port", default=0, type=int, help="")
 
     p.add_argument(
         "--env_agents",
@@ -143,7 +145,7 @@ def parse_gdrl_args(argv=None, evaluation=False):
 def sample_factory_training(args, extras):
     register_gdrl_env(args)
     cfg = parse_gdrl_args(argv=extras, evaluation=args.eval)
-
+    cfg.base_port = random.randint(10000,30000)
     status = run_rl(cfg)
     return status
 
