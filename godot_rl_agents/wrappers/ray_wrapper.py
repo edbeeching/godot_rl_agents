@@ -2,7 +2,6 @@ from typing import Callable, List, Optional, Tuple
 
 
 import numpy as np
-import torch
 
 from ray.rllib.env.vector_env import VectorEnv
 from ray.rllib.utils.typing import (
@@ -144,7 +143,7 @@ def rllib_training(args):
         #print(f".. best checkpoint was: {best_checkpoint}")
         new_trainer = PPOTrainer(config=exp["config"])
         new_trainer.restore(path)
-        policy = new_trainer.get_policy()
+        #policy = new_trainer.get_policy()
         new_trainer.export_policy_model(export_dir=export_path, onnx = 15) #This works for version 1.11.X
 		#Running  with: gdrl --env_path envs/builds/JumperHard/jumper_hard.exe --export --restore envs/checkpoints/jumper_hard/checkpoint_000500/checkpoint-500
         #model = policy.model
