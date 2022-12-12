@@ -145,7 +145,7 @@ def parse_gdrl_args(argv=None, evaluation=False):
 def sample_factory_training(args, extras):
     register_gdrl_env(args)
     cfg = parse_gdrl_args(argv=extras, evaluation=args.eval)
-    cfg.base_port = random.randint(10000,30000)
+    cfg.base_port = random.randint(20000,22000)
     status = run_rl(cfg)
     return status
 
