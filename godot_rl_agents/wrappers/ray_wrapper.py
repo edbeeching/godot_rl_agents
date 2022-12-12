@@ -107,8 +107,8 @@ def rllib_training(args):
 
 
     print(exp)
-
-    results = tune.run(
+    if not args.export:
+        results = tune.run(
         exp["algorithm"],
         name=run_name,
         config=exp["config"],
@@ -123,6 +123,10 @@ def rllib_training(args):
         path = args.restore #full path with file name 
         path = path.split("/") #split the path into a list
         path = path[:-1] #remove the file name from the list
+		#duplicate the path for the export
+        export_path = path.copy()
+        export_path.append("onnx")
+        export_path = "/".join(export_path) #join the list into a string
         #duplicate the last element of the list
         path.append(path[-1])
         #change format from checkpoint_000500 to checkpoint-500
@@ -141,15 +145,16 @@ def rllib_training(args):
         new_trainer = PPOTrainer(config=exp["config"])
         new_trainer.restore(path)
         policy = new_trainer.get_policy()
-        model = policy.model
+        new_trainer.export_policy_model(export_dir=export_path, onnx = 15) #This works for version 1.11.X
+		#Running  with: gdrl --env_path envs/builds/JumperHard/jumper_hard.exe --export --restore envs/checkpoints/jumper_hard/checkpoint_000500/checkpoint-500
+        #model = policy.model
         #export the model to onnx using torch.onnx.export
         #dummy_input = torch.randn(1, 3, 84, 84)
         #input is dictionary with key "obs" and value is a tensor of shape [...,8]
-        tensor = torch.randn([1, 2, 4, 6, 8, 10, 12, 14])
-        dummy_input = {"obs":  tensor}
-        torch.onnx.export(model, dummy_input, "model.onnx", verbose=True,
-        dynamic_axes={"input": {0: "batch_size"}, "output": {0: "batch_size"}})
-
+        #tensor = torch.randn([1, 2, 4, 6, 8, 10, 12, 14])
+        #dummy_input = {"obs":  tensor}
+        #torch.onnx.export(model, dummy_input, "model.onnx", verbose=True,
+        #dynamic_axes={"input": {0: "batch_size"}, "output": {0: "batch_size"}})
   
     ray.shutdown()
 
