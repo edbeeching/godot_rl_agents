@@ -105,6 +105,10 @@ r_key={
  ]
 }
 
+[mono]
+
+project/assembly_name="JumperHard"
+
 [physics]
 
 common/enable_pause_aware_picking=true
