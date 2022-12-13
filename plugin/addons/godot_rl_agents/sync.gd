@@ -1,6 +1,7 @@
 extends Node
 # --fixed-fps 2000 --disable-render-loop
 @export var action_repeat := 8
+@export var speed_up = 1
 var n_action_steps = 0
 
 const MAJOR_VERSION := "0"
@@ -18,7 +19,13 @@ var args = null
 @onready var start_time = Time.get_ticks_msec()
 var initialized = false
 var just_reset = false
+
+
+# Called when the node enters the scene tree for the first time.
+
 func _ready():
+	Engine.physics_ticks_per_second = speed_up*60 # Replace with function body.
+	Engine.time_scale = speed_up * 1.0
 	await get_tree().root.ready
 	get_tree().set_pause(true) 
 	_initialize()

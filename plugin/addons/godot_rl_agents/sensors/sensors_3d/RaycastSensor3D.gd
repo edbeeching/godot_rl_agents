@@ -6,7 +6,11 @@ class_name RayCastSensor3D
 	set(value):
 		collision_mask = value
 		_update()
-		
+@export_flags_3d_physics var boolean_class_mask = 1:
+	get: return boolean_class_mask
+	set(value):
+		boolean_class_mask = value
+		_update()		
 
 @export var n_rays_width := 6.0:
 	get: return n_rays_width
@@ -140,11 +144,12 @@ func calculate_raycasts() -> Array:
 
 		result.append(distance)
 		if class_sensor:
-			var hit_class = [0, 0]
+			var hit_class = 0 
 			if ray.get_collider():
 				var hit_collision_layer = ray.get_collider().collision_layer
-				hit_class[hit_collision_layer-1] = 1
-			result.append_array(hit_class)
+				hit_collision_layer = hit_collision_layer & collision_mask
+				hit_class = (hit_collision_layer & boolean_class_mask) > 0
+			result.append(hit_class)
 		ray.set_enabled(false)
 	return result
 
