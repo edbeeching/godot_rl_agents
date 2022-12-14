@@ -6,7 +6,7 @@ using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
 using System.Management;
 
-namespace GodotONNX;
+namespace GodotONNX{
 public class ONNXInference : Node
 {
 	private InferenceSession session;
@@ -15,13 +15,42 @@ public class ONNXInference : Node
 
 	public override void _Ready()
 	{
-		var session = LoadModel(modelPath);
+		session = LoadModel(modelPath);
+		GD.Print("Compiles");
 		Run();
 	}
-	public void Run(Godot inputs){
-		IDisposableReadOnlyCollection<DisposableNamedOnnxValue> results = session.Run(inputs);
-		IEnumerable<float> output = results.First().AsEnumerable<float>();
+	public void Run(){
+		//Expects a tensor of shape [batch_size, 8] type float named obs and a tensor of shape [batch_size] type float named state_ins
+		//Current model: Jumper Hard
+		//Fill the input tensors
+		IReadOnlyCollection<NamedOnnxValue> obs = new List<NamedOnnxValue> {
+			NamedOnnxValue.CreateFromTensor("obs", new DenseTensor<float>(new float[] { 0, 0, 0, 0, 0, 0, 0, 0 }, new int[] { 1, 8 })), //Batch size is 1 for now
+			NamedOnnxValue.CreateFromTensor("state_ins", new DenseTensor<float>(new float[] { 0 }, new int[] { 1 }))}; //Batch size is 1 for now
+		IReadOnlyCollection<string> outputNames = new List<string> { "output", "state_outs" };
+		IDisposableReadOnlyCollection<DisposableNamedOnnxValue> results = session.Run(obs, outputNames);
+		//Can't convert IEnumerable<float> to Variant, so we have to convert it to an array or something
+
+		//Output is a dictionary of arrays, ex: { "output" : [0.1, 0.2, 0.3, 0.4, ...], "state_outs" : [0.5, ...]}
+		Godot.Collections.Dictionary<string, Godot.Collections.Array<float>> output = new Godot.Collections.Dictionary<string, Godot.Collections.Array<float>>();
+		DisposableNamedOnnxValue output1 = results.First();
+		DisposableNamedOnnxValue output2 = results.Last();
+
+		Godot.Collections.Array<float> output1Array = new Godot.Collections.Array<float>();
+		Godot.Collections.Array<float> output2Array = new Godot.Collections.Array<float>();
+
+		foreach (float f in output1.AsEnumerable<float>()) {
+			output1Array.Add(f);
+		}
+		foreach (float f in output2.AsEnumerable<float>()) {
+			output2Array.Add(f);
+		}
+
+		output.Add(output1.Name, output1Array);
+		output.Add(output2.Name, output2Array);
+
 		GD.Print(results.ToString());
+		GD.Print(output.ToString());
+		//GD.Print(sum.ToString());
 	}	
 	public InferenceSession LoadModel(string Path) {
 		Godot.File file = new Godot.File();
@@ -30,7 +59,7 @@ public class ONNXInference : Node
 		file.Close();
 		ConfigureSession();
 		
-		InferenceSession NewSession = new(model); //Load the model
+		InferenceSession NewSession = new InferenceSession(model); //Load the model
 		return NewSession;
 	}
 	public void ConfigureSession() {
@@ -103,4 +132,4 @@ public class ONNXInference : Node
 	return -1;
 			}
 		}
-	
+}	
