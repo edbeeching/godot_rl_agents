@@ -13,7 +13,7 @@ from godot_rl.core.godot_env import GodotEnv
 from godot_rl.core.utils import lod_to_dol
 
 
-class SampleFactoryEnvWrapper(GodotEnv):
+class SampleFactoryEnvWrapperBatched(GodotEnv):
     @property
     def unwrapped(self):
         return self
@@ -28,9 +28,39 @@ class SampleFactoryEnvWrapper(GodotEnv):
         return {k: np.array(v) for k, v in obs.items()}, info
 
     def step(self, action):
-        obs, reward, term, trunc, info = super().step(action)
+        obs, reward, term, trunc, info = super().step(action, order_ij=False)
         obs = lod_to_dol(obs)
         return {k: np.array(v) for k, v in obs.items()}, np.array(reward), np.array(term), np.array(trunc) * 0, info
+
+    @staticmethod
+    def to_numpy(lod):
+
+        for d in lod:
+            for k, v in d.items():
+                d[k] = np.array(v)
+
+        return lod
+
+    def render():
+        return
+
+class SampleFactoryEnvWrapperNonBatched(GodotEnv):
+    @property
+    def unwrapped(self):
+        return self
+
+    @property
+    def num_agents(self):
+        return self.num_envs
+
+    def reset(self, seed=None):
+        obs, info = super().reset(seed=seed)
+        return self.to_numpy(obs), info
+
+    def step(self, action):
+        obs, reward, term, trunc, info = super().step(action, order_ij=True)
+        
+        return self.to_numpy(obs), np.array(reward), np.array(term), np.array(trunc) * 0, info
 
     @staticmethod
     def to_numpy(lod):
@@ -57,7 +87,7 @@ def make_godot_env_func(env_path, full_env_name, cfg=None, env_config=None, rend
         if cfg.viz:#
             print("creating viz env")
             show_window = env_config.env_id == 0
-    env = SampleFactoryEnvWrapper(env_path=env_path, port=port, seed=seed, show_window=show_window)
+    env = SampleFactoryEnvWrapperNonBatched(env_path=env_path, port=port, seed=seed, show_window=show_window)
 
     return env
 
@@ -103,7 +133,7 @@ def gdrl_override_defaults(_env, parser):
         lr_schedule="linear_decay",
         shuffle_minibatches=False,
         gae_lambda=0.95,
-        batched_sampling=True,
+        batched_sampling=False,
         normalize_input=True,
         normalize_returns=True,
         serial_mode=False,

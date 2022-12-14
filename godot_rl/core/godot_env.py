@@ -64,7 +64,7 @@ class GodotEnv:
 
         assert os.path.exists(filename)
 
-    def from_numpy(self, action):
+    def from_numpy(self, action, order_ij=False):
         # handles dict to tuple actions
         result = []
 
@@ -72,7 +72,11 @@ class GodotEnv:
             env_action = {}
 
             for j, k in enumerate(self._action_space.keys()):
-                v = action[j][i]
+                if order_ij==True:
+                    v = action[i][j]
+                else:
+                    v = action[j][i]
+
                 if isinstance(v, np.ndarray):
                     env_action[k] = v.tolist()
                 else:
@@ -81,10 +85,10 @@ class GodotEnv:
             result.append(env_action)
         return result
 
-    def step(self, action):
+    def step(self, action, order_ij=False):
         message = {
             "type": "action",
-            "action": self.from_numpy(action),
+            "action": self.from_numpy(action, order_ij=order_ij),
         }
         self._send_as_json(message)
         response = self._get_json_dict()
