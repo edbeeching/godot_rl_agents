@@ -24,8 +24,7 @@ var just_reset = false
 # Called when the node enters the scene tree for the first time.
 
 func _ready():
-	Engine.physics_ticks_per_second = speed_up*60 # Replace with function body.
-	Engine.time_scale = speed_up * 1.0
+
 	await get_tree().root.ready
 	get_tree().set_pause(true) 
 	_initialize()
@@ -121,9 +120,11 @@ func _get_args():
 			# with the value set to an empty string.
 			arguments[argument.lstrip("--")] = ""
 
-			
-			
 	return arguments   
+
+func _get_speedup():
+	print(args)
+	return args.get("speedup", str(speed_up)).to_int()
 
 func _get_port():    
 	return args.get("port", DEFAULT_PORT).to_int()
@@ -135,7 +136,6 @@ func _set_seed():
 func _set_action_repeat():
 	action_repeat = args.get("action_repeat", DEFAULT_ACTION_REPEAT).to_int()
 	
-
 func disconnect_from_server():
 	stream.disconnect_from_host()
 
@@ -143,6 +143,10 @@ func _initialize():
 	_get_agents()
 	
 	args = _get_args()
+	Engine.physics_ticks_per_second = _get_speedup() * 60 # Replace with function body.
+	Engine.time_scale = _get_speedup() * 1.0
+	prints("physics ticks", Engine.physics_ticks_per_second, Engine.time_scale, _get_speedup(), speed_up)
+	
 	connected = connect_to_server()
 	if connected:
 		_set_heuristic("model")

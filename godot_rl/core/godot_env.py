@@ -25,6 +25,7 @@ class GodotEnv:
         seed=0,
         framerate=None,
         action_repeat=None,
+        speedup=None
     ):
 
         if env_path is None:
@@ -32,7 +33,7 @@ class GodotEnv:
         self.proc = None
         if env_path is not None:
             self.check_platform(env_path)
-            self._launch_env(env_path, port, show_window, framerate, seed, action_repeat)
+            self._launch_env(env_path, port, show_window, framerate, seed, action_repeat, speedup)
         else:
             print("No game binary has been provided, please press PLAY in the Godot editor")
 
@@ -145,16 +146,18 @@ class GodotEnv:
         print("exit was not clean, using atexit to close env")
         self.close()
 
-    def _launch_env(self, env_path, port, show_window, framerate, seed, action_repeat):
+    def _launch_env(self, env_path, port, show_window, framerate, seed, action_repeat, speedup):
         # --fixed-fps {framerate}
         launch_cmd = f"{env_path} --port={port} --env_seed={seed}"
 
         if show_window == False:
             launch_cmd += " --disable-render-loop --headless"
         if framerate is not None:
-            launch_cmd += f" --fixed-fps {framerate}"
+            launch_cmd += f" --fixed-fps={framerate}"
         if action_repeat is not None:
-            launch_cmd += f" --action_repeat {action_repeat}"
+            launch_cmd += f" --action_repeat={action_repeat}"
+        if speedup is not None:
+            launch_cmd += f" --speedup={speedup}"
 
         launch_cmd = launch_cmd.split(" ")
         self.proc = subprocess.Popen(
@@ -312,10 +315,23 @@ class GodotEnv:
 
 
 if __name__ == "__main__":
-
+    # Visualizing observations 
+    import matplotlib.pyplot as plt
+    ray_width = 25
+    ray_height = 5
+    class_detect = True
+    viz = False
+  
     env = GodotEnv()
     print("observation space", env.observation_space)
     print("action space", env.action_space)
+
+    if viz:
+        plt.ion()
+        fig1, ax1 = plt.subplots()
+        dummy_obs = np.zeros(shape=(ray_height, ray_width, 3), dtype=np.uint8)
+        axim1 = ax1.imshow(dummy_obs, vmin=0, vmax=1)
+
     obs = env.reset()
 
     for i in range(1000):
@@ -324,6 +340,25 @@ if __name__ == "__main__":
         
         # env.reset()
         obs, reward, term, trunc, info = env.step(action)
+        if viz:
+            #2250 values 5x25x3 for sensor 1 25x25x3 for sensor 2
+            agent0_obs = obs[0]["obs"]
+            sensor1_data = agent0_obs[:250]
+            sensor1_distance = np.array(sensor1_data[::2])
+            sensor1_class1 = np.array(sensor1_data[1::2])
+
+
+            sensor2_data = agent0_obs[250:]
+            sensor2_distance = np.array(sensor2_data[::2])
+            sensor2_class1 = np.array(sensor2_data[1::2])
+
+
+            axim1.set_data(np.flipud(np.fliplr(sensor1_class1.reshape(ray_width, ray_height).transpose(1,0))))
+            fig1.canvas.flush_events()
+
+
+
+
         # print(obs, done)
         # plt.imshow(obs[0]["camera_2d"][:, :, :3])
         # plt.show()
