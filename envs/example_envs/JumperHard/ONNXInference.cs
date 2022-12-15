@@ -137,7 +137,7 @@ public class ONNXInference : Node
 	{
 	string adapterName = Godot.VisualServer.GetVideoAdapterName();
 	//string adapterVendor = Godot.VisualServer.GetVideoAdapterVendor();
-	adapterName = adapterName.ToUpper();
+	adapterName = adapterName.ToUpper(new System.Globalization.CultureInfo(""));
 	//TODO: GPU vendors for MacOS, what do they even use these days?
 	if (adapterName.Contains("INTEL")) {
 		GD.Print("Detected GPU: Intel");//Return 1, should use DirectML
