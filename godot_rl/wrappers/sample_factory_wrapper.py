@@ -87,7 +87,10 @@ def make_godot_env_func(env_path, full_env_name, cfg=None, env_config=None, rend
         if cfg.viz:#
             print("creating viz env")
             show_window = env_config.env_id == 0
-    env = SampleFactoryEnvWrapperNonBatched(env_path=env_path, port=port, seed=seed, show_window=show_window)
+    if cfg.batched_sampling:
+        env = SampleFactoryEnvWrapperBatched(env_path=env_path, port=port, seed=seed, show_window=show_window)
+    else:
+        env = SampleFactoryEnvWrapperNonBatched(env_path=env_path, port=port, seed=seed, show_window=show_window)
 
     return env
 
