@@ -142,10 +142,10 @@ public class ONNXInference : Node
 	if (adapterName.Contains("INTEL")) {
 		GD.Print("Detected GPU: Intel");//Return 1, should use DirectML
 		return 1;}
-	else if (adapterName.Contains("AMD")) {
+	if (adapterName.Contains("AMD")) {
 		GD.Print("Detected GPU: AMD");//Return 1, should use DirectML, check later for ROCm
 		return 1;}
-	else if (adapterName.Contains("NVIDIA")){
+	if (adapterName.Contains("NVIDIA")){
 		GD.Print("Detected GPU: NVIDIA"); //Return 0, should use CUDA
 		return 0;}
 	
