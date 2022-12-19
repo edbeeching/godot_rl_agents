@@ -1,7 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://bomr5lv7ajac2"]
+[gd_scene load_steps=6 format=3 uid="uid://bomr5lv7ajac2"]
 
 [ext_resource type="PackedScene" uid="uid://b6sxdnmi48aab" path="res://JumperHarder.tscn" id="1"]
 [ext_resource type="Script" path="res://addons/godot_rl_agents/sync.gd" id="2"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_v2bru"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_vwbta"]
+sky_material = SubResource("ProceduralSkyMaterial_v2bru")
+
+[sub_resource type="Environment" id="Environment_3mp4x"]
+background_mode = 2
+sky = SubResource("Sky_vwbta")
+tonemap_mode = 3
+glow_enabled = true
 
 [node name="BatchEnvs" type="Node3D"]
 
@@ -56,6 +69,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1243.91, 0, -1237.95)
 
 [node name="Sync" type="Node" parent="."]
 script = ExtResource("2")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_3mp4x")
 
 [node name="DirectionalLight2" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.5, 0.866025, 0, -0.433013, 0.25, 0.866025, 0.75, -0.433013, 0.5, 0, 25, 0)

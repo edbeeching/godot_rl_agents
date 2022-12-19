@@ -17,6 +17,7 @@ size = Vector3(6, 4, 6)
 [node name="JumperHard" type="Node3D"]
 
 [node name="Player" parent="." instance=ExtResource("1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 
 [node name="ResetTriggerBox" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -17, 0)

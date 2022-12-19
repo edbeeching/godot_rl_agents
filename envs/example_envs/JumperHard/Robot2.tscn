@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://dosdwpx55ki5e"]
+
+[ext_resource type="PackedScene" uid="uid://bw5j37ajgnx4k" path="res://tmp/player.glb" id="1_3mhn8"]
+
+[node name="robot" instance=ExtResource("1_3mhn8")]
+
+[node name="Skeleton3D" parent="Skeleton" index="0"]
+bones/13/rotation = Quaternion(-0.000357303, 0.998602, 0.0504822, -0.0156872)

@@ -16,7 +16,7 @@ var needs_reset = false
 @onready var raycast_sensor = $"RayCastSensor3D"
 @onready var first_jump_pad = $"../Pads/FirstPad"
 @onready var second_jump_pad = $"../Pads/SecondPad"
-@onready var robot = $Robot
+@onready var robot = $robot
 
 var next = 1
 var done = false
@@ -75,7 +75,7 @@ func _physics_process(_delta):
 	y_velo -= GRAVITY
 	var just_jumped = false
 	if grounded and get_jump_action():
-		robot.set_animation("jump-up-cycle")
+		robot.set_animation("jump")
 		just_jumped = true
 		y_velo = JUMP_FORCE
 		grounded = false
@@ -85,15 +85,15 @@ func _physics_process(_delta):
 		y_velo = -MAX_FALL_SPEED
 	
 	if y_velo < 0 and !grounded :
-		robot.set_animation("falling-cycle")
+		robot.set_animation("falling")
 	
 	var horizontal_speed = Vector2(move_vec.x, move_vec.z)
 	if horizontal_speed.length() < 0.1 and grounded:
 		robot.set_animation("idle")
 	elif horizontal_speed.length() < 1.0 and grounded:
-		robot.set_animation("walk-cycle")    
+		robot.set_animation("walk")    
 	elif horizontal_speed.length() >= 1.0 and grounded:
-		robot.set_animation("run-cycle")
+		robot.set_animation("run")
 	
 	update_reward()
 	
