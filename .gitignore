@@ -157,3 +157,5 @@ envs/example_envs/FlyBy/.godot
 *.import
 
 editor/
+
+examples/
