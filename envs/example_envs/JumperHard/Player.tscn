@@ -44,436 +44,436 @@ n_rays_width = 12.0
 n_rays_height = 12.0
 ray_length = 15.0
 
-[node name="@node_0 0@36376" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_0 0@37562" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-6.14364, -6.92623, 11.8018)
 
-[node name="node_0 1" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_0 1@37563" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-6.399, -5.74025, 12.2924)
 
-[node name="node_0 2" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_0 2@37564" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-6.60566, -4.51059, 12.6894)
 
-[node name="node_0 3" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_0 3@37565" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-6.76205, -3.24659, 12.9898)
 
-[node name="node_0 4" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_0 4@37566" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-6.86697, -1.95789, 13.1913)
 
-[node name="node_0 5" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_0 5@37567" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-6.91964, -0.654291, 13.2925)
 
-[node name="node_0 6" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_0 6@37568" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-6.91964, 0.654291, 13.2925)
 
-[node name="node_0 7" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_0 7@37569" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-6.86697, 1.95789, 13.1913)
 
-[node name="node_0 8" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_0 8@37570" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-6.76205, 3.24659, 12.9898)
 
-[node name="node_0 9" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_0 9@37571" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-6.60566, 4.51059, 12.6894)
 
-[node name="node_0 10" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_0 10@37572" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-6.399, 5.74025, 12.2924)
 
-[node name="node_0 11" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_0 11@37573" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-6.14364, 6.92623, 11.8018)
 
-[node name="node_1 0" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_1 0@37574" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-5.09167, -6.92623, 12.2924)
 
-[node name="node_1 1" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_1 1@37575" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-5.3033, -5.74025, 12.8033)
 
-[node name="node_1 2" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_1 2@37576" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-5.47458, -4.51059, 13.2168)
 
-[node name="node_1 3" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_1 3@37577" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-5.60418, -3.24659, 13.5297)
 
-[node name="node_1 4" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_1 4@37578" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-5.69114, -1.95789, 13.7396)
 
-[node name="node_1 5" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_1 5@37579" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-5.73479, -0.654291, 13.845)
 
-[node name="node_1 6" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_1 6@37580" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-5.73479, 0.654291, 13.845)
 
-[node name="node_1 7" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_1 7@37581" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-5.69114, 1.95789, 13.7396)
 
-[node name="node_1 8" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_1 8@37582" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-5.60418, 3.24659, 13.5297)
 
-[node name="node_1 9" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_1 9@37583" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-5.47458, 4.51059, 13.2168)
 
-[node name="node_1 10" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_1 10@37584" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-5.3033, 5.74025, 12.8033)
 
-[node name="node_1 11" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_1 11@37585" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-5.09167, 6.92623, 12.2924)
 
-[node name="node_2 0" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_2 0@37586" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-4.00094, -6.92623, 12.6894)
 
-[node name="node_2 1" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_2 1@37587" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-4.16724, -5.74025, 13.2168)
 
-[node name="node_2 2" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_2 2@37588" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-4.30182, -4.51059, 13.6436)
 
-[node name="node_2 3" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_2 3@37589" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-4.40367, -3.24659, 13.9667)
 
-[node name="node_2 4" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_2 4@37590" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-4.472, -1.95789, 14.1834)
 
-[node name="node_2 5" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_2 5@37591" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-4.50629, -0.654291, 14.2921)
 
-[node name="node_2 6" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_2 6@37592" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-4.50629, 0.654291, 14.2921)
 
-[node name="node_2 7" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_2 7@37593" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-4.472, 1.95789, 14.1834)
 
-[node name="node_2 8" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_2 8@37594" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-4.40367, 3.24659, 13.9667)
 
-[node name="node_2 9" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_2 9@37595" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-4.30182, 4.51059, 13.6436)
 
-[node name="node_2 10" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_2 10@37596" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-4.16724, 5.74025, 13.2168)
 
-[node name="node_2 11" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_2 11@37597" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-4.00094, 6.92623, 12.6894)
 
-[node name="node_3 0" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_3 0@37598" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-2.87976, -6.92623, 12.9898)
 
-[node name="node_3 1" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_3 1@37599" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-2.99946, -5.74025, 13.5297)
 
-[node name="node_3 2" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_3 2@37600" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-3.09633, -4.51059, 13.9667)
 
-[node name="node_3 3" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_3 3@37601" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-3.16964, -3.24659, 14.2973)
 
-[node name="node_3 4" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_3 4@37602" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-3.21882, -1.95789, 14.5192)
 
-[node name="node_3 5" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_3 5@37603" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-3.2435, -0.654291, 14.6305)
 
-[node name="node_3 6" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_3 6@37604" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-3.2435, 0.654291, 14.6305)
 
-[node name="node_3 7" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_3 7@37605" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-3.21882, 1.95789, 14.5192)
 
-[node name="node_3 8" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_3 8@37606" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-3.16964, 3.24659, 14.2973)
 
-[node name="node_3 9" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_3 9@37607" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-3.09633, 4.51059, 13.9667)
 
-[node name="node_3 10" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_3 10@37608" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-2.99946, 5.74025, 13.5297)
 
-[node name="node_3 11" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_3 11@37609" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-2.87976, 6.92623, 12.9898)
 
-[node name="node_4 0" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_4 0@37610" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-1.73667, -6.92623, 13.1913)
 
-[node name="node_4 1" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_4 1@37611" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-1.80886, -5.74025, 13.7396)
 
-[node name="node_4 2" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_4 2@37612" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-1.86728, -4.51059, 14.1834)
 
-[node name="node_4 3" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_4 3@37613" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-1.91148, -3.24659, 14.5192)
 
-[node name="node_4 4" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_4 4@37614" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-1.94114, -1.95789, 14.7444)
 
-[node name="node_4 5" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_4 5@37615" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-1.95603, -0.654291, 14.8575)
 
-[node name="node_4 6" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_4 6@37616" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-1.95603, 0.654291, 14.8575)
 
-[node name="node_4 7" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_4 7@37617" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-1.94114, 1.95789, 14.7444)
 
-[node name="node_4 8" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_4 8@37618" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-1.91148, 3.24659, 14.5192)
 
-[node name="node_4 9" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_4 9@37619" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-1.86728, 4.51059, 14.1834)
 
-[node name="node_4 10" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_4 10@37620" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-1.80886, 5.74025, 13.7396)
 
-[node name="node_4 11" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_4 11@37621" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-1.73667, 6.92623, 13.1913)
 
-[node name="node_5 0" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_5 0@37622" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-0.580363, -6.92623, 13.2925)
 
-[node name="node_5 1" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_5 1@37623" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-0.604486, -5.74025, 13.845)
 
-[node name="node_5 2" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_5 2@37624" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-0.624008, -4.51059, 14.2921)
 
-[node name="node_5 3" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_5 3@37625" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-0.638781, -3.24659, 14.6305)
 
-[node name="node_5 4" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_5 4@37626" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-0.648693, -1.95789, 14.8575)
 
-[node name="node_5 5" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_5 5@37627" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-0.653668, -0.654291, 14.9715)
 
-[node name="node_5 6" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_5 6@37628" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-0.653668, 0.654291, 14.9715)
 
-[node name="node_5 7" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_5 7@37629" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-0.648693, 1.95789, 14.8575)
 
-[node name="node_5 8" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_5 8@37630" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-0.638781, 3.24659, 14.6305)
 
-[node name="node_5 9" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_5 9@37631" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-0.624008, 4.51059, 14.2921)
 
-[node name="node_5 10" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_5 10@37632" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-0.604486, 5.74025, 13.845)
 
-[node name="node_5 11" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_5 11@37633" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(-0.580363, 6.92623, 13.2925)
 
-[node name="node_6 0" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_6 0@37634" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(0.580363, -6.92623, 13.2925)
 
-[node name="node_6 1" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_6 1@37635" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(0.604486, -5.74025, 13.845)
 
-[node name="node_6 2" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_6 2@37636" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(0.624008, -4.51059, 14.2921)
 
-[node name="node_6 3" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_6 3@37637" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(0.638781, -3.24659, 14.6305)
 
-[node name="node_6 4" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_6 4@37638" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(0.648693, -1.95789, 14.8575)
 
-[node name="node_6 5" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_6 5@37639" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(0.653668, -0.654291, 14.9715)
 
-[node name="node_6 6" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_6 6@37640" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(0.653668, 0.654291, 14.9715)
 
-[node name="node_6 7" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_6 7@37641" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(0.648693, 1.95789, 14.8575)
 
-[node name="node_6 8" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_6 8@37642" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(0.638781, 3.24659, 14.6305)
 
-[node name="node_6 9" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_6 9@37643" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(0.624008, 4.51059, 14.2921)
 
-[node name="node_6 10" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_6 10@37644" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(0.604486, 5.74025, 13.845)
 
-[node name="node_6 11" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_6 11@37645" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(0.580363, 6.92623, 13.2925)
 
-[node name="node_7 0" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_7 0@37646" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(1.73667, -6.92623, 13.1913)
 
-[node name="node_7 1" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_7 1@37647" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(1.80886, -5.74025, 13.7396)
 
-[node name="node_7 2" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_7 2@37648" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(1.86728, -4.51059, 14.1834)
 
-[node name="node_7 3" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_7 3@37649" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(1.91148, -3.24659, 14.5192)
 
-[node name="node_7 4" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_7 4@37650" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(1.94114, -1.95789, 14.7444)
 
-[node name="node_7 5" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_7 5@37651" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(1.95603, -0.654291, 14.8575)
 
-[node name="node_7 6" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_7 6@37652" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(1.95603, 0.654291, 14.8575)
 
-[node name="node_7 7" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_7 7@37653" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(1.94114, 1.95789, 14.7444)
 
-[node name="node_7 8" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_7 8@37654" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(1.91148, 3.24659, 14.5192)
 
-[node name="node_7 9" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_7 9@37655" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(1.86728, 4.51059, 14.1834)
 
-[node name="node_7 10" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_7 10@37656" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(1.80886, 5.74025, 13.7396)
 
-[node name="node_7 11" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_7 11@37657" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(1.73667, 6.92623, 13.1913)
 
-[node name="node_8 0" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_8 0@37658" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(2.87976, -6.92623, 12.9898)
 
-[node name="node_8 1" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_8 1@37659" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(2.99946, -5.74025, 13.5297)
 
-[node name="node_8 2" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_8 2@37660" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(3.09633, -4.51059, 13.9667)
 
-[node name="node_8 3" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_8 3@37661" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(3.16964, -3.24659, 14.2973)
 
-[node name="node_8 4" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_8 4@37662" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(3.21882, -1.95789, 14.5192)
 
-[node name="node_8 5" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_8 5@37663" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(3.2435, -0.654291, 14.6305)
 
-[node name="node_8 6" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_8 6@37664" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(3.2435, 0.654291, 14.6305)
 
-[node name="node_8 7" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_8 7@37665" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(3.21882, 1.95789, 14.5192)
 
-[node name="node_8 8" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_8 8@37666" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(3.16964, 3.24659, 14.2973)
 
-[node name="node_8 9" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_8 9@37667" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(3.09633, 4.51059, 13.9667)
 
-[node name="node_8 10" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_8 10@37668" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(2.99946, 5.74025, 13.5297)
 
-[node name="node_8 11" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_8 11@37669" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(2.87976, 6.92623, 12.9898)
 
-[node name="node_9 0" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_9 0@37670" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(4.00094, -6.92623, 12.6894)
 
-[node name="node_9 1" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_9 1@37671" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(4.16724, -5.74025, 13.2168)
 
-[node name="node_9 2" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_9 2@37672" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(4.30182, -4.51059, 13.6436)
 
-[node name="node_9 3" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_9 3@37673" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(4.40367, -3.24659, 13.9667)
 
-[node name="node_9 4" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_9 4@37674" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(4.472, -1.95789, 14.1834)
 
-[node name="node_9 5" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_9 5@37675" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(4.50629, -0.654291, 14.2921)
 
-[node name="node_9 6" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_9 6@37676" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(4.50629, 0.654291, 14.2921)
 
-[node name="node_9 7" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_9 7@37677" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(4.472, 1.95789, 14.1834)
 
-[node name="node_9 8" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_9 8@37678" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(4.40367, 3.24659, 13.9667)
 
-[node name="node_9 9" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_9 9@37679" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(4.30182, 4.51059, 13.6436)
 
-[node name="node_9 10" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_9 10@37680" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(4.16724, 5.74025, 13.2168)
 
-[node name="node_9 11" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_9 11@37681" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(4.00094, 6.92623, 12.6894)
 
-[node name="node_10 0" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_10 0@37682" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(5.09167, -6.92623, 12.2924)
 
-[node name="node_10 1" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_10 1@37683" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(5.3033, -5.74025, 12.8033)
 
-[node name="node_10 2" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_10 2@37684" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(5.47458, -4.51059, 13.2168)
 
-[node name="node_10 3" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_10 3@37685" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(5.60418, -3.24659, 13.5297)
 
-[node name="node_10 4" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_10 4@37686" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(5.69114, -1.95789, 13.7396)
 
-[node name="node_10 5" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_10 5@37687" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(5.73479, -0.654291, 13.845)
 
-[node name="node_10 6" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_10 6@37688" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(5.73479, 0.654291, 13.845)
 
-[node name="node_10 7" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_10 7@37689" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(5.69114, 1.95789, 13.7396)
 
-[node name="node_10 8" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_10 8@37690" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(5.60418, 3.24659, 13.5297)
 
-[node name="node_10 9" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_10 9@37691" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(5.47458, 4.51059, 13.2168)
 
-[node name="node_10 10" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_10 10@37692" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(5.3033, 5.74025, 12.8033)
 
-[node name="node_10 11" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_10 11@37693" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(5.09167, 6.92623, 12.2924)
 
-[node name="node_11 0" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_11 0@37694" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(6.14364, -6.92623, 11.8018)
 
-[node name="node_11 1" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_11 1@37695" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(6.399, -5.74025, 12.2924)
 
-[node name="node_11 2" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_11 2@37696" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(6.60566, -4.51059, 12.6894)
 
-[node name="node_11 3" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_11 3@37697" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(6.76205, -3.24659, 12.9898)
 
-[node name="node_11 4" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_11 4@37698" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(6.86697, -1.95789, 13.1913)
 
-[node name="node_11 5" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_11 5@37699" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(6.91964, -0.654291, 13.2925)
 
-[node name="node_11 6" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_11 6@37700" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(6.91964, 0.654291, 13.2925)
 
-[node name="node_11 7" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_11 7@37701" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(6.86697, 1.95789, 13.1913)
 
-[node name="node_11 8" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_11 8@37702" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(6.76205, 3.24659, 12.9898)
 
-[node name="node_11 9" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_11 9@37703" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(6.60566, 4.51059, 12.6894)
 
-[node name="node_11 10" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_11 10@37704" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(6.399, 5.74025, 12.2924)
 
-[node name="node_11 11" type="RayCast3D" parent="RayCastSensor3D"]
+[node name="@node_11 11@37705" type="RayCast3D" parent="RayCastSensor3D"]
 target_position = Vector3(6.14364, 6.92623, 11.8018)
 
 [node name="robot" parent="." instance=ExtResource("4_eqt5m")]
