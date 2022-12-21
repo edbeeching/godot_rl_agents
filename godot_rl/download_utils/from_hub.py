@@ -8,7 +8,7 @@ def load_from_hf(dir_path: str, repo_id: str):
     repo_name = temp[1]
 
     local_dir = os.path.join(dir_path, repo_name)
-    Repository(local_dir, repo_id)
+    Repository(local_dir, repo_id, repo_type="dataset")
     print(f"The repository {repo_id} has been cloned to {local_dir}")
 
 

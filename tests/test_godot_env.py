@@ -4,19 +4,37 @@ from godot_rl.core.godot_env import GodotEnv
 
 
 @pytest.mark.parametrize(
-    "env_path,port",
+    "env_name,port,n_agents",
     [
         (
-            "envs/builds/BallChase/ball_chase.x86_64",
+            "BallChase",
             12008,
+            16,
         ),
         (
-            "envs/builds/JumperHard/jumper_hard.x86_64",
+            "FPS",
             12009,
+            8,
+        ),
+        (
+            "JumperHard",
+            12010,
+            16,
+        ),
+        (
+            "Racer",
+            12011,
+            8,
+        ),
+        (
+            "FlyBy",
+            12011,
+            16,
         ),
     ],
 )
-def test_env_ij(env_path, port):
+def test_env_ij(env_name, port, n_agents):
+    env_path = f"examples/godot_rl_{env_name}/bin/{env_name}.x86_64"
     env = GodotEnv(env_path=env_path, port=port)
 
     action_space = env.action_space
@@ -45,25 +63,43 @@ def test_env_ij(env_path, port):
     env.close()
 
 @pytest.mark.parametrize(
-    "env_path,port",
+    "env_name,port,n_agents",
     [
         (
-            "envs/builds/BallChase/ball_chase.x86_64",
+            "BallChase",
             12008,
+            16,
         ),
         (
-            "envs/builds/JumperHard/jumper_hard.x86_64",
+            "FPS",
             12009,
+            8,
+        ),
+        (
+            "JumperHard",
+            12010,
+            16,
+        ),
+        (
+            "Racer",
+            12011,
+            8,
+        ),
+        (
+            "FlyBy",
+            12011,
+            16,
         ),
     ],
 )
-def test_env_ji(env_path, port):
+def test_env_ji(env_name, port, n_agents):
+    env_path = f"examples/godot_rl_{env_name}/bin/{env_name}.x86_64"
     env = GodotEnv(env_path=env_path, port=port)
 
     action_space = env.action_space
     observation_space = env.observation_space
     n_envs = env.num_envs
-
+    assert n_envs == n_agents
     for j in range(2):
         obs, info = env.reset()
         assert len(obs) == n_envs

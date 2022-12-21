@@ -2,63 +2,32 @@ name: tests
 
 on:
   push:
-    branches:
-    - main
-    - godot4
+    branches: [ master ]
   pull_request:
-    branches:
-    - main
-    - godot4
+    branches: [ master ]
 
 jobs:
-  run-tests-ubuntu:
+  tests:
     strategy:
-      fail-fast: false
       matrix:
-        python-version: ['3.8', '3.9', '3.10']
+        python-version: [3.7, 3.8, 3.9]
         os: ['ubuntu-latest']
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python
-      uses: actions/setup-python@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Add conda to system path
+    - name: Install dependencies
       run: |
-        # $CONDA is an environment variable pointing to the root of the miniconda directory
-        echo $CONDA/bin >> $GITHUB_PATH
-    - name: Install conda env & dependencies
+        python -m pip install --upgrade pip
+        # cpu version of pytorch
+        pip install .[test]
+    - name: Download examples
       run: |
-       conda install python=${{ matrix.python-version }}
-       pip install -e '.[test]'
-       conda list
-    - name: Run tests
-      run: |
-        make test
+        make download_examples
 
-  run-tests-mac:
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ['3.8', '3.9', '3.10']
-        os: ['macos-latest']
-    runs-on: ${{ matrix.os }}
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Add conda to system path
-      run: |
-        # $CONDA is an environment variable pointing to the root of the miniconda directory
-        echo $CONDA/bin >> $GITHUB_PATH
-    - name: Install conda env & dependencies
-      run: |
-       conda install python=${{ matrix.python-version }}
-       pip install -e '.[test]'
-       conda list
-    - name: Run tests
+    - name: Test with pytest
       run: |
         make test
