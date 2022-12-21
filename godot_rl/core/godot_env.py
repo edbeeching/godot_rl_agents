@@ -318,11 +318,12 @@ class GodotEnv:
         self._send_string(action)
 
 
-if __name__ == "__main__":
+
+def interactive():
     # Visualizing observations 
     import matplotlib.pyplot as plt
     ray_width = 25
-    ray_height = 5
+    ray_height = 25
     class_detect = True
     viz = False
   
@@ -347,17 +348,18 @@ if __name__ == "__main__":
         if viz:
             #2250 values 5x25x3 for sensor 1 25x25x3 for sensor 2
             agent0_obs = obs[0]["obs"]
-            sensor1_data = agent0_obs[:250]
-            sensor1_distance = np.array(sensor1_data[::2])
-            sensor1_class1 = np.array(sensor1_data[1::2])
+            sensor1_data = agent0_obs[:375]
+            sensor1_distance = np.array(sensor1_data[::3])
+            sensor1_class1 = np.array(sensor1_data[1::3])
+            sensor1_class2 = np.array(sensor1_data[2::3])
 
 
-            sensor2_data = agent0_obs[250:]
-            sensor2_distance = np.array(sensor2_data[::2])
-            sensor2_class1 = np.array(sensor2_data[1::2])
+            sensor2_data = agent0_obs[375:]
+            sensor2_distance = np.array(sensor2_data[::3])
+            sensor2_class1 = np.array(sensor2_data[1::3])
+            sensor2_class2 = np.array(sensor2_data[2::3])
 
-
-            axim1.set_data(np.flipud(np.fliplr(sensor1_class1.reshape(ray_width, ray_height).transpose(1,0))))
+            axim1.set_data(np.flipud(np.fliplr(sensor2_class1.reshape(ray_width, ray_height).transpose(1,0))))
             fig1.canvas.flush_events()
 
 
@@ -368,3 +370,6 @@ if __name__ == "__main__":
         # plt.show()
         # print(obs)
     env.close()
+
+if __name__ == "__main__":
+    interactive()

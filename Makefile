@@ -15,6 +15,9 @@ style:
 test:
 	python -m pytest tests/
 
+download_examples:
+	bash scripts/get_all_examples_from_hub.sh
+
 wheel:
 	rm dist/*
 	python3 -m pip install --upgrade build

@@ -57,6 +57,7 @@ def get_args():
     parser.add_argument(
         "--trainer",
         default="sb3",
+        choices=["sb3", "sf", "rllib"],
         type=str,
         help="Which trainer framework to use (rllib or stable-baselines)",
     )
@@ -96,9 +97,10 @@ def main():
     elif args.trainer == "sb3":
         training_function = stable_baselines_training
     elif args.trainer == "sf":
-        training_function = sample_factory_training
-    elif args.trainer == "sf_enjoy":
-        training_function = sample_factory_enjoy
+        if args.eval:
+            training_function = sample_factory_enjoy
+        else:
+            training_function = sample_factory_training
     else:
         raise NotImplementedError
 
