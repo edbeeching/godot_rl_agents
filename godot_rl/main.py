@@ -25,22 +25,17 @@ import argparse
 try:
     from godot_rl.wrappers.ray_wrapper import rllib_training
 except ImportError as e:
-
     def rllib_training(args, extras):
         print("Import error when trying to use rllib, this is probably not installed try pip install ray[rllib]")
-
 
 try:
     from godot_rl.wrappers.stable_baselines_wrapper import \
         stable_baselines_training
 except ImportError as e:
-
     def stable_baselines_training(args, extras):
         print(
             "Import error when trying to use sb3, this is probably not installed try pip install stable-baselines3"
         )
-
-
 try:
     from godot_rl.wrappers.sample_factory_wrapper import \
         sample_factory_training, sample_factory_enjoy
@@ -85,6 +80,12 @@ def get_args():
         default=False,
         action="store_true",
         help="whether to eval the model",
+    )
+    parser.add_argument(
+        "--speedup",
+        default=1,
+        type=int,
+        help="whether to speed up the physics in the env",
     )
 
     return parser.parse_known_args()

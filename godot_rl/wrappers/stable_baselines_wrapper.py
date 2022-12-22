@@ -86,5 +86,6 @@ def stable_baselines_training(args, extras):
         tensorboard_log="logs/log",
     )
     model.learn(20000)
+
     print("closing env")
     env.close()

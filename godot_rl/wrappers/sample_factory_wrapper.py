@@ -75,7 +75,7 @@ class SampleFactoryEnvWrapperNonBatched(GodotEnv):
         return
 
 
-def make_godot_env_func(env_path, full_env_name, cfg=None, env_config=None, render_mode=None):
+def make_godot_env_func(env_path,full_env_name, cfg=None, env_config=None, render_mode=None, speedup=1):
     seed = 0
     port = 21008 + cfg.base_port
     print("BASE PORT ", cfg.base_port)
@@ -88,15 +88,15 @@ def make_godot_env_func(env_path, full_env_name, cfg=None, env_config=None, rend
             print("creating viz env")
             show_window = env_config.env_id == 0
     if cfg.batched_sampling:
-        env = SampleFactoryEnvWrapperBatched(env_path=env_path, port=port, seed=seed, show_window=show_window)
+        env = SampleFactoryEnvWrapperBatched(env_path=env_path, port=port, seed=seed, show_window=show_window, speedup=speedup)
     else:
-        env = SampleFactoryEnvWrapperNonBatched(env_path=env_path, port=port, seed=seed, show_window=show_window)
+        env = SampleFactoryEnvWrapperNonBatched(env_path=env_path, port=port, seed=seed, show_window=show_window, speedup=speedup)
 
     return env
 
 
 def register_gdrl_env(args):
-    make_env = partial(make_godot_env_func, args.env_path)
+    make_env = partial(make_godot_env_func, args.env_path, speedup=args.speedup)
     register_env("gdrl", make_env)
 
 
@@ -112,10 +112,10 @@ def gdrl_override_defaults(_env, parser):
         env_frameskip=1,
         env_framestack=4,
         num_workers=1,
-        num_envs_per_worker=1,
-        worker_num_splits=1,
+        num_envs_per_worker=2,
+        worker_num_splits=2,
         env_agents=16,
-        train_for_env_steps=10000000,
+        train_for_env_steps=1000000,
         nonlinearity="relu",
         kl_loss_coeff=0.0,
         use_rnn=False,
