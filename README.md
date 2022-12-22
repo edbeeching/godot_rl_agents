@@ -54,6 +54,7 @@ chmod +x examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64
 ```
 ## Simple environments
 ### BallChase
+https://user-images.githubusercontent.com/7275864/209159206-a7896103-5492-4a62-8a2f-bad1e3741dae.mp4
 #### Stable Baselines 3: (TODO)
 #### Sample Factory:
 - Train a model from scratch
@@ -82,6 +83,7 @@ gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_BallChase/bin/BallChas
 ```
 
 ### FlyBy
+https://user-images.githubusercontent.com/7275864/209160025-0781537e-ff37-427d-bb32-753299b30510.mp4
 #### Stable Baselines 3: (TODO)
 #### Sample-factory:
 - Train a model from scratch
@@ -104,6 +106,7 @@ gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_FlyBy/bin/FlyBy.x86_64
 ```
 
 ## JumperHard
+https://user-images.githubusercontent.com/7275864/209160056-b96ed6f4-3b8b-467a-997d-7e4833e99025.mp4
 #### Stable Baselines 3: (TODO)
 #### Sample-factory:
 - Train a model from scratch
@@ -130,6 +133,7 @@ We highly recommend training these environments on a compute cluster. As they ta
 - Download a pretrained checkpoint from the HF hub:
 - Visualize a trained model:
 ### Team FPS (experimental)
+https://user-images.githubusercontent.com/7275864/209160117-cd95fa6b-67a0-40af-9d89-ea324b301795.mp4
 #### Stable Baselines 3: (TODO)
 #### Sample-factory:
 - Train a model from scratch
