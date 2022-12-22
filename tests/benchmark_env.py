@@ -6,8 +6,8 @@ we perform 10,000 actions and calculate the interactions per second in a variety
 
 
 import time
-from godot_rl_agents.core.godot_env import GodotEnv
 
+from godot_rl.core.godot_env import GodotEnv
 
 if __name__ == "__main__":
     show_window = False

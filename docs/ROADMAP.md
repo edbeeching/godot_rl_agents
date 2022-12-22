@@ -17,7 +17,7 @@ This document provides non-exaustive list of features the will be implemented in
 - [x] Training with Stable baselines 3
 - [x] Command line interface for training
 - [x] Benchmarking environments
-- [ ] Testing with pytest
+- [x] Testing with pytest
   - [ ] Testing of wrappers
     - [ ] Stable baselines
     - [x] Ray
@@ -25,10 +25,10 @@ This document provides non-exaustive list of features the will be implemented in
   - [ ] Simple test envs: 
     - [x] Identity learning
     - [ ] bandits, etc
-- [ ] CI test on windows
-- [x] Discrete, continous and combinations of the two
+
+- [x] Discrete, continuous and combinations of the two
 - [x] Automatic port choice with CLA
-- [x] Examples intructions
+- [x] Examples instructions
 - [x] Installation instuctions
 - [x] Compiled envs at higher framerates
 - [x] Benchmarking of env interaction speed
@@ -36,25 +36,27 @@ This document provides non-exaustive list of features the will be implemented in
 - [x] semi automatic naming of runs
 - [x] trailer
 
-
 ## Version 0.2
-
-- [ ] Variable sized observations (Attention over)
-- [ ] An additional game (racing or ???)
-- [ ] Memory-based agents
 - [x] Continuous integration with Travis
-- [ ] Load trained model inside Godot Engine for inference (C# lib for torch)
-- [ ] Extend the 2D and 3D sensor plugins
-- [ ] Headless training (for clusters)
-- [ ] Docker file (for clusters)
-- [ ] Add "call" functionality to call Godot methods from python
+- [x] Extend the 2D and 3D sensor plugins
+- [x] Headless training (for clusters)
+- [x] Add "call" functionality to call Godot methods from python
 ## Version 0.3
-
-- [ ] Multi-agent
 - [ ] C# implementations of sync GDScript code
-- [ ] Camera observations, CNN for training
+- [x] Camera observations, CNN for training
 ## Version 0.4
+- [x] Godot 4 support
+- [x] CI with github actions
+- [x] Accelerated physics
+- [x] Multi-agent
+- [x] An additional game (racing and FPS)
+- [x] Sample Factory support
+- [x] Memory-based agents
 ## Version 0.5
+- [ ] Load trained model inside Godot Engine for inference (C# lib for torch)
+- [ ] CI test on windows
+- [ ] Docker file (for clusters)
+- [ ] Variable sized observations (Attention over)
 ## Version 0.6
 ## Version 0.7
 

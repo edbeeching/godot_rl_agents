@@ -1,0 +1,33 @@
+name: tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  tests:
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8, 3.9]
+        os: ['ubuntu-latest']
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        # cpu version of pytorch
+        pip install .[test,sb3]
+    - name: Download examples
+      run: |
+        make download_examples
+
+    - name: Test with pytest
+      run: |
+        make test
