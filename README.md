@@ -18,7 +18,7 @@ https://user-images.githubusercontent.com/7275864/140730165-dbfddb61-cc90-47c7-8
 1. [Motivation](#motivation)
 2. [Installation](#installation)
 3. [Examples](#examples)
-4. [Documentation](#documentation)
+4. [Creating custom environments ](#creating-custom-environments)
 5. [Roadmap](#roadmap)
 6. [FAQ](#faq)
 7. [Licence](#licence)
@@ -27,23 +27,23 @@ https://user-images.githubusercontent.com/7275864/140730165-dbfddb61-cc90-47c7-8
 10. [References](#references)
   
 
-### Motivation
+## Motivation
 Over the next decade advances in AI algorithms, notably in the fields of Machine Learning and Deep Reinforcement Learning, are primed to revolutionize the Video Game industry. Customizable enemies, worlds and story telling will lead to diverse gameplay experiences and new genres of games. Currently the field is dominated by large organizations and pay to use engines that have the budget to create such AI enhanced agents. The objective of the Godot RL Agents package is to lower the bar of accessability so that game developers can take their idea from creation to publication end-to-end with an open source and free package.
 
-### Installation
+## Installation
 Godot RL Agents has been tested on Linux and Windows and should work out of the box, we recommend using a virtual environment.
 ```pip install godot-rl```
 
 In order to perform training we support 3 different backends in Godot RL Agents:
-- Stable Baselines 3 ```pip install godot-rl[sb3]```
-- Sample Factory ```pip install godot-rl[sf]```
-- Ray rllib ```pip install godot-rl[rllib]```
+- [Stable Baselines 3](https://stable-baselines3.readthedocs.io/en/master/) ```pip install godot-rl[sb3]```
+- [Sample Factory](https://www.samplefactory.dev/) ```pip install godot-rl[sf]```
+- [Ray rllib](https://docs.ray.io/en/latest/rllib/index.html) ```pip install godot-rl[rllib]```
 
 
 If you are having issues with the installation, please refer to our FAQ section or raise an issue.
 
 
-### Examples
+## Examples
 We have created 5 examples of varying complexity. All environments are hosted in separate repo and can be downloaded with
 ```shell
 gdrl.env_from_hub -r edbeeching/godot_rl_<ENV_NAME>
@@ -171,35 +171,36 @@ The folling command will attempt to connect to an editor and step through 1000 r
 gdrl.interactive
 ```
 
-### Creating custom environments (Doc is WIP, raise an issue if anything is unclear)
+# Creating custom environments 
+(Doc is WIP, raise an issue if anything is unclear)
 Once you have studied the example environments, you can follow the instructions in [Custom environments](docs/CUSTOM_ENV.md) in order to make your own. 
 
-### Roadmap
+# Roadmap
 We have number features that will soon be available in versions 0.4.0
 Refer to the [Roadmap](docs/ROADMAP.md) for more information.
 
 
-### FAQ
+# FAQ
 1. Why have we developed Godot RL Agents?
   The objectives of the framework are to:
 * Provide a free and open source tool for Deep RL research and game development.
 * Enable game creators to imbue their non-player characters with unique * behaviors.
 * Allow for automated gameplay testing through interaction with an RL agent.
-1. How can I contribute to Godot RL Agents?
+2. How can I contribute to Godot RL Agents?
    Please try it out, find bugs and either raise an issue or if you fix them yourself, submit a pull request.
-2. When will you be providing Mac support?
+3. When will you be providing Mac support?
    I would like to provide this ASAP but I do not own a mac so I cannot perform any manual testing of the codebase.
-3. Can you help with my game project? 
+4. Can you help with my game project? 
    If the game example do not provide enough information, reach out to us on github and we may be able to provide some advice.
-4. How similar is this tool to Unity ML agents?
+5. How similar is this tool to Unity ML agents?
    We are inspired by the the Unity ML agents toolkit and aims to be a more compact, concise ad hackable codebase, with little abstraction.
 
-### Licence
+# Licence
 Godot RL Agents is MIT licensed. See the [LICENSE file](LICENSE) for details.
 
 "Cartoon Plane" (https://skfb.ly/UOLT) by antonmoek is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 
-### Citing Godot RL Agents
+# Citing Godot RL Agents
 ```
 @article{beeching2021godotrlagents,
   author={Beeching, Edward and Dibangoye, Jilles and 
@@ -210,8 +211,8 @@ year = {2021},
 }
 ```
 
-### Acknowledgments
+# Acknowledgments
 We thank the authors of the Godot Engine for providing such a powerful and flexible game engine for AI agent development.
 We thank the developers at Ray and Stable baselines for creating easy to use and powerful RL training frameworks.
 We thank the creators of the Unity ML Agents Toolkit, which inspired us to create this work.
-### References
+# References
