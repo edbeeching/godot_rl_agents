@@ -1,13 +1,13 @@
 
 # Godot RL Agents
-The Godot RL Agents is a fully Open Source packages that allows video game creators, AI researchers and hobbiest the opportunity to learn complex behaviors for their Non Player Characters or agents. 
+The Godot RL Agents is a fully Open Source package that allows video game creators, AI researchers and hobbyists the opportunity to learn complex behaviors for their Non Player Characters or agents. 
 This repository provides:
-* An interface between games created in Godot and Machine Learning algorithms running in Python
-* Access to 21 state of the art Machine Learning algorithms, provided by the [Ray RLLib](https://docs.ray.io/en/latest/rllib-algorithms.html) framework.
+* An interface between games created in the [Godot Engine](https://godotengine.org/) and Machine Learning algorithms running in Python
+* Wrappers for three well known rl frameworks: StableBaselines3, Sample Factory and [Ray RLLib](https://docs.ray.io/en/latest/rllib-algorithms.html)
 * Support for memory-based agents, with LSTM or attention based interfaces
 * Support for 2D and 3D games
 * A suite of AI sensors to augment your agent's capacity to observe the game world
-* Godot and Godot RL agents are completely free and open source under the very permissive MIT license. No strings attached, no royalties, nothing. 
+* Godot and Godot RL Agents are completely free and open source under the very permissive MIT license. No strings attached, no royalties, nothing. 
 
 You can find out more about Godot RL agents in our AAAI-2022 Workshop [paper](https://arxiv.org/abs/2112.03636).
 
@@ -16,39 +16,160 @@ https://user-images.githubusercontent.com/7275864/140730165-dbfddb61-cc90-47c7-8
 ## Contents
 <!-- no toc -->
 1. [Motivation](#motivation)
-2. [Citing Godot RL Agents](#citing-godot-rl-agents)
-3. [Installation](#installation)
-4. [Examples](#examples)
-5. [Documentation](#documentation)
-6. [Roadmap](#roadmap)
-7. [FAQ](#faq)
-8. [Licence](#licence)
+2. [Installation](#installation)
+3. [Examples](#examples)
+4. [Documentation](#documentation)
+5. [Roadmap](#roadmap)
+6. [FAQ](#faq)
+7. [Licence](#licence)
+8. [Citing Godot RL Agents](#citing-godot-rl-agents)
 9. [Acknowledgments](#acknowledgments)
 10. [References](#references)
   
 
 ### Motivation
 Over the next decade advances in AI algorithms, notably in the fields of Machine Learning and Deep Reinforcement Learning, are primed to revolutionize the Video Game industry. Customizable enemies, worlds and story telling will lead to diverse gameplay experiences and new genres of games. Currently the field is dominated by large organizations and pay to use engines that have the budget to create such AI enhanced agents. The objective of the Godot RL Agents package is to lower the bar of accessability so that game developers can take their idea from creation to publication end-to-end with an open source and free package.
-### Citing Godot RL Agents
-```
-@article{beeching2021godotrlagents,
-  author={Beeching, Edward and Dibangoye, Jilles and 
-    Simonin, Olivier and Wolf, Christian},
-title = {Godot Reinforcement Learning Agents},
-journal = {{arXiv preprint arXiv:2112.03636.},
-year = {2021}, 
-}
 
-
-```
 ### Installation
-Please follow the [installation instructions](docs/INSTALLATION.md) to install Godot RL agents.
+Godot RL Agents has been tested on Linux and Windows and should work out of the box, we recommend using a virtual environment.
+```pip install godot-rl```
+
+In order to perform training we support 3 different backends in Godot RL Agents:
+- Stable Baselines 3 ```pip install godot-rl[sb3]```
+- Sample Factory ```pip install godot-rl[sf]```
+- Ray rllib ```pip install godot-rl[rllib]```
+
+
+If you are having issues with the installation, please refer to our FAQ section or raise an issue.
+
+
 ### Examples
-We provide several reference implementations and instructions to implement your own environment, please refer to the [Examples](docs/EXAMPLE_ENVIRONMENTS.md) documentation.
-### Creating custom environments
+We have created 5 examples of varying complexity. All environments are hosted in separate repo and can be downloaded with
+```shell
+gdrl.env_from_hub -r edbeeching/godot_rl_<ENV_NAME>
+```
+Note you may need to set execution permissions on the binary with:
+```shell 
+chmod +x examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64 
+```
+## Simple environments
+### BallChase
+#### Stable Baselines 3: (TODO)
+#### Sample Factory:
+- Train a model from scratch
+```shell
+gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_BallChase/bin/BallChase.x86_64 --num_workers=10 --experiment=BallChase --viz  --speedup=8 --batched_sampling=True
+```
+
+- Download a pretrained checkpoint from the HF hub:
+```shell
+python -m sample_factory.huggingface.load_from_hub -r edbeeching/sample_factory_BallChase
+```
+
+- Visualize a trained model:
+```
+gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_BallChase/bin/BallChase.x86_64 --num_workers=1 --experiment=BallChase --viz --eval --batched_sampling=True
+```
+- Load a pretrained checkpoint:
+```shell
+python -m sample_factory.huggingface.load_from_hub -r edbeeching/sample_factory_BallChase
+``` 
+
+-Uploading a model to the hub:
+
+```shell 
+gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_BallChase/bin/BallChase.x86_64 --num_workers=1 --experiment=BallChase --viz --eval --batched_sampling=True --speedup=8 --push_to_hub --hf_repository=<HF_USERNAME>/sample_factory_BallChase
+```
+
+### FlyBy
+#### Stable Baselines 3: (TODO)
+#### Sample-factory:
+- Train a model from scratch
+```shell
+gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_FlyBy/bin/FlyBy.x86_64 --num_workers=10 --experiment=FlyBy --viz --speedup=8 --batched_sampling=True
+```
+- Download a pretrained checkpoint from the HF hub:
+```shell
+python -m sample_factory.huggingface.load_from_hub -r edbeeching/sample_factory_FlyBy
+``` 
+- Visualize a trained model:
+
+```shell
+gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_FlyBy/bin/FlyBy.x86_64 --num_workers=1 --experiment=FlyBy --viz --eval --batched_sampling=True
+```
+
+- Upload a model to the hub:
+```shell
+gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_FlyBy/bin/FlyBy.x86_64 --num_workers=1 --experiment=FlyBy --viz --eval --batched_sampling=True --speedup=8 --push_to_hub --hf_repository=<HF_USERNAME>/sample_factory_FlyBy --max_num_frames=10000
+```
+
+## JumperHard
+#### Stable Baselines 3: (TODO)
+#### Sample-factory:
+- Train a model from scratch
+```shell
+gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_JumperHard/bin/JumperHard.x86_64 --num_workers=10 --experiment=JumperHard01 --viz --batched_sampling=True --speedup=8
+```
+
+- Download a pretrained checkpoint from the HF hub:
+```shell
+python -m sample_factory.huggingface.load_from_hub -r edbeeching/sample_factory_JumperHard
+```
+- Visualize a trained model:
+gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_JumperHard/bin/JumperHard.x86_64 --num_workers=1 --experiment=JumperHard --viz --eval --batched_sampling=True
+- Upload a model to the hub:
+```shell
+gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_JumperHard/bin/JumperHard.x86_64 --num_workers=1 --experiment=JumperHard --viz --eval --batched_sampling=True --speedup=8 --push_to_hub --hf_repository=<HF_USERNAME>/sample_factory_JumperHard --max_num_frames=10000
+```
+## Advanced Environments
+We highly recommend training these environments on a compute cluster. As they take several hours / GPUs to converge to a decent policy.
+### Racer
+#### Stable Baselines 3: (TODO)
+#### Sample-factory:
+- Train a model from scratch
+- Download a pretrained checkpoint from the HF hub:
+- Visualize a trained model:
+### Team FPS (experimental)
+#### Stable Baselines 3: (TODO)
+#### Sample-factory:
+- Train a model from scratch
+```shell
+gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_FPS/bin/FPS.x86_64 --num_workers=10 --experiment=FPS --viz --batched_sampling=True --speedup=8 --num_workers=80 --batched_sampling=False --num_policies=4 --with_pbt=True --pbt_period_env_steps=1000000 --pbt_start_mutation=1000000 --batch_size=2048 --num_batches_per_epoch=2 --num_epochs=2 --learning_rate=0.00005 --exploration_loss_coef=0.001 --lr_schedule=kl_adaptive_epoch --lr_schedule_kl_threshold=0.08 --use_rnn=True --recurrence=32
+```
+- Download a pretrained checkpoint from the HF hub:
+```shell
+python -m sample_factory.huggingface.load_from_hub -r edbeeching/sample_factory_FPS
+```
+- Visualize a trained model:
+gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_FPS/bin/FPS.x86_64 --num_workers=1 --experiment=FPS --viz --eval --batched_sampling=True
+
+- Upload a model to the hub:
+```shell
+gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_FPS/bin/FPS.x86_64 --num_workers=1 --experiment=FPS --viz --eval --batched_sampling=True --speedup=8 --push_to_hub --hf_repository=<HF_USERNAME>/sample_factory_FPS_ --max_num_frames=10000
+```
+
+More details about the environments can be found in [Example environments](docs/EXAMPLE_ENVIRONMENTS.md)
+
+## Training on a cluster
+The above training commands should all work on a headless cluster, just remove the ```--viz``` flag.
+
+## Downloading the Godot Editor
+The Godot 4 Game Engine is lightweight at around 50 MB, you can find the beta version on their [website](https://godotengine.org/).
+Alternatively you can download the version used to create these environments (Godot 4 Beta 4) using the command:
+```gdrl.download_editor```
+The should work on Linux, Mac and Windows. But has not been extensively tested.
+## Running Environments in the Editor
+Godot RL Agents envs can be run interactively in the editor, for easy debugging and testing of new ideas.
+The folling command will attempt to connect to an editor and step through 1000 random actions.
+```
+gdrl.interactive
+```
+
+### Creating custom environments (Doc is WIP, raise an issue if anything is unclear)
 Once you have studied the example environments, you can follow the instructions in [Custom environments](docs/CUSTOM_ENV.md) in order to make your own. 
+
 ### Roadmap
-We have number features that will soon be available in versions 0.2.0 and 0.3.0. 
+We have number features that will soon be available in versions 0.4.0
 Refer to the [Roadmap](docs/ROADMAP.md) for more information.
 
 
@@ -65,12 +186,24 @@ Refer to the [Roadmap](docs/ROADMAP.md) for more information.
 3. Can you help with my game project? 
    If the game example do not provide enough information, reach out to us on github and we may be able to provide some advice.
 4. How similar is this tool to Unity ML agents?
-   We are inspired by the the Unity ML agents toolkit and make no effort to hide it.
+   We are inspired by the the Unity ML agents toolkit and aims to be a more compact, concise ad hackable codebase, with little abstraction.
 
 ### Licence
 Godot RL Agents is MIT licensed. See the [LICENSE file](LICENSE) for details.
 
 "Cartoon Plane" (https://skfb.ly/UOLT) by antonmoek is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+### Citing Godot RL Agents
+```
+@article{beeching2021godotrlagents,
+  author={Beeching, Edward and Dibangoye, Jilles and 
+    Simonin, Olivier and Wolf, Christian},
+title = {Godot Reinforcement Learning Agents},
+journal = {{arXiv preprint arXiv:2112.03636.},
+year = {2021}, 
+}
+```
+
 ### Acknowledgments
 We thank the authors of the Godot Engine for providing such a powerful and flexible game engine for AI agent development.
 We thank the developers at Ray and Stable baselines for creating easy to use and powerful RL training frameworks.
