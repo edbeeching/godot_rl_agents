@@ -57,7 +57,7 @@ chmod +x examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64
 https://user-images.githubusercontent.com/7275864/209159206-a7896103-5492-4a62-8a2f-bad1e3741dae.mp4
 #### Stable Baselines 3: (TODO)
 #### Sample Factory:
-- Train a model from scratch
+- Train a model from scratch:
 ```shell
 gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_BallChase/bin/BallChase.x86_64 --num_workers=10 --experiment=BallChase --viz  --speedup=8 --batched_sampling=True
 ```
@@ -76,7 +76,7 @@ gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_BallChase/bin/BallChas
 python -m sample_factory.huggingface.load_from_hub -r edbeeching/sample_factory_BallChase
 ``` 
 
--Uploading a model to the hub:
+- Upload a model to the hub:
 
 ```shell 
 gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_BallChase/bin/BallChase.x86_64 --num_workers=1 --experiment=BallChase --viz --eval --batched_sampling=True --speedup=8 --push_to_hub --hf_repository=<HF_USERNAME>/sample_factory_BallChase
@@ -86,7 +86,7 @@ gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_BallChase/bin/BallChas
 https://user-images.githubusercontent.com/7275864/209160025-0781537e-ff37-427d-bb32-753299b30510.mp4
 #### Stable Baselines 3: (TODO)
 #### Sample-factory:
-- Train a model from scratch
+- Train a model from scratch:
 ```shell
 gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_FlyBy/bin/FlyBy.x86_64 --num_workers=10 --experiment=FlyBy --viz --speedup=8 --batched_sampling=True
 ```
@@ -109,7 +109,7 @@ gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_FlyBy/bin/FlyBy.x86_64
 https://user-images.githubusercontent.com/7275864/209160056-b96ed6f4-3b8b-467a-997d-7e4833e99025.mp4
 #### Stable Baselines 3: (TODO)
 #### Sample-factory:
-- Train a model from scratch
+- Train a model from scratch:
 ```shell
 gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_JumperHard/bin/JumperHard.x86_64 --num_workers=10 --experiment=JumperHard01 --viz --batched_sampling=True --speedup=8
 ```
@@ -126,10 +126,10 @@ gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_JumperHard/bin/JumperH
 ```
 ## Advanced Environments
 We highly recommend training these environments on a compute cluster. As they take several hours / GPUs to converge to a decent policy.
-### Racer
+### Racer (TODO)
 #### Stable Baselines 3: (TODO)
 #### Sample-factory:
-- Train a model from scratch
+- Train a model from scratch:
 - Download a pretrained checkpoint from the HF hub:
 - Visualize a trained model:
 ### Team FPS (experimental)
@@ -145,7 +145,9 @@ gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_FPS/bin/FPS.x86_64 --n
 python -m sample_factory.huggingface.load_from_hub -r edbeeching/sample_factory_FPS
 ```
 - Visualize a trained model:
+```shell
 gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_FPS/bin/FPS.x86_64 --num_workers=1 --experiment=FPS --viz --eval --batched_sampling=True
+```
 
 - Upload a model to the hub:
 ```shell
