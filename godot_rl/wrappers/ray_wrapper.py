@@ -39,14 +39,15 @@ class RayVectorGodotEnv(VectorEnv):
         )
 
     def vector_reset(self) -> List[EnvObsType]:
-        return self._env.reset()
+        obs, info = self._env.reset()
+        return obs
 
     def vector_step(
         self, actions: List[EnvActionType]
     ) -> Tuple[List[EnvObsType], List[float], List[bool], List[EnvInfoDict]]:
         actions = np.array(actions)
-        self.obs, reward, done, info = self._env.step(actions)
-        return self.obs, reward, done, info
+        self.obs, reward, term, trunc, info = self._env.step(actions, order_ij=True)
+        return self.obs, reward, term, info
 
     def get_unwrapped(self):
         return [self._env]
