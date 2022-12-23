@@ -44,7 +44,7 @@ If you are having issues with the installation, please refer to our FAQ section 
 
 
 ## Examples
-We have created 5 examples of varying complexity. All environments are hosted in separate repo and can be downloaded with
+We have created 5 examples of varying complexity. All environments are hosted in [separate repo](https://github.com/edbeeching/godot_rl_agents_examples) and can be downloaded with:
 ```shell
 gdrl.env_from_hub -r edbeeching/godot_rl_<ENV_NAME>
 ```
