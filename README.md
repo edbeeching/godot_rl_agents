@@ -126,12 +126,27 @@ gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_JumperHard/bin/JumperH
 ```
 ## Advanced Environments
 We highly recommend training these environments on a compute cluster. As they take several hours / GPUs to converge to a decent policy.
-### Racer (TODO)
+### Racer
+https://user-images.githubusercontent.com/7275864/209358492-e0964b51-269b-4106-9b7d-a7b3729217b0.mp4
 #### Stable Baselines 3: (TODO)
 #### Sample-factory:
 - Train a model from scratch:
+```shell
+gdrl--trainer=sf --env=gdrl --env_path=examples/godot_rl_Racer/bin/Racer.x86_64 --train_for_env_steps=10000000 --experiment=Racer --reward_scale=0.01 --worker_num_splits=2 --num_envs_per_worker=2 --num_workers=40 --speedup=8 --batched_sampling=True --batch_size=2048 --num_batches_per_epoch=2 --num_epochs=2  --learning_rate=0.0001 --exploration_loss_coef=0.0001 --lr_schedule=kl_adaptive_epoch --lr_schedule_kl_threshold=0.04 --use_rnn=True --recurrence=32
+```
 - Download a pretrained checkpoint from the HF hub:
+```shell
+python -m sample_factory.huggingface.load_from_hub -r edbeeching/sample_factory_FPS
+```
 - Visualize a trained model:
+```shell
+gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_Racer/bin/Racer.x86_64 --num_workers=1 --experiment=Racer --viz --eval --batched_sampling=True
+```
+- Upload a model to the hub:
+```shell
+gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_Racer/bin/Racer.x86_64 --num_workers=1 --experiment=Racer --viz --eval --batched_sampling=True --speedup=8 --push_to_hub --hf_repository=<HF_USERNAME>/sample_factory_Racer --max_num_frames=10000
+```
+
 ### Team FPS (experimental)
 https://user-images.githubusercontent.com/7275864/209160117-cd95fa6b-67a0-40af-9d89-ea324b301795.mp4
 #### Stable Baselines 3: (TODO)
@@ -151,7 +166,7 @@ gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_FPS/bin/FPS.x86_64 --n
 
 - Upload a model to the hub:
 ```shell
-gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_FPS/bin/FPS.x86_64 --num_workers=1 --experiment=FPS --viz --eval --batched_sampling=True --speedup=8 --push_to_hub --hf_repository=<HF_USERNAME>/sample_factory_FPS_ --max_num_frames=10000
+gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_FPS/bin/FPS.x86_64 --num_workers=1 --experiment=FPS --viz --eval --batched_sampling=True --speedup=8 --push_to_hub --hf_repository=<HF_USERNAME>/sample_factory_FPS --max_num_frames=10000
 ```
 
 More details about the environments can be found in [Example environments](docs/EXAMPLE_ENVIRONMENTS.md)
