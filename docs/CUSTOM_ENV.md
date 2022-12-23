@@ -12,7 +12,17 @@ Before following any instructions, create your primary game scene (without the m
 To interface between the Godot game executable or editor we have implemented a small plugin which is located in the plugin/addons/godot_rl_agents directory. Copy the plugin directory to your addons directory within your game project. For more infomation on plugins see this [page](https://docs.godotengine.org/en/stable/tutorials/plugins/editor/installing_plugins.html).
 
 Once the plugin is installed, a new node is available called "sync" which you will need to attach to the root node of you scene.
+
+
+### Adding sensors to your agent
+We provide a number of sensors nodes that can be added to your agent called RayCastSensor2D and RayCastSensor3D. The videos below show an overview.
+
+https://user-images.githubusercontent.com/7275864/209363084-f91b2fcb-2042-494c-9c62-53eb4954d62b.mp4
+
+https://user-images.githubusercontent.com/7275864/209363098-a6bee0a6-dc85-4b8d-b69a-d747bcf39635.mp4
+
 ### Interaction between Python and Godot
+The most up to date example is the FPS example, which contains a separate AIControll node (attached to the player) that handles the generation of observations.
 In the script for controlling the player, or another node if that is more convenient. The node that owns this script will need to be added to the group "AGENT". You will then need to add the following variables and functions:
 
 ```
