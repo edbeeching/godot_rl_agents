@@ -8,60 +8,74 @@ namespace GodotONNX{
 		
 		public static SessionOptions GetSessionOptions() {
 			options = new SessionOptions();
+			options.LogSeverityLevel = OrtLoggingLevel.ORT_LOGGING_LEVEL_WARNING; 
+			// see warnings
 			SystemCheck();
-		
 			return options;
 		}
 
-static public int SystemCheck()  //-1 CPU, 0 GPU, 1 DirectML, 2 CoreML
+static public void SystemCheck()  
 	{
 		//Most code for this function is verbose only, the only reason it exists is to track
-		//the implementation progress of the various compute APIs.
-		//Get OS Name
-		string OSName = OS.GetName();
-		//Get Compute API
-		int ComputeAPIID = ComputeCheck();
+		//implementation progress of the different compute APIs.
+
+		//December 2022: CUDA is not working. 
+
+		string OSName = OS.GetName(); //Get OS Name
+		int ComputeAPIID = ComputeCheck(); //Get Compute API
 		//TODO: Get CPU architecture
-		//
+
 		//Linux can use OpenVINO (C#) on x64 and ROCm on x86 (GDNative/C++)
+		//Windows can use OpenVINO (C#) on x64
+		//TODO: try TensorRT instead of CUDA
+		//TODO: Use OpenVINO for Intel Graphics
+		
 		string [] ComputeNames = {"CUDA", "DirectML/ROCm", "DirectML", "CoreML", "CPU"};
 		//match OS and Compute API
-		options.AppendExecutionProvider_CPU(0);
-		GD.Print("OS: " + OSName, "Compute API: " + ComputeAPIID);
-		if (ComputeAPIID == -1) return -1;
+		options.AppendExecutionProvider_CPU(0); // Always use CPU
+		GD.Print("OS: " + OSName, " | Compute API: " + ComputeNames[ComputeAPIID]);
 
-		switch (OSName) {
-		case "Windows": //Can use CUDA, DirectML, CPU
-			if (ComputeAPIID == 0) { //CUDA
-				options.AppendExecutionProvider_CUDA(0);
+		switch (OSName) 
+		{
+		case "Windows": //Can use CUDA, DirectML
+			if (ComputeAPIID == 0) 
+				{
+				//CUDA 
+				//options.AppendExecutionProvider_CUDA(0);
+				options.AppendExecutionProvider_DML(0);
 					}
-			else if (ComputeAPIID == 1) { //DirectML
+			else if (ComputeAPIID == 1) 
+				{ 
+				//DirectML
 				options.AppendExecutionProvider_DML(0);
 				}
 			break;
 		case "X11": //Can use CUDA, ROCm
-			if (ComputeAPIID == 0) { //CUDA
-				options.AppendExecutionProvider_CUDA(0);
+			if (ComputeAPIID == 0) 
+				{ 
+				//CUDA
+				//options.AppendExecutionProvider_CUDA(0);
 				}
-			if (ComputeAPIID == 1) { //ROCm, only works on x86 
+			if (ComputeAPIID == 1) 
+				{
+				//ROCm, only works on x86 
 				//Research indicates that this has to be compiled as a GDNative plugin
 				GD.Print("ROCm not supported yet, using CPU.");
 				options.AppendExecutionProvider_CPU(0);
-				return -1;
 				}
 			
 			break;
 		case "OSX": //Can use CoreML
 			if (ComputeAPIID == 0) { //CoreML
-				options.AppendExecutionProvider_CoreML(0);
-				return 2;
+			//TODO: Needs testing
+				options.AppendExecutionProvider_CoreML(0); 
+				//CoreML on ARM64, out of the box, on x64 needs .tar file from GitHub
 				}
 			break;
 		default:
 			GD.Print("OS not Supported.");
 			break;
 		}
-		return -1;
 	}
 	public static int ComputeCheck() 
 	{
