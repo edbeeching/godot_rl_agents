@@ -31,7 +31,7 @@ class GodotEnv:
         if env_path is None:
             port = GodotEnv.DEFAULT_PORT
         self.proc = None
-        if env_path is not None:
+        if env_path is not None and env_path != "debug":
             self.check_platform(env_path)
             self._launch_env(env_path, port, show_window, framerate, seed, action_repeat, speedup)
         else:
