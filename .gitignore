@@ -159,3 +159,5 @@ envs/example_envs/FlyBy/.godot
 editor/
 
 examples/godot_rl*
+
+runs/
