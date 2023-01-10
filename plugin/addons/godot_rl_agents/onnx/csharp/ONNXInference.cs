@@ -5,11 +5,15 @@ using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
 
 namespace GodotONNX{
-/// <include file='docs/ONNXInference.xml' path='docs/members[@name="ONNXInference"]/ONNXInference/*'/>
-public class ONNXInference : Node
+    /// <include file='docs/ONNXInference.xml' path='docs/members[@name="ONNXInference"]/ONNXInference/*'/>
+    public class ONNXInference : Node
 {
+		
 	private InferenceSession session;
-	public string modelPath;
+	/// <summary>
+	/// Path to the ONNX model. Use Initialize to change it. 
+	/// </summary>
+	private string modelPath;
 	private int batchSize;
 
 	private SessionOptions SessionOpt;
@@ -46,7 +50,7 @@ public class ONNXInference : Node
 			}; 
 		IReadOnlyCollection<string> outputNames = new List<string> { "output", "state_outs" }; //ONNX is sensible to these names, as well as the input names
 
-		IDisposableReadOnlyCollection<DisposableNamedOnnxValue> results = null;
+			IDisposableReadOnlyCollection<DisposableNamedOnnxValue> results;
 		
 		try{
 			results = session.Run(inputs, outputNames);
