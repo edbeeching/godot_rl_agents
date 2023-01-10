@@ -5,6 +5,7 @@ using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
 
 namespace GodotONNX{
+/// <include file='docs/ONNXInference.xml' path='docs/members[@name="ONNXInference"]/ONNXInference/*'/>
 public class ONNXInference : Node
 {
 	private InferenceSession session;
@@ -14,6 +15,7 @@ public class ONNXInference : Node
 	private SessionOptions SessionOpt;
 
 	//init function
+/// <include file='docs/ONNXInference.xml' path='docs/members[@name="ONNXInference"]/Initialize/*'/>
 	public void Initialize(string Path, int BatchSize)
 	{
 		modelPath = Path;
@@ -23,6 +25,7 @@ public class ONNXInference : Node
 		session = LoadModel(modelPath);
 
 	}
+/// <include file='docs/ONNXInference.xml' path='docs/members[@name="ONNXInference"]/Run/*'/>
 	public Godot.Collections.Dictionary<string, Godot.Collections.Array<float>> RunInference(Godot.Collections.Array<float> obs, int state_ins)
 	{
 		//Current model: Any (Godot Rl Agents)
@@ -74,6 +77,7 @@ public class ONNXInference : Node
 		//Output is a dictionary of arrays, ex: { "output" : [0.1, 0.2, 0.3, 0.4, ...], "state_outs" : [0.5, ...]}
 		return output;
 	}	
+/// <include file='docs/ONNXInference.xml' path='docs/members[@name="ONNXInference"]/Load/*'/>
 	public InferenceSession LoadModel(string Path) 
 	{
 		Godot.File file = new Godot.File();

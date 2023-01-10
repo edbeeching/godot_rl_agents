@@ -2,10 +2,13 @@ using Godot;
 using Microsoft.ML.OnnxRuntime;
 
 namespace GodotONNX{
+/// <include file='docs/SessionConfigurator.xml' path='docs/members[@name="SessionConfigurator"]/SessionConfigurator/*'/>
 
 	public static class SessionConfigurator {
+
 		private static SessionOptions options = new SessionOptions();
 		
+/// <include file='docs/SessionConfigurator.xml' path='docs/members[@name="SessionConfigurator"]/GetSessionOptions/*'/>
 		public static SessionOptions GetSessionOptions() {
 			options = new SessionOptions();
 			options.LogSeverityLevel = OrtLoggingLevel.ORT_LOGGING_LEVEL_WARNING; 
@@ -13,6 +16,7 @@ namespace GodotONNX{
 			SystemCheck();
 			return options;
 		}
+/// <include file='docs/SessionConfigurator.xml' path='docs/members[@name="SessionConfigurator"]/SystemCheck/*'/>
 
 static public void SystemCheck()  
 	{
@@ -77,6 +81,8 @@ static public void SystemCheck()
 			break;
 		}
 	}
+/// <include file='docs/SessionConfigurator.xml' path='docs/members[@name="SessionConfigurator"]/ComputeCheck/*'/>
+
 	public static int ComputeCheck() 
 	{
 	string adapterName = Godot.VisualServer.GetVideoAdapterName();
