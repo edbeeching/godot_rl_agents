@@ -157,7 +157,7 @@ class GodotEnv:
         if show_window == False:
             launch_cmd += " --disable-render-loop --headless"
         if framerate is not None:
-            launch_cmd += f" --fixed-fps={framerate}"
+            launch_cmd += f" --fixed-fps {framerate}"
         if action_repeat is not None:
             launch_cmd += f" --action_repeat={action_repeat}"
         if speedup is not None:
