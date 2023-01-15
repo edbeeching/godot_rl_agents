@@ -68,16 +68,11 @@ python -m sample_factory.huggingface.load_from_hub -r edbeeching/sample_factory_
 ```
 
 - Visualize a trained model:
-```
+```shell
 gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_BallChase/bin/BallChase.x86_64 --num_workers=1 --experiment=BallChase --viz --eval --batched_sampling=True
 ```
-- Load a pretrained checkpoint:
-```shell
-python -m sample_factory.huggingface.load_from_hub -r edbeeching/sample_factory_BallChase
-``` 
 
 - Upload a model to the hub:
-
 ```shell 
 gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_BallChase/bin/BallChase.x86_64 --num_workers=1 --experiment=BallChase --viz --eval --batched_sampling=True --speedup=8 --push_to_hub --hf_repository=<HF_USERNAME>/sample_factory_BallChase
 ```
@@ -90,12 +85,13 @@ https://user-images.githubusercontent.com/7275864/209160025-0781537e-ff37-427d-b
 ```shell
 gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_FlyBy/bin/FlyBy.x86_64 --num_workers=10 --experiment=FlyBy --viz --speedup=8 --batched_sampling=True
 ```
+
 - Download a pretrained checkpoint from the HF hub:
 ```shell
 python -m sample_factory.huggingface.load_from_hub -r edbeeching/sample_factory_FlyBy
 ``` 
-- Visualize a trained model:
 
+- Visualize a trained model:
 ```shell
 gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_FlyBy/bin/FlyBy.x86_64 --num_workers=1 --experiment=FlyBy --viz --eval --batched_sampling=True
 ```
@@ -118,8 +114,12 @@ gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_JumperHard/bin/JumperH
 ```shell
 python -m sample_factory.huggingface.load_from_hub -r edbeeching/sample_factory_JumperHard
 ```
+
 - Visualize a trained model:
+```shell
 gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_JumperHard/bin/JumperHard.x86_64 --num_workers=1 --experiment=JumperHard --viz --eval --batched_sampling=True
+```
+
 - Upload a model to the hub:
 ```shell
 gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_JumperHard/bin/JumperHard.x86_64 --num_workers=1 --experiment=JumperHard --viz --eval --batched_sampling=True --speedup=8 --push_to_hub --hf_repository=<HF_USERNAME>/sample_factory_JumperHard --max_num_frames=10000
@@ -134,14 +134,17 @@ https://user-images.githubusercontent.com/7275864/209358492-e0964b51-269b-4106-9
 ```shell
 gdrl--trainer=sf --env=gdrl --env_path=examples/godot_rl_Racer/bin/Racer.x86_64 --train_for_env_steps=10000000 --experiment=Racer --reward_scale=0.01 --worker_num_splits=2 --num_envs_per_worker=2 --num_workers=40 --speedup=8 --batched_sampling=True --batch_size=2048 --num_batches_per_epoch=2 --num_epochs=2  --learning_rate=0.0001 --exploration_loss_coef=0.0001 --lr_schedule=kl_adaptive_epoch --lr_schedule_kl_threshold=0.04 --use_rnn=True --recurrence=32
 ```
+
 - Download a pretrained checkpoint from the HF hub:
 ```shell
 python -m sample_factory.huggingface.load_from_hub -r edbeeching/sample_factory_FPS
 ```
+
 - Visualize a trained model:
 ```shell
 gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_Racer/bin/Racer.x86_64 --num_workers=1 --experiment=Racer --viz --eval --batched_sampling=True
 ```
+
 - Upload a model to the hub:
 ```shell
 gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_Racer/bin/Racer.x86_64 --num_workers=1 --experiment=Racer --viz --eval --batched_sampling=True --speedup=8 --push_to_hub --hf_repository=<HF_USERNAME>/sample_factory_Racer --max_num_frames=10000
@@ -155,10 +158,12 @@ https://user-images.githubusercontent.com/7275864/209160117-cd95fa6b-67a0-40af-9
 ```shell
 gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_FPS/bin/FPS.x86_64 --num_workers=10 --experiment=FPS --viz --batched_sampling=True --speedup=8 --num_workers=80 --batched_sampling=False --num_policies=4 --with_pbt=True --pbt_period_env_steps=1000000 --pbt_start_mutation=1000000 --batch_size=2048 --num_batches_per_epoch=2 --num_epochs=2 --learning_rate=0.00005 --exploration_loss_coef=0.001 --lr_schedule=kl_adaptive_epoch --lr_schedule_kl_threshold=0.08 --use_rnn=True --recurrence=32
 ```
+
 - Download a pretrained checkpoint from the HF hub:
 ```shell
 python -m sample_factory.huggingface.load_from_hub -r edbeeching/sample_factory_FPS
 ```
+
 - Visualize a trained model:
 ```shell
 gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_FPS/bin/FPS.x86_64 --num_workers=1 --experiment=FPS --viz --eval --batched_sampling=True
