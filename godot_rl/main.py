@@ -87,6 +87,12 @@ def get_args():
         type=int,
         help="whether to speed up the physics in the env",
     )
+    parser.add_argument(
+        "--iterations",
+        default=20000,
+        type=int,
+        help="How many iterations to run (For sb3)",
+    )
 
     return parser.parse_known_args()
 
