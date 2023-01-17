@@ -35,7 +35,7 @@ def parse_args():
         help="whether to capture videos of the agent performances (check out `videos` folder)")
 
     # Algorithm specific arguments
-    parser.add_argument("--env-id", type=str, default="examples/godot_rl_BallChase/bin/BallChase.x86_64",  #examples/godot_rl_BallChase/bin/BallChase.x86_64
+    parser.add_argument("--env-id", type=str, default="examples/godot_rl_JumperHard/bin/JumperHard.x86_64",  #examples/godot_rl_BallChase/bin/BallChase.x86_64
         help="the id of the environment")
     parser.add_argument("--total-timesteps", type=int, default=1000000,
         help="total timesteps of the experiments")
@@ -150,8 +150,9 @@ if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() and args.cuda else "cpu")
 
     # env setup
-    envs = env = CleanRLGodotEnv(env_path=args.env_id, show_window=True, speedup=8) # Godot envs are already vectorized
-    assert isinstance(envs.single_action_space, gym.spaces.Box), "only continuous action space is supported"
+    
+    envs = env = CleanRLGodotEnv(env_path=args.env_id, show_window=True, speedup=8, convert_action_space=True) # Godot envs are already vectorized
+    #assert isinstance(envs.single_action_space, gym.spaces.Box), "only continuous action space is supported"
     args.num_envs = envs.num_envs
     args.batch_size = int(args.num_envs * args.num_steps)
     args.minibatch_size = int(args.batch_size // args.num_minibatches)
