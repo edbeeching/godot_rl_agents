@@ -1,5 +1,5 @@
 import gym
-
+import numpy as np
 
 def lod_to_dol(lod):
     return {k: [dic[k] for dic in lod] for k in lod[0]}
@@ -63,11 +63,10 @@ class ActionSpaceProcessor():
                 counter += space.shape[0]
 
             elif isinstance(space, gym.spaces.Discrete):
-                if action[counter] > 0.0:
-                    original_action.append(1.0)
-                else:
-                    original_action.append(1.0)
-                counter += 1
+
+                discrete_actions = np.greater(action[:, counter],0.0)
+                discrete_actions = discrete_actions.astype(np.float32)
+                original_action.append(discrete_actions)
 
             else:
                 raise NotImplementedError
