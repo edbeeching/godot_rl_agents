@@ -6,9 +6,9 @@ from godot_rl.core.godot_env import GodotEnv
 
 
 class CleanRLGodotEnv:
-    def __init__(self, env_path=None, group_tuple_actions=False, **kwargs):
+    def __init__(self, env_path=None, group_tuple_actions=False, convert_action_space=False, **kwargs):
         # group_tuple_actions: combine multiple continue action spaces into one larger space 
-        self._env = GodotEnv(env_path=env_path, **kwargs)
+        self._env = GodotEnv(env_path=env_path,convert_action_space=convert_action_space, **kwargs)
         self._check_valid_action_space(group_tuple_actions)
         self._group_tuple_actions = group_tuple_actions
         
@@ -34,11 +34,11 @@ class CleanRLGodotEnv:
 
     @staticmethod
     def action_preprocessor(action):
-        return [action]
+        return action
 
     def step(self, action):
         action = self.action_preprocessor(action)
-        obs, reward, term, trunc, info = self._env.step(action, order_ij=True)
+        obs, reward, term, trunc, info = self._env.step(action)
         obs = lod_to_dol(obs)
         return np.stack(obs["obs"]), reward, term, trunc, info
 
@@ -54,7 +54,7 @@ class CleanRLGodotEnv:
     @property
     def single_action_space(self):
         if not self._group_tuple_actions:
-            return self._env.action_space[0]
+            return self._env.action_space
         
         # flatten the action space
         return self._flattened_action_space
