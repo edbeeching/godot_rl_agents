@@ -1,6 +1,6 @@
 
 # Godot RL Agents
-The Godot RL Agents is a fully Open Source package that allows video game creators, AI researchers and hobbyists the opportunity to learn complex behaviors for their Non Player Characters or agents. 
+Godot RL Agents is a fully Open Source package that allows video game creators, AI researchers and hobbyists the opportunity to learn complex behaviors for their Non Player Characters or agents. 
 This repository provides:
 * An interface between games created in the [Godot Engine](https://godotengine.org/) and Machine Learning algorithms running in Python
 * Wrappers for three well known rl frameworks: StableBaselines3, Sample Factory and [Ray RLLib](https://docs.ray.io/en/latest/rllib-algorithms.html)
