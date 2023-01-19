@@ -4,7 +4,7 @@ import os
 import random
 import time
 from distutils.util import strtobool
-
+from collections import deque
 import gym
 import numpy as np
 import torch
@@ -35,7 +35,7 @@ def parse_args():
         help="whether to capture videos of the agent performances (check out `videos` folder)")
 
     # Algorithm specific arguments
-    parser.add_argument("--env-id", type=str, default="examples/godot_rl_BallChase/bin/BallChase.x86_64",  #examples/godot_rl_BallChase/bin/BallChase.x86_64
+    parser.add_argument("--env-id", type=str, default="examples/godot_rl_JumperHard/bin/JumperHard.x86_64",  #examples/godot_rl_BallChase/bin/BallChase.x86_64
         help="the id of the environment")
     parser.add_argument("--total-timesteps", type=int, default=1000000,
         help="total timesteps of the experiments")
@@ -150,8 +150,9 @@ if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() and args.cuda else "cpu")
 
     # env setup
-    envs = env = CleanRLGodotEnv(env_path=args.env_id, show_window=True, speedup=8) # Godot envs are already vectorized
-    assert isinstance(envs.single_action_space, gym.spaces.Box), "only continuous action space is supported"
+    
+    envs = env = CleanRLGodotEnv(env_path=args.env_id, show_window=True, speedup=8, convert_action_space=True) # Godot envs are already vectorized
+    #assert isinstance(envs.single_action_space, gym.spaces.Box), "only continuous action space is supported"
     args.num_envs = envs.num_envs
     args.batch_size = int(args.num_envs * args.num_steps)
     args.minibatch_size = int(args.batch_size // args.num_minibatches)
@@ -174,6 +175,10 @@ if __name__ == "__main__":
     next_done = torch.zeros(args.num_envs).to(device)
     num_updates = args.total_timesteps // args.batch_size
     video_filenames = set()
+
+    # episode reward stats, modified as Godot RL does not return this information in info (yet)
+    episode_returns = deque(maxlen=20)
+    accum_rewards = np.zeros(args.num_envs)
 
     for update in range(1, num_updates + 1):
         # Annealing the rate if instructed to do so.
@@ -200,17 +205,12 @@ if __name__ == "__main__":
             rewards[step] = torch.tensor(reward).to(device).view(-1)
             next_obs, next_done = torch.Tensor(next_obs).to(device), torch.Tensor(done).to(device)
 
-            # Only print when at least 1 env is done
-            if "final_info" not in infos:
-                continue
-
-            for info in infos["final_info"]:
-                # Skip the envs that are not done
-                if info is None:
-                    continue
-                print(f"global_step={global_step}, episodic_return={info['episode']['r']}")
-                writer.add_scalar("charts/episodic_return", info["episode"]["r"], global_step)
-                writer.add_scalar("charts/episodic_length", info["episode"]["l"], global_step)
+            accum_rewards += np.array(reward)
+            
+            for i, d in enumerate(done):
+                if d:
+                    episode_returns.append(accum_rewards[i])
+                    accum_rewards[i] = 0
 
         # bootstrap value if not done
         with torch.no_grad():
@@ -304,14 +304,10 @@ if __name__ == "__main__":
         writer.add_scalar("losses/approx_kl", approx_kl.item(), global_step)
         writer.add_scalar("losses/clipfrac", np.mean(clipfracs), global_step)
         writer.add_scalar("losses/explained_variance", explained_var, global_step)
-        print("SPS:", int(global_step / (time.time() - start_time)))
-        writer.add_scalar("charts/SPS", int(global_step / (time.time() - start_time)), global_step)
-
-        if args.track and args.capture_video:
-            for filename in os.listdir(f"videos/{run_name}"):
-                if filename not in video_filenames and filename.endswith(".mp4"):
-                    wandb.log({f"videos": wandb.Video(f"videos/{run_name}/{filename}")})
-                    video_filenames.add(filename)
+        if len(episode_returns) > 0:
+            print("SPS:", int(global_step / (time.time() - start_time)), "Returns:", np.mean(np.array(episode_returns)))
+            writer.add_scalar("charts/SPS", int(global_step / (time.time() - start_time)), global_step)
+            writer.add_scalar("charts/episodic_return", np.mean(np.array(episode_returns)), global_step)
 
     envs.close()
     writer.close()

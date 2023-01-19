@@ -10,6 +10,8 @@ from sys import platform
 import numpy as np
 from gym import spaces
 
+from godot_rl.core.utils import ActionSpaceProcessor
+
 
 class GodotEnv:
     MAJOR_VERSION = "0"
@@ -25,7 +27,8 @@ class GodotEnv:
         seed=0,
         framerate=None,
         action_repeat=None,
-        speedup=None
+        speedup=None,
+        convert_action_space=False,
     ):
 
         if env_path is None:
@@ -42,6 +45,9 @@ class GodotEnv:
         self.num_envs = None
         self._handshake()
         self._get_env_info()
+        # sf2 requires a tuple action space
+        self._tuple_action_space = spaces.Tuple([v for _, v in self._action_space.items()])
+        self.action_space_processor = ActionSpaceProcessor(self._tuple_action_space, convert_action_space)
 
         atexit.register(self._close)
 
@@ -86,6 +92,7 @@ class GodotEnv:
         return result
 
     def step(self, action, order_ij=False):
+        action = self.action_space_processor.to_original_dist(action)
         message = {
             "type": "action",
             "action": self.from_numpy(action, order_ij=order_ij),
@@ -254,10 +261,8 @@ class GodotEnv:
 
     @property
     def action_space(self):
-        # sf2 requires a tuple obs space
-        tuple_action_space = spaces.Tuple([v for _, v in self._action_space.items()])
-        return tuple_action_space
-
+        return self.action_space_processor.action_space
+        
     @staticmethod
     def decode_2d_obs_from_string(
         hex_string,
