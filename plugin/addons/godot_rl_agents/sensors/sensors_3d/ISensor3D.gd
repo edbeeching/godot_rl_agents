@@ -1,7 +1,7 @@
 extends Spatial
 class_name ISensor3D
 
-var _obs = null
+var _obs : Array = []
 var _active := false
 
 func get_observation():
