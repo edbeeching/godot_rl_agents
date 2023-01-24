@@ -1,22 +1,14 @@
+import pathlib
 from typing import Callable, List, Optional, Tuple
 
-
 import numpy as np
-
-from ray.rllib.env.vector_env import VectorEnv
-from ray.rllib.utils.typing import (
-    EnvActionType,
-    EnvInfoDict,
-    EnvObsType,
-)
-from godot_rl_agents.core.godot_env import GodotEnv
-import pathlib
-#import PPOTrainer
-from ray.rllib.agents.ppo import PPOTrainer
 import ray
-from ray import tune
-
 import yaml
+from ray import tune
+from ray.rllib.env.vector_env import VectorEnv
+from ray.rllib.utils.typing import EnvActionType, EnvInfoDict, EnvObsType
+
+from godot_rl.core.godot_env import GodotEnv
 
 
 class RayVectorGodotEnv(VectorEnv):
@@ -47,14 +39,15 @@ class RayVectorGodotEnv(VectorEnv):
         )
 
     def vector_reset(self) -> List[EnvObsType]:
-        return self._env.reset()
+        obs, info = self._env.reset()
+        return obs
 
     def vector_step(
         self, actions: List[EnvActionType]
     ) -> Tuple[List[EnvObsType], List[float], List[bool], List[EnvInfoDict]]:
         actions = np.array(actions)
-        self.obs, reward, done, info = self._env.step(actions)
-        return self.obs, reward, done, info
+        self.obs, reward, term, trunc, info = self._env.step(actions, order_ij=True)
+        return self.obs, reward, term, info
 
     def get_unwrapped(self):
         return [self._env]
@@ -64,10 +57,22 @@ class RayVectorGodotEnv(VectorEnv):
         return self.obs[index]
 
 
-from godot_rl_agents.core.utils import register_env
+def register_env():
+    tune.register_env(
+        "godot",
+        lambda c: RayVectorGodotEnv(
+            env_path=c["env_path"],
+            config=c,
+            port=c.worker_index + GodotEnv.DEFAULT_PORT + 10,
+            show_window=c["show_window"],
+            framerate=c["framerate"],
+            seed=c.worker_index + c["seed"],
+            action_repeat=c["framerate"],
+        ),
+    )
 
 
-def rllib_training(args):
+def rllib_training(args, extras):
     ray.init()
 
     with open(args.config_file) as f:

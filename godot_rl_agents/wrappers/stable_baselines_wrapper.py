@@ -1,18 +1,39 @@
+import gym
+import numpy as np
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env.base_vec_env import VecEnv
 
-from godot_rl_agents.core.godot_env import GodotEnv
+from godot_rl.core.godot_env import GodotEnv
+from godot_rl.core.utils import lod_to_dol
 
 
 class StableBaselinesGodotEnv(VecEnv):
-    def __init__(self, port=10008, seed=0):
-        self.env = GodotEnv(port=port, seed=seed)
+    def __init__(self, env_path=None, **kwargs):
+        self.env = GodotEnv(env_path=env_path, **kwargs)
+        self._check_valid_action_space()
+
+    def _check_valid_action_space(self):
+        action_space = self.env.action_space
+        if isinstance(action_space, gym.spaces.Tuple):
+            assert (
+                len(action_space.spaces) == 1
+            ), f"sb3 supports a single action space, this env constains multiple spaces {action_space}"
+
+    def _to_tuple_action(self, action):
+        return [action]
 
     def step(self, action):
-        return self.env.step(action)
+        action = self._to_tuple_action(action)
+        obs, reward, term, trunc, info = self.env.step(action)
+        obs = lod_to_dol(obs)
+
+        return {k: np.array(v) for k, v in obs.items()}, np.array(reward), np.array(term), info
 
     def reset(self):
-        return self.env.reset()
+        obs, info = self.env.reset()
+        obs = lod_to_dol(obs)
+        obs = {k: np.array(v) for k, v in obs.items()}
+        return obs
 
     def close(self):
         self.env.close()
@@ -26,7 +47,8 @@ class StableBaselinesGodotEnv(VecEnv):
 
     @property
     def action_space(self):
-        return self.env.action_space
+        # sb3 is not compatible with tuple/dict action spaces
+        return self.env.action_space.spaces[0]
 
     @property
     def num_envs(self):
@@ -51,19 +73,12 @@ class StableBaselinesGodotEnv(VecEnv):
         raise NotImplementedError()
 
 
-def stable_baselines_training(args):
-    print(
-        "Stable-baselines3 is currently unsupported due to issue: https://github.com/DLR-RM/stable-baselines3/issues/731"
-    )
-    raise NotImplementedError
-
-
-if __name__ == "__main__":
-
-    env = StableBaselinesGodotEnv()
+def stable_baselines_training(args, extras):
+    # TODO: Add cla etc for sb3
+    env = StableBaselinesGodotEnv(env_path=args.env_path)
 
     model = PPO(
-        "MlpPolicy",
+        "MultiInputPolicy",
         env,
         ent_coef=0.0001,
         verbose=2,
@@ -71,5 +86,6 @@ if __name__ == "__main__":
         tensorboard_log="logs/log",
     )
     model.learn(20000)
+
     print("closing env")
     env.close()

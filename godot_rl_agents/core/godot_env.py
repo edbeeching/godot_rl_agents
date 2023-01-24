@@ -1,21 +1,21 @@
-import os
-import time
-import pathlib
-
-from sys import platform
-import subprocess
-import socket
+import atexit
 import json
-from urllib import response
+import os
+import pathlib
+import socket
+import subprocess
+import time
+from sys import platform
+
 import numpy as np
 from gym import spaces
-from ray.rllib.utils.spaces.repeated import Repeated
-import atexit
+
+from godot_rl.core.utils import ActionSpaceProcessor
 
 
 class GodotEnv:
     MAJOR_VERSION = "0"
-    MINOR_VERSION = "1"
+    MINOR_VERSION = "3"
     DEFAULT_PORT = 11008
     DEFAULT_TIMEOUT = 60
 
@@ -27,26 +27,27 @@ class GodotEnv:
         seed=0,
         framerate=None,
         action_repeat=None,
+        speedup=None,
+        convert_action_space=False,
     ):
 
         if env_path is None:
             port = GodotEnv.DEFAULT_PORT
         self.proc = None
-        if env_path is not None:
+        if env_path is not None and env_path != "debug":
             self.check_platform(env_path)
-            self._launch_env(
-                env_path, port, show_window, framerate, seed, action_repeat
-            )
+            self._launch_env(env_path, port, show_window, framerate, seed, action_repeat, speedup)
         else:
-            print(
-                "No game binary has been provided, please press PLAY in the Godot editor"
-            )
+            print("No game binary has been provided, please press PLAY in the Godot editor")
 
         self.port = port
         self.connection = self._start_server()
         self.num_envs = None
         self._handshake()
         self._get_env_info()
+        # sf2 requires a tuple action space
+        self._tuple_action_space = spaces.Tuple([v for _, v in self._action_space.items()])
+        self.action_space_processor = ActionSpaceProcessor(self._tuple_action_space, convert_action_space)
 
         atexit.register(self._close)
 
@@ -69,24 +70,32 @@ class GodotEnv:
 
         assert os.path.exists(filename)
 
-    def from_numpy(self, action):
+    def from_numpy(self, action, order_ij=False):
+        # handles dict to tuple actions
         result = []
 
-        for a in action:
-            d = {}
-            for k, v in a.items():
-                if isinstance(v, np.ndarray):
-                    d[k] = v.tolist()
-                else:
-                    d[k] = int(v)
-            result.append(d)
+        for i in range(self.num_envs):
+            env_action = {}
 
+            for j, k in enumerate(self._action_space.keys()):
+                if order_ij==True:
+                    v = action[i][j]
+                else:
+                    v = action[j][i]
+
+                if isinstance(v, np.ndarray):
+                    env_action[k] = v.tolist()
+                else:
+                    env_action[k] = int(v)  # cannot serialize int32
+
+            result.append(env_action)
         return result
 
-    def step(self, action):
+    def step(self, action, order_ij=False):
+        action = self.action_space_processor.to_original_dist(action)
         message = {
             "type": "action",
-            "action": self.from_numpy(action),
+            "action": self.from_numpy(action, order_ij=order_ij),
         }
         self._send_as_json(message)
         response = self._get_json_dict()
@@ -97,6 +106,7 @@ class GodotEnv:
             response["obs"],
             response["reward"],
             np.array(response["done"]).tolist(),
+            np.array(response["done"]).tolist(),  # TODO update API to term, trunc
             [{}] * len(response["done"]),
         )
 
@@ -105,17 +115,11 @@ class GodotEnv:
         for k in response_obs[0].keys():
             if "2d" in k:
                 for sub in response_obs:
-                    sub[k] = self.decode_2d_obs_from_string(
-                        sub[k], self.observation_space[k].shape
-                    )
+                    sub[k] = self.decode_2d_obs_from_string(sub[k], self.observation_space[k].shape)
 
         return response_obs
 
-    def reset(self):
-        # may need to clear message buffer
-        # there will be a the next obs to collect
-        # _ = self._get_json_dict()
-        # self._clear_socket()
+    def reset(self, seed=None):
         message = {
             "type": "reset",
         }
@@ -123,8 +127,8 @@ class GodotEnv:
         response = self._get_json_dict()
         response["obs"] = self._process_obs(response["obs"])
         assert response["type"] == "reset"
-        obs = np.array(response["obs"])
-        return obs
+        obs = response["obs"]
+        return obs, {}
 
     def call(self, method):
         message = {
@@ -153,16 +157,18 @@ class GodotEnv:
         print("exit was not clean, using atexit to close env")
         self.close()
 
-    def _launch_env(self, env_path, port, show_window, framerate, seed, action_repeat):
+    def _launch_env(self, env_path, port, show_window, framerate, seed, action_repeat, speedup):
         # --fixed-fps {framerate}
         launch_cmd = f"{env_path} --port={port} --env_seed={seed}"
 
         if show_window == False:
-            launch_cmd += " --disable-render-loop --no-window"
+            launch_cmd += " --disable-render-loop --headless"
         if framerate is not None:
             launch_cmd += f" --fixed-fps {framerate}"
         if action_repeat is not None:
-            launch_cmd += f" --action_repeat {action_repeat}"
+            launch_cmd += f" --action_repeat={action_repeat}"
+        if speedup is not None:
+            launch_cmd += f" --speedup={speedup}"
 
         launch_cmd = launch_cmd.split(" ")
         self.proc = subprocess.Popen(
@@ -177,6 +183,7 @@ class GodotEnv:
 
         print(f"waiting for remote GODOT connection on port {self.port}")
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
         # Bind the socket to the port, "localhost" was not working on windows VM, had to use the IP
         server_address = ("127.0.0.1", self.port)
@@ -219,7 +226,7 @@ class GodotEnv:
             else:
                 print(f"action space {v['action_type']} is not supported")
                 assert 0, f"action space {v['action_type']} is not supported"
-        self.action_space = spaces.Dict(action_spaces)
+        self._action_space = spaces.Dict(action_spaces)
 
         observation_spaces = {}
         print("observation space", json_dict["observation_space"])
@@ -233,18 +240,18 @@ class GodotEnv:
                 )
             elif v["space"] == "discrete":
                 observation_spaces[k] = spaces.Discrete(v["size"])
-            elif v["space"] == "repeated":
-                assert "max_length" in v
-                if v["subspace"] == "box":
-                    subspace = observation_spaces[k] = spaces.Box(
-                        low=-1.0,
-                        high=1.0,
-                        shape=v["size"],
-                        dtype=np.float32,
-                    )
-                elif v["subspace"] == "discrete":
-                    subspace = spaces.Discrete(v["size"])
-                observation_spaces[k] = Repeated(subspace, v["max_length"])
+            # elif v["space"] == "repeated": TODO: Add repeated spaces back when we have support and a good example
+            #     assert "max_length" in v
+            #     if v["subspace"] == "box":
+            #         subspace = observation_spaces[k] = spaces.Box(
+            #             low=-1.0,
+            #             high=1.0,
+            #             shape=v["size"],
+            #             dtype=np.float32,
+            #         )
+            #     elif v["subspace"] == "discrete":
+            #         subspace = spaces.Discrete(v["size"])
+            #     observation_spaces[k] = Repeated(subspace, v["max_length"])
             else:
                 print(f"observation space {v['space']} is not supported")
                 assert 0, f"observation space {v['space']} is not supported"
@@ -252,6 +259,10 @@ class GodotEnv:
 
         self.num_envs = json_dict["n_agents"]
 
+    @property
+    def action_space(self):
+        return self.action_space_processor.action_space
+        
     @staticmethod
     def decode_2d_obs_from_string(
         hex_string,
@@ -295,9 +306,7 @@ class GodotEnv:
                 return self._get_data()
             length = int.from_bytes(data, "little")
             string = ""
-            while (
-                len(string) != length
-            ):  # TODO: refactor as string concatenation could be slow
+            while len(string) != length:  # TODO: refactor as string concatenation could be slow
                 string += self.connection.recv(length).decode()
 
             return string
@@ -314,22 +323,19 @@ class GodotEnv:
         self._send_string(action)
 
 
-if __name__ == "__main__":
-    import matplotlib.pyplot as plt
 
+def interactive():
     env = GodotEnv()
     print("observation space", env.observation_space)
     print("action space", env.action_space)
+
     obs = env.reset()
-
     for i in range(1000):
-
-        # env.reset()
-        obs, reward, done, info = env.step(
-            [env.action_space.sample() for _ in range(env.num_envs)]
-        )
-        # print(obs, done)
-        # plt.imshow(obs[0]["camera_2d"][:, :, :3])
-        # plt.show()
-        # print(obs)
+        action = [env.action_space.sample() for _ in range(env.num_envs)]
+        action = list(zip(*action))
+        
+        obs, reward, term, trunc, info = env.step(action)
     env.close()
+
+if __name__ == "__main__":
+    interactive()
