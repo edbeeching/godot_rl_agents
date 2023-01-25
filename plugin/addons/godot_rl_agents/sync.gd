@@ -15,7 +15,7 @@ var message_center
 var should_connect = true
 var agents
 var need_to_send_obs = false
-var args = null
+var args = {}
 onready var start_time = OS.get_ticks_msec()
 var initialized = false
 var just_reset = false
@@ -117,7 +117,7 @@ func _get_args():
 
 func _get_speedup():
 	print(args)
-	return args.get("speedup", str(speed_up)).to_int()
+	return int(args.get("speedup", speed_up))
 
 func _get_port():	
 	return int(args.get("port", DEFAULT_PORT))
@@ -135,9 +135,9 @@ func disconnect_from_server():
 
 func _initialize():
 	_get_agents()
-	Engine.physics_ticks_per_second = _get_speedup() * 60 # Replace with function body.
+	Engine.iterations_per_second = _get_speedup() * 60 # Replace with function body.
 	Engine.time_scale = _get_speedup() * 1.0
-	prints("physics ticks", Engine.physics_ticks_per_second, Engine.time_scale, _get_speedup(), speed_up)
+	prints("physics ticks", Engine.iterations_per_second, Engine.time_scale, _get_speedup(), speed_up)
 	
 	args = _get_args()
 	connected = connect_to_server()
