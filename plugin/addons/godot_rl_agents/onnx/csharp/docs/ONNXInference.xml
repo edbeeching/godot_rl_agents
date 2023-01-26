@@ -1,0 +1,31 @@
+<docs>
+	<members name="ONNXInference">
+		<ONNXInference>
+			<summary>
+       		The main <c>ONNXInference</c> Class that handles the inference process.
+        	</summary>
+		</ONNXInference>
+   		<Initialize>
+        	<summary>
+			Starts the inference process. 
+			</summary>
+			<param name="Path">Path to the ONNX model, expects a path inside resources.</param>
+			<param name="BatchSize">How many observations will the model recieve.</param>
+		</Initialize>
+		<Run>
+			<summary>
+			Runs the given input through the model and returns the output.
+			</summary>
+			<param name="obs">Dictionary containing all observations.</param>
+			<param name="state_ins">How many different agents are creating these observations.</param>
+			<returns>A Dictionary of arrays, containing instructions based on the observations.</returns>
+		</Run>
+		<Load>
+			<summary>
+			Loads the given model into the inference process, using the best Execution provider available.
+			</summary>
+			<param name="Path">Path to the ONNX model, expects a path inside resources.</param>
+			<returns>InferenceSession ready to run.</returns>
+		</Load>
+	</members>
+</docs>

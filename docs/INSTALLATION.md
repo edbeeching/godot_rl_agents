@@ -35,5 +35,22 @@ conda install -c conda-forge brotlipy # this may we required on windows
 pip install .
 ```
 
+## ONNX Inferencing
+
+For exporting and testing your models, we provide a GDScript wrapper. This requires you to use Godot with C#, along with .NET. 
+To install all dependencies, open a console in your project's directory and run the following commands:
+```
+dotnet add package Microsoft.ML.OnnxRuntime #Compatible with any PC
+dotnet add package Microsoft.ML.OnnxRuntime.Gpu # for NVidia GPUs
+dotnet add package Microsoft.ML.OnnxRuntime.DirectML # for AMD GPUs, windows only
+dotnet add package System.Numerics.Tensors # Tensors
+
+```
+Comments in these commands are only for reference, you should be able to install them all.
+
+
+
+
+
 # After Installation
 We recommend taking a look at the examples in envs/example/envs, more details are found in the [example envs](docs/../EXAMPLE_ENVIRONMENTS.md) documentation.

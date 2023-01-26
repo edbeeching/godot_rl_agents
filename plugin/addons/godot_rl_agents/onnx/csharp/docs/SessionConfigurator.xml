@@ -1,0 +1,29 @@
+<docs>
+	<members name="SessionConfigurator">
+		<SessionConfigurator>
+			<summary>
+       		The main <c>SessionConfigurator</c> Class that handles the execution options and providers for the inference process.
+        	</summary>
+		</SessionConfigurator>
+  		<GetSessionOptions>
+    	    <summary>
+    	    Creates a SessionOptions with all available execution providers.
+    	    </summary>
+			<returns>SessionOptions with all available execution providers.</returns>
+    	</GetSessionOptions>
+    	<SystemCheck>
+        	<summary>
+        	Appends any execution provider available in the current system.  
+        	</summary>
+			<remarks>
+				This function is mainly verbose for tracking implementation progress of different compute APIs. 
+			</remarks>
+    	</SystemCheck>
+    	<ComputeCheck>
+        	<summary>
+        		Checks for available GPUs.
+        	</summary>
+			<returns>An integer identifier for each compute platform.</returns>
+    	</ComputeCheck>
+	</members>
+</docs>

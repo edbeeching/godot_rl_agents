@@ -145,6 +145,10 @@ envs/example_envs/SpaceShooter/.import
 envs/example_envs/FlyBy/assets/
 envs/example_envs/FlyBy/.import
 
+
+envs/example_envs/JumperHard/.mono/
+
 plugin/.mono/
 
 plugin/.import/
+
