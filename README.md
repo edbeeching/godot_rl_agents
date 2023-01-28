@@ -56,7 +56,7 @@ Note you may need to set execution permissions on the binary with:
 chmod +x examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64 
 ```
 
-Examples of training scripts can be found in the [examples directory](https://github.com/edbeeching/godot_rl_agents/tree/main/examples) of the github repo.
+Examples of training scripts can be found in the [examples directory](https://github.com/edbeeching/godot_rl_agents/tree/main/examples) of the github repo. Note some RL frameworks such as sb3 and StableBaseline3 do not support action spaces that combine discrete and continous actions, we provide a wrapper that converts these to continuous spaces with a threshold at 0. Sample Factory and rllib support mixed action spaces out of the box.
 
 ## Simple environments
 ### BallChase
