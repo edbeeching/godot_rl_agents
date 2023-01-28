@@ -47,7 +47,7 @@ If you are having issues with the installation, please refer to our FAQ section 
 
 
 ## Examples
-We have created 5 examples of varying complexity. All environments are hosted in [separate repo](https://github.com/edbeeching/godot_rl_agents_examples) and can be downloaded with:
+We have created 5 example environments of varying complexity. All environments are hosted in [separate repo](https://github.com/edbeeching/godot_rl_agents_examples) and can be downloaded with:
 ```shell
 gdrl.env_from_hub -r edbeeching/godot_rl_<ENV_NAME>
 ```
@@ -55,10 +55,20 @@ Note you may need to set execution permissions on the binary with:
 ```shell 
 chmod +x examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64 
 ```
+
+Examples of training scripts can be found in the [examples directory](https://github.com/edbeeching/godot_rl_agents/tree/main/examples) of the github repo.
+
 ## Simple environments
 ### BallChase
 https://user-images.githubusercontent.com/7275864/209159206-a7896103-5492-4a62-8a2f-bad1e3741dae.mp4
-#### Stable Baselines 3: (TODO)
+#### Stable Baselines 3:
+```shell
+python examples/stable_baselines3_example.py --env_path=examples/godot_rl_BallChase/bin/BallChase.x86_64 --speedup=8
+```
+#### Clean RL:
+```shell
+python examples/clean_rl_example.py --env_path=examples/godot_rl_BallChase/bin/BallChase.x86_64 --speedup=8
+```
 #### Sample Factory:
 - Train a model from scratch:
 ```shell
@@ -82,7 +92,16 @@ gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_BallChase/bin/BallChas
 
 ### FlyBy
 https://user-images.githubusercontent.com/7275864/209160025-0781537e-ff37-427d-bb32-753299b30510.mp4
-#### Stable Baselines 3: (TODO)
+
+#### Stable Baselines 3:
+```shell
+python examples/stable_baselines3_example.py --env_path=examples/godot_rl_FlyBy/bin/FlyBy.x86_64 --speedup=8
+```
+
+#### Clean RL:
+```shell
+python examples/clean_rl_example.py --env_path=examples/godot_rl_FlyBy/bin/FlyBy.x86_64 --speedup=8
+```
 #### Sample-factory:
 - Train a model from scratch:
 ```shell
@@ -106,7 +125,15 @@ gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_FlyBy/bin/FlyBy.x86_64
 
 ## JumperHard
 https://user-images.githubusercontent.com/7275864/209160056-b96ed6f4-3b8b-467a-997d-7e4833e99025.mp4
-#### Stable Baselines 3: (TODO)
+#### Stable Baselines 3:
+```shell
+python examples/stable_baselines3_example.py --env_path=examples/godot_rl_JumperHard/bin/JumperHard.x86_64 --speedup=8
+```
+
+#### Clean RL:
+```shell
+python examples/clean_rl_example.py --env_path=examples/godot_rl_JumperHard/bin/JumperHard.x86_64 --speedup=8
+```
 #### Sample-factory:
 - Train a model from scratch:
 ```shell
@@ -128,10 +155,18 @@ gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_JumperHard/bin/JumperH
 gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_JumperHard/bin/JumperHard.x86_64 --num_workers=1 --experiment=JumperHard --viz --eval --batched_sampling=True --speedup=8 --push_to_hub --hf_repository=<HF_USERNAME>/sample_factory_JumperHard --max_num_frames=10000
 ```
 ## Advanced Environments
-We highly recommend training these environments on a compute cluster. As they take several hours / GPUs to converge to a decent policy.
+We highly recommend training these environments on a compute cluster. As they take several hours / GPUs to converge to a decent policy. Note these environments have only been tested with Sample Factory, it unlikely you will get good performance in the FPS environment with other RL frameworks other that sample factory or rllib.
 ### Racer
 https://user-images.githubusercontent.com/7275864/209358492-e0964b51-269b-4106-9b7d-a7b3729217b0.mp4
-#### Stable Baselines 3: (TODO)
+#### Stable Baselines 3: 
+```shell
+python examples/stable_baselines3_example.py --env_path=examples/godot_rl_Racer/bin/Racer.x86_64 --speedup=8
+```
+
+#### Clean RL:
+```shell
+python examples/clean_rl_example.py --env_path=examples/godot_rl_Racer/bin/Racer.x86_64 --speedup=8
+```
 #### Sample-factory:
 - Train a model from scratch:
 ```shell
@@ -155,7 +190,7 @@ gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_Racer/bin/Racer.x86_64
 
 ### Team FPS (experimental)
 https://user-images.githubusercontent.com/7275864/209160117-cd95fa6b-67a0-40af-9d89-ea324b301795.mp4
-#### Stable Baselines 3: (TODO)
+
 #### Sample-factory:
 - Train a model from scratch
 ```shell
