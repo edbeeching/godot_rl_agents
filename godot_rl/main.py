@@ -87,6 +87,12 @@ def get_args():
         type=int,
         help="whether to speed up the physics in the env",
     )
+    parser.add_argument(
+        "--export",
+        default=False,
+        action="store_true",
+        help="wheter to export the model"
+    )
 
     return parser.parse_known_args()
 
