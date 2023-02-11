@@ -1,4 +1,4 @@
-# aCustom Environment Creation
+# Custom Environment Creation
 
 **NOTE:** These instructions will be subject to large improvements based on the community feedback. If any aspect is not clear or you struggle at all, please raise an issue on github and we will try to improve it.
 
