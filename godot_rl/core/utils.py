@@ -21,26 +21,28 @@ class ActionSpaceProcessor():
         self._convert = convert
 
         space_size = 0
-        if isinstance(action_space, gym.spaces.Tuple):
-            
-            for space in action_space.spaces:
-                if isinstance(space, gym.spaces.Box):
-                    assert len(space.shape) ==1
-                    space_size += space.shape[0]
-                elif isinstance(space, gym.spaces.Discrete):
-                    if space.n > 2:
-                        # for not only binary actions are supported, need to add support for the n>2 case
-                        raise NotImplementedError
-                    space_size += 1
-                else:
-                    raise NotImplementedError
-        elif isinstance(action_space, gym.spaces.Dict):
-            raise NotImplementedError
-        else:
-            assert isinstance(space, [gym.spaces.Box, gym.spaces.Discrete])
-            return 
 
-        self.converted_action_space = gym.spaces.Box(-1,1, shape=[space_size])
+        if convert:
+            if isinstance(action_space, gym.spaces.Tuple):
+                
+                for space in action_space.spaces:
+                    if isinstance(space, gym.spaces.Box):
+                        assert len(space.shape) ==1
+                        space_size += space.shape[0]
+                    elif isinstance(space, gym.spaces.Discrete):
+                        if space.n > 2:
+                            # for now only binary actions are supported, need to add support for the n>2 case
+                            raise NotImplementedError
+                        space_size += 1
+                    else:
+                        raise NotImplementedError
+            elif isinstance(action_space, gym.spaces.Dict):
+                raise NotImplementedError
+            else:
+                assert isinstance(space, [gym.spaces.Box, gym.spaces.Discrete])
+                return 
+
+            self.converted_action_space = gym.spaces.Box(-1,1, shape=[space_size])
 
     @property
     def action_space(self):
