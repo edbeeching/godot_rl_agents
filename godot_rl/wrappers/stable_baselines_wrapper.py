@@ -19,11 +19,7 @@ class StableBaselinesGodotEnv(VecEnv):
                 len(action_space.spaces) == 1
             ), f"sb3 supports a single action space, this env constains multiple spaces {action_space}"
 
-    def _to_tuple_action(self, action):
-        return [action]
-
     def step(self, action):
-        action = self._to_tuple_action(action)
         obs, reward, term, trunc, info = self.env.step(action)
         obs = lod_to_dol(obs)
 
@@ -48,7 +44,7 @@ class StableBaselinesGodotEnv(VecEnv):
     @property
     def action_space(self):
         # sb3 is not compatible with tuple/dict action spaces
-        return self.env.action_space.spaces[0]
+        return self.env.action_space
 
     @property
     def num_envs(self):
