@@ -56,7 +56,7 @@ class GodotEnv:
         if platform == "linux" or platform == "linux2":
             assert (
                 pathlib.Path(filename).suffix == ".x86_64"
-            ), f"incorrect file suffix for fileman {filename} suffix {pathlib.Path(filename).suffix }"
+            ), f"incorrect file suffix for filename {filename} suffix {pathlib.Path(filename).suffix }"
         elif platform == "darwin":
             assert 0, "mac is not supported, yet"
             # OS X
@@ -64,7 +64,7 @@ class GodotEnv:
             # Windows...
             assert (
                 pathlib.Path(filename).suffix == ".exe"
-            ), f"incorrect file suffix for fileman {filename} suffix {pathlib.Path(filename).suffix }"
+            ), f"incorrect file suffix for filename {filename} suffix {pathlib.Path(filename).suffix }"
         else:
             assert 0, f"unknown filetype {pathlib.Path(filename).suffix}"
 
