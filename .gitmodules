@@ -1,0 +1,3 @@
+[submodule "godot_rl_agents_plugin"] 
+  path = godot_rl_agents_plugin 
+  url = git@github.com:edbeeching/godot_rl_agents_plugin.git
