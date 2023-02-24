@@ -10,7 +10,7 @@ from sys import platform
 import numpy as np
 from gym import spaces
 
-from godot_rl.core.utils import ActionSpaceProcessor
+from godot_rl.core.utils import ActionSpaceProcessor, convert_macos_path
 
 
 class GodotEnv:
@@ -54,17 +54,20 @@ class GodotEnv:
     def check_platform(self, filename: str):
 
         if platform == "linux" or platform == "linux2":
+            # Linux
             assert (
                 pathlib.Path(filename).suffix == ".x86_64"
-            ), f"incorrect file suffix for fileman {filename} suffix {pathlib.Path(filename).suffix }"
+            ), f"Incorrect file suffix for filename {filename} suffix {pathlib.Path(filename).suffix }. Please provide a .x86_64 file"
         elif platform == "darwin":
-            assert 0, "mac is not supported, yet"
-            # OS X
+            # OSX
+            assert (
+                pathlib.Path(filename).suffix == ".app"
+            ), f"Incorrect file suffix for filename {filename} suffix {pathlib.Path(filename).suffix }. Please provide a .app file"
         elif platform == "win32":
             # Windows...
             assert (
                 pathlib.Path(filename).suffix == ".exe"
-            ), f"incorrect file suffix for fileman {filename} suffix {pathlib.Path(filename).suffix }"
+            ), f"Incorrect file suffix for filename {filename} suffix {pathlib.Path(filename).suffix }. Please provide a .exe file"
         else:
             assert 0, f"unknown filetype {pathlib.Path(filename).suffix}"
 
@@ -159,7 +162,9 @@ class GodotEnv:
 
     def _launch_env(self, env_path, port, show_window, framerate, seed, action_repeat, speedup):
         # --fixed-fps {framerate}
-        launch_cmd = f"{env_path} --port={port} --env_seed={seed}"
+        path = convert_macos_path(env_path) if platform == "darwin" else env_path
+
+        launch_cmd = f"{path} --port={port} --env_seed={seed}"
 
         if show_window == False:
             launch_cmd += " --disable-render-loop --headless"
