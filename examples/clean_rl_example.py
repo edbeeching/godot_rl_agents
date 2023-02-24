@@ -35,8 +35,10 @@ def parse_args():
         help="whether to capture videos of the agent performances (check out `videos` folder)")
 
     # Algorithm specific arguments
-    parser.add_argument("--env-id", type=str, default="examples/godot_rl_JumperHard/bin/JumperHard.x86_64",  #examples/godot_rl_BallChase/bin/BallChase.x86_64
+    parser.add_argument("--env_path", type=str, default="examples/godot_rl_JumperHard/bin/JumperHard.x86_64",  #examples/godot_rl_BallChase/bin/BallChase.x86_64
         help="the id of the environment")
+    parser.add_argument("--speedup", type=int, default=8,
+        help="the speedup of the godot environment")
     parser.add_argument("--total-timesteps", type=int, default=1000000,
         help="total timesteps of the experiments")
     parser.add_argument("--learning-rate", type=float, default=3e-4,
@@ -75,9 +77,9 @@ def parse_args():
     return args
 
 
-def make_env(env_id):
+def make_env(env_path, speedup):
     def thunk():
-        env = CleanRLGodotEnv(env_path=env_id, show_window=True, speedup=8)
+        env = CleanRLGodotEnv(env_path=env_path, show_window=True, speedup=speedup)
         return env
     return thunk
 
@@ -122,7 +124,7 @@ class Agent(nn.Module):
 
 if __name__ == "__main__":
     args = parse_args()
-    run_name = f"{args.env_id}__{args.exp_name}__{args.seed}__{int(time.time())}"
+    run_name = f"{args.env_path}__{args.exp_name}__{args.seed}__{int(time.time())}"
     if args.track:
         import wandb
 
@@ -151,7 +153,7 @@ if __name__ == "__main__":
 
     # env setup
     
-    envs = env = CleanRLGodotEnv(env_path=args.env_id, show_window=True, speedup=8, convert_action_space=True) # Godot envs are already vectorized
+    envs = env = CleanRLGodotEnv(env_path=args.env_path, show_window=True, speedup=args.speedup, convert_action_space=True) # Godot envs are already vectorized
     #assert isinstance(envs.single_action_space, gym.spaces.Box), "only continuous action space is supported"
     args.num_envs = envs.num_envs
     args.batch_size = int(args.num_envs * args.num_steps)
