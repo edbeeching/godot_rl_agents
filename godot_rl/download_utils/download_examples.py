@@ -25,13 +25,13 @@ def download_examples():
     wget.download(URL, out="")
     print()
     print(f"unzipping")
-    with ZipFile("main.zip", 'r') as zipObj:
+    with ZipFile(f"{BRANCH}.zip", 'r') as zipObj:
     # Extract all the contents of zip file in different directory
         zipObj.extractall('examples/')
     print(f"cleaning up")
-    os.remove("main.zip")
+    os.remove(f"{BRANCH}.zip")
     print(f"moving files")
-    for file in os.listdir("examples/godot_rl_agents_examples-main"):
-        shutil.move(f"examples/godot_rl_agents_examples-main/{file}", "examples")
-    os.rmdir("examples/godot_rl_agents_examples-main")
+    for file in os.listdir(f"examples/godot_rl_agents_examples-{BRANCH}"):
+        shutil.move(f"examples/godot_rl_agents_examples-{BRANCH}/{file}", "examples")
+    os.rmdir(f"examples/godot_rl_agents_examples-{BRANCH}")
     
