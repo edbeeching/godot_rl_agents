@@ -1,5 +1,6 @@
 import gym
 import numpy as np
+import re
 
 
 def lod_to_dol(lod):
@@ -9,6 +10,21 @@ def lod_to_dol(lod):
 def dol_to_lod(dol):
     return [dict(zip(dol, t)) for t in zip(*dol.values())]
 
+def convert_macos_path(env_path):
+    """
+    On MacOs the user is supposed to provide a application.app file to env_path.
+    However the actual binary is in application.app/Contents/Macos/application.
+    This helper function converts the path to the path of the actual binary.
+
+    Example input: ./Demo.app
+    Example output: ./Demo.app/Contents/Macos/Demo
+    """
+
+    filenames = re.findall(r'[^\/]+(?=\.)', env_path)
+    assert (
+        len(filenames) == 1
+    ), f"An error occured while converting the env path for MacOS."
+    return env_path + "/Contents/MacOS/" + filenames[0]
 
 class ActionSpaceProcessor:
     # can convert tuple action dists to a single continuous action distribution
