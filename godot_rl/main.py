@@ -93,6 +93,12 @@ def get_args():
         action="store_true",
         help="wheter to export the model"
     )
+    parser.add_argument(
+        "--num_gpus",
+        default=None,
+        type=int,
+        help="Number of GPUs to use [only for rllib]"
+    )
 
     return parser.parse_known_args()
 

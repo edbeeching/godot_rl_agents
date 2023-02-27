@@ -126,6 +126,9 @@ def rllib_training(args, extras):
         run_name = exp["algorithm"] + "/editor"
     print("run_name", run_name)
 
+    if args.num_gpus != None:
+        exp["config"]["num_gpus"] = args.num_gpus
+
     if args.env_path is None:
         print("SETTING WORKERS TO 1")
         exp["config"]["num_workers"] = 1
