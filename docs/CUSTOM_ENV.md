@@ -1,8 +1,11 @@
+# Creating Custom Environments with Godot RL Agents
+(please ensure you have install the library and have run the examples before following this tutorial)
+
 In this section, you will learn how to create a custom environment in the Godot Game Engine and then implement an AI controller that learns to play with Deep Reinforcement Learning. The example game we create today is simple, but shows off many of the features of the Godot Engine and the Godot RL Agents library. You can then dive into the examples for more complex environments and behaviors. 
 
 The environment we will be building today is called Ring Pong, the game of pong but the pitch is a ring and the paddle moves around the ring. The objective is to keep the ball bouncing inside the ring. The video below shows and example policy that has learned to play this game using Deep RL, you should achieve similar results by the end of this chapter.
 
-
+https://user-images.githubusercontent.com/7275864/222367265-b0ca1f91-3ae2-4f43-b775-d6ed1d7e2f0b.mp4
 
 ## Installing the Godot Game Engine
 
@@ -12,7 +15,7 @@ Godot Engine is a feature-packed, cross-platform game engine designed to create 
 
 While we will guide you through the steps to implement your agent, you may wish to learn more about the Godot Game Engine. Their [documentation](https://docs.godotengine.org/en/latest/index.html) is thorough, there are many tutorials on YouTube we would also recommend [GDQuest](https://www.gdquest.com/), [KidsCanCode](https://kidscancode.org/godot_recipes/4.x/) and [Bramwell](https://www.youtube.com/channel/UCczi7Aq_dTKrQPF5ZV5J3gg) as sources of information.
 
-In order to create games in Godot, you must first download the editor. The latest version of Godot RL Agents supports the recently released Godot 4.0. Available on the [Godot Website](https://godotengine.org/)
+In order to create games in Godot, you must first download the editor. The latest version of Godot RL Agents supports the recently released Godot 4.0. Available on the [Godot Website](https://godotengine.org/).
 
 ## Loading the starter project
 
