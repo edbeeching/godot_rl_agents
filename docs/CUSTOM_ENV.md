@@ -173,8 +173,17 @@ In this simple example, a reasonable policy is learned in several minutes. You m
 
 ![action_repeat](https://user-images.githubusercontent.com/7275864/222365882-0a9dba16-102c-4326-acb1-0448459ed884.png)
 
-Try setting this property up to 8 to speed up training. This can be a great benefit on more complex environments, like the multi-player FPS we will learn about in the next chapter.
+Try setting this property up to 8 to speed up training. This can be a great benefit on more complex environments, such as the FPS environment available in the examples.
+
+### Adding sensors to your agent  (Optional depending on your custom environment) 
+We provide a number of sensors nodes that can be added to your agent called RayCastSensor2D and RayCastSensor3D. The videos below show an overview.
+
+https://user-images.githubusercontent.com/7275864/209363084-f91b2fcb-2042-494c-9c62-53eb4954d62b.mp4
+
+https://user-images.githubusercontent.com/7275864/209363098-a6bee0a6-dc85-4b8d-b69a-d747bcf39635.mp4
 
 ## There’s more!
 
 We have only scratched the surface of what can be achieved with Godot RL Agents, the library includes custom sensors and cameras to enrich the information available to the agent. Take a look at the [examples](https://github.com/edbeeching/godot_rl_agents_examples) to find out more!
+
+
