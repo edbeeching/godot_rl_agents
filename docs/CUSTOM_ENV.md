@@ -2,7 +2,7 @@ In this section, you will learn how to create a custom environment in the Godot 
 
 The environment we will be building today is called Ring Pong, the game of pong but the pitch is a ring and the paddle moves around the ring. The objective is to keep the ball bouncing inside the ring. The video below shows and example policy that has learned to play this game using Deep RL, you should achieve similar results by the end of this chapter.
 
-[ring_pong_clean_rl.mkv](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/81e3b740-eb95-46af-866d-46e600e02a57/ring_pong_clean_rl.mkv)
+
 
 ## Installing the Godot Game Engine
 
@@ -33,25 +33,25 @@ The Godot RL Agents plugin can be installed from the Github repo or with the God
 
 First click on the AssetLib and search for “rl”
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/e1f6bdfe-c70b-4838-8d25-ce0dba15d267/Untitled.png)
+![addon](https://user-images.githubusercontent.com/7275864/222365663-c6d0527a-6099-48f4-a52a-5f164769705c.png)
 
 Then click on Godot RL Agents, click Download and unselect the LICIENSE and [README.md](http://README.md) files. Then click install.
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7a9824d3-d55e-40ed-8417-36e8c29e4736/Untitled.png)
+![addon_load](https://user-images.githubusercontent.com/7275864/222365688-81bb9ef8-fffe-4eda-b1a4-c05ca0a801c8.png)
 
 The Godot RL Agents plugin is now downloaded to your machine your machine. Now click on Project → Project settings and enable the addon:
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/770d20d1-9160-412a-be7f-7f07655ca68c/Untitled.png)
+![addon_enable](https://user-images.githubusercontent.com/7275864/222365708-7ff088c6-13c1-45a3-bc83-6b9075ef3430.png)
 
 ## Adding the AI controller
 
 We now want to add an AI controller to our game. Open the player.tscn scene, on the left you should see a hierarchy of nodes that looks like this:
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d13912a8-771b-4dec-8846-bfd4f3740d9c/Untitled.png)
+![ai_controller](https://user-images.githubusercontent.com/7275864/222365744-0f57c49c-8bd0-4b24-a6e1-346337e83e76.png)
 
 Right click the **Player** node and click **Add Child Node.** There are many nodes listed here, search for AIController3D and create it. 
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8c0e9602-61bb-4887-931a-e46a19cb962a/Untitled.png)
+![ai_controller_node](https://user-images.githubusercontent.com/7275864/222366065-ab014718-1db4-4149-a245-b04b7899824f.png)
 
 The AI Controller Node should have been added to the scene tree, next to it is a scroll. Click on it to open the script that is attached to the AIController. The Godot game engine uses a scripting language called GDScript, which is syntactically similar to python. The script contains methods that need to be implemented in order to get our AI controller working.
 
@@ -171,7 +171,7 @@ You can run training live in the the editor, but first launching the python trai
 
 In this simple example, a reasonable policy is learned in several minutes. You may wish to speed up training, click on the Sync node in the train scene and you will see there is a “Speed Up” property exposed in the editor:
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ebdd847c-0f74-4a02-92df-2a0cf235d1e8/Untitled.png)
+![action_repeat](https://user-images.githubusercontent.com/7275864/222365882-0a9dba16-102c-4326-acb1-0448459ed884.png)
 
 Try setting this property up to 8 to speed up training. This can be a great benefit on more complex environments, like the multi-player FPS we will learn about in the next chapter.
 
