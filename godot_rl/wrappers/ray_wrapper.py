@@ -113,8 +113,6 @@ def rllib_export(model_path):
 
 
 def rllib_training(args, extras):
-    ray.init()
-
     with open(args.config_file) as f:
         exp = yaml.safe_load(f)
     register_env()
@@ -149,6 +147,9 @@ def rllib_training(args, extras):
         exp["stop"]["training_iteration"] = 999999
 
     print(exp)
+
+    ray.init(num_gpus=exp["config"]["num_gpus"] or 1)
+
     if not args.export:
         results = tune.run(
         exp["algorithm"],
