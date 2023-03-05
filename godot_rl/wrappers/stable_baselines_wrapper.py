@@ -9,7 +9,7 @@ from godot_rl.core.utils import lod_to_dol
 
 class StableBaselinesGodotEnv(VecEnv):
     def __init__(self, env_path=None, **kwargs):
-        self.env = GodotEnv(env_path=env_path, **kwargs)
+        self.env = GodotEnv(env_path=env_path, convert_action_space=True, **kwargs)
         self._check_valid_action_space()
 
     def _check_valid_action_space(self):
