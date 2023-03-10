@@ -99,6 +99,12 @@ def get_args():
         type=int,
         help="Number of GPUs to use [only for rllib]"
     )
+    parser.add_argument(
+        "--experiment_name",
+        default=None,
+        type=str,
+        help="The name of the experiment [only for rllib]"
+    )
 
     return parser.parse_known_args()
 
