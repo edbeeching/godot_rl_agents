@@ -63,24 +63,24 @@ Please ensure you have successfully quickstart guide before following this secti
 
 Godot RL Agents supports 4 different RL training frameworks, the links below detail a more in depth guide of how to use a particular backend:
 
-- StableBaselines3 (Windows, Mac, Linux)
-- SampleFactory (Mac, Linux)
-- CleanRL (Windows, Mac, Linux)
-- Ray rllib (Windows, Mac, Linux)
+- [StableBaselines3](docs/ADV_STABLE_BASELINES_3.md) (Windows, Mac, Linux)
+- [SampleFactory](docs/ADV_SAMPLE_FACTORY.md) (Mac, Linux)
+- [CleanRL](docs/ADV_CLEAN_RL.md) (Windows, Mac, Linux)
+- [Ray rllib](docs/ADV_RLLIB.md) (Windows, Mac, Linux)
 
 # FAQ
 
 1. Why have we developed Godot RL Agents?
 The objectives of the framework are to:
 - Provide a free and open source tool for Deep RL research and game development.
-- Enable game creators to imbue their non-player characters with unique * behaviors.
+- Enable game creators to imbue their non-player characters with unique behaviors.
 - Allow for automated gameplay testing through interaction with an RL agent.
 1. How can I contribute to Godot RL Agents?
 Please try it out, find bugs and either raise an issue or if you fix them yourself, submit a pull request.
 2. When will you be providing Mac support?
-I would like to provide this ASAP but I do not own a mac so I cannot perform any manual testing of the codebase.
+This should now be working, let us know if you have any issues.
 3. Can you help with my game project?
-If the game example do not provide enough information, reach out to us on github and we may be able to provide some advice.
+If the README and docs here not provide enough information, reach out to us on github and we may be able to provide some advice.
 4. How similar is this tool to Unity ML agents?
 We are inspired by the the Unity ML agents toolkit and aims to be a more compact, concise ad hackable codebase, with little abstraction.
 
