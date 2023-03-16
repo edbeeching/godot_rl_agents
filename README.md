@@ -58,7 +58,7 @@ There is a dedicated tutorial on creating custom environments [here](docs/CUSTOM
 If you face any issues getting started, please reach out on our discord or raise a github issue.
 
 ## Advanced usage
-
+https://user-images.githubusercontent.com/7275864/209160117-cd95fa6b-67a0-40af-9d89-ea324b301795.mp4
 Please ensure you have successfully quickstart guide before following this section.
 
 Godot RL Agents supports 4 different RL training frameworks, the links below detail a more in depth guide of how to use a particular backend:
