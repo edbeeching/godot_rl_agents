@@ -1,8 +1,5 @@
 # Godot RL Agents
 
-> :warning: The main branch supports Godot 4 only. If you want to use Godot RL Agents in Godot 3.5 checkout the branch godot3.5.
-> 
-
 Feel free to join our [Discord](https://discord.gg/HMMD2J8SxY) for help and discussions about Godot RL Agents.
 
 Godot RL Agents is a fully Open Source package that allows video game creators, AI researchers and hobbyists the opportunity to learn complex behaviors for their Non Player Characters or agents.
