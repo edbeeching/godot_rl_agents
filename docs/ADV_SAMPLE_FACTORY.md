@@ -6,7 +6,7 @@ Sample Factory is thoroughly tested, used by many researchers and practitioners,
 
 Find out more on their website: www.samplefactory.dev
 
-## Key features[¶](https://www.samplefactory.dev/#key-features)
+## Key features
 
 - Highly optimized algorithm [architecture](https://www.samplefactory.dev/06-architecture/overview/) for maximum learning throughput
 - [Synchronous and asynchronous](https://www.samplefactory.dev/07-advanced-topics/sync-async/) training regimes
