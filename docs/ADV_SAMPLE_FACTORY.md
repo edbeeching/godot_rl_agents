@@ -80,13 +80,13 @@ gdrl--trainer=sf --env=gdrl --env_path=examples/godot_rl_Racer/bin/Racer.x86_64 
 • Download a pretrained checkpoint from the HF hub:
 
 ```bash
-python -m sample_factory.huggingface.load_from_hub -r edbeeching/sample_factory_<ENV_NAME>
+python -m sample_factory.huggingface.load_from_hub -r edbeeching/sample_factory_Racer
 ```
 
 • Visualize a trained model:
 
 ```bash
-gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64 --num_workers=1 --experiment=<ENV_NAME> --viz --eval --batched_sampling=True --speedup=8 --push_to_hub --hf_repository=<HF_USERNAME>/sample_factory_<ENV_NAME>
+gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_Racer/bin/Racer.x86_64 --num_workers=1 --experiment=Racer --viz --eval --batched_sampling=True --speedup=8 --push_to_hub --hf_repository=edbeeching/sample_factory_Racer
 ```
 
 ### Usage instructions for env **MultiAgent FPS**
@@ -107,13 +107,13 @@ gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_FPS/bin/FPS.x86_64 --n
 • Download a pretrained checkpoint from the HF hub:
 
 ```bash
-python -m sample_factory.huggingface.load_from_hub -r edbeeching/sample_factory_<ENV_NAME>
+python -m sample_factory.huggingface.load_from_hub -r edbeeching/sample_factory_FPS
 ```
 
 • Visualize a trained model:
 
 ```bash
-gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64 --num_workers=1 --experiment=<ENV_NAME> --viz --eval --batched_sampling=True --speedup=8 --push_to_hub --hf_repository=<HF_USERNAME>/sample_factory_<ENV_NAME>
+gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_FPS/bin/FPS.x86_64 --num_workers=1 --experiment=FPS --viz --eval --batched_sampling=True --speedup=8 --push_to_hub --hf_repository=edbeeching/sample_factory_FPS
 ```
 
 ## Training on a cluster
