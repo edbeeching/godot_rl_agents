@@ -149,7 +149,7 @@ def gdrl_override_defaults(_env, parser):
 def add_gdrl_env_args(_env, p: argparse.ArgumentParser, evaluation=False):
     if evaluation:
         # apparently env.render(mode="human") is not supported anymore and we need to specify the render mode in
-        # the env ctor
+        # the env actor
         p.add_argument("--render_mode", default="human", type=str, help="")
     p.add_argument("--base_port", default=0, type=int, help="")
 
