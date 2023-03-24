@@ -12,7 +12,7 @@ pip install godot-rl[rllib]
 ## Basic Environment Usage
 Usage instructions for envs **BallChase**, **FlyBy** and **JumperHard.**
 
-- Download the env:
+• Download the env:
 
 ```bash
 gdrl.env_from_hub -r edbeeching/godot_rl_<ENV_NAME>

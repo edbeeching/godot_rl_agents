@@ -26,6 +26,22 @@ Main Features
 pip install godot-rl[sb3]
 ```
 
+## Basic Environment Usage
+Usage instructions for envs **BallChase**, **FlyBy** and **JumperHard.**
+
+• Download the env:
+
+```bash
+gdrl.env_from_hub -r edbeeching/godot_rl_<ENV_NAME>
+chmod +x examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64 # linux example
+```
+
+• Train a model from scratch:
+
+```bash
+gdrl --env=gdrl --env_path=examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64 --viz
+```
+
 While the default options for sb3 work reasonably well. You may be interested in changing the hyperparameters.
 
 We recommend taking the [sb3 example](https://github.com/edbeeching/godot_rl_agents/blob/main/examples/stable_baselines3_example.py) and modifying to match your needs.
