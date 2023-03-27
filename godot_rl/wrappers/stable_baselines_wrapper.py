@@ -69,7 +69,7 @@ class StableBaselinesGodotEnv(VecEnv):
         raise NotImplementedError()
 
 
-def stable_baselines_training(args, extras):
+def stable_baselines_training(args, extras, n_steps=200000):
     # TODO: Add cla etc for sb3
     env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=args.viz, speedup=args.speedup)
 
@@ -81,7 +81,7 @@ def stable_baselines_training(args, extras):
         n_steps=32,
         tensorboard_log="logs/log",
     )
-    model.learn(200000)
+    model.learn(n_steps)
 
     print("closing env")
     env.close()

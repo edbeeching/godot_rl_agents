@@ -66,6 +66,7 @@ def get_args():
     parser.add_argument("--num_gpus", default=None, type=int, help="Number of GPUs to use [only for rllib]")
     parser.add_argument("--experiment_name", default=None, type=str, help="The name of the experiment [only for rllib]")
     parser.add_argument("--viz", default=False, action="store_true", help="Whether to visualize one process")
+
     return parser.parse_known_args()
 
 
