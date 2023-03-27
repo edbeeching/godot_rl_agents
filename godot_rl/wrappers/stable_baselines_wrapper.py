@@ -71,7 +71,7 @@ class StableBaselinesGodotEnv(VecEnv):
 
 def stable_baselines_training(args, extras):
     # TODO: Add cla etc for sb3
-    env = StableBaselinesGodotEnv(env_path=args.env_path)
+    env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=args.viz, speedup=args.speedup)
 
     model = PPO(
         "MultiInputPolicy",
@@ -81,7 +81,7 @@ def stable_baselines_training(args, extras):
         n_steps=32,
         tensorboard_log="logs/log",
     )
-    model.learn(20000)
+    model.learn(1000000)
 
     print("closing env")
     env.close()

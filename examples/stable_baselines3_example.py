@@ -25,7 +25,7 @@ args, extras = parser.parse_known_args()
 env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=True, speedup=args.speedup, convert_action_space=True)
 
 model = PPO("MultiInputPolicy", env, ent_coef=0.0001, verbose=2, n_steps=32, tensorboard_log="logs/log")
-model.learn(200000)
+model.learn(1000000)
 
 print("closing env")
 env.close()
