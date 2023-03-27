@@ -44,6 +44,7 @@ class SampleFactoryEnvWrapperBatched(GodotEnv):
     def render():
         return
 
+
 class SampleFactoryEnvWrapperNonBatched(GodotEnv):
     @property
     def unwrapped(self):
@@ -59,7 +60,7 @@ class SampleFactoryEnvWrapperNonBatched(GodotEnv):
 
     def step(self, action):
         obs, reward, term, trunc, info = super().step(action, order_ij=True)
-        
+
         return self.to_numpy(obs), np.array(reward), np.array(term), np.array(trunc) * 0, info
 
     @staticmethod
@@ -75,7 +76,7 @@ class SampleFactoryEnvWrapperNonBatched(GodotEnv):
         return
 
 
-def make_godot_env_func(env_path,full_env_name, cfg=None, env_config=None, render_mode=None, speedup=1):
+def make_godot_env_func(env_path, full_env_name, cfg=None, env_config=None, render_mode=None, speedup=1, viz=False):
     seed = 0
     port = 21008 + cfg.base_port
     print("BASE PORT ", cfg.base_port)
@@ -84,19 +85,23 @@ def make_godot_env_func(env_path,full_env_name, cfg=None, env_config=None, rende
         port += 1 + env_config.env_id
         seed += 1 + env_config.env_id
         print("env id", env_config.env_id)
-        if cfg.viz:#
+        if viz:  #
             print("creating viz env")
             show_window = env_config.env_id == 0
     if cfg.batched_sampling:
-        env = SampleFactoryEnvWrapperBatched(env_path=env_path, port=port, seed=seed, show_window=show_window, speedup=speedup)
+        env = SampleFactoryEnvWrapperBatched(
+            env_path=env_path, port=port, seed=seed, show_window=show_window, speedup=speedup
+        )
     else:
-        env = SampleFactoryEnvWrapperNonBatched(env_path=env_path, port=port, seed=seed, show_window=show_window, speedup=speedup)
+        env = SampleFactoryEnvWrapperNonBatched(
+            env_path=env_path, port=port, seed=seed, show_window=show_window, speedup=speedup
+        )
 
     return env
 
 
 def register_gdrl_env(args):
-    make_env = partial(make_godot_env_func, args.env_path, speedup=args.speedup)
+    make_env = partial(make_godot_env_func, args.env_path, speedup=args.speedup, viz=args.viz)
     register_env("gdrl", make_env)
 
 
@@ -159,12 +164,6 @@ def add_gdrl_env_args(_env, p: argparse.ArgumentParser, evaluation=False):
         type=int,
         help="Num agents in each envpool (if used)",
     )
-    p.add_argument(
-        "--viz",
-        default=False,
-        action="store_true",
-        help="Whether to visualize one process",
-    )
 
 
 def parse_gdrl_args(argv=None, evaluation=False):
@@ -178,13 +177,14 @@ def parse_gdrl_args(argv=None, evaluation=False):
 def sample_factory_training(args, extras):
     register_gdrl_env(args)
     cfg = parse_gdrl_args(argv=extras, evaluation=args.eval)
-    cfg.base_port = random.randint(20000,22000)
+    cfg.base_port = random.randint(20000, 22000)
     status = run_rl(cfg)
     return status
+
 
 def sample_factory_enjoy(args, extras):
     register_gdrl_env(args)
     cfg = parse_gdrl_args(argv=extras, evaluation=args.eval)
-    
+
     status = enjoy(cfg)
     return status

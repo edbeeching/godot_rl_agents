@@ -1,4 +1,6 @@
 ### Godot RL Agents Project RoadMap
+THIS DOCUMENT IS A BIT OUT OF DATE, BUT MAY BE USEFUL TO SOMEONE SO WE HAVE LEFT IT UP
+
 This document provides non-exaustive list of features the will be implemented in future versions of Godot RL Agents
 
 ## Version 0.1 (beta release)
