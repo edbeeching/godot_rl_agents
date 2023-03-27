@@ -21,8 +21,6 @@ In order to create games in Godot, you must first download the editor. The lates
 
 We provide two versions of the codebase. 
 
-**(THOMAS YOU MAY WANT TO MOVE THESE FILES TO ANOTHER LOCATION)**
-
 - [A starter project, to download and follow along for this tutorial](https://drive.google.com/file/d/1C7xd3TibJHlxFEJPBgBLpksgxrFZ3D8e/view?usp=share_link)
 - [A final version of the project, for comparison and debugging.](https://drive.google.com/file/d/1k-b2Bu7uIA6poApbouX4c3sq98xqogpZ/view?usp=share_link)
 
