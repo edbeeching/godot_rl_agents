@@ -64,7 +64,7 @@ gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_<ENV_NAME>/bin/<ENV_NA
 
 ### Usage instructions for env **Racer.**
 
-- Download the env:
+• Download the env:
 
 ```bash
 gdrl.env_from_hub -r edbeeching/godot_rl_Racer
@@ -91,7 +91,7 @@ gdrl --trainer=sf --env=gdrl --env_path=examples/godot_rl_Racer/bin/Racer.x86_64
 
 ### Usage instructions for env **MultiAgent FPS**
 
-- Download the env:
+• Download the env:
 
 ```bash
 gdrl.env_from_hub -r edbeeching/godot_rl_FPS
