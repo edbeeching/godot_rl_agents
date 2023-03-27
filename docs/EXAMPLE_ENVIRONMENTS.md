@@ -1,4 +1,7 @@
 # Example environments 
+THIS DOCUMENT IS A BIT OUT OF DATE, BUT MAY BE USEFUL TO SOMEONE SO WE HAVE LEFT IT UP
+
+
 This is a WIP and needs updating since the Godot 4 update.
 For the current version, we provide 4 example environments, located in **envs/example_envs/**
 ![Alt text](all_example_envs.png?raw=true "All Environments")

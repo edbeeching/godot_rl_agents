@@ -35,6 +35,8 @@ class GodotEnv:
             port = GodotEnv.DEFAULT_PORT
         self.proc = None
         if env_path is not None and env_path != "debug":
+            env_path = self._set_platform_suffix(env_path)
+
             self.check_platform(env_path)
             self._launch_env(env_path, port, show_window, framerate, seed, action_repeat, speedup)
         else:
@@ -51,8 +53,17 @@ class GodotEnv:
 
         atexit.register(self._close)
 
-    def check_platform(self, filename: str):
+    def _set_platform_suffix(self, env_path):
+        suffixes = {
+            "linux": ".x86_64",
+            "linux2": ".x86_64",
+            "darwin": ".app",
+            "win32": ".exe",
+        }
+        suffix = suffixes[platform]
+        return pathlib.Path(env_path).with_suffix(suffix)
 
+    def check_platform(self, filename: str):
         if platform == "linux" or platform == "linux2":
             # Linux
             assert (
@@ -81,7 +92,7 @@ class GodotEnv:
             env_action = {}
 
             for j, k in enumerate(self._action_space.keys()):
-                if order_ij==True:
+                if order_ij == True:
                     v = action[i][j]
                 else:
                     v = action[j][i]
@@ -267,7 +278,7 @@ class GodotEnv:
     @property
     def action_space(self):
         return self.action_space_processor.action_space
-        
+
     @staticmethod
     def decode_2d_obs_from_string(
         hex_string,
@@ -328,7 +339,6 @@ class GodotEnv:
         self._send_string(action)
 
 
-
 def interactive():
     env = GodotEnv()
     print("observation space", env.observation_space)
@@ -338,9 +348,10 @@ def interactive():
     for i in range(1000):
         action = [env.action_space.sample() for _ in range(env.num_envs)]
         action = list(zip(*action))
-        
+
         obs, reward, term, trunc, info = env.step(action)
     env.close()
+
 
 if __name__ == "__main__":
     interactive()

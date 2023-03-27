@@ -28,7 +28,7 @@ from godot_rl.core.godot_env import GodotEnv
         ),
         (
             "FlyBy",
-            12011,
+            12012,
             16,
         ),
     ],
@@ -62,32 +62,33 @@ def test_env_ij(env_name, port, n_agents):
 
     env.close()
 
+
 @pytest.mark.parametrize(
     "env_name,port,n_agents",
     [
         (
             "BallChase",
-            12008,
+            13008,
             16,
         ),
         (
             "FPS",
-            12009,
+            13009,
             8,
         ),
         (
             "JumperHard",
-            12010,
+            13010,
             16,
         ),
         (
             "Racer",
-            12011,
+            13011,
             8,
         ),
         (
             "FlyBy",
-            12011,
+            13012,
             16,
         ),
     ],

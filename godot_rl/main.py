@@ -30,9 +30,9 @@ except ImportError as e:
         print("Import error when trying to use rllib. If you have not installed the package, try: pip install godot-rl[rllib]")
         print("Otherwise try fixing the error above.")
 
+
 try:
-    from godot_rl.wrappers.stable_baselines_wrapper import \
-        stable_baselines_training
+    from godot_rl.wrappers.stable_baselines_wrapper import stable_baselines_training
 except ImportError as e:
     print("Error: ", e)
     def stable_baselines_training(args, extras):
@@ -40,9 +40,9 @@ except ImportError as e:
             "Import error when trying to use sb3. If you have not installed the package, try: pip install godot-rl[sb3]"
         )
         print("Otherwise try fixing the error above.")
+
 try:
-    from godot_rl.wrappers.sample_factory_wrapper import \
-        sample_factory_training, sample_factory_enjoy
+    from godot_rl.wrappers.sample_factory_wrapper import sample_factory_training, sample_factory_enjoy
 except ImportError as e:
     print("Error: ", e)
     def sample_factory_training(args, extras):
@@ -59,58 +59,17 @@ def get_args():
         default="sb3",
         choices=["sb3", "sf", "rllib"],
         type=str,
-        help="Which trainer framework to use (rllib or stable-baselines)",
+        help="framework to use (rllib or stable-baselines)",
     )
-    parser.add_argument(
-        "--env_path",
-        # default="envs/example_envs/builds/JumperHard/jumper_hard.x86_64",
-        default=None,
-        type=str,
-        help="The Godot binary to use, do not include for in editor training",
-    )
-    parser.add_argument(
-        "--config_file",
-        default="ppo_test.yaml",
-        type=str,
-        help="The yaml config file used to specify parameters for training (used for rllib)",
-    )
-    parser.add_argument(
-        "--restore",
-        default=None,
-        type=str,
-        help="the location of a checkpoint to restore from",
-    )
-    parser.add_argument(
-        "--eval",
-        default=False,
-        action="store_true",
-        help="whether to eval the model",
-    )
-    parser.add_argument(
-        "--speedup",
-        default=1,
-        type=int,
-        help="whether to speed up the physics in the env",
-    )
-    parser.add_argument(
-        "--export",
-        default=False,
-        action="store_true",
-        help="wheter to export the model"
-    )
-    parser.add_argument(
-        "--num_gpus",
-        default=None,
-        type=int,
-        help="Number of GPUs to use [only for rllib]"
-    )
-    parser.add_argument(
-        "--experiment_name",
-        default=None,
-        type=str,
-        help="The name of the experiment [only for rllib]"
-    )
-
+    parser.add_argument("--env_path", default=None, type=str, help="Godot binary to use")
+    parser.add_argument("--config_file", default="ppo_test.yaml", type=str, help="The yaml config file (used by rllib)")
+    parser.add_argument("--restore", default=None, type=str, help="the location of a checkpoint to restore from")
+    parser.add_argument("--eval", default=False, action="store_true", help="whether to eval the model")
+    parser.add_argument("--speedup", default=1, type=int, help="whether to speed up the physics in the env")
+    parser.add_argument("--export", default=False, action="store_true", help="wheter to export the model")
+    parser.add_argument("--num_gpus", default=None, type=int, help="Number of GPUs to use [only for rllib]")
+    parser.add_argument("--experiment_name", default=None, type=str, help="The name of the experiment [only for rllib]")
+    parser.add_argument("--viz", default=False, action="store_true", help="Whether to visualize one process")
     return parser.parse_known_args()
 
 
