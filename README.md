@@ -25,7 +25,7 @@ This quickstart guide will get you up and running using the Godot RL Agents libr
 1. Install the Godot RL Agents library: (if you are new to python, pip and conda, read this [guide](https://www.machinelearningplus.com/deployment/conda-create-environment-and-everything-you-need-to-know-to-manage-conda-virtual-environment/))
 
 ```bash
-pip install godot-rl[sb3]
+pip install godot-rl
 ```
 
 1. Download one, or more of [examples](https://github.com/edbeeching/godot_rl_agents_examples), such as BallChase, JumperHard, FlyBy.
