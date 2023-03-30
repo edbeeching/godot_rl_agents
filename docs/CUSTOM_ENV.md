@@ -168,7 +168,14 @@ func _on_area_3d_body_entered(body):
 
 We now need to synchronize between the game running in Godot and the neural network being trained in Python. Godot RL agents provides a node that does just that. Open the train.tscn scene, right click on the root node and click “Add child node”. Then, search for “sync” and add a Godot RL Agents Sync node. This node handles the communication between Python and Godot over TCP. 
 
-You can run training live in the the editor, but first launching the python training with `python examples/clean_rl_example.py —env-id=debug`
+You can run training live in the the editor, but first launching the python training with:
+```
+python examples/clean_rl_example.py —env-id=debug
+```
+or simply:
+```
+gdrl
+```
 
 In this simple example, a reasonable policy is learned in several minutes. You may wish to speed up training, click on the Sync node in the train scene and you will see there is a “Speed Up” property exposed in the editor:
 
