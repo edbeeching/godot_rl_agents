@@ -61,7 +61,7 @@ class GodotEnv:
             "win32": ".exe",
         }
         suffix = suffixes[platform]
-        return pathlib.Path(env_path).with_suffix(suffix)
+        return str(pathlib.Path(env_path).with_suffix(suffix))
 
     def check_platform(self, filename: str):
         if platform == "linux" or platform == "linux2":
