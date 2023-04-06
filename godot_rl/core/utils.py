@@ -86,6 +86,7 @@ class ActionSpaceProcessor:
                 discrete_actions = np.greater(action[:, counter], 0.0)
                 discrete_actions = discrete_actions.astype(np.float32)
                 original_action.append(discrete_actions)
+                counter += 1
 
             else:
                 raise NotImplementedError
