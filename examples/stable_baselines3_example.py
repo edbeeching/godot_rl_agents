@@ -1,6 +1,7 @@
 import argparse
 
 from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
+from godot_rl.wrappers.onnx.stable_baselines_export import export_ppo_model_as_onnx
 from stable_baselines3 import PPO
 
 # To download the env source and binary:
@@ -11,7 +12,12 @@ from stable_baselines3 import PPO
 parser = argparse.ArgumentParser(allow_abbrev=False)
 parser.add_argument(
     "--env_path",
-    # default="envs/example_envs/builds/JumperHard/jumper_hard.x86_64",
+    default=None,
+    type=str,
+    help="The Godot binary to use, do not include for in editor training",
+)
+parser.add_argument(
+    "--onnx_export_path",
     default=None,
     type=str,
     help="The Godot binary to use, do not include for in editor training",
@@ -29,3 +35,6 @@ model.learn(1000000)
 
 print("closing env")
 env.close()
+
+if args.onnx_export_path is not None:
+    export_ppo_model_as_onnx(model, args.onnx_export_path)
