@@ -25,8 +25,7 @@ args, extras = parser.parse_known_args()
 env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=True, speedup=args.speedup)
 
 model = PPO("MultiInputPolicy", env, ent_coef=0.0001, verbose=2, n_steps=32, tensorboard_log="logs/log")
-model.learn(10)
-model.save("BallChase.zip")
+model.learn(1000000)
+
 print("closing env")
 env.close()
-print("exiting")
