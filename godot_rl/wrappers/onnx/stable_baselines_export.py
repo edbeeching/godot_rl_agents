@@ -46,9 +46,9 @@ def export_ppo_model_as_onnx(ppo: PPO, onnx_model_path: str):
 
 
 def verify_onnx_export(ppo: PPO, onnx_model_path: str, num_tests=10):
+    import numpy as np
     import onnx
     import onnxruntime as ort
-    import numpy as np
 
     onnx_model = onnx.load(onnx_model_path)
     onnx.checker.check_model(onnx_model)
