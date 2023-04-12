@@ -11,13 +11,13 @@ class OnnxableMultiInputPolicy(torch.nn.Module):
         self.action_net = action_net
         self.value_net = value_net
 
-    def forward(self, observation):
-        obs_dict = {k: v for k, v in zip(self.obs_keys, observation)}
+    def forward(self, obs, state_ins):
+        obs_dict = {k: v for k, v in zip(self.obs_keys, obs)}
         # NOTE: You may have to process (normalize) observation in the correct
         #       way before using this. See `common.preprocessing.preprocess_obs`
         features = self.features_extractor(obs_dict)
         action_hidden, value_hidden = self.mlp_extractor(features)
-        return self.action_net(action_hidden), self.value_net(value_hidden)
+        return self.action_net(action_hidden), state_ins
 
 
 def export_ppo_model_as_onnx(ppo: PPO, onnx_model_path: str):
@@ -36,11 +36,16 @@ def export_ppo_model_as_onnx(ppo: PPO, onnx_model_path: str):
     dummy_input = [v for v in dummy_input.values()]
     torch.onnx.export(
         onnxable_model,
-        dummy_input,
-        onnx_model_path,
+        args=(dummy_input, torch.zeros(1).float()),
+        f=onnx_model_path,
         opset_version=9,
-        input_names=["observation"],
-        output_names=["act", "value"],
+        input_names=["obs", "state_ins"],
+        output_names=["output", "state_outs"],
+        dynamic_axes={'obs' : {0 : 'batch_size'}, 
+                      'state_ins' : {0 : 'batch_size'},    # variable length axes
+                      'output' : {0 : 'batch_size'},
+                      'state_outs' : {0 : 'batch_size'}}
+
     )
     verify_onnx_export(ppo, onnx_model_path)
 
@@ -64,9 +69,36 @@ def verify_onnx_export(ppo: PPO, onnx_model_path: str, num_tests=10):
             obs2[k] = torch.from_numpy(v).unsqueeze(0)
 
         with torch.no_grad():
-            action_sb3, value_sb3, _ = sb3_model(obs2, deterministic=True)
+            action_sb3, _, _ = sb3_model(obs2, deterministic=True)
 
         obs = [v for v in obs.values()]
-        action_onnx, value_onnx = ort_sess.run(None, {"observation": obs})
+        action_onnx, state_outs = ort_sess.run(None, {"obs": obs, "state_ins": np.array([0.0], dtype=np.float32)})
         assert np.allclose(action_sb3, action_onnx, atol=1e-5), "Mismatch in action output"
-        assert np.allclose(value_sb3, value_onnx, atol=1e-5), "Mismatch in value output"
+        assert np.allclose(state_outs, np.array([0.0]), atol=1e-5), "Mismatch in state_outs output"
+
+
+if __name__ == "__main__":
+    import os
+
+    # import pytest
+    from stable_baselines3 import PPO
+
+    # from godot_rl.wrappers.onnx.stable_baselines_export import (
+    #     export_ppo_model_as_onnx, verify_onnx_export)
+    from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
+    
+    env_name="BallChase"
+    port=10001
+    env_path = f"examples/godot_rl_{env_name}/bin/{env_name}.x86_64"
+    env = StableBaselinesGodotEnv(env_path, port=port)
+
+    ppo = PPO(
+        "MultiInputPolicy",
+        env,
+        ent_coef=0.0001,
+        verbose=2,
+        n_steps=32,
+        tensorboard_log="logs/log",
+    )
+    env.close()
+    export_ppo_model_as_onnx(ppo, f"{env_name}.onnx")
