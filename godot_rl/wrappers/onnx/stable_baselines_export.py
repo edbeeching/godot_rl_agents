@@ -75,30 +75,3 @@ def verify_onnx_export(ppo: PPO, onnx_model_path: str, num_tests=10):
         action_onnx, state_outs = ort_sess.run(None, {"obs": obs, "state_ins": np.array([0.0], dtype=np.float32)})
         assert np.allclose(action_sb3, action_onnx, atol=1e-5), "Mismatch in action output"
         assert np.allclose(state_outs, np.array([0.0]), atol=1e-5), "Mismatch in state_outs output"
-
-
-if __name__ == "__main__":
-    import os
-
-    # import pytest
-    from stable_baselines3 import PPO
-
-    # from godot_rl.wrappers.onnx.stable_baselines_export import (
-    #     export_ppo_model_as_onnx, verify_onnx_export)
-    from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
-    
-    env_name="BallChase"
-    port=10001
-    env_path = f"examples/godot_rl_{env_name}/bin/{env_name}.x86_64"
-    env = StableBaselinesGodotEnv(env_path, port=port)
-
-    ppo = PPO(
-        "MultiInputPolicy",
-        env,
-        ent_coef=0.0001,
-        verbose=2,
-        n_steps=32,
-        tensorboard_log="logs/log",
-    )
-    env.close()
-    export_ppo_model_as_onnx(ppo, f"{env_name}.onnx")
