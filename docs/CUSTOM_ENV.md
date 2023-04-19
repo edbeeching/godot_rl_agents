@@ -183,6 +183,10 @@ In this simple example, a reasonable policy is learned in several minutes. You m
 
 Try setting this property up to 8 to speed up training. This can be a great benefit on more complex environments, such as the FPS environment available in the examples.
 
+NOTE: If you receive an error `Invalid get index '0' (on base: 'Array[Node]')` click on `AIController3D` and add an `AGENT` group by clicking on `Node`, clicking on `Groups`, typing in `AGENT` and clicking `Add` to add the new group.
+
+![adding_new_group](https://user-images.githubusercontent.com/7275864/230909061-d4eae2ce-e13f-4d6e-858f-a08691635442.png)
+
 ### Adding sensors to your agent  (Optional depending on your custom environment) 
 We provide a number of sensors nodes that can be added to your agent called RayCastSensor2D and RayCastSensor3D. The videos below show an overview.
 
