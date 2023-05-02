@@ -28,13 +28,14 @@ This quickstart guide will get you up and running using the Godot RL Agents libr
 pip install godot-rl
 ```
 
-1. Download one, or more of [examples](https://github.com/edbeeching/godot_rl_agents_examples), such as BallChase, JumperHard, FlyBy.
+2. Download one, or more of [examples](https://github.com/edbeeching/godot_rl_agents_examples), such as BallChase, JumperHard, FlyBy.
 
 ```bash
 gdrl.env_from_hub -r edbeeching/godot_rl_JumperHard 
 ```
+You may need to example run permissions on the game executable. `chmod +x examples/godot_rl_JumperHard/bin/JumperHard.x86_64`
 
-1. Train and visualize 
+3. Train and visualize 
 
 ```bash
 gdrl --env=gdrl --env_path=examples/godot_rl_JumperHard/bin/JumperHard.x86_64 --viz
@@ -53,6 +54,12 @@ You can also train an agent in the Godot editor, without the need to export the 
 There is a dedicated tutorial on creating custom environments [here](docs/CUSTOM_ENV.md). We recommend following this tutorial before trying to create your own environment.
 
 If you face any issues getting started, please reach out on our discord or raise a github issue.
+
+### Exporting and loading your trained agent in onnx format:
+The latest version of the library provides experimental support for onnx models with the Stable Baselines 3 and rllib training frameworks.
+1. First run train you agent using the sb3 example on the [github repo](https://github.com/edbeeching/godot_rl_agents/blob/main/examples/stable_baselines3_example.py), enabling the option `--onnx_export_path=GameModel.onnx`
+2. Then, using the **mono version** of the Godot Editor, add the onnx model path to the sync node. If you do not seen this option you may need to download the plugin from [source](https://github.com/edbeeching/godot_rl_agents_plugin)
+3. The game should now load and run using the onnx model. If you are having issues building the project, ensure that the contents of the `.csproj` and `.sln` files in you project match that those of the plugin [source](https://github.com/edbeeching/godot_rl_agents_plugin).
 
 ## Advanced usage
 [https://user-images.githubusercontent.com/7275864/209160117-cd95fa6b-67a0-40af-9d89-ea324b301795.mp4](https://user-images.githubusercontent.com/7275864/209160117-cd95fa6b-67a0-40af-9d89-ea324b301795.mp4)
