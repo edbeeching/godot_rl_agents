@@ -22,7 +22,7 @@ class GodotEnv:
     def __init__(
         self,
         env_path=None,
-        port=11008,
+        port=DEFAULT_PORT,
         show_window=False,
         seed=0,
         framerate=None,
@@ -31,8 +31,6 @@ class GodotEnv:
         convert_action_space=False,
     ):
 
-        if env_path is None:
-            port = GodotEnv.DEFAULT_PORT
         self.proc = None
         if env_path is not None and env_path != "debug":
             env_path = self._set_platform_suffix(env_path)
