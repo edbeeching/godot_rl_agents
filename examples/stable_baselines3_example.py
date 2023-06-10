@@ -3,6 +3,7 @@ import argparse
 from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
 from godot_rl.wrappers.onnx.stable_baselines_export import export_ppo_model_as_onnx
 from stable_baselines3 import PPO
+from stable_baselines3.common.vec_env.vec_monitor import VecMonitor
 
 # To download the env source and binary:
 # 1.  gdrl.env_from_hub -r edbeeching/godot_rl_BallChase
@@ -29,6 +30,7 @@ args, extras = parser.parse_known_args()
 
 
 env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=True, speedup=args.speedup)
+env = VecMonitor(env)
 
 model = PPO("MultiInputPolicy", env, ent_coef=0.0001, verbose=2, n_steps=32, tensorboard_log="logs/log")
 model.learn(1000000)
