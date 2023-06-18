@@ -11,6 +11,7 @@ class StableBaselinesGodotEnv(VecEnv):
     def __init__(self, env_path=None, **kwargs):
         self.env = GodotEnv(env_path=env_path, convert_action_space=True, **kwargs)
         self._check_valid_action_space()
+        self.results = None
 
     def _check_valid_action_space(self):
         action_space = self.env.action_space
@@ -34,7 +35,7 @@ class StableBaselinesGodotEnv(VecEnv):
     def close(self):
         self.env.close()
 
-    def env_is_wrapped(self):
+    def env_is_wrapped(self, wrapper_class, indices = None):
         return [False] * self.env.num_envs
 
     @property
@@ -62,11 +63,15 @@ class StableBaselinesGodotEnv(VecEnv):
     def set_attr(self):
         raise NotImplementedError()
 
-    def step_async(self):
-        raise NotImplementedError()
+    def step_async(self, actions: np.ndarray):
+        # raise NotImplementedError()
+        # only works for single instances
+        self.results = self.step(actions)
 
     def step_wait(self):
-        raise NotImplementedError()
+        # raise NotImplementedError()
+        # only works for single instances
+        return self.results
 
 
 def stable_baselines_training(args, extras, n_steps=200000):
