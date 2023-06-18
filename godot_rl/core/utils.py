@@ -40,26 +40,37 @@ class ActionSpaceProcessor:
         space_size = 0
 
         if convert:
+            use_multi_discrete_spaces = False
+            multi_discrete_spaces = np.array([])
             if isinstance(action_space, gym.spaces.Tuple):
 
-                for space in action_space.spaces:
-                    if isinstance(space, gym.spaces.Box):
-                        assert len(space.shape) == 1
-                        space_size += space.shape[0]
-                    elif isinstance(space, gym.spaces.Discrete):
-                        if space.n > 2:
-                            # for not only binary actions are supported, need to add support for the n>2 case
+                if all(isinstance(space, gym.spaces.Discrete) for space in action_space.spaces):
+                    use_multi_discrete_spaces = True
+                    for space in action_space.spaces:
+                        multi_discrete_spaces = np.append(multi_discrete_spaces, space.n)
+                else:
+                    for space in action_space.spaces:
+                        if isinstance(space, gym.spaces.Box):
+                            assert len(space.shape) == 1
+                            space_size += space.shape[0]
+                        elif isinstance(space, gym.spaces.Discrete):
+                            if space.n > 2:
+                                #for now only binary actions are supported if you mix different spaces
+                                # need to add support for the n>2 case
+                                raise NotImplementedError
+                            space_size += 1
+                        else:
                             raise NotImplementedError
-                        space_size += 1
-                    else:
-                        raise NotImplementedError
             elif isinstance(action_space, gym.spaces.Dict):
                 raise NotImplementedError
             else:
                 assert isinstance(space, [gym.spaces.Box, gym.spaces.Discrete])
                 return
 
-            self.converted_action_space = gym.spaces.Box(-1, 1, shape=[space_size])
+            if use_multi_discrete_spaces:
+                self.converted_action_space = gym.spaces.MultiDiscrete(multi_discrete_spaces)
+            else:
+                self.converted_action_space = gym.spaces.Box(-1, 1, shape=[space_size])
 
     @property
     def action_space(self):
