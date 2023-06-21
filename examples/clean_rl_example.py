@@ -35,8 +35,8 @@ def parse_args():
         help="whether to capture videos of the agent performances (check out `videos` folder)")
 
     # Algorithm specific arguments
-    parser.add_argument("--env_path", type=str, default="examples/godot_rl_JumperHard/bin/JumperHard.x86_64",  #examples/godot_rl_BallChase/bin/BallChase.x86_64
-        help="the id of the environment")
+    parser.add_argument("--env_path", type=str, default=None,
+        help="the path of the environment")
     parser.add_argument("--speedup", type=int, default=8,
         help="the speedup of the godot environment")
     parser.add_argument("--total-timesteps", type=int, default=1000000,
