@@ -36,16 +36,16 @@ class ActionSpaceProcessor:
 
         self._original_action_space = action_space
         self._convert = convert
+        self._use_multi_discrete_spaces = False
 
         space_size = 0
 
         if convert:
-            use_multi_discrete_spaces = False
             multi_discrete_spaces = np.array([])
             if isinstance(action_space, gym.spaces.Tuple):
 
                 if all(isinstance(space, gym.spaces.Discrete) for space in action_space.spaces):
-                    use_multi_discrete_spaces = True
+                    self._use_multi_discrete_spaces = True
                     for space in action_space.spaces:
                         multi_discrete_spaces = np.append(multi_discrete_spaces, space.n)
                 else:
@@ -57,7 +57,7 @@ class ActionSpaceProcessor:
                             if space.n > 2:
                                 #for now only binary actions are supported if you mix different spaces
                                 # need to add support for the n>2 case
-                                raise NotImplementedError
+                                raise NotImplementedError("Discrete actions with size > 2 are currently not supported when used together with continuous actions.")
                             space_size += 1
                         else:
                             raise NotImplementedError
@@ -67,7 +67,7 @@ class ActionSpaceProcessor:
                 assert isinstance(space, [gym.spaces.Box, gym.spaces.Discrete])
                 return
 
-            if use_multi_discrete_spaces:
+            if self._use_multi_discrete_spaces:
                 self.converted_action_space = gym.spaces.MultiDiscrete(multi_discrete_spaces)
             else:
                 self.converted_action_space = gym.spaces.Box(-1, 1, shape=[space_size])
@@ -92,10 +92,15 @@ class ActionSpaceProcessor:
                 original_action.append(action[:, counter : counter + space.shape[0]])
                 counter += space.shape[0]
 
-            elif isinstance(space, gym.spaces.Discrete):
-
-                discrete_actions = np.greater(action[:, counter], 0.0)
-                discrete_actions = discrete_actions.astype(np.float32)
+            elif isinstance(space, gym.spaces.Discrete):       
+                discrete_actions = None
+                
+                if self._use_multi_discrete_spaces:
+                    discrete_actions = action[:, counter]
+                else:
+                    discrete_actions = np.greater(action[:, counter], 0.0)
+                    discrete_actions = discrete_actions.astype(np.float32)   
+                
                 original_action.append(discrete_actions)
                 counter += 1
 
