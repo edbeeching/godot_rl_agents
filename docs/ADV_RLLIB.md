@@ -25,6 +25,6 @@ chmod +x examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64 # linux example
 gdrl --trainer=rllib --env=gdrl --env_path=examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64 --speedup=8 --viz
 ```
 
-By default rllib will use the hyperparameters in the **ppo_test.yaml** file on the github repo. You can either modify this file, or create your own one.
+By default rllib will use the hyperparameters in the [ppo_test.yaml](https://github.com/edbeeching/godot_rl_agents/blob/main/ppo_test.yaml) file on the github repo. You can either modify this file, or create your own one.
 
 Rllib contains many features and RL algorithms, it can be used to create highly complex agent behaviors. We recommend taking the time to read their [docs](https://docs.ray.io/en/latest/rllib/index.html) to learn more.
