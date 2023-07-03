@@ -1,15 +1,23 @@
+from gym import spaces
+import numpy as np
+
 import torch
+
 from stable_baselines3 import PPO
+from stable_baselines3.common.distributions import (
+    MultiCategoricalDistribution
+)
 
 
 class OnnxableMultiInputPolicy(torch.nn.Module):
-    def __init__(self, obs_keys, features_extractor, mlp_extractor, action_net, value_net):
+    def __init__(self, obs_keys, features_extractor, mlp_extractor, action_net, value_net, action_space):
         super().__init__()
         self.obs_keys = obs_keys
         self.features_extractor = features_extractor
         self.mlp_extractor = mlp_extractor
         self.action_net = action_net
         self.value_net = value_net
+        self.action_space = action_space
 
     def forward(self, obs, state_ins):
         obs_dict = {k: v for k, v in zip(self.obs_keys, obs)}
@@ -17,7 +25,15 @@ class OnnxableMultiInputPolicy(torch.nn.Module):
         #       way before using this. See `common.preprocessing.preprocess_obs`
         features = self.features_extractor(obs_dict)
         action_hidden, value_hidden = self.mlp_extractor(features)
-        return self.action_net(action_hidden), state_ins
+
+        actions = self.action_net(action_hidden)
+
+        if isinstance(self.action_space, spaces.MultiDiscrete):
+            distribution = MultiCategoricalDistribution(self.action_space.nvec)
+            distribution.proba_distribution(action_logits=actions)
+            actions = distribution.get_actions(deterministic=True)
+
+        return actions, state_ins
 
 
 def export_ppo_model_as_onnx(ppo: PPO, onnx_model_path: str):
@@ -28,6 +44,7 @@ def export_ppo_model_as_onnx(ppo: PPO, onnx_model_path: str):
         ppo_policy.mlp_extractor,
         ppo_policy.action_net,
         ppo_policy.value_net,
+        ppo_policy.action_space
     )
     dummy_input = dict(ppo.observation_space.sample())
     for k, v in dummy_input.items():
@@ -41,17 +58,16 @@ def export_ppo_model_as_onnx(ppo: PPO, onnx_model_path: str):
         opset_version=9,
         input_names=["obs", "state_ins"],
         output_names=["output", "state_outs"],
-        dynamic_axes={'obs' : {0 : 'batch_size'}, 
-                      'state_ins' : {0 : 'batch_size'},    # variable length axes
-                      'output' : {0 : 'batch_size'},
-                      'state_outs' : {0 : 'batch_size'}}
+        dynamic_axes={'obs': {0: 'batch_size'},
+                      'state_ins': {0: 'batch_size'},  # variable length axes
+                      'output': {0: 'batch_size'},
+                      'state_outs': {0: 'batch_size'}}
 
     )
     verify_onnx_export(ppo, onnx_model_path)
 
 
 def verify_onnx_export(ppo: PPO, onnx_model_path: str, num_tests=10):
-    import numpy as np
     import onnx
     import onnxruntime as ort
 
