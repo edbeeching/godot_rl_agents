@@ -36,7 +36,7 @@ First click on the AssetLib and search for “rl”
 
 ![addon](https://user-images.githubusercontent.com/7275864/222365663-c6d0527a-6099-48f4-a52a-5f164769705c.png)
 
-Then click on Godot RL Agents, click Download and unselect the LICIENSE and [README.md](http://README.md) files. Then click install.
+Then click on Godot RL Agents, click Download and unselect the LICENSE and README.md files. Then click install.
 
 ![addon_load](https://user-images.githubusercontent.com/7275864/222365688-81bb9ef8-fffe-4eda-b1a4-c05ca0a801c8.png)
 
@@ -131,7 +131,7 @@ func set_action(action) -> void:
 	move_action = clamp(action["move_action"][0], -1.0, 1.0)
 ```
 
-We have now defined the agent’s observation, which is the position and velocity of the ball in its local coordinate space. We have also defined the action space of the agent, which is a single continuous value ranging from -1 to +1.
+We have now defined the agent’s observation, which is the position and velocity of the ball in its local cooridinate space. We have also defined the action space of the agent, which is a single contuninous value ranging from -1 to +1.
 
 The next step is to update the Player’s script to use the actions from the AIController, edit the Player’s script by clicking on the scroll next to the player node, update the code in `Player.gd` to the following the following:
 
