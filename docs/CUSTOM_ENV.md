@@ -36,7 +36,7 @@ First click on the AssetLib and search for “rl”
 
 ![addon](https://user-images.githubusercontent.com/7275864/222365663-c6d0527a-6099-48f4-a52a-5f164769705c.png)
 
-Then click on Godot RL Agents, click Download and unselect the LICIENSE and [README.md](http://README.md) files. Then click install.
+Then click on Godot RL Agents, click Download and unselect the LICENSE and README.md files. Then click install.
 
 ![addon_load](https://user-images.githubusercontent.com/7275864/222365688-81bb9ef8-fffe-4eda-b1a4-c05ca0a801c8.png)
 
