@@ -8,48 +8,66 @@ from godot_rl.core.utils import lod_to_dol
 
 
 class StableBaselinesGodotEnv(VecEnv):
-    def __init__(self, env_path=None, **kwargs):
-        self.env = GodotEnv(env_path=env_path, convert_action_space=True, **kwargs)
+    def __init__(self, env_path=None, n_parallel=1, **kwargs):
+        port = kwargs.pop("port", GodotEnv.DEFAULT_PORT)
+        self.envs = [GodotEnv(env_path=env_path, convert_action_space=True, port=port+p, **kwargs) for p in range(n_parallel)]
+        self.n_parallel = n_parallel
         self._check_valid_action_space()
         self.results = None
 
     def _check_valid_action_space(self):
-        action_space = self.env.action_space
+        action_space = self.envs[0].action_space
         if isinstance(action_space, gym.spaces.Tuple):
             assert (
                 len(action_space.spaces) == 1
             ), f"sb3 supports a single action space, this env constains multiple spaces {action_space}"
 
     def step(self, action):
-        obs, reward, term, trunc, info = self.env.step(action)
-        obs = lod_to_dol(obs)
-
+        all_obs = []
+        all_rewards = []
+        all_term = []
+        all_trunc = []
+        all_info = []
+        
+        num_envs = self.envs[0].num_envs
+        for i in range(self.n_parallel):
+            self.envs[i].step_send(action[i*num_envs:(i+1)*num_envs])
+            
+        for i in range(self.n_parallel):
+            obs, reward, term, trunc, info = self.envs[i].step_recv()
+            all_obs.extend(obs)
+            all_rewards.extend(reward)
+            all_term.extend(term)
+            all_trunc.extend(trunc)
+            all_info.extend(info)
+            
+        obs = lod_to_dol(all_obs)
         return {k: np.array(v) for k, v in obs.items()}, np.array(reward), np.array(term), info
 
     def reset(self):
-        obs, info = self.env.reset()
+        obs, info = self.envs[0].reset()
         obs = lod_to_dol(obs)
         obs = {k: np.array(v) for k, v in obs.items()}
         return obs
 
     def close(self):
-        self.env.close()
+        self.envs[0].close()
 
     def env_is_wrapped(self, wrapper_class, indices = None):
-        return [False] * self.env.num_envs
+        return [False] * (self.envs[0].num_envs * self.n_parallel)
 
     @property
     def observation_space(self):
-        return self.env.observation_space
+        return self.envs[0].observation_space
 
     @property
     def action_space(self):
         # sb3 is not compatible with tuple/dict action spaces
-        return self.env.action_space
+        return self.envs[0].action_space
 
     @property
     def num_envs(self):
-        return self.env.num_envs
+        return self.envs[0].num_envs * self.n_parallel
 
     def env_method(self):
         raise NotImplementedError()
@@ -74,9 +92,9 @@ class StableBaselinesGodotEnv(VecEnv):
         return self.results
 
 
-def stable_baselines_training(args, extras, n_steps=200000):
+def stable_baselines_training(args, extras, n_steps=200000, **kwargs):
     # TODO: Add cla etc for sb3
-    env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=args.viz, speedup=args.speedup)
+    env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=args.viz, speedup=args.speedup, **kwargs)
 
     model = PPO(
         "MultiInputPolicy",
