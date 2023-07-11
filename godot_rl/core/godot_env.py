@@ -104,14 +104,20 @@ class GodotEnv:
         return result
 
     def step(self, action, order_ij=False):
+        self.step_send(action, order_ij=order_ij)
+        return self.step_recv()
+        
+
+    def step_send(self, action, order_ij=False):
         action = self.action_space_processor.to_original_dist(action)
         message = {
             "type": "action",
             "action": self.from_numpy(action, order_ij=order_ij),
         }
         self._send_as_json(message)
+    
+    def step_recv(self):
         response = self._get_json_dict()
-
         response["obs"] = self._process_obs(response["obs"])
 
         return (
@@ -121,6 +127,8 @@ class GodotEnv:
             np.array(response["done"]).tolist(),  # TODO update API to term, trunc
             [{}] * len(response["done"]),
         )
+        
+        
 
     def _process_obs(self, response_obs: dict):
 
@@ -254,18 +262,6 @@ class GodotEnv:
                 )
             elif v["space"] == "discrete":
                 observation_spaces[k] = spaces.Discrete(v["size"])
-            # elif v["space"] == "repeated": TODO: Add repeated spaces back when we have support and a good example
-            #     assert "max_length" in v
-            #     if v["subspace"] == "box":
-            #         subspace = observation_spaces[k] = spaces.Box(
-            #             low=-1.0,
-            #             high=1.0,
-            #             shape=v["size"],
-            #             dtype=np.float32,
-            #         )
-            #     elif v["subspace"] == "discrete":
-            #         subspace = spaces.Discrete(v["size"])
-            #     observation_spaces[k] = Repeated(subspace, v["max_length"])
             else:
                 print(f"observation space {v['space']} is not supported")
                 assert 0, f"observation space {v['space']} is not supported"
@@ -300,7 +296,6 @@ class GodotEnv:
         return self._get_data()
 
     def _clear_socket(self):
-
         self.connection.setblocking(False)
         try:
             while True:
@@ -308,7 +303,6 @@ class GodotEnv:
                 if not data:
                     break
         except BlockingIOError as e:
-            # print("BlockingIOError expection on clear")
             pass
         self.connection.setblocking(True)
 
