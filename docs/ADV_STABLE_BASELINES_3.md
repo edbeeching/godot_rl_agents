@@ -29,14 +29,14 @@ pip install godot-rl[sb3]
 ## Basic Environment Usage
 Usage instructions for envs **BallChase**, **FlyBy** and **JumperHard.**
 
-• Download the env:
+### Download the env:
 
 ```bash
 gdrl.env_from_hub -r edbeeching/godot_rl_<ENV_NAME>
 chmod +x examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64 # linux example
 ```
 
-• Train a model from scratch:
+### Train a model from scratch:
 
 ```bash
 gdrl --env=gdrl --env_path=examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64 --viz
@@ -44,7 +44,11 @@ gdrl --env=gdrl --env_path=examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64 --
 
 While the default options for sb3 work reasonably well. You may be interested in changing the hyperparameters.
 
-We recommend taking the [sb3 example](https://github.com/edbeeching/godot_rl_agents/blob/main/examples/stable_baselines3_example.py) and modifying to match your needs.
+We recommend taking the [sb3 example](https://github.com/edbeeching/godot_rl_agents/blob/main/examples/stable_baselines3_example.py) and modifying to match your needs. 
+
+This example exposes more parameter for the user to configure, such as `--speedup` to run the environment faster than realtime and the `n_parallel` to launch several instances of the game executable in order to accelerate training (not available for in-editor training).
+
+
 ```python
 import argparse
 
@@ -66,11 +70,12 @@ parser.add_argument(
 )
 
 parser.add_argument("--speedup", default=1, type=int, help="whether to speed up the physics in the env")
+parser.add_argument("--n_parallel", default=1, type=int, help="whether to speed up the physics in the env")
 
 args, extras = parser.parse_known_args()
 
 
-env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=True, speedup=args.speedup, convert_action_space=True)
+env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=True, n_parallel=args.n_parallel, speedup=args.speedup)
 
 model = PPO("MultiInputPolicy", env, ent_coef=0.0001, verbose=2, n_steps=32, tensorboard_log="logs/log")
 model.learn(200000)

@@ -25,11 +25,11 @@ parser.add_argument(
 )
 
 parser.add_argument("--speedup", default=1, type=int, help="whether to speed up the physics in the env")
-
+parser.add_argument("--n_parallel", default=1, type=int, help="whether to speed up the physics in the env")
 args, extras = parser.parse_known_args()
 
 
-env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=True, speedup=args.speedup)
+env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=True, n_parallel=args.n_parallel, speedup=args.speedup)
 env = VecMonitor(env)
 
 model = PPO("MultiInputPolicy", env, ent_coef=0.0001, verbose=2, n_steps=32, tensorboard_log="logs/log")
