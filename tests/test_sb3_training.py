@@ -1,6 +1,3 @@
-import pytest
-
-from godot_rl.core.godot_env import GodotEnv
 from godot_rl.main import get_args
 
 try:
