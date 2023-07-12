@@ -1,9 +1,7 @@
 import argparse
-import sys
 from functools import partial
 import random
 import numpy as np
-from gym import spaces
 from sample_factory.cfg.arguments import parse_full_cfg, parse_sf_args
 from sample_factory.envs.env_utils import register_env
 from sample_factory.train import run_rl
@@ -45,15 +43,7 @@ class SampleFactoryEnvWrapperBatched(GodotEnv):
         return
 
 
-class SampleFactoryEnvWrapperNonBatched(GodotEnv):
-    @property
-    def unwrapped(self):
-        return self
-
-    @property
-    def num_agents(self):
-        return self.num_envs
-
+class SampleFactoryEnvWrapperNonBatched(SampleFactoryEnvWrapperBatched):
     def reset(self, seed=None):
         obs, info = super().reset(seed=seed)
         return self.to_numpy(obs), info
@@ -63,17 +53,6 @@ class SampleFactoryEnvWrapperNonBatched(GodotEnv):
 
         return self.to_numpy(obs), np.array(reward), np.array(term), np.array(trunc) * 0, info
 
-    @staticmethod
-    def to_numpy(lod):
-
-        for d in lod:
-            for k, v in d.items():
-                d[k] = np.array(v)
-
-        return lod
-
-    def render():
-        return
 
 
 def make_godot_env_func(env_path, full_env_name, cfg=None, env_config=None, render_mode=None, speedup=1, viz=False):

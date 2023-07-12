@@ -1,3 +1,5 @@
+import importlib
+
 import gym
 import numpy as np
 import re
@@ -103,3 +105,12 @@ class ActionSpaceProcessor:
                 raise NotImplementedError
 
         return original_action
+
+
+
+def cant_import(module_name):
+    try:
+        importlib.import_module(module_name)
+        return False
+    except ImportError:
+        return True
