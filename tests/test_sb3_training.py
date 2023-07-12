@@ -30,5 +30,6 @@ def test_sb3_training(env_name, port, n_parallel):
     args, extras = get_args()
     args.env = "gdrl"
     args.env_path = f"examples/godot_rl_{env_name}/bin/{env_name}.x86_64"
+    starting_port = port + n_parallel
 
-    stable_baselines_training(args, extras, n_steps=1000, port=port, n_parallel=n_parallel)
+    stable_baselines_training(args, extras, n_steps=1000, port=starting_port, n_parallel=n_parallel)
