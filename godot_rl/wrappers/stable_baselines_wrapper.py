@@ -30,6 +30,7 @@ class StableBaselinesGodotEnv(VecEnv):
         all_info = []
         
         num_envs = self.envs[0].num_envs
+        # Decouple sending actions from receiveing observations
         for i in range(self.n_parallel):
             self.envs[i].step_send(action[i*num_envs:(i+1)*num_envs])
             
@@ -42,16 +43,23 @@ class StableBaselinesGodotEnv(VecEnv):
             all_info.extend(info)
             
         obs = lod_to_dol(all_obs)
-        return {k: np.array(v) for k, v in obs.items()}, np.array(reward), np.array(term), info
+        return {k: np.array(v) for k, v in obs.items()}, np.array(all_rewards), np.array(all_term), all_info
 
     def reset(self):
-        obs, info = self.envs[0].reset()
-        obs = lod_to_dol(obs)
+        all_obs = []
+        all_info = []
+        for i in range(self.n_parallel):
+            obs, info = self.envs[i].reset()
+            all_obs.extend(obs)
+            all_info.extend(info)
+            
+        obs = lod_to_dol(all_obs)
         obs = {k: np.array(v) for k, v in obs.items()}
         return obs
 
     def close(self):
-        self.envs[0].close()
+        for env in self.envs:
+            env.close()
 
     def env_is_wrapped(self, wrapper_class, indices = None):
         return [False] * (self.envs[0].num_envs * self.n_parallel)
