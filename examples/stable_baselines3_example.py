@@ -24,8 +24,8 @@ parser.add_argument(
     help="The Godot binary to use, do not include for in editor training",
 )
 
-parser.add_argument("--speedup", default=1, type=int, help="whether to speed up the physics in the env")
-parser.add_argument("--n_parallel", default=1, type=int, help="whether to speed up the physics in the env")
+parser.add_argument("--speedup", default=1, type=int, help="Whether to speed up the physics in the env")
+parser.add_argument("--n_parallel", default=1, type=int, help="How many instances of the environment executable to launch - requires --env_path to be set if > 1.")
 args, extras = parser.parse_known_args()
 
 
