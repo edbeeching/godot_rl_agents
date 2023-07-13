@@ -7,13 +7,29 @@ try:
     from godot_rl.wrappers.stable_baselines_wrapper import stable_baselines_training
 except ImportError as e:
 
-    def stable_baselines_training(args, extras):
+    def stable_baselines_training(args, extras, **kwargs):
         print("Import error when trying to use sb3, this is probably not installed try pip install godot-rl[sb3]")
 
-
-def test_sb3_training():
+@pytest.mark.parametrize(
+    "env_name,port",
+    [
+        ("BallChase", 12000),
+        ("FPS", 12100),
+        ("JumperHard", 12200),
+        ("Racer", 12300),
+        ("FlyBy", 12400),
+    ],
+)
+@pytest.mark.parametrize(
+    "n_parallel",[
+        1,2,4
+    ]
+    
+)
+def test_sb3_training(env_name, port, n_parallel):
     args, extras = get_args()
     args.env = "gdrl"
-    args.env_path = "examples/godot_rl_JumperHard/bin/JumperHard.x86_64"
+    args.env_path = f"examples/godot_rl_{env_name}/bin/{env_name}.x86_64"
+    starting_port = port + n_parallel
 
-    stable_baselines_training(args, extras, n_steps=10000)
+    stable_baselines_training(args, extras, n_steps=1000, port=starting_port, n_parallel=n_parallel)
