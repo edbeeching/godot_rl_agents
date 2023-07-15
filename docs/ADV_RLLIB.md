@@ -22,7 +22,7 @@ chmod +x examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64 # linux example
 • Train a model from scratch:
 
 ```
-gdrl --trainer=rllib --env=gdrl --env_path=examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64 --speedup=8 --viz
+gdrl --trainer=rllib --env=gdrl --env_path=examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64 --speedup=8 --experiment_name=Experiment_01 --viz
 ```
 
 By default rllib will use the hyperparameters in the **ppo_test.yaml** file on the github repo. You can either modify this file, or create your own one.

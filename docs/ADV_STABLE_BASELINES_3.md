@@ -39,7 +39,7 @@ chmod +x examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64 # linux example
 ### Train a model from scratch:
 
 ```bash
-gdrl --env=gdrl --env_path=examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64 --viz
+gdrl --env=gdrl --env_path=examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64 --experiment_name=Experiment_01 --viz
 ```
 
 While the default options for sb3 work reasonably well. You may be interested in changing the hyperparameters.
