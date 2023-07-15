@@ -2,6 +2,7 @@ import gym
 import numpy as np
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env.base_vec_env import VecEnv
+from stable_baselines3.common.vec_env.vec_monitor import VecMonitor
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 from godot_rl.core.godot_env import GodotEnv
@@ -128,6 +129,7 @@ class StableBaselinesGodotEnv(VecEnv):
 def stable_baselines_training(args, extras, n_steps: int = 200000, **kwargs) -> None:
     # Initialize the custom environment
     env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=args.viz, speedup=args.speedup, **kwargs)
+    env = VecMonitor(env)
 
     # Initialize the PPO model
     model = PPO(
@@ -140,7 +142,7 @@ def stable_baselines_training(args, extras, n_steps: int = 200000, **kwargs) -> 
     )
 
     # Train the model
-    model.learn(n_steps)
+    model.learn(n_steps, tb_log_name=args.experiment_name)
 
     print("closing env")
     env.close()

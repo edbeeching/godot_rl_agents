@@ -171,6 +171,7 @@ def parse_gdrl_args(argv=None, evaluation=False):
     add_gdrl_env_args(partial_cfg.env, parser, evaluation=evaluation)
     gdrl_override_defaults(partial_cfg.env, parser)
     final_cfg = parse_full_cfg(parser, argv)
+    final_cfg.experiment = final_cfg.experiment_name if final_cfg.experiment_name != None else final_cfg.experiment
     return final_cfg
 
 
