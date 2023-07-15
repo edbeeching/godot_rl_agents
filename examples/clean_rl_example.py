@@ -17,8 +17,10 @@ from godot_rl.wrappers.clean_rl_wrapper import CleanRLGodotEnv
 def parse_args():
     # fmt: off
     parser = argparse.ArgumentParser()
-    parser.add_argument("--exp-name", type=str, default=os.path.basename(__file__).rstrip(".py"),
-        help="the name of this experiment")
+    parser.add_argument("--experiment_dir", default="logs_cleanrl", type=str,
+        help="The name of the the experiment directory, in which the tensorboard logs are getting stored")
+    parser.add_argument("--experiment_name", default=os.path.basename(__file__).rstrip(".py"), type=str,
+        help="The name of the the experiment, which will be displayed in tensborboard")
     parser.add_argument("--seed", type=int, default=1,
         help="seed of the experiment")
     parser.add_argument("--torch-deterministic", type=lambda x: bool(strtobool(x)), default=True, nargs="?", const=True,
@@ -124,7 +126,7 @@ class Agent(nn.Module):
 
 if __name__ == "__main__":
     args = parse_args()
-    run_name = f"{args.env_path}__{args.exp_name}__{args.seed}__{int(time.time())}"
+    run_name = f"{args.env_path}__{args.experiment_name}__{args.seed}__{int(time.time())}"
     if args.track:
         import wandb
 
@@ -137,7 +139,7 @@ if __name__ == "__main__":
             # monitor_gym=True, no longer works for gymnasium
             save_code=True,
         )
-    writer = SummaryWriter(f"runs/{run_name}")
+    writer = SummaryWriter(f"{args.experiment_dir}/{run_name}")
     writer.add_text(
         "hyperparameters",
         "|param|value|\n|-|-|\n%s" % ("\n".join([f"|{key}|{value}|" for key, value in vars(args).items()])),

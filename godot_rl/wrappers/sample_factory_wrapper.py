@@ -164,6 +164,18 @@ def add_gdrl_env_args(_env, p: argparse.ArgumentParser, evaluation=False):
         type=int,
         help="Num agents in each envpool (if used)",
     )
+    p.add_argument(
+        "--experiment_dir",
+        default="logs_sf",
+        type=str,
+        help="The name of the the experiment directory, in which the tensorboard logs are getting stored",
+    )
+    p.add_argument(
+        "--experiment_name",
+        default=None,
+        type=str,
+        help="The name of the the experiment, which will be displayed in tensborboard",
+    )
 
 
 def parse_gdrl_args(argv=None, evaluation=False):
@@ -171,7 +183,8 @@ def parse_gdrl_args(argv=None, evaluation=False):
     add_gdrl_env_args(partial_cfg.env, parser, evaluation=evaluation)
     gdrl_override_defaults(partial_cfg.env, parser)
     final_cfg = parse_full_cfg(parser, argv)
-    final_cfg.experiment = final_cfg.experiment_name if final_cfg.experiment_name != None else final_cfg.experiment
+    final_cfg.train_dir = final_cfg.experiment_dir 
+    final_cfg.experiment = final_cfg.experiment_name or final_cfg.experiment
     return final_cfg
 
 

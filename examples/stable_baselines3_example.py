@@ -19,7 +19,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "--experiment_dir",
-    default="logs/log",
+    default="logs_sb3",
     type=str,
     help="The name of the the experiment directory, in which the tensorboard logs are getting stored",
 )
