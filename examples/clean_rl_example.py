@@ -20,7 +20,7 @@ def parse_args():
     parser.add_argument("--experiment_dir", default="logs/cleanrl", type=str,
         help="The name of the experiment directory, in which the tensorboard logs are getting stored")
     parser.add_argument("--experiment_name", default=os.path.basename(__file__).rstrip(".py"), type=str,
-        help="The name of the experiment, which will be displayed in tensborboard")
+        help="The name of the experiment, which will be displayed in tensorboard")
     parser.add_argument("--seed", type=int, default=1,
         help="seed of the experiment")
     parser.add_argument("--torch-deterministic", type=lambda x: bool(strtobool(x)), default=True, nargs="?", const=True,
