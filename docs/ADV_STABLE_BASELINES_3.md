@@ -39,14 +39,14 @@ chmod +x examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64 # linux example
 ### Train a model from scratch:
 
 ```bash
-gdrl --env=gdrl --env_path=examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64 --viz
+gdrl --env=gdrl --env_path=examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64 --experiment_name=Experiment_01 --viz
 ```
 
 While the default options for sb3 work reasonably well. You may be interested in changing the hyperparameters.
 
 We recommend taking the [sb3 example](https://github.com/edbeeching/godot_rl_agents/blob/main/examples/stable_baselines3_example.py) and modifying to match your needs. 
 
-This example exposes more parameter for the user to configure, such as `--speedup` to run the environment faster than realtime and the `n_parallel` to launch several instances of the game executable in order to accelerate training (not available for in-editor training).
+This example exposes more parameter for the user to configure, such as `--speedup` to run the environment faster than realtime and the `--n_parallel` to launch several instances of the game executable in order to accelerate training (not available for in-editor training).
 
 
 ```python
