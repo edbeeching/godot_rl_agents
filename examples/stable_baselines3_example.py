@@ -21,13 +21,13 @@ parser.add_argument(
     "--experiment_dir",
     default="logs/sb3",
     type=str,
-    help="The name of the the experiment directory, in which the tensorboard logs are getting stored",
+    help="The name of the experiment directory, in which the tensorboard logs are getting stored",
 )
 parser.add_argument(
     "--experiment_name",
     default="Experiment",
     type=str,
-    help="The name of the the experiment, which will be displayed in tensborboard",
+    help="The name of the experiment, which will be displayed in tensborboard",
 )
 parser.add_argument(
     "--onnx_export_path",
