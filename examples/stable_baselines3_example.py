@@ -27,7 +27,7 @@ parser.add_argument(
     "--experiment_name",
     default="Experiment",
     type=str,
-    help="The name of the experiment, which will be displayed in tensborboard",
+    help="The name of the experiment, which will be displayed in tensorboard",
 )
 parser.add_argument(
     "--onnx_export_path",
