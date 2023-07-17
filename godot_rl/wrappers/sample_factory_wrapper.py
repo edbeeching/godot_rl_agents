@@ -168,13 +168,13 @@ def add_gdrl_env_args(_env, p: argparse.ArgumentParser, evaluation=False):
         "--experiment_dir",
         default="logs/sf",
         type=str,
-        help="The name of the the experiment directory, in which the tensorboard logs are getting stored",
+        help="The name of the experiment directory, in which the tensorboard logs are getting stored",
     )
     p.add_argument(
         "--experiment_name",
         default=None,
         type=str,
-        help="The name of the the experiment, which will be displayed in tensborboard",
+        help="The name of the experiment, which will be displayed in tensorboard",
     )
 
 
