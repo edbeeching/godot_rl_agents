@@ -1,4 +1,4 @@
-import gym
+import gymnasium as gym
 import numpy as np
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env.base_vec_env import VecEnv
@@ -109,8 +109,8 @@ class StableBaselinesGodotEnv(VecEnv):
     def env_method(self):
         raise NotImplementedError()
 
-    def get_attr(self):
-        raise NotImplementedError()
+    def get_attr(self, attr_name: str, indices = None) -> List[Any]:
+        raise AttributeError("get attr not implemented in godot-rl StableBaselinesWrapper")
 
     def seed(self):
         raise NotImplementedError()

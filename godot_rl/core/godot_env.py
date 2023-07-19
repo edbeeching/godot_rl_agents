@@ -8,7 +8,7 @@ import time
 from sys import platform
 
 import numpy as np
-from gym import spaces
+from gymnasium import spaces
 from typing import Optional
 from godot_rl.core.utils import ActionSpaceProcessor, convert_macos_path
 
