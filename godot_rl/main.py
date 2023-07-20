@@ -60,10 +60,18 @@ def get_args():
     parser.add_argument("--export", default=False, action="store_true", help="wheter to export the model")
     parser.add_argument("--num_gpus", default=None, type=int, help="Number of GPUs to use [only for rllib]")
     parser.add_argument("--experiment_dir", default=None, type=str, help="The name of the the experiment directory, in which the tensorboard logs are getting stored")
-    parser.add_argument("--experiment_name", default=None, type=str, help="The name of the the experiment, which will be displayed in tensborboard")
+    parser.add_argument("--experiment_name", default="experiment", type=str, help="The name of the the experiment, which will be displayed in tensborboard")
     parser.add_argument("--viz", default=False, action="store_true", help="Whether to visualize one process")
+    
+    args, extras =  parser.parse_known_args()
+    if args.experiment_dir is None:
+        args.experiment_dir = f"logs/{args.trainer}"
+        
+    if args.trainer == "sf" and args.env_path is None:
+        print("WARNING: the sample-factory intergration is not designed to run in interactive mode, please export you game to use this trainer")
+        
 
-    return parser.parse_known_args()
+    return args, extras
 
 
 def main():
