@@ -25,7 +25,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "--experiment_name",
-    default="Experiment",
+    default="experiment",
     type=str,
     help="The name of the experiment, which will be displayed in tensorboard",
 )
