@@ -24,14 +24,14 @@ parser.add_argument(
     "--experiment_dir",
     default="logs/sb3",
     type=str,
-    help="The name of the experiment directory, in which the tensorboard logs and checkpoints are getting stored."
+    help="The name of the experiment directory, in which the tensorboard logs and checkpoints (if enabled) are getting stored."
 )
 parser.add_argument(
     "--experiment_name",
     default="Experiment",
     type=str,
     help="The name of the experiment, which will be displayed in tensorboard and "
-         "for checkpoint directory and name.",
+         "for checkpoint directory and name (if enabled).",
 )
 parser.add_argument(
     "--resume_model_path",
