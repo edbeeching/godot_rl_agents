@@ -1,4 +1,6 @@
 import argparse
+import os
+import pathlib
 
 from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
 from godot_rl.wrappers.onnx.stable_baselines_export import export_ppo_model_as_onnx
@@ -30,6 +32,20 @@ parser.add_argument(
     help="The name of the experiment, which will be displayed in tensorboard",
 )
 parser.add_argument(
+    "--resume_model_path",
+    default=None,
+    type=str,
+    help="The path to a model file previously saved using --save_model_path or a checkpoint saved using "
+         "--save_checkpoints_frequency. Use this to resume training from a saved model.",
+)
+parser.add_argument(
+    "--save_model_path",
+    default=None,
+    type=str,
+    help="The path to use for saving the trained sb3 model after training is complete. Saved model can be used later "
+         "to resume training. Extension will be set to .zip",
+)
+parser.add_argument(
     "--onnx_export_path",
     default=None,
     type=str,
@@ -44,7 +60,13 @@ args, extras = parser.parse_known_args()
 env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=True, n_parallel=args.n_parallel, speedup=args.speedup)
 env = VecMonitor(env)
 
-model = PPO("MultiInputPolicy", env, ent_coef=0.0001, verbose=2, n_steps=32, tensorboard_log=args.experiment_dir)
+if args.resume_model_path is None:
+    model = PPO("MultiInputPolicy", env, ent_coef=0.0001, verbose=2, n_steps=32, tensorboard_log=args.experiment_dir)
+else:
+    path_zip = pathlib.Path(args.resume_model_path)
+    print("Loading model: " + os.path.abspath(path_zip))
+    model = PPO.load(path_zip, env=env)
+
 model.learn(1000000, tb_log_name=args.experiment_name)
 
 print("closing env")
