@@ -90,7 +90,11 @@ if args.save_checkpoint_frequency is not None and os.path.isdir(path_checkpoint)
                                              "or if previous checkpoints are not needed anymore, "
                                              "remove the folder containing the checkpoints. ")
 
-env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=True, n_parallel=args.n_parallel, speedup=args.speedup)
+if args.inference and args.resume_model_path is None:
+    raise parser.error("Using --inference requires --resume_model_path to be set.")
+
+env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=True, n_parallel=args.n_parallel,
+                              speedup=args.speedup)
 env = VecMonitor(env)
 
 if args.resume_model_path is None:
