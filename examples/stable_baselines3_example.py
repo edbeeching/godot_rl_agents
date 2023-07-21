@@ -51,11 +51,18 @@ parser.add_argument(
     type=str,
     help="The Godot binary to use, do not include for in editor training",
 )
-
+parser.add_argument(
+    "--timesteps",
+    default=1_000_000,
+    type=int,
+    help="The number of environment steps to train for, default is 1_000_000. If resuming from a saved model, "
+         "it will continue training for this amount of steps from the saved state without counting previously trained "
+         "steps",
+)
 parser.add_argument("--speedup", default=1, type=int, help="Whether to speed up the physics in the env")
-parser.add_argument("--n_parallel", default=1, type=int, help="How many instances of the environment executable to launch - requires --env_path to be set if > 1.")
+parser.add_argument("--n_parallel", default=1, type=int, help="How many instances of the environment executable to "
+                                                              "launch - requires --env_path to be set if > 1.")
 args, extras = parser.parse_known_args()
-
 
 env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=True, n_parallel=args.n_parallel, speedup=args.speedup)
 env = VecMonitor(env)
@@ -67,10 +74,19 @@ else:
     print("Loading model: " + os.path.abspath(path_zip))
     model = PPO.load(path_zip, env=env)
 
-model.learn(1000000, tb_log_name=args.experiment_name)
+model.learn(args.timesteps, tb_log_name=args.experiment_name)
 
 print("closing env")
 env.close()
 
+# Enforce the extension of onnx and zip when saving model to avoid potential conflicts in case of same name
+# and extension used for both
 if args.onnx_export_path is not None:
-    export_ppo_model_as_onnx(model, args.onnx_export_path)
+    path_onnx = pathlib.Path(args.onnx_export_path).with_suffix(".onnx")
+    print("Exporting onnx to: " + os.path.abspath(path_onnx))
+    export_ppo_model_as_onnx(model, str(path_onnx))
+
+if args.save_model_path is not None:
+    path_zip = pathlib.Path(args.save_model_path).with_suffix(".zip")
+    print("Saving model to: " + os.path.abspath(path_zip))
+    model.save(path_zip)
