@@ -113,6 +113,9 @@ ENV/
 env.*/
 venv.*/
 
+# weights and biases
+wandb/
+
 # Spyder project settings
 .spyderproject
 .spyproject

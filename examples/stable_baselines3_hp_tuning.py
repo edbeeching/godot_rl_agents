@@ -19,6 +19,7 @@ from optuna.pruners import MedianPruner
 from optuna.samplers import TPESampler
 
 from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
+from godot_rl.core.godot_env import GodotEnv
 
 from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import EvalCallback
@@ -56,15 +57,15 @@ DEFAULT_HYPERPARAMS = {
 def sample_ppo_params(trial: optuna.Trial) -> Dict[str, Any]:
     """Sampler for PPO hyperparameters."""
     learning_rate = trial.suggest_loguniform("learning_rate", 0.0003, 0.003)
-    n_steps = trial.suggest_categorical("n_steps", [8, 16, 32, 64, 128, 256, 512])
-    batch_size = trial.suggest_categorical("batch_size", [8, 16, 32, 64, 128, 256, 512])
+    n_steps = trial.suggest_categorical("n_steps", [32, 64, 128, 256, 512, 1024, 2048])
+    batch_size = trial.suggest_categorical("batch_size", [32, 64, 128, 256, 512, 1024, 2048])
     n_epochs = trial.suggest_categorical("n_epochs", [2, 4, 8, 16])
 
     return {
         "learning_rate": learning_rate,
         "n_steps": n_steps,
         "batch_size": batch_size,
-        "n_epochs": n_epochs        
+        "n_epochs": n_epochs,
     }
 
 
@@ -109,7 +110,8 @@ def objective(trial: optuna.Trial) -> float:
     kwargs.update(sample_ppo_params(trial))
     print("args:", kwargs)
     # Create the RL model.
-    model = PPO("MultiInputPolicy", VecMonitor(StableBaselinesGodotEnv(env_path=args.env_path, speedup=args.speedup, n_parallel=args.n_parallel)), tensorboard_log="logs/optuna", **kwargs)
+    training_port = GodotEnv.DEFAULT_PORT + 1
+    model = PPO("MultiInputPolicy", VecMonitor(StableBaselinesGodotEnv(env_path=args.env_path, speedup=args.speedup, n_parallel=args.n_parallel, port=training_port)), tensorboard_log="logs/optuna", **kwargs)
     # Create env used for evaluation.
     eval_env = VecMonitor(StableBaselinesGodotEnv(env_path=args.env_path, speedup=args.speedup))
     
