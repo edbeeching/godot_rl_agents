@@ -52,43 +52,43 @@ To use the example script, first move to the location where the downloaded scrip
 
 ### Train a model in editor:
 ```bash
-python .\stable_baselines3_example.py
+python stable_baselines3_example.py
 ```
 
 ### Train an exported environment:
 ```bash
-python .\stable_baselines3_example.py --env_path=path_to_executable
+python stable_baselines3_example.py --env_path=path_to_executable
 ```
 Note that the exported environment will not be rendered in order to accelerate training.
 If you want to display it, add the `--viz` argument.
 
 ### Train an exported environment using 4 environment processes:
 ```bash
-python .\stable_baselines3_example.py --env_path=path_to_executable --n_parallel=4
+python stable_baselines3_example.py --env_path=path_to_executable --n_parallel=4
 ```
 
 ### Train an exported environment using 8 times speedup:
 ```bash
-python .\stable_baselines3_example.py --env_path=path_to_executable --speedup=8
+python stable_baselines3_example.py --env_path=path_to_executable --speedup=8
 ```
 
 ### Set an experiment directory and name:
 You can optionally set an experiment directory and name to override the default. When saving checkpoints, you need to use a unique directory or name for each run (more about that below).
 ```bash
-python .\stable_baselines3_example.py --experiment_dir="experiments" --experiment_name="experiment1"
+python stable_baselines3_example.py --experiment_dir="experiments" --experiment_name="experiment1"
 ```
 
 ### Train a model for 10_000 steps then save and export the model
 The exported .onnx model can be used by the Godot sync node to run inference from Godot directly, while the saved .zip model can be used to resume training later or run inference from the example script by adding `--inference`.
 ```bash
-python .\stable_baselines3_example.py --timesteps=100_000 --onnx_export_path=model.onnx --save_model_path=model.zip
+python stable_baselines3_example.py --timesteps=100_000 --onnx_export_path=model.onnx --save_model_path=model.zip
 ```
 
 ### Resume training from a saved .zip model
 This will load the previously saved model.zip, and resume training for another 100 000 steps, so the saved model will have been trained for 200 000 steps in total.
 Note that the console log will display the `total_timesteps` for the last training session only, so it will show `100000` instead of `200000`. 
 ```bash
-python .\stable_baselines3_example.py --timesteps=100_000 --save_model_path=model_200_000_total_steps.zip --resume_model_path=model.zip
+python stable_baselines3_example.py --timesteps=100_000 --save_model_path=model_200_000_total_steps.zip --resume_model_path=model.zip
 ```
 
 ### Save periodic checkpoints
@@ -99,7 +99,7 @@ Alternatively, you can remove the folder containing checkpoints from a previous 
 E.g. train for a total of 2 000 000 steps with checkpoints saved at every 50 000 steps:
 
 ```bash
-python .\stable_baselines3_example.py --experiment_name=experiment1 --timesteps=2_000_000 --save_checkpoint_frequency=50_000
+python stable_baselines3_example.py --experiment_name=experiment1 --timesteps=2_000_000 --save_checkpoint_frequency=50_000
 ```
 
 Checkpoints will be saved to `logs\sb3\experiment1_checkpoints` in the above case, the location is affected by `--experiment_dir` and `--experiment_name`.
@@ -107,5 +107,5 @@ Checkpoints will be saved to `logs\sb3\experiment1_checkpoints` in the above cas
 ### Run inference on a saved model for 100_000 steps
 You can run inference on a model that was previously saved using either `--save_model_path` or `--save_checkpoint_frequency`.
 ```bash
-python .\stable_baselines3_example.py --timesteps=100_000 --resume_model_path=model.zip --inference
+python stable_baselines3_example.py --timesteps=100_000 --resume_model_path=model.zip --inference
 ```
