@@ -10,6 +10,7 @@ def test_sample_factory_training():
     args.env_path = "examples/godot_rl_JumperHard/bin/JumperHard.x86_64"
     extras = []
     extras.append('--env=gdrl')
-    extras.extend(['--train_for_env_steps=1000'])
+    extras.append('--train_for_env_steps=1000')
+    extras.append('--device=cpu')
     
     sample_factory_training(args, extras)
