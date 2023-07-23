@@ -38,7 +38,7 @@ parser.add_argument(
     default=None,
     type=str,
     help="The path to a model file previously saved using --save_model_path or a checkpoint saved using "
-         "--save_checkpoints_frequency. Use this to resume training from a saved model.",
+         "--save_checkpoints_frequency. Use this to resume training or infer from a saved model.",
 )
 parser.add_argument(
     "--save_model_path",
