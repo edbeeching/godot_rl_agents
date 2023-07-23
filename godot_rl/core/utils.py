@@ -1,6 +1,9 @@
-import gym
-import numpy as np
+import importlib
 import re
+
+import gymnasium as gym
+import numpy as np
+
 
 
 def lod_to_dol(lod):
@@ -103,3 +106,13 @@ class ActionSpaceProcessor:
                 raise NotImplementedError
 
         return original_action
+
+def can_import(module_name):
+    return not cant_import(module_name)
+
+def cant_import(module_name):
+    try:
+        importlib.import_module(module_name)
+        return False
+    except ImportError:
+        return True

@@ -1,9 +1,7 @@
 import argparse
-import sys
 from functools import partial
 import random
 import numpy as np
-from gym import spaces
 from sample_factory.cfg.arguments import parse_full_cfg, parse_sf_args
 from sample_factory.envs.env_utils import register_env
 from sample_factory.train import run_rl
@@ -11,9 +9,9 @@ from sample_factory.enjoy import enjoy
 
 from godot_rl.core.godot_env import GodotEnv
 from godot_rl.core.utils import lod_to_dol
+from gymnasium import Env
 
-
-class SampleFactoryEnvWrapperBatched(GodotEnv):
+class SampleFactoryEnvWrapperBatched(GodotEnv, Env):
     @property
     def unwrapped(self):
         return self
@@ -22,7 +20,7 @@ class SampleFactoryEnvWrapperBatched(GodotEnv):
     def num_agents(self):
         return self.num_envs
 
-    def reset(self, seed=None):
+    def reset(self, seed=None, options=None):
         obs, info = super().reset(seed=seed)
         obs = lod_to_dol(obs)
         return {k: np.array(v) for k, v in obs.items()}, info
@@ -45,7 +43,7 @@ class SampleFactoryEnvWrapperBatched(GodotEnv):
         return
 
 
-class SampleFactoryEnvWrapperNonBatched(GodotEnv):
+class SampleFactoryEnvWrapperNonBatched(GodotEnv, Env):
     @property
     def unwrapped(self):
         return self
@@ -53,14 +51,12 @@ class SampleFactoryEnvWrapperNonBatched(GodotEnv):
     @property
     def num_agents(self):
         return self.num_envs
-
-    def reset(self, seed=None):
+    def reset(self, seed=None, options=None):
         obs, info = super().reset(seed=seed)
         return self.to_numpy(obs), info
 
     def step(self, action):
         obs, reward, term, trunc, info = super().step(action, order_ij=True)
-
         return self.to_numpy(obs), np.array(reward), np.array(term), np.array(trunc) * 0, info
 
     @staticmethod
@@ -78,7 +74,7 @@ class SampleFactoryEnvWrapperNonBatched(GodotEnv):
 
 def make_godot_env_func(env_path, full_env_name, cfg=None, env_config=None, render_mode=None, speedup=1, viz=False):
     seed = 0
-    port = 21008 + cfg.base_port
+    port = cfg.base_port
     print("BASE PORT ", cfg.base_port)
     show_window = False
     if env_config:
@@ -156,7 +152,7 @@ def add_gdrl_env_args(_env, p: argparse.ArgumentParser, evaluation=False):
         # apparently env.render(mode="human") is not supported anymore and we need to specify the render mode in
         # the env actor
         p.add_argument("--render_mode", default="human", type=str, help="")
-    p.add_argument("--base_port", default=0, type=int, help="")
+    p.add_argument("--base_port", default=GodotEnv.DEFAULT_PORT, type=int, help="")
 
     p.add_argument(
         "--env_agents",
@@ -183,7 +179,7 @@ def parse_gdrl_args(argv=None, evaluation=False):
     add_gdrl_env_args(partial_cfg.env, parser, evaluation=evaluation)
     gdrl_override_defaults(partial_cfg.env, parser)
     final_cfg = parse_full_cfg(parser, argv)
-    args, _ = parser.parse_known_args()
+    args, _ = parser.parse_known_args(argv)
     final_cfg.train_dir = args.experiment_dir or "logs/sf"
     final_cfg.experiment = args.experiment_name or final_cfg.experiment
     return final_cfg
@@ -192,7 +188,7 @@ def parse_gdrl_args(argv=None, evaluation=False):
 def sample_factory_training(args, extras):
     register_gdrl_env(args)
     cfg = parse_gdrl_args(argv=extras, evaluation=args.eval)
-    cfg.base_port = random.randint(20000, 22000)
+    #cfg.base_port = random.randint(20000, 22000)
     status = run_rl(cfg)
     return status
 
