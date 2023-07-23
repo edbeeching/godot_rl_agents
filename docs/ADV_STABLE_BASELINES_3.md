@@ -55,7 +55,7 @@ To use the example script, first move to the location where the downloaded scrip
 python stable_baselines3_example.py
 ```
 
-### Train an exported environment:
+### Train a model using an exported environment:
 ```bash
 python stable_baselines3_example.py --env_path=path_to_executable
 ```
