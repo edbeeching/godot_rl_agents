@@ -9,14 +9,19 @@ This is a simplified version of what can be found in https://github.com/DLR-RM/r
 You can run this example as follows:
     $ python examples/stable_baselines3_hp_tuning.py --env_path=<path/to/your/env> --speedup=8 --n_parallel=1
 """
+
+try:
+    import optuna
+    from optuna.pruners import MedianPruner
+    from optuna.samplers import TPESampler
+except ImportError as e:
+    print("You need to install optuna to use the hyperparameter tuning script. Try: pip install optuna")
+    exit()
+
 from typing import Any
 from typing import Dict
 
 import gym
-
-import optuna
-from optuna.pruners import MedianPruner
-from optuna.samplers import TPESampler
 
 from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
 from godot_rl.core.godot_env import GodotEnv
