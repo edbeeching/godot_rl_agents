@@ -24,7 +24,8 @@ parser.add_argument(
     "--experiment_dir",
     default="logs/sb3",
     type=str,
-    help="The name of the experiment directory, in which the tensorboard logs and checkpoints (if enabled) are getting stored."
+    help="The name of the experiment directory, in which the tensorboard logs and checkpoints (if enabled) are "
+         "getting stored."
 )
 parser.add_argument(
     "--experiment_name",
@@ -75,6 +76,13 @@ parser.add_argument(
     help="Instead of training, it will run inference on a loaded model for --timesteps steps. "
          "Requires --resume_model_path to be set."
 )
+parser.add_argument(
+    "--viz",
+    action="store_true",
+    help="If set, the window(s) with the Godot environment(s) will be displayed, otherwise "
+         "training will run without rendering the game. Does not apply to in-editor training.",
+    default=False
+)
 parser.add_argument("--speedup", default=1, type=int, help="Whether to speed up the physics in the env")
 parser.add_argument("--n_parallel", default=1, type=int, help="How many instances of the environment executable to "
                                                               "launch - requires --env_path to be set if > 1.")
@@ -93,7 +101,10 @@ if args.save_checkpoint_frequency is not None and os.path.isdir(path_checkpoint)
 if args.inference and args.resume_model_path is None:
     raise parser.error("Using --inference requires --resume_model_path to be set.")
 
-env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=True, n_parallel=args.n_parallel,
+if args.env_path is None and args.viz:
+    print("Info: Using --viz without --env_path set has no effect, in-editor training will always render.")
+
+env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=args.viz, n_parallel=args.n_parallel,
                               speedup=args.speedup)
 env = VecMonitor(env)
 
