@@ -73,7 +73,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         # cpu version of pytorch
-        pip install .[test,rllib]
+        pip install .[rllib,test]
     - name: Download examples
       run: |
         make download_examples
@@ -97,7 +97,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         # cpu version of pytorch
-        pip install .[test,rllib]
+        pip install .[rllib,test]
     - name: Download examples
       run: |
         make download_examples
