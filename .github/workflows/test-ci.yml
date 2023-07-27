@@ -75,7 +75,7 @@ jobs:
         # cpu version of pytorch
         pip install .[test]
         pip uninstall -y stable-baselines3 gymnasium
-        pip install -y ray[rllib]
+        pip install ray[rllib]
     - name: Download examples
       run: |
         make download_examples
