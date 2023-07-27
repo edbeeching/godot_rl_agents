@@ -1,15 +1,9 @@
 import pytest
 
-from godot_rl.core.godot_env import GodotEnv
 from godot_rl.main import get_args
+from godot_rl.core.utils import can_import
 
-try:
-    from godot_rl.wrappers.stable_baselines_wrapper import stable_baselines_training
-except ImportError as e:
-
-    def stable_baselines_training(args, extras, **kwargs):
-        print("Import error when trying to use sb3, this is probably not installed try pip install godot-rl[sb3]")
-
+@pytest.mark.skipif(can_import("ray"), reason="rllib and sb3 are not compatable")
 @pytest.mark.parametrize(
     "env_name,port",
     [
@@ -20,13 +14,9 @@ except ImportError as e:
         ("FlyBy", 12400),
     ],
 )
-@pytest.mark.parametrize(
-    "n_parallel",[
-        1,2,4
-    ]
-    
-)
+@pytest.mark.parametrize("n_parallel",[1,2,4])
 def test_sb3_training(env_name, port, n_parallel):
+    from godot_rl.wrappers.stable_baselines_wrapper import stable_baselines_training
     args, extras = get_args()
     args.env = "gdrl"
     args.env_path = f"examples/godot_rl_{env_name}/bin/{env_name}.x86_64"
