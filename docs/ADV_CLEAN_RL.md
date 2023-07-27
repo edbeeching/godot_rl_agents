@@ -17,11 +17,11 @@ You can read more about CleanRL in their [technical paper](https://arxiv.org/abs
 
 # Installation
 ```bash
-pip install godot-rl[clean-rl]
+pip install godot-rl[cleanrl]
 ```
 
-While the default options for clean-rl work reasonably well. You may be interested in changing the hyperparameters.
-We recommend taking the [clean-rl example](https://github.com/edbeeching/godot_rl_agents/blob/main/examples/clean_rl_example.py) and modifying to match your needs.
+While the default options for cleanrl work reasonably well. You may be interested in changing the hyperparameters.
+We recommend taking the [cleanrl example](https://github.com/edbeeching/godot_rl_agents/blob/main/examples/clean_rl_example.py) and modifying to match your needs.
 
 ```python
     parser.add_argument("--gae-lambda", type=float, default=0.95,

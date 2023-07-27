@@ -31,30 +31,35 @@ class RayVectorGodotEnv(VectorEnv):
             show_window=show_window,
             framerate=framerate,
             action_repeat=action_repeat,
-        )
+        )        
         super().__init__(
             observation_space=self._env.observation_space,
             action_space=self._env.action_space,
             num_envs=self._env.num_envs,
         )
 
-    def vector_reset(self) -> List[EnvObsType]:
+    def vector_reset(self, seeds = None, options = None) -> List[EnvObsType]:    
         obs, info = self._env.reset()
-        return obs
+        return obs, ([info] * self.num_envs)
 
     def vector_step(
         self, actions: List[EnvActionType]
     ) -> Tuple[List[EnvObsType], List[float], List[bool], List[EnvInfoDict]]:
         actions = np.array(actions)
         self.obs, reward, term, trunc, info = self._env.step(actions, order_ij=True)
-        return self.obs, reward, term, info
+        return self.obs, reward, term, trunc, info
 
     def get_unwrapped(self):
         return [self._env]
 
-    def reset_at(self, index: Optional[int]) -> EnvObsType:
+    def reset_at(self, index: Optional[int], seed = None, options = None) -> EnvObsType:
         # the env is reset automatically, no need to reset it
-        return self.obs[index]
+        if hasattr(self, "obs"):
+            return self.obs[index], {}
+        else:
+            # First Reset
+            obs, info = self._env.reset()
+            return obs[index], info
 
 
 def register_env():
