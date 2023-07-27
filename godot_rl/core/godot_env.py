@@ -225,7 +225,7 @@ class GodotEnv:
         response["obs"] = self._process_obs(response["obs"])
         assert response["type"] == "reset"
         obs = response["obs"]
-        return obs, {}
+        return obs, [{}] * self.num_envs
 
     def call(self, method):
         message = {
