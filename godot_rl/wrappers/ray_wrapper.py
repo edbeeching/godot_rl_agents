@@ -45,7 +45,7 @@ class RayVectorGodotEnv(VectorEnv):
     def vector_step(
         self, actions: List[EnvActionType]
     ) -> Tuple[List[EnvObsType], List[float], List[bool], List[EnvInfoDict]]:
-        actions = np.array(actions)
+        actions = np.array(actions, dtype=np.dtype(object))
         self.obs, reward, term, trunc, info = self._env.step(actions, order_ij=True)
         return self.obs, reward, term, trunc, info
 
