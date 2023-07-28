@@ -82,8 +82,8 @@ parser.add_argument(
 parser.add_argument(
     "--viz",
     action="store_true",
-    help="If set, the window(s) with the Godot environment(s) will be displayed, otherwise "
-         "training will run without rendering the game. Does not apply to in-editor training.",
+    help="If set, the simulation will be displayed in a window during training. Otherwise "
+        "training will run without rendering the simualtion. This setting does not apply to in-editor training.",
     default=False
 )
 parser.add_argument("--speedup", default=1, type=int, help="Whether to speed up the physics in the env")
