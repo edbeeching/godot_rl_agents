@@ -16,6 +16,9 @@ from godot_rl.wrappers.clean_rl_wrapper import CleanRLGodotEnv
 def parse_args():
     # fmt: off
     parser = argparse.ArgumentParser()
+    parser.add_argument("--viz", default=False, type=bool,
+        help="If set, the simulation will be displayed in a window during training. Otherwise "
+            "training will run without rendering the simualtion. This setting does not apply to in-editor training.")
     parser.add_argument("--experiment_dir", default="logs/cleanrl", type=str,
         help="The name of the experiment directory, in which the tensorboard logs are getting stored")
     parser.add_argument("--experiment_name", default=os.path.basename(__file__).rstrip(".py"), type=str,
@@ -154,7 +157,7 @@ if __name__ == "__main__":
 
     # env setup
     
-    envs = env = CleanRLGodotEnv(env_path=args.env_path, show_window=True, speedup=args.speedup, convert_action_space=True) # Godot envs are already vectorized
+    envs = env = CleanRLGodotEnv(env_path=args.env_path, show_window=args.viz, speedup=args.speedup, convert_action_space=True) # Godot envs are already vectorized
     args.num_envs = envs.num_envs
     args.batch_size = int(args.num_envs * args.num_steps)
     args.minibatch_size = int(args.batch_size // args.num_minibatches)
