@@ -72,32 +72,32 @@ class SampleFactoryEnvWrapperNonBatched(GodotEnv, Env):
         return
 
 
-def make_godot_env_func(env_path, full_env_name, cfg=None, env_config=None, render_mode=None, speedup=1, viz=False):
-    seed = 0
+def make_godot_env_func(env_path, full_env_name, cfg=None, env_config=None, render_mode=None, seed=0, speedup=1, viz=False):
     port = cfg.base_port
     print("BASE PORT ", cfg.base_port)
     show_window = False
+    _seed = seed
     if env_config:
         port += 1 + env_config.env_id
-        seed += 1 + env_config.env_id
+        _seed += 1 + env_config.env_id
         print("env id", env_config.env_id)
         if viz:  #
             print("creating viz env")
             show_window = env_config.env_id == 0
     if cfg.batched_sampling:
         env = SampleFactoryEnvWrapperBatched(
-            env_path=env_path, port=port, seed=seed, show_window=show_window, speedup=speedup
+            env_path=env_path, port=port, seed=_seed, show_window=show_window, speedup=speedup
         )
     else:
         env = SampleFactoryEnvWrapperNonBatched(
-            env_path=env_path, port=port, seed=seed, show_window=show_window, speedup=speedup
+            env_path=env_path, port=port, seed=_seed, show_window=show_window, speedup=speedup
         )
 
     return env
 
 
 def register_gdrl_env(args):
-    make_env = partial(make_godot_env_func, args.env_path, speedup=args.speedup, viz=args.viz)
+    make_env = partial(make_godot_env_func, args.env_path, speedup=args.speedup, seed=args.seed, viz=args.viz)
     register_env("gdrl", make_env)
 
 
@@ -152,6 +152,7 @@ def add_gdrl_env_args(_env, p: argparse.ArgumentParser, evaluation=False):
         # apparently env.render(mode="human") is not supported anymore and we need to specify the render mode in
         # the env actor
         p.add_argument("--render_mode", default="human", type=str, help="")
+
     p.add_argument("--base_port", default=GodotEnv.DEFAULT_PORT, type=int, help="")
 
     p.add_argument(
