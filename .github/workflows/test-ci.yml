@@ -76,7 +76,6 @@ jobs:
         pip install .[test]
     - name: Clean up dependencies
       run: |
-        python -m pip install --upgrade pip
         pip uninstall -y stable-baselines3 gymnasium
         pip install .[rllib]
     - name: Download examples
@@ -100,11 +99,13 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
+        python -m pip install --upgrade pip wheel==0.38.4
         # cpu version of pytorch
         pip install .[test]
+    - name: Clean up dependencies
+      run: |
         pip uninstall -y stable-baselines3 gymnasium
-        pip install ray[rllib]
+        pip install .[rllib]
     - name: Download examples
       run: |
         make download_examples
