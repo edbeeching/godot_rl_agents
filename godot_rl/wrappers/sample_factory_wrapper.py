@@ -155,6 +155,8 @@ def add_gdrl_env_args(_env, p: argparse.ArgumentParser, evaluation=False):
 
     p.add_argument("--base_port", default=GodotEnv.DEFAULT_PORT, type=int, help="")
 
+    p.add_argument("--seed", default=0, type=int, help="")
+
     p.add_argument(
         "--env_agents",
         default=2,
