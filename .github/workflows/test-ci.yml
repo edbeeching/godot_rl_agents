@@ -76,6 +76,7 @@ jobs:
         pip install .[test]
     - name: Clean up dependencies
       run: |
+        python -m pip install --upgrade pip
         pip uninstall -y stable-baselines3 gymnasium
         pip install .[rllib]
     - name: Download examples
