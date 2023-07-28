@@ -10,7 +10,7 @@ from godot_rl.core.utils import can_import, lod_to_dol
 
 
 class StableBaselinesGodotEnv(VecEnv):
-    def __init__(self, env_path: Optional[str] = None, n_parallel: int = 1, **kwargs) -> None:
+    def __init__(self, env_path: Optional[str] = None, n_parallel: int = 1, seed: int = 0, **kwargs) -> None:
         # If we are doing editor training, n_parallel must be 1
         if env_path is None and n_parallel > 1:
             raise ValueError("You must provide the path to a exported game executable if n_parallel > 1")
@@ -19,7 +19,7 @@ class StableBaselinesGodotEnv(VecEnv):
         port = kwargs.pop("port", GodotEnv.DEFAULT_PORT)
 
         # Create a list of GodotEnv instances
-        self.envs = [GodotEnv(env_path=env_path, convert_action_space=True, port=port+p, seed=p, **kwargs) for p in range(n_parallel)]
+        self.envs = [GodotEnv(env_path=env_path, convert_action_space=True, port=port+p, seed=seed+p, **kwargs) for p in range(n_parallel)]
         
         # Store the number of parallel environments
         self.n_parallel = n_parallel
@@ -114,7 +114,7 @@ class StableBaselinesGodotEnv(VecEnv):
             return [None for _ in range(self.num_envs)]
         raise AttributeError("get attr not fully implemented in godot-rl StableBaselinesWrapper")
 
-    def seed(self):
+    def seed(self, seed = None):
         raise NotImplementedError()
 
     def set_attr(self):
