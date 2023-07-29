@@ -6,7 +6,7 @@ from stable_baselines3.common.vec_env.vec_monitor import VecMonitor
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 from godot_rl.core.godot_env import GodotEnv
-from godot_rl.core.utils import can_import, lod_to_dol
+from godot_rl.core.utils import lod_to_dol
 
 
 class StableBaselinesGodotEnv(VecEnv):
@@ -129,8 +129,6 @@ class StableBaselinesGodotEnv(VecEnv):
         return self.results
 
 def stable_baselines_training(args, extras, n_steps: int = 200000, **kwargs) -> None:
-    if can_import("ray"):
-        print("WARNING, stable baselines and ray[rllib] are not compatable")
     # Initialize the custom environment
     env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=args.viz, speedup=args.speedup, **kwargs)
     env = VecMonitor(env)

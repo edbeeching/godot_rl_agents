@@ -14,4 +14,3 @@ def test_sample_factory_training():
     extras.append('--device=cpu')
     
     sample_factory_training(args, extras)
-    
