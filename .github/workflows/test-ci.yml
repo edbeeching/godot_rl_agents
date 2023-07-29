@@ -71,7 +71,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip wheel==0.38.4
+        python -m pip install --upgrade pip
         # cpu version of pytorch
         pip install .[test]
     - name: Clean up dependencies
