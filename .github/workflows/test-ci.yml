@@ -74,8 +74,6 @@ jobs:
         python -m pip install --upgrade pip
         # cpu version of pytorch
         pip install .[test]
-    - name: Clean up dependencies
-      run: |
         pip uninstall -y stable-baselines3 gymnasium
         pip install ray[rllib]
     - name: Download examples
