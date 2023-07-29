@@ -46,7 +46,7 @@ While the default options for sb3 work reasonably well. You may be interested in
 
 We recommend taking the [sb3 example](https://github.com/edbeeching/godot_rl_agents/blob/main/examples/stable_baselines3_example.py) and modifying to match your needs. 
 
-This example exposes more parameter for the user to configure, such as `--speedup` to run the environment faster than realtime and the `--n_parallel` to launch several instances of the game executable in order to accelerate training (not available for in-editor training).
+This example exposes more parameter for the user to configure, such as `--speedup` to run the environment faster than realtime and the `n_parallel` to launch several instances of the game executable in order to accelerate training (not available for in-editor training).
 
 
 ```python

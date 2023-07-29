@@ -18,18 +18,6 @@ parser.add_argument(
     help="The Godot binary to use, do not include for in editor training",
 )
 parser.add_argument(
-    "--experiment_dir",
-    default="logs/log",
-    type=str,
-    help="The name of the the experiment directory, in which the tensorboard logs are getting stored",
-)
-parser.add_argument(
-    "--experiment_name",
-    default="Experiment",
-    type=str,
-    help="The name of the the experiment, which will be displayed in tensborboard",
-)
-parser.add_argument(
     "--onnx_export_path",
     default=None,
     type=str,
@@ -44,8 +32,8 @@ args, extras = parser.parse_known_args()
 env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=True, n_parallel=args.n_parallel, speedup=args.speedup)
 env = VecMonitor(env)
 
-model = PPO("MultiInputPolicy", env, ent_coef=0.0001, verbose=2, n_steps=32, tensorboard_log=args.experiment_dir)
-model.learn(1000000, tb_log_name=args.experiment_name)
+model = PPO("MultiInputPolicy", env, ent_coef=0.0001, verbose=2, n_steps=32, tensorboard_log="logs/log")
+model.learn(1000000)
 
 print("closing env")
 env.close()
