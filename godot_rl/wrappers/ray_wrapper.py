@@ -20,7 +20,6 @@ class RayVectorGodotEnv(VectorEnv):
         show_window=False,
         framerate=None,
         action_repeat=None,
-        speedup=None,
         timeout_wait=60,
         config=None,
     ) -> None:
@@ -32,7 +31,6 @@ class RayVectorGodotEnv(VectorEnv):
             show_window=show_window,
             framerate=framerate,
             action_repeat=action_repeat,
-            speedup=speedup
         )
         super().__init__(
             observation_space=self._env.observation_space,
@@ -40,28 +38,23 @@ class RayVectorGodotEnv(VectorEnv):
             num_envs=self._env.num_envs,
         )
 
-    def vector_reset(self, *, seeds: Optional[List[int]] = None, options: Optional[List[dict]] = None) -> List[EnvObsType]:
-        self.obs, info = self._env.reset()
-        return self.obs, info 
+    def vector_reset(self) -> List[EnvObsType]:
+        obs, info = self._env.reset()
+        return obs
 
     def vector_step(
         self, actions: List[EnvActionType]
     ) -> Tuple[List[EnvObsType], List[float], List[bool], List[EnvInfoDict]]:
         actions = np.array(actions)
         self.obs, reward, term, trunc, info = self._env.step(actions, order_ij=True)
-        return self.obs, reward, term, trunc, info
+        return self.obs, reward, term, info
 
     def get_unwrapped(self):
         return [self._env]
 
-    def reset_at(self,     
-            index: Optional[int] = None,
-            *,
-            seed: Optional[int] = None,
-            options: Optional[dict] = None,
-        ) -> EnvObsType:
+    def reset_at(self, index: Optional[int]) -> EnvObsType:
         # the env is reset automatically, no need to reset it
-        return self.obs[index], {}
+        return self.obs[index]
 
 
 def register_env():
@@ -75,7 +68,6 @@ def register_env():
             framerate=c["framerate"],
             seed=c.worker_index + c["seed"],
             action_repeat=c["framerate"],
-            speedup=c["speedup"],
         ),
     )
 
@@ -141,10 +133,6 @@ def rllib_training(args, extras):
 
     checkpoint_freq = 10
     checkpoint_at_end = True
-    
-    exp["config"]["env_config"]["show_window"] = args.viz
-    exp["config"]["env_config"]["speedup"] = args.speedup
-    
     if args.eval or args.export:
         checkpoint_freq = 0
         exp["config"]["env_config"]["show_window"] = True
