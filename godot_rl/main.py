@@ -62,7 +62,6 @@ def get_args():
     parser.add_argument("--experiment_dir", default=None, type=str, help="The name of the the experiment directory, in which the tensorboard logs are getting stored")
     parser.add_argument("--experiment_name", default="experiment", type=str, help="The name of the the experiment, which will be displayed in tensborboard")
     parser.add_argument("--viz", default=False, action="store_true", help="Whether to visualize one process")
-    parser.add_argument("--seed", default=0, type=int, help="seed of the experiment")
     
     args, extras =  parser.parse_known_args()
     if args.experiment_dir is None:
