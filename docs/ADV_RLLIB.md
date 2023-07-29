@@ -4,8 +4,6 @@
 
 ## Installation
 
-If you want to train with rllib, create a new environment e.g.: `python -m venv venv.rllib` as rllib's dependencies can conflict with those of sb3 and other libraries.
-
 ```bash
 # remove sb3 installation with pip uninstall godot-rl[sb3]
 pip install godot-rl[rllib]
