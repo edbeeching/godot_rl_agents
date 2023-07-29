@@ -2,7 +2,6 @@ import argparse
 import os
 import pathlib
 
-from stable_baselines3.common.callbacks import CheckpointCallback
 from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
 from godot_rl.wrappers.onnx.stable_baselines_export import export_ppo_model_as_onnx
 from stable_baselines3 import PPO
@@ -24,14 +23,13 @@ parser.add_argument(
     "--experiment_dir",
     default="logs/sb3",
     type=str,
-    help="The name of the experiment directory, in which the tensorboard logs and checkpoints are getting stored."
+    help="The name of the experiment directory, in which the tensorboard logs are getting stored",
 )
 parser.add_argument(
     "--experiment_name",
     default="Experiment",
     type=str,
-    help="The name of the experiment, which will be displayed in tensorboard and "
-         "for checkpoint directory and name.",
+    help="The name of the experiment, which will be displayed in tensorboard",
 )
 parser.add_argument(
     "--resume_model_path",
@@ -48,14 +46,6 @@ parser.add_argument(
          "to resume training. Extension will be set to .zip",
 )
 parser.add_argument(
-    "--save_checkpoint_frequency",
-    default=None,
-    type=int,
-    help=("If set, will save checkpoints every 'frequency' environment steps. "
-          "Requires a unique --experiment_name or --experiment_dir for each run. "
-          "Does not need --save_model_path to be set. "),
-)
-parser.add_argument(
     "--onnx_export_path",
     default=None,
     type=str,
@@ -69,26 +59,10 @@ parser.add_argument(
          "it will continue training for this amount of steps from the saved state without counting previously trained "
          "steps",
 )
-parser.add_argument(
-    "--inference",
-    action="store_true",
-    help="Instead of training, it will run inference on a loaded model for --timesteps steps. "
-         "Requires --resume_model_path to be set."
-)
 parser.add_argument("--speedup", default=1, type=int, help="Whether to speed up the physics in the env")
 parser.add_argument("--n_parallel", default=1, type=int, help="How many instances of the environment executable to "
                                                               "launch - requires --env_path to be set if > 1.")
 args, extras = parser.parse_known_args()
-
-path_checkpoint = os.path.join(args.experiment_dir, args.experiment_name + "_checkpoints")
-abs_path_checkpoint = os.path.abspath(path_checkpoint)
-
-# Prevent overwriting existing checkpoints when starting a new experiment if checkpoint saving is enabled
-if args.save_checkpoint_frequency is not None and os.path.isdir(path_checkpoint):
-    raise RuntimeError(abs_path_checkpoint + " folder already exists. "
-                                             "Use a different --experiment_dir, or --experiment_name,"
-                                             "or if previous checkpoints are not needed anymore, "
-                                             "remove the folder containing the checkpoints. ")
 
 env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=True, n_parallel=args.n_parallel, speedup=args.speedup)
 env = VecMonitor(env)
@@ -98,25 +72,9 @@ if args.resume_model_path is None:
 else:
     path_zip = pathlib.Path(args.resume_model_path)
     print("Loading model: " + os.path.abspath(path_zip))
-    model = PPO.load(path_zip, env=env, tensorboard_log=args.experiment_dir)
-    print(model.ent_coef)
+    model = PPO.load(path_zip, env=env)
 
-if args.inference:
-    obs = env.reset()
-    for i in range(args.timesteps):
-        action, _state = model.predict(obs, deterministic=True)
-        obs, reward, done, info = env.step(action)
-else:
-    if args.save_checkpoint_frequency is None:
-        model.learn(args.timesteps, tb_log_name=args.experiment_name)
-    else:
-        print("Checkpoint saving enabled. Checkpoints will be saved to: " + abs_path_checkpoint)
-        checkpoint_callback = CheckpointCallback(
-            save_freq=(args.save_checkpoint_frequency // env.num_envs),
-            save_path=path_checkpoint,
-            name_prefix=args.experiment_name
-        )
-        model.learn(args.timesteps, callback=checkpoint_callback, tb_log_name=args.experiment_name)
+model.learn(args.timesteps, tb_log_name=args.experiment_name)
 
 print("closing env")
 env.close()
