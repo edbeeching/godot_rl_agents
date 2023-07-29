@@ -74,8 +74,8 @@ jobs:
         python -m pip install --upgrade pip
         # cpu version of pytorch
         pip install .[test]
-        pip uninstall -y stable-baselines3 gymnasium
-        pip install -y ray[rllib]
+        pip uninstall stable-baselines3 gymnasium
+        pip install ray[rllib]
     - name: Download examples
       run: |
         make download_examples
@@ -100,8 +100,8 @@ jobs:
         python -m pip install --upgrade pip
         # cpu version of pytorch
         pip install .[test]
-        pip uninstall -y stable-baselines3 gymnasium
-        pip install -y ray[rllib]
+        pip uninstall stable-baselines3 gymnasium
+        pip install ray[rllib]
     - name: Download examples
       run: |
         make download_examples
