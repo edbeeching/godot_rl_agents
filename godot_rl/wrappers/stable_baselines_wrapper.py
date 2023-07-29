@@ -110,9 +110,7 @@ class StableBaselinesGodotEnv(VecEnv):
         raise NotImplementedError()
 
     def get_attr(self, attr_name: str, indices = None) -> List[Any]:
-        if attr_name == "render_mode":
-            return [None for _ in range(self.num_envs)]
-        raise AttributeError("get attr not fully implemented in godot-rl StableBaselinesWrapper")
+        raise AttributeError("get attr not implemented in godot-rl StableBaselinesWrapper")
 
     def seed(self):
         raise NotImplementedError()
