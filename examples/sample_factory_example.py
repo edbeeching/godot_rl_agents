@@ -7,8 +7,7 @@ def get_args():
     parser.add_argument("--env_path", default=None, type=str, help="Godot binary to use")
     parser.add_argument("--eval", default=False, action="store_true", help="whether to eval the model")
     parser.add_argument("--speedup", default=1, type=int, help="whether to speed up the physics in the env")
-    parser.add_argument("--seed", default=0, type=int, help="environment seed")
-    parser.add_argument("--export", default=False, action="store_true", help="whether to export the model")
+    parser.add_argument("--export", default=False, action="store_true", help="wheter to export the model")
     parser.add_argument("--viz", default=False, action="store_true", help="Whether to visualize one process")
 
     return parser.parse_known_args()
