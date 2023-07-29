@@ -8,8 +8,6 @@ This is a simplified version of what can be found in https://github.com/DLR-RM/r
 
 You can run this example as follows:
     $ python examples/stable_baselines3_hp_tuning.py --env_path=<path/to/your/env> --speedup=8 --n_parallel=1
-    
-Feel free to copy this script and update, add or remove the hp values to your liking. 
 """
 
 try:
