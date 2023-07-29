@@ -7,7 +7,7 @@ Taken from: https://github.com/optuna/optuna-examples/blob/main/rl/sb3_simple.py
 This is a simplified version of what can be found in https://github.com/DLR-RM/rl-baselines3-zoo.
 
 You can run this example as follows:
-    $ python examples/stable_baselines3_hp_tuning.py --env_path=<path/to/your/env> --speedup=8 --n_parallel=1
+    $ python examples/stable_baselines3_hp_tuning.py --env_path=<path/to/your/env> --speedup=8 --n_agents=<number of agents in your environment>
 """
 from typing import Any
 from typing import Dict
@@ -31,23 +31,17 @@ import argparse
 
 parser = argparse.ArgumentParser(allow_abbrev=False)
 parser.add_argument("--env_path", default=None, type=str, help="The Godot binary to use, do not include for in editor training")
+parser.add_argument("--n_agents", default=16, type=int, help="number of agents in the environment")
 parser.add_argument("--speedup", default=8, type=int, help="whether to speed up the physics in the env")
-parser.add_argument("--n_parallel", default=1, type=int, help="How many instances of the environment executable to launch - requires --env_path to be set if > 1.")
 
 args, extras = parser.parse_known_args()
-
-# Create a temporal environment to get the number of agents per environment dynamically
-env = StableBaselinesGodotEnv(env_path=args.env_path, speedup=args.speedup)
-n_agents = env.num_envs
-env.close()
 
 N_TRIALS = 20
 N_STARTUP_TRIALS = 5
 N_EVALUATIONS = 1
 N_TIMESTEPS = 10240
-EVAL_FREQ = max(int((N_TIMESTEPS // N_EVALUATIONS) // (n_agents * args.n_parallel)), 1)
+EVAL_FREQ = max(int((N_TIMESTEPS // N_EVALUATIONS) // args.n_agents), 1)
 N_EVAL_EPISODES = 3
-STOP_TRIAL_TIMEOUT = 60 * 60 * 2  # 2 hours
 
 DEFAULT_HYPERPARAMS = {
     "ent_coef": 0.005,
@@ -56,8 +50,8 @@ DEFAULT_HYPERPARAMS = {
 def sample_ppo_params(trial: optuna.Trial) -> Dict[str, Any]:
     """Sampler for PPO hyperparameters."""
     learning_rate = trial.suggest_loguniform("learning_rate", 0.0003, 0.003)
-    n_steps = trial.suggest_categorical("n_steps", [8, 16, 32, 64, 128, 256, 512])
-    batch_size = trial.suggest_categorical("batch_size", [8, 16, 32, 64, 128, 256, 512])
+    n_steps = trial.suggest_categorical("n_steps", [8, 16, 32, 64, 128])
+    batch_size = trial.suggest_categorical("batch_size", [128, 256, 512, 1024])
     n_epochs = trial.suggest_categorical("n_epochs", [2, 4, 8, 16])
 
     return {
@@ -109,7 +103,7 @@ def objective(trial: optuna.Trial) -> float:
     kwargs.update(sample_ppo_params(trial))
     print("args:", kwargs)
     # Create the RL model.
-    model = PPO("MultiInputPolicy", VecMonitor(StableBaselinesGodotEnv(env_path=args.env_path, speedup=args.speedup, n_parallel=args.n_parallel)), tensorboard_log="logs/optuna", **kwargs)
+    model = PPO("MultiInputPolicy", StableBaselinesGodotEnv(env_path=args.env_path, speedup=args.speedup), tensorboard_log="logs/optuna", **kwargs)
     # Create env used for evaluation.
     eval_env = VecMonitor(StableBaselinesGodotEnv(env_path=args.env_path, speedup=args.speedup))
     
@@ -152,7 +146,7 @@ if __name__ == "__main__":
 
     study = optuna.create_study(sampler=sampler, pruner=pruner, direction="maximize")
     try:
-        study.optimize(objective, n_trials=N_TRIALS, timeout=STOP_TRIAL_TIMEOUT)
+        study.optimize(objective, n_trials=N_TRIALS, timeout=6000)
     except KeyboardInterrupt:
         pass
 
