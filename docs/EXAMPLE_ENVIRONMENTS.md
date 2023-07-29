@@ -36,9 +36,9 @@ For the current version, we provide 4 example environments, located in **envs/ex
 ### Example training:
 The agent can be trained with the following command:
 ```
-gdrl --env_path envs/builds/JumperHard/jumper_hard.x86_64 --config_file envs/configs/ppo_config_jumper_hard.yaml
+gdrl --env_path envs/builds/JumperHard/jumper_hard.x86_64 --config_file envs/configs/ppo_config_jumper_hard.yaml --experiment_name=Experiment_01
 ```
-Training logs will be output by default to **/home/USER/ray_results/PPO/jumper_hard/**
+Training logs will be output by default to **./logs/rllib/PPO/jumper_hard/**
 You can monitor training curves etc with tensorboard
 ```
 tensorboard --logdir /PATH/TO/LOG/DIR
@@ -75,9 +75,9 @@ gdrl --env_path envs/builds/JumperHard/jumper_hard.x86_64 --eval --restore envs/
 ### Example training:
 The agent can be trained with the following command:
 ```
-gdrl --env_path envs/builds/BallChase/ball_chase.x86_64 --config_file envs/configs/ppo_config_ball_chase.yaml
+gdrl --trainer=rllib --env_path envs/builds/BallChase/ball_chase.x86_64 --config_file envs/configs/ppo_config_ball_chase.yaml --experiment_name=BallChase_01 
 ```
-Training logs will be output by default to **/home/USER/ray_results/PPO/ball_chase/**
+Training logs will be output by default to **./logs/rllib/PPO/ball_chase/**
 You can monitor training curves etc with tensorboard
 ```
 tensorboard --logdir /PATH/TO/LOG/DIR
@@ -112,9 +112,9 @@ gdrl --env_path envs/builds/BallChase/ball_chase.x86_64 --eval --restore envs/ch
 ### Example training:
 The agent can be trained with the following command:
 ```
-gdrl --env_path envs/builds/FlyBy/fly_by.x86_64 --config_file envs/configs/ppo_config_fly_by.yaml
+gdrl --trainer=rllib --env_path envs/builds/FlyBy/fly_by.x86_64 --config_file envs/configs/ppo_config_fly_by.yaml --experiment_name=FlyBy_01 
 ```
-Training logs will be output by default to **/home/USER/ray_results/PPO/fly_by/**
+Training logs will be output by default to **./logs/rllib/PPO/fly_by/**
 You can monitor training curves etc with tensorboard
 ```
 tensorboard --logdir /PATH/TO/LOG/DIR
@@ -153,9 +153,9 @@ gdrl --env_path envs/builds/FlyBy/fly_by.x86_64 --eval --restore envs/checkpoint
 ### Example training:
 The agent can be trained with the following command:
 ```
-gdrl --env_path envs/builds/SpaceShooter/space_shooter.x86_64 --config_file envs/configs/ppo_config_space_shooter.yaml
+gdrl --trainer=rllib --env_path envs/builds/SpaceShooter/space_shooter.x86_64 --config_file envs/configs/ppo_config_space_shooter.yaml --experiment_name=Shooter_01 
 ```
-Training logs will be output by default to **/home/USER/ray_results/PPO/space_shooter/**
+Training logs will be output by default to **./logs/rllib/PPO/space_shooter/**
 You can monitor training curves etc with tensorboard
 ```
 tensorboard --logdir /PATH/TO/LOG/DIR
