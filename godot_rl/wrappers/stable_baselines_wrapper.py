@@ -138,7 +138,7 @@ def stable_baselines_training(args, extras, n_steps: int = 200000, **kwargs) -> 
         ent_coef=0.0001,
         verbose=2,
         n_steps=32,
-        tensorboard_log=args.experiment_dir or "logs_sb3",
+        tensorboard_log="logs/log",
     )
 
     # Train the model
