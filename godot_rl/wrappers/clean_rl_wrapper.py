@@ -1,6 +1,6 @@
 
 import numpy as np
-import gymnasium as gym
+import gym
 from godot_rl.core.utils import lod_to_dol
 from godot_rl.core.godot_env import GodotEnv
 

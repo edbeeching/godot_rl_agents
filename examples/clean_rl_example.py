@@ -5,6 +5,7 @@ import random
 import time
 from distutils.util import strtobool
 from collections import deque
+import gym
 import numpy as np
 import torch
 import torch.nn as nn
@@ -155,6 +156,7 @@ if __name__ == "__main__":
     # env setup
     
     envs = env = CleanRLGodotEnv(env_path=args.env_path, show_window=True, speedup=args.speedup, convert_action_space=True) # Godot envs are already vectorized
+    #assert isinstance(envs.single_action_space, gym.spaces.Box), "only continuous action space is supported"
     args.num_envs = envs.num_envs
     args.batch_size = int(args.num_envs * args.num_steps)
     args.minibatch_size = int(args.batch_size // args.num_minibatches)
