@@ -23,7 +23,7 @@ except ImportError as e:
 from typing import Any
 from typing import Dict
 
-import gymnasium as gym
+import gym
 
 from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
 from godot_rl.core.godot_env import GodotEnv
