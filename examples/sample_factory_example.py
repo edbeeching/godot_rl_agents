@@ -12,12 +12,6 @@ def get_args():
     parser.add_argument("--viz", default=False, action="store_true", help="Whether to visualize one process")
     parser.add_argument("--experiment_dir", default="logs/sf", type=str,
     help="The name of the experiment directory, in which the tensorboard logs are getting stored")
-    parser.add_argument(
-        "--experiment_name",
-        default="experiment",
-        type=str,
-        help="The name of the experiment, which will be displayed in tensorboard. ",
-    )
 
     return parser.parse_known_args()
 
