@@ -126,8 +126,6 @@ def rllib_training(args, extras):
     register_env()
 
     exp["config"]["env_config"]["env_path"] = args.env_path
-    exp["config"]["env_config"]["seed"] = args.seed
-
     if args.env_path is not None:
         run_name = exp["algorithm"] + "/" + pathlib.Path(args.env_path).stem
     else:
