@@ -4,7 +4,7 @@ algorithm: PPO
 stop:
     episode_reward_mean: 5000
     training_iteration: 1000
-    timesteps_total: 100
+    timesteps_total: 200
 
 config:
     env: godot
@@ -24,7 +24,7 @@ config:
     train_batch_size: 1024
     sgd_minibatch_size: 128
     num_sgd_iter: 16
-    num_workers: 1
+    num_workers: 4
     lr: 0.0003
     num_envs_per_worker: 16
     batch_mode: truncate_episodes
