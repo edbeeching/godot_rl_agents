@@ -17,7 +17,7 @@ from godot_rl.wrappers.clean_rl_wrapper import CleanRLGodotEnv
 def parse_args():
     # fmt: off
     parser = argparse.ArgumentParser()
-    parser.add_argument("--experiment_dir", default="logs/cleanrl", type=str,
+    parser.add_argument("--experiment_dir", default="logs_cleanrl", type=str,
         help="The name of the the experiment directory, in which the tensorboard logs are getting stored")
     parser.add_argument("--experiment_name", default=os.path.basename(__file__).rstrip(".py"), type=str,
         help="The name of the the experiment, which will be displayed in tensborboard")
@@ -126,7 +126,7 @@ class Agent(nn.Module):
 
 if __name__ == "__main__":
     args = parse_args()
-    run_name = f"{args.experiment_name}__{args.seed}__{int(time.time())}"
+    run_name = f"{args.env_path}__{args.experiment_name}__{args.seed}__{int(time.time())}"
     if args.track:
         import wandb
 

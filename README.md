@@ -38,7 +38,7 @@ You may need to example run permissions on the game executable. `chmod +x exampl
 3. Train and visualize 
 
 ```bash
-gdrl --env=gdrl --env_path=examples/godot_rl_JumperHard/bin/JumperHard.x86_64 --experiment_name=Experiment_01 --viz
+gdrl --env=gdrl --env_path=examples/godot_rl_JumperHard/bin/JumperHard.x86_64 --viz
 ```
 
 ### In editor interactive training

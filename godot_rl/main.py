@@ -25,6 +25,7 @@ import argparse
 try:
     from godot_rl.wrappers.ray_wrapper import rllib_training
 except ImportError as e:
+    print("Warning: ", e)
     def rllib_training(args, extras):
         print("Import error when trying to use rllib. If you have not installed the package, try: pip install godot-rl[rllib]")
         print("Otherwise try fixing the error above.")
@@ -33,6 +34,7 @@ except ImportError as e:
 try:
     from godot_rl.wrappers.stable_baselines_wrapper import stable_baselines_training
 except ImportError as e:
+    print("Warning: ", e)
     def stable_baselines_training(args, extras):
         print(
             "Import error when trying to use sb3. If you have not installed the package, try: pip install godot-rl[sb3]"
@@ -42,6 +44,7 @@ except ImportError as e:
 try:
     from godot_rl.wrappers.sample_factory_wrapper import sample_factory_training, sample_factory_enjoy
 except ImportError as e:
+    print("Warning: ", e)
     def sample_factory_training(args, extras):
         print(
             "Import error when trying to use sample-factory If you have not installed the package, try: pip install godot-rl[sf]"
