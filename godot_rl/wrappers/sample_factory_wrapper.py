@@ -174,7 +174,7 @@ def add_gdrl_env_args(_env, p: argparse.ArgumentParser, evaluation=False):
         "--experiment_name",
         default=None,
         type=str,
-        help="The name of the experiment, which will be displayed in tensorboard",
+        help="The name of the experiment, which will be displayed in tensborboard",
     )
 
 
