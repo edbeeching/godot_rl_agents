@@ -72,7 +72,6 @@ parser.add_argument(
 )
 parser.add_argument(
     "--inference",
-    default=False,
     action="store_true",
     help="Instead of training, it will run inference on a loaded model for --timesteps steps. "
          "Requires --resume_model_path to be set."
