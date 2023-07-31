@@ -5,10 +5,13 @@
 ## Installation
 
 If you want to train with rllib, create a new environment e.g.: `python -m venv venv.rllib` as rllib's dependencies can conflict with those of sb3 and other libraries.
-
+Due to a version clash with gymnasium, stable-baselines3 much be uninstalled before installing rllib.
 ```bash
-# remove sb3 installation with pip uninstall godot-rl[sb3]
-pip install godot-rl[rllib]
+pip install godot-rl
+# remove sb3 and gymnasium installations
+pip uninstall -y stable-baselines3 gymnasium
+# install rllib
+pip install ray[rllib]
 ```
 
 ## Basic Environment Usage
