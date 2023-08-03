@@ -55,3 +55,61 @@ jobs:
     - name: Test with pytest
       run: |
         make test
+
+
+  tests_ubuntu_rllib:
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, 3.10.10]
+        os: ['ubuntu-latest']
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip wheel==0.38.4
+        # cpu version of pytorch
+        pip install .[test]
+    - name: Clean up dependencies
+      run: |
+        pip uninstall -y stable-baselines3 gymnasium
+        pip install .[rllib]
+    - name: Download examples
+      run: |
+        make download_examples
+
+    - name: Test with pytest
+      run: |
+        make test
+  tests_windows_rllib:
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, 3.10.10]
+        os: ['windows-latest']
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip wheel==0.38.4
+        # cpu version of pytorch
+        pip install .[test]
+    - name: Clean up dependencies
+      run: |
+        pip uninstall -y stable-baselines3 gymnasium
+        pip install .[rllib]
+    - name: Download examples
+      run: |
+        make download_examples
+
+    - name: Test with pytest
+      run: |
+        make test

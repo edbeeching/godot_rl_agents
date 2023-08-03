@@ -136,6 +136,7 @@ dmypy.json
 
 envs/unity/
 logs/
+logs.*/
 dump/
 tmp/
 Packaging Python Projects — Python Packaging User Guide_files/

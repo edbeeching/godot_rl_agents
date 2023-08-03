@@ -72,32 +72,32 @@ class SampleFactoryEnvWrapperNonBatched(GodotEnv, Env):
         return
 
 
-def make_godot_env_func(env_path, full_env_name, cfg=None, env_config=None, render_mode=None, speedup=1, viz=False):
-    seed = 0
+def make_godot_env_func(env_path, full_env_name, cfg=None, env_config=None, render_mode=None, seed=0, speedup=1, viz=False):
     port = cfg.base_port
     print("BASE PORT ", cfg.base_port)
     show_window = False
+    _seed = seed
     if env_config:
         port += 1 + env_config.env_id
-        seed += 1 + env_config.env_id
+        _seed += 1 + env_config.env_id
         print("env id", env_config.env_id)
         if viz:  #
             print("creating viz env")
             show_window = env_config.env_id == 0
     if cfg.batched_sampling:
         env = SampleFactoryEnvWrapperBatched(
-            env_path=env_path, port=port, seed=seed, show_window=show_window, speedup=speedup
+            env_path=env_path, port=port, seed=_seed, show_window=show_window, speedup=speedup
         )
     else:
         env = SampleFactoryEnvWrapperNonBatched(
-            env_path=env_path, port=port, seed=seed, show_window=show_window, speedup=speedup
+            env_path=env_path, port=port, seed=_seed, show_window=show_window, speedup=speedup
         )
 
     return env
 
 
 def register_gdrl_env(args):
-    make_env = partial(make_godot_env_func, args.env_path, speedup=args.speedup, viz=args.viz)
+    make_env = partial(make_godot_env_func, args.env_path, speedup=args.speedup, seed=args.seed, viz=args.viz)
     register_env("gdrl", make_env)
 
 
@@ -152,6 +152,7 @@ def add_gdrl_env_args(_env, p: argparse.ArgumentParser, evaluation=False):
         # apparently env.render(mode="human") is not supported anymore and we need to specify the render mode in
         # the env actor
         p.add_argument("--render_mode", default="human", type=str, help="")
+
     p.add_argument("--base_port", default=GodotEnv.DEFAULT_PORT, type=int, help="")
 
     p.add_argument(
@@ -160,26 +161,14 @@ def add_gdrl_env_args(_env, p: argparse.ArgumentParser, evaluation=False):
         type=int,
         help="Num agents in each envpool (if used)",
     )
-    p.add_argument(
-        "--experiment_dir",
-        default="logs/sf",
-        type=str,
-        help="The name of the experiment directory, in which the tensorboard logs are getting stored",
-    )
-    p.add_argument(
-        "--experiment_name",
-        default=None,
-        type=str,
-        help="The name of the experiment, which will be displayed in tensorboard",
-    )
 
 
-def parse_gdrl_args(argv=None, evaluation=False):
+def parse_gdrl_args(args, argv=None, evaluation=False):
     parser, partial_cfg = parse_sf_args(argv=argv, evaluation=evaluation)
     add_gdrl_env_args(partial_cfg.env, parser, evaluation=evaluation)
     gdrl_override_defaults(partial_cfg.env, parser)
     final_cfg = parse_full_cfg(parser, argv)
-    args, _ = parser.parse_known_args(argv)
+    
     final_cfg.train_dir = args.experiment_dir or "logs/sf"
     final_cfg.experiment = args.experiment_name or final_cfg.experiment
     return final_cfg
@@ -187,7 +176,7 @@ def parse_gdrl_args(argv=None, evaluation=False):
 
 def sample_factory_training(args, extras):
     register_gdrl_env(args)
-    cfg = parse_gdrl_args(argv=extras, evaluation=args.eval)
+    cfg = parse_gdrl_args(args=args, argv=extras, evaluation=args.eval)
     #cfg.base_port = random.randint(20000, 22000)
     status = run_rl(cfg)
     return status
@@ -195,7 +184,7 @@ def sample_factory_training(args, extras):
 
 def sample_factory_enjoy(args, extras):
     register_gdrl_env(args)
-    cfg = parse_gdrl_args(argv=extras, evaluation=args.eval)
+    cfg = parse_gdrl_args(args=args, argv=extras, evaluation=args.eval)
 
     status = enjoy(cfg)
     return status

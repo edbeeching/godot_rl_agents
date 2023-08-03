@@ -3,6 +3,7 @@ import os
 import pathlib
 
 from stable_baselines3.common.callbacks import CheckpointCallback
+from godot_rl.core.utils import can_import
 from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
 from godot_rl.wrappers.onnx.stable_baselines_export import export_ppo_model_as_onnx
 from stable_baselines3 import PPO
@@ -11,7 +12,8 @@ from stable_baselines3.common.vec_env.vec_monitor import VecMonitor
 # To download the env source and binary:
 # 1.  gdrl.env_from_hub -r edbeeching/godot_rl_BallChase
 # 2.  chmod +x examples/godot_rl_BallChase/bin/BallChase.x86_64
-
+if can_import("ray"):
+    print("WARNING, stable baselines and ray[rllib] are not compatable")
 
 parser = argparse.ArgumentParser(allow_abbrev=False)
 parser.add_argument(
@@ -33,6 +35,12 @@ parser.add_argument(
     type=str,
     help="The name of the experiment, which will be displayed in tensorboard and "
          "for checkpoint directory and name (if enabled).",
+)
+parser.add_argument(
+    "--seed",
+    type=int,
+    default=0,
+    help="seed of the experiment"
 )
 parser.add_argument(
     "--resume_model_path",
@@ -80,8 +88,8 @@ parser.add_argument(
 parser.add_argument(
     "--viz",
     action="store_true",
-    help="If set, the window(s) with the Godot environment(s) will be displayed, otherwise "
-         "training will run without rendering the game. Does not apply to in-editor training.",
+    help="If set, the simulation will be displayed in a window during training. Otherwise "
+        "training will run without rendering the simualtion. This setting does not apply to in-editor training.",
     default=False
 )
 parser.add_argument("--speedup", default=1, type=int, help="Whether to speed up the physics in the env")
@@ -105,7 +113,7 @@ if args.inference and args.resume_model_path is None:
 if args.env_path is None and args.viz:
     print("Info: Using --viz without --env_path set has no effect, in-editor training will always render.")
 
-env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=args.viz, n_parallel=args.n_parallel,
+env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=args.viz, seed=args.seed, n_parallel=args.n_parallel,
                               speedup=args.speedup)
 env = VecMonitor(env)
 
