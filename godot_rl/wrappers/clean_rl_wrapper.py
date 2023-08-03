@@ -84,6 +84,12 @@ class CleanRLGodotEnv:
     @property
     def single_action_space(self):
         return self.envs[0].action_space
+
     @property
     def num_envs(self) -> int:
         return self.envs[0].num_envs * self.n_parallel
+
+    def close(self) -> None:
+        # Close each environment
+        for env in self.envs:
+            env.close()
