@@ -78,7 +78,7 @@ You can optionally set an experiment directory and name to override the default.
 python stable_baselines3_example.py --experiment_dir="experiments" --experiment_name="experiment1"
 ```
 
-### Train a model for 10_000 steps then save and export the model
+### Train a model for 100_000 steps then save and export the model
 The exported .onnx model can be used by the Godot sync node to run inference from Godot directly, while the saved .zip model can be used to resume training later or run inference from the example script by adding `--inference`.
 ```bash
 python stable_baselines3_example.py --timesteps=100_000 --onnx_export_path=model.onnx --save_model_path=model.zip
