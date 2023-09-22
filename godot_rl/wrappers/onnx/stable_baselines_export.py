@@ -59,7 +59,7 @@ def verify_onnx_export(ppo: PPO, onnx_model_path: str, num_tests=10):
     onnx.checker.check_model(onnx_model)
 
     sb3_model = ppo.policy.to("cpu")
-    ort_sess = ort.InferenceSession(onnx_model_path)
+    ort_sess = ort.InferenceSession(onnx_model_path, providers=['CPUExecutionProvider'])
 
     for i in range(num_tests):
         obs = dict(ppo.observation_space.sample())
