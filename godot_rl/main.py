@@ -21,7 +21,6 @@ gdrl --env_path path/to/exported/executable ---config_path path/to/yaml/file
 """
 
 import argparse
-import os
 
 try:
     from godot_rl.wrappers.ray_wrapper import rllib_training
