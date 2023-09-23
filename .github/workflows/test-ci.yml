@@ -77,6 +77,7 @@ jobs:
     - name: Clean up dependencies
       run: |
         pip uninstall -y stable-baselines3 gymnasium
+        pip install gymnasium==0.26.3
         pip install ray[rllib]
     - name: Download examples
       run: |
@@ -105,6 +106,7 @@ jobs:
     - name: Clean up dependencies
       run: |
         pip uninstall -y stable-baselines3 gymnasium
+        pip install gymnasium==0.26.3
         pip install ray[rllib]
     - name: Download examples
       run: |
