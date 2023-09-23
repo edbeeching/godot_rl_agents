@@ -1,5 +1,3 @@
-import os.path
-
 import pytest
 
 from godot_rl.core.utils import cant_import
