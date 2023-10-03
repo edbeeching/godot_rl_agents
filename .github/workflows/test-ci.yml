@@ -77,7 +77,7 @@ jobs:
     - name: Clean up dependencies
       run: |
         pip uninstall -y stable-baselines3 gymnasium
-        pip install .[rllib]
+        pip install ray[rllib]
     - name: Download examples
       run: |
         make download_examples
@@ -105,7 +105,7 @@ jobs:
     - name: Clean up dependencies
       run: |
         pip uninstall -y stable-baselines3 gymnasium
-        pip install .[rllib]
+        pip install ray[rllib]
     - name: Download examples
       run: |
         make download_examples
