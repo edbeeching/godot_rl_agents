@@ -96,7 +96,7 @@ If the README and docs here not provide enough information, reach out to us on g
 
 ### How similar is this tool to Unity ML agents?
 
-We are inspired by the the Unity ML agents toolkit and aims to be a more compact, concise ad hackable codebase, with little abstraction.
+We are inspired by the the Unity ML agents toolkit and aims to be a more compact, concise and hackable codebase, with little abstraction.
 
 # Licence
 
