@@ -22,7 +22,7 @@ This quickstart guide will get you up and running using the Godot RL Agents libr
 
 ### Installation and first training
 
-1. Install the Godot RL Agents library. If you are new to Python or not using a virtual environment, it's highly recommended to create one using [venv](https://docs.python.org/3/library/venv.html) or [Conda](https://www.machinelearningplus.com/deployment/conda-create-environment-and-everything-you-need-to-know-to-manage-conda-virtual-environment/) to isolate your project dependencies.
+Install the Godot RL Agents library. If you are new to Python or not using a virtual environment, it's highly recommended to create one using [venv](https://docs.python.org/3/library/venv.html) or [Conda](https://www.machinelearningplus.com/deployment/conda-create-environment-and-everything-you-need-to-know-to-manage-conda-virtual-environment/) to isolate your project dependencies.
 
 Once you have set up your virtual environment, proceed with the installation:
 
@@ -30,7 +30,7 @@ Once you have set up your virtual environment, proceed with the installation:
 pip install godot-rl
 ```
 
-2. Download one, or more of [examples](https://github.com/edbeeching/godot_rl_agents_examples), such as BallChase, JumperHard, FlyBy.
+Download one, or more of [examples](https://github.com/edbeeching/godot_rl_agents_examples), such as BallChase, JumperHard, FlyBy.
 
 ```bash
 gdrl.env_from_hub -r edbeeching/godot_rl_JumperHard
@@ -42,7 +42,7 @@ You may need to add run permissions on the game executable.
 chmod +x examples/godot_rl_JumperHard/bin/JumperHard.x86_64
 ```
 
-3. Train and visualize
+Train and visualize
 
 ```bash
 gdrl --env=gdrl --env_path=examples/godot_rl_JumperHard/bin/JumperHard.x86_64 --experiment_name=Experiment_01 --viz
