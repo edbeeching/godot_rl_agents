@@ -60,7 +60,7 @@ You can also train an agent in the Godot editor, without the need to export the 
 
 There is a dedicated tutorial on creating custom environments [here](docs/CUSTOM_ENV.md). We recommend following this tutorial before trying to create your own environment.
 
-If you face any issues getting started, please reach out on our discord or raise a GitHub issue.
+If you face any issues getting started, please reach out on our [Discord](https://discord.gg/HMMD2J8SxY) or raise a GitHub issue.
 
 ### Exporting and loading your trained agent in onnx format:
 
