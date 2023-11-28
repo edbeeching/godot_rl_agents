@@ -7,6 +7,7 @@ version = "0.6.2"
 authors = [
   { name="Edward Beeching", email="edbeeching@gmail.com" },
 ]
+dynamic = ["license", "scripts", "dependencies", "optional-dependencies"]
 description = "A Deep Reinforcement Learning package for the Godot game engine"
 readme = "README.md"
 requires-python = ">=3.7"
