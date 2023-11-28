@@ -6,31 +6,11 @@ from godot_rl.core.godot_env import GodotEnv
 @pytest.mark.parametrize(
     "env_name,port,n_agents",
     [
-        (
-            "BallChase",
-            12008,
-            16,
-        ),
-        (
-            "FPS",
-            12009,
-            8,
-        ),
-        (
-            "JumperHard",
-            12010,
-            16,
-        ),
-        (
-            "Racer",
-            12011,
-            8,
-        ),
-        (
-            "FlyBy",
-            12012,
-            16,
-        ),
+        ("BallChase", 12008, 16),
+        ("FPS", 12009, 8),
+        ("JumperHard", 12010, 16),
+        ("Racer", 12011, 8),
+        ("FlyBy", 12012, 16),
     ],
 )
 def test_env_ij(env_name, port, n_agents):
@@ -57,8 +37,12 @@ def test_env_ij(env_name, port, n_agents):
             assert isinstance(
                 reward[0], (float, int)
             ), f"The reward returned by 'step()' must be a float or int, and is {reward[0]} of type {type(reward[0])}"
-            assert isinstance(term[0], bool), f"The 'done' signal {term[0]}  {type(term[0])} must be a boolean"
-            assert isinstance(info[0], dict), "The 'info' returned by 'step()' must be a python dictionary"
+            assert isinstance(
+                term[0], bool
+            ), f"The 'done' signal {term[0]}  {type(term[0])} must be a boolean"
+            assert isinstance(
+                info[0], dict
+            ), "The 'info' returned by 'step()' must be a python dictionary"
 
     env.close()
 
@@ -66,31 +50,11 @@ def test_env_ij(env_name, port, n_agents):
 @pytest.mark.parametrize(
     "env_name,port,n_agents",
     [
-        (
-            "BallChase",
-            13008,
-            16,
-        ),
-        (
-            "FPS",
-            13009,
-            8,
-        ),
-        (
-            "JumperHard",
-            13010,
-            16,
-        ),
-        (
-            "Racer",
-            13011,
-            8,
-        ),
-        (
-            "FlyBy",
-            13012,
-            16,
-        ),
+        ("BallChase", 13008, 16),
+        ("FPS", 13009, 8),
+        ("JumperHard", 13010, 16),
+        ("Racer", 13011, 8),
+        ("FlyBy", 13012, 16),
     ],
 )
 def test_env_ji(env_name, port, n_agents):
@@ -118,7 +82,11 @@ def test_env_ji(env_name, port, n_agents):
             assert isinstance(
                 reward[0], (float, int)
             ), f"The reward returned by 'step()' must be a float or int, and is {reward[0]} of type {type(reward[0])}"
-            assert isinstance(term[0], bool), f"The 'done' signal {term[0]}  {type(term[0])} must be a boolean"
-            assert isinstance(info[0], dict), "The 'info' returned by 'step()' must be a python dictionary"
+            assert isinstance(
+                term[0], bool
+            ), f"The 'done' signal {term[0]}  {type(term[0])} must be a boolean"
+            assert isinstance(
+                info[0], dict
+            ), "The 'info' returned by 'step()' must be a python dictionary"
 
     env.close()
