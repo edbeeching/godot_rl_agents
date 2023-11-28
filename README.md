@@ -22,20 +22,27 @@ This quickstart guide will get you up and running using the Godot RL Agents libr
 
 ### Installation and first training
 
-1. Install the Godot RL Agents library: (if you are new to python, pip and conda, read this [guide](https://www.machinelearningplus.com/deployment/conda-create-environment-and-everything-you-need-to-know-to-manage-conda-virtual-environment/))
+Install the Godot RL Agents library. If you are new to Python or not using a virtual environment, it's highly recommended to create one using [venv](https://docs.python.org/3/library/venv.html) or [Conda](https://www.machinelearningplus.com/deployment/conda-create-environment-and-everything-you-need-to-know-to-manage-conda-virtual-environment/) to isolate your project dependencies.
+
+Once you have set up your virtual environment, proceed with the installation:
 
 ```bash
 pip install godot-rl
 ```
 
-2. Download one, or more of [examples](https://github.com/edbeeching/godot_rl_agents_examples), such as BallChase, JumperHard, FlyBy.
+Download one, or more of [examples](https://github.com/edbeeching/godot_rl_agents_examples), such as BallChase, JumperHard, FlyBy.
 
 ```bash
-gdrl.env_from_hub -r edbeeching/godot_rl_JumperHard 
+gdrl.env_from_hub -r edbeeching/godot_rl_JumperHard
 ```
-You may need to example run permissions on the game executable. `chmod +x examples/godot_rl_JumperHard/bin/JumperHard.x86_64`
 
-3. Train and visualize 
+You may need to add run permissions on the game executable.
+
+```bash
+chmod +x examples/godot_rl_JumperHard/bin/JumperHard.x86_64
+```
+
+Train and visualize
 
 ```bash
 gdrl --env=gdrl --env_path=examples/godot_rl_JumperHard/bin/JumperHard.x86_64 --experiment_name=Experiment_01 --viz
@@ -47,23 +54,25 @@ You can also train an agent in the Godot editor, without the need to export the 
 
 1. Download the Godot 4 Game Engine from [https://godotengine.org/](https://godotengine.org/)
 2. Open the engine and import the JumperHard example in `examples/godot_rl_JumperHard`
-3. Start in editor training with: `gdrl` 
+3. Start in editor training with: `gdrl`
 
 ### Creating a custom environment
 
 There is a dedicated tutorial on creating custom environments [here](docs/CUSTOM_ENV.md). We recommend following this tutorial before trying to create your own environment.
 
-If you face any issues getting started, please reach out on our discord or raise a github issue.
+If you face any issues getting started, please reach out on our [Discord](https://discord.gg/HMMD2J8SxY) or raise a GitHub issue.
 
 ### Exporting and loading your trained agent in onnx format:
+
 The latest version of the library provides experimental support for onnx models with the Stable Baselines 3 and rllib training frameworks.
-1. First run train you agent using the sb3 example on the [github repo](https://github.com/edbeeching/godot_rl_agents/blob/main/examples/stable_baselines3_example.py), enabling the option `--onnx_export_path=GameModel.onnx`
+
+1. First run train you agent using the sb3 example on the [GitHub repo](https://github.com/edbeeching/godot_rl_agents/blob/main/examples/stable_baselines3_example.py), enabling the option `--onnx_export_path=GameModel.onnx`
 2. Then, using the **mono version** of the Godot Editor, add the onnx model path to the sync node. If you do not seen this option you may need to download the plugin from [source](https://github.com/edbeeching/godot_rl_agents_plugin)
 3. The game should now load and run using the onnx model. If you are having issues building the project, ensure that the contents of the `.csproj` and `.sln` files in you project match that those of the plugin [source](https://github.com/edbeeching/godot_rl_agents_plugin).
 
 ## Advanced usage
-[https://user-images.githubusercontent.com/7275864/209160117-cd95fa6b-67a0-40af-9d89-ea324b301795.mp4](https://user-images.githubusercontent.com/7275864/209160117-cd95fa6b-67a0-40af-9d89-ea324b301795.mp4)
 
+[https://user-images.githubusercontent.com/7275864/209160117-cd95fa6b-67a0-40af-9d89-ea324b301795.mp4](https://user-images.githubusercontent.com/7275864/209160117-cd95fa6b-67a0-40af-9d89-ea324b301795.mp4)
 
 Please ensure you have successfully completed the quickstart guide before following this section.
 
@@ -79,9 +88,11 @@ Godot RL Agents supports 4 different RL training frameworks, the links below det
 ### Why have we developed Godot RL Agents?
 
 The objectives of the framework are to:
+
 - Provide a free and open source tool for Deep RL research and game development.
 - Enable game creators to imbue their non-player characters with unique behaviors.
 - Allow for automated gameplay testing through interaction with an RL agent.
+
 ### How can I contribute to Godot RL Agents?
 
 Please try it out, find bugs and either raise an issue or if you fix them yourself, submit a pull request.
@@ -92,13 +103,13 @@ This should now be working, let us know if you have any issues.
 
 ### Can you help with my game project?
 
-If the README and docs here not provide enough information, reach out to us on github and we may be able to provide some advice.
+If the README and docs here not provide enough information, reach out to us on [Discord](https://discord.gg/HMMD2J8SxY) or GitHub and we may be able to provide some advice.
 
 ### How similar is this tool to Unity ML agents?
 
 We are inspired by the the Unity ML agents toolkit and aims to be a more compact, concise and hackable codebase, with little abstraction.
 
-# Licence
+# License
 
 Godot RL Agents is MIT licensed. See the [LICENSE file](https://www.notion.so/huggingface2/LICENSE) for details.
 
