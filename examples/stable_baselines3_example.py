@@ -151,7 +151,7 @@ def linear_schedule(initial_value: float) -> Callable[[float], float]:
 
 
 if args.resume_model_path is None:
-    learning_rate = 0.0003 if args.inference else linear_schedule(0.0003)
+    learning_rate = 0.0003 if not args.linear_lr_schedule else linear_schedule(0.0003)
     model: PPO = PPO("MultiInputPolicy",
                      env,
                      ent_coef=0.0001,
