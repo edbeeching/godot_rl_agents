@@ -79,20 +79,20 @@ You can optionally set an experiment directory and name to override the default.
 python stable_baselines3_example.py --experiment_dir="experiments" --experiment_name="experiment1"
 ```
 
-### Train a model for 100_000 steps then save and export the model
+### Train a model for 100_000 steps then save and export the model:
 The exported .onnx model can be used by the Godot sync node to run inference from Godot directly, while the saved .zip model can be used to resume training later or run inference from the example script by adding `--inference`.
 ```bash
 python stable_baselines3_example.py --timesteps=100_000 --onnx_export_path=model.onnx --save_model_path=model.zip
 ```
 
-### Resume training from a saved .zip model
+### Resume training from a saved .zip model:
 This will load the previously saved model.zip, and resume training for another 100 000 steps, so the saved model will have been trained for 200 000 steps in total.
 Note that the console log will display the `total_timesteps` for the last training session only, so it will show `100000` instead of `200000`. 
 ```bash
 python stable_baselines3_example.py --timesteps=100_000 --save_model_path=model_200_000_total_steps.zip --resume_model_path=model.zip
 ```
 
-### Save periodic checkpoints
+### Save periodic checkpoints:
 You can save periodic checkpoints and later resume training from any checkpoint using the same CL argument as above, or run inference on any checkpoint just like with the saved model.
 Note that you need to use a unique `experiment_name` or `experiment_dir` for each run so that checkpoints from one run won't overwrite checkpoints from another run.
 Alternatively, you can remove the folder containing checkpoints from a previous run if you don't need them anymore.
@@ -105,13 +105,13 @@ python stable_baselines3_example.py --experiment_name=experiment1 --timesteps=2_
 
 Checkpoints will be saved to `logs\sb3\experiment1_checkpoints` in the above case, the location is affected by `--experiment_dir` and `--experiment_name`.
 
-### Run inference on a saved model for 100_000 steps
+### Run inference on a saved model for 100_000 steps:
 You can run inference on a model that was previously saved using either `--save_model_path` or `--save_checkpoint_frequency`.
 ```bash
 python stable_baselines3_example.py --timesteps=100_000 --resume_model_path=model.zip --inference
 ```
 
-### Use a linear learning rate schedule
+### Use a linear learning rate schedule:
 By default, the learning rate will be constant throughout training.
 If you add `--linear_lr_schedule`, learning rate will decrease with the progress,
 and reach 0 at `--timesteps` value.
