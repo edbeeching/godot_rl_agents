@@ -48,6 +48,7 @@ We recommend taking the [sb3 example](https://github.com/edbeeching/godot_rl_age
 
 The example exposes more parameters for the user to configure, such as `--speedup` to run the environment faster than realtime and the `--n_parallel` to launch several instances of the game executable in order to accelerate training (not available for in-editor training). 
 
+## SB3 Example script usage:
 To use the example script, first move to the location where the downloaded script is in the console/terminal, and then try some of the example use cases below:
 
 ### Train a model in editor:
@@ -108,4 +109,12 @@ Checkpoints will be saved to `logs\sb3\experiment1_checkpoints` in the above cas
 You can run inference on a model that was previously saved using either `--save_model_path` or `--save_checkpoint_frequency`.
 ```bash
 python stable_baselines3_example.py --timesteps=100_000 --resume_model_path=model.zip --inference
+```
+
+### Use a linear learning rate schedule
+By default, the learning rate will be constant throughout training.
+If you add `--linear_lr_schedule`, learning rate will decrease with the progress,
+and reach 0 at `--timesteps` value.
+```bash
+python stable_baselines3_example.py --timesteps=1_000_000 --linear_lr_schedule
 ```
