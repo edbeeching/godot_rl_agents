@@ -12,6 +12,7 @@ from gymnasium import spaces
 from typing import Optional
 from godot_rl.core.utils import ActionSpaceProcessor, convert_macos_path
 
+from collections import OrderedDict
 
 class GodotEnv:
     MAJOR_VERSION = "0" # Versioning for the environment
@@ -319,7 +320,7 @@ class GodotEnv:
 
         # actions can be "single" for a single action head
         # or "multi" for several outputeads
-        action_spaces = {}
+        action_spaces = OrderedDict()
         print("action space", json_dict["action_space"])
         for k, v in json_dict["action_space"].items():
             if v["action_type"] == "discrete":
