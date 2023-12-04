@@ -209,7 +209,7 @@ else:
     try:
         model.learn(**learn_arguments)
     except KeyboardInterrupt:
-        print("Training interrupted by user. Will save/export if --save_model_path or --onnx_export_path was used.")
+        print("Training interrupted by user. Will save if --save_model_path was used and/or export if --onnx_export_path was used.")
 
 close_env()
 handle_onnx_export()
