@@ -114,7 +114,6 @@ def handle_onnx_export():
         path_onnx = pathlib.Path(args.onnx_export_path).with_suffix(".onnx")
         print("Exporting onnx to: " + os.path.abspath(path_onnx))
         export_ppo_model_as_onnx(model, str(path_onnx))
-    pass
 
 
 def handle_model_save():
@@ -122,7 +121,6 @@ def handle_model_save():
         zip_save_path = pathlib.Path(args.save_model_path).with_suffix(".zip")
         print("Saving model to: " + os.path.abspath(zip_save_path))
         model.save(zip_save_path)
-    pass
 
 
 def close_env():
