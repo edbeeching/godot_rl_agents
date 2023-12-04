@@ -84,6 +84,8 @@ The exported .onnx model can be used by the Godot sync node to run inference fro
 ```bash
 python stable_baselines3_example.py --timesteps=100_000 --onnx_export_path=model.onnx --save_model_path=model.zip
 ```
+Note: If you interrupt/halt training using `ctrl + c`, it should save/export models before closing training (but only if you have included the corresponding arguments mentioned above). Using checkpoints (see below) is a safer way to keep progress.
+
 
 ### Resume training from a saved .zip model:
 This will load the previously saved model.zip, and resume training for another 100 000 steps, so the saved model will have been trained for 200 000 steps in total.
