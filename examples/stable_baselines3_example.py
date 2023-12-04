@@ -1,6 +1,7 @@
 import argparse
 import os
 import pathlib
+from typing import Callable
 
 from stable_baselines3.common.callbacks import CheckpointCallback
 from godot_rl.core.utils import can_import
@@ -13,7 +14,7 @@ from stable_baselines3.common.vec_env.vec_monitor import VecMonitor
 # 1.  gdrl.env_from_hub -r edbeeching/godot_rl_BallChase
 # 2.  chmod +x examples/godot_rl_BallChase/bin/BallChase.x86_64
 if can_import("ray"):
-    print("WARNING, stable baselines and ray[rllib] are not compatable")
+    print("WARNING, stable baselines and ray[rllib] are not compatible")
 
 parser = argparse.ArgumentParser(allow_abbrev=False)
 parser.add_argument(
@@ -86,10 +87,18 @@ parser.add_argument(
          "Requires --resume_model_path to be set."
 )
 parser.add_argument(
+    "--linear_lr_schedule",
+    default=False,
+    action="store_true",
+    help="Use a linear LR schedule for training. If set, learning rate will decrease until it reaches 0 at "
+         "--timesteps"
+         "value. Note: On resuming training, the schedule will reset. If disabled, constant LR will be used."
+)
+parser.add_argument(
     "--viz",
     action="store_true",
     help="If set, the simulation will be displayed in a window during training. Otherwise "
-        "training will run without rendering the simualtion. This setting does not apply to in-editor training.",
+         "training will run without rendering the simulation. This setting does not apply to in-editor training.",
     default=False
 )
 parser.add_argument("--speedup", default=1, type=int, help="Whether to speed up the physics in the env")
@@ -117,8 +126,39 @@ env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=args.viz, seed
                               speedup=args.speedup)
 env = VecMonitor(env)
 
+
+# LR schedule code snippet from:
+# https://stable-baselines3.readthedocs.io/en/master/guide/examples.html#learning-rate-schedule
+def linear_schedule(initial_value: float) -> Callable[[float], float]:
+    """
+    Linear learning rate schedule.
+
+    :param initial_value: Initial learning rate.
+    :return: schedule that computes
+      current learning rate depending on remaining progress
+    """
+
+    def func(progress_remaining: float) -> float:
+        """
+        Progress will decrease from 1 (beginning) to 0.
+
+        :param progress_remaining:
+        :return: current learning rate
+        """
+        return progress_remaining * initial_value
+
+    return func
+
+
 if args.resume_model_path is None:
-    model = PPO("MultiInputPolicy", env, ent_coef=0.0001, verbose=2, n_steps=32, tensorboard_log=args.experiment_dir)
+    learning_rate = 0.0003 if not args.linear_lr_schedule else linear_schedule(0.0003)
+    model: PPO = PPO("MultiInputPolicy",
+                     env,
+                     ent_coef=0.0001,
+                     verbose=2,
+                     n_steps=32,
+                     tensorboard_log=args.experiment_dir,
+                     learning_rate=learning_rate)
 else:
     path_zip = pathlib.Path(args.resume_model_path)
     print("Loading model: " + os.path.abspath(path_zip))
