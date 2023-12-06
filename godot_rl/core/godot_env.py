@@ -360,7 +360,6 @@ class GodotEnv:
         return (
             np.frombuffer(bytes.fromhex(hex_string), dtype=np.uint8)
             .reshape(shape)
-            .astype(np.float32)[:, :, :]  # TODO remove the alpha channel
         )
 
     def _send_as_json(self, dictionary):
