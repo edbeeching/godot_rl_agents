@@ -69,7 +69,7 @@ parser.add_argument(
     "--onnx_export_path",
     default=None,
     type=str,
-    help="The Godot binary to use, do not include for in editor training",
+    help="If included, will export onnx file after training to the path specified.",
 )
 parser.add_argument(
     "--timesteps",
