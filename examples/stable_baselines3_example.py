@@ -106,6 +106,31 @@ parser.add_argument("--n_parallel", default=1, type=int, help="How many instance
                                                               "launch - requires --env_path to be set if > 1.")
 args, extras = parser.parse_known_args()
 
+
+def handle_onnx_export():
+    # Enforce the extension of onnx and zip when saving model to avoid potential conflicts in case of same name
+    # and extension used for both
+    if args.onnx_export_path is not None:
+        path_onnx = pathlib.Path(args.onnx_export_path).with_suffix(".onnx")
+        print("Exporting onnx to: " + os.path.abspath(path_onnx))
+        export_ppo_model_as_onnx(model, str(path_onnx))
+
+
+def handle_model_save():
+    if args.save_model_path is not None:
+        zip_save_path = pathlib.Path(args.save_model_path).with_suffix(".zip")
+        print("Saving model to: " + os.path.abspath(zip_save_path))
+        model.save(zip_save_path)
+
+
+def close_env():
+    try:
+        print("closing env")
+        env.close()
+    except Exception as e:
+        print("Exception while closing env: ", e)
+
+
 path_checkpoint = os.path.join(args.experiment_dir, args.experiment_name + "_checkpoints")
 abs_path_checkpoint = os.path.abspath(path_checkpoint)
 
@@ -170,28 +195,20 @@ if args.inference:
         action, _state = model.predict(obs, deterministic=True)
         obs, reward, done, info = env.step(action)
 else:
-    if args.save_checkpoint_frequency is None:
-        model.learn(args.timesteps, tb_log_name=args.experiment_name)
-    else:
+    learn_arguments = dict(total_timesteps=args.timesteps, tb_log_name=args.experiment_name)
+    if args.save_checkpoint_frequency:
         print("Checkpoint saving enabled. Checkpoints will be saved to: " + abs_path_checkpoint)
         checkpoint_callback = CheckpointCallback(
             save_freq=(args.save_checkpoint_frequency // env.num_envs),
             save_path=path_checkpoint,
             name_prefix=args.experiment_name
         )
-        model.learn(args.timesteps, callback=checkpoint_callback, tb_log_name=args.experiment_name)
+        learn_arguments['callback'] = checkpoint_callback
+    try:
+        model.learn(**learn_arguments)
+    except KeyboardInterrupt:
+        print("Training interrupted by user. Will save if --save_model_path was used and/or export if --onnx_export_path was used.")
 
-print("closing env")
-env.close()
-
-# Enforce the extension of onnx and zip when saving model to avoid potential conflicts in case of same name
-# and extension used for both
-if args.onnx_export_path is not None:
-    path_onnx = pathlib.Path(args.onnx_export_path).with_suffix(".onnx")
-    print("Exporting onnx to: " + os.path.abspath(path_onnx))
-    export_ppo_model_as_onnx(model, str(path_onnx))
-
-if args.save_model_path is not None:
-    path_zip = pathlib.Path(args.save_model_path).with_suffix(".zip")
-    print("Saving model to: " + os.path.abspath(path_zip))
-    model.save(path_zip)
+close_env()
+handle_onnx_export()
+handle_model_save()
