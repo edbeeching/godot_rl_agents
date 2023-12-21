@@ -105,7 +105,7 @@ There are two variants of the RayCast Sensor (2D and 3D):
 
 ![RayCast sensor variants](https://github.com/edbeeching/godot_rl_agents/assets/61947090/e0d82de2-e2e3-4953-aeb1-8b2eee5433b2)
 
-The sensor can be used to add information about the obstacles in the environment to the agent:
+The sensor can be used to add information about the objects in the environment to the agent:
 
 ![RayCastSensorExample](https://github.com/edbeeching/godot_rl_agents/assets/61947090/af4d5cd7-6d45-4c58-96fb-76e0a06007ab)
 
