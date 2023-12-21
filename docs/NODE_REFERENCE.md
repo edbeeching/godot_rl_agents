@@ -99,4 +99,46 @@ Speeds the physics up in the environments to enable faster training.
 #### Onnx Model Path:
 The path to a trained .onnx model file to use for inference (only needed for the `Onnx Inference` control mode).
 
+# Sensors
+## RayCastSensor
+There are two variants of the RayCast Sensor (2D and 3D):
+
+![RayCast sensor variants](https://github.com/edbeeching/godot_rl_agents/assets/61947090/e0d82de2-e2e3-4953-aeb1-8b2eee5433b2)
+
+The sensor can be used to add information about the obstacles in the environment to the agent:
+
+![RayCastSensorExample](https://github.com/edbeeching/godot_rl_agents/assets/61947090/af4d5cd7-6d45-4c58-96fb-76e0a06007ab)
+
+### Properties:
+
+![image](https://github.com/edbeeching/godot_rl_agents/assets/61947090/a09416b2-c289-4aa2-8c5a-f2baafccb73a)
+
+#### Collision Mask:
+The rays from the raycast sensor will detect the objects in these physics layers. 
+> [!TIP]
+> You can make multiple raycast sensors, with different collision masks, to detect different object types (e.g. one for walls, one for collectibles, and one for avoidables).
+
+#### Boolean Class Mask:
+If you enable `Class Sensor`, this will differentiate in the observations returned whether the object that was hit by a ray is both in one of the layers from the collision mask and one of the layers from the boolean class mask. You could use this to differentiate from two different object groups (e.g. wall or coin). 
+
+#### N Rays Width:
+How many rays to add to the cone of rays (width).
+
+#### N Rays Height: 
+How many rays to add to the cone of rays (height).
+
+#### Cone Width:
+Width of the cone.
+
+#### Cone Height:
+Height of the cone.
+
+#### Collide with areas:
+Whether the raycasts from the sensor should collide with areas.
+
+#### Collide with bodies:
+Whether the raycasts from the sensor should collide with bodies.
+
+#### Class sensor:
+Whether two classes should be differentiated check [Boolean Class Mask](#boolean-class-mask).
 
