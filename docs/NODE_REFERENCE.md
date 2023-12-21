@@ -65,4 +65,38 @@ func _physics_process(delta):
 
 > [!NOTE]
 > Some statistics during training such as `mean episode reward` and `mean episode length` may not appear if no episodes
-> have ended. 
+> have ended.
+
+
+## Sync Node
+
+This is the main node that controls training and inference (using the trained model).
+
+### Properties:
+
+#### Control Mode:
+There are three modes:
+- Training - will start training when you click `Play` in Godot editor (or use the exported application as `--env_path` in training).
+> [!NOTE]
+> For training to work, you need to [install Godot-RL](https://github.com/edbeeching/godot_rl_agents#installation-and-first-training) and start the training server using `gdrl` or, to have the ability to save the model  after training is done, using the [sb3 example script](https://github.com/edbeeching/godot_rl_agents/blob/main/docs/ADV_STABLE_BASELINES_3.md#sb3-example-script-usage).
+- Human - `ai_controller.heuristic` will be set to `"human"`. You can use this to test the environment by manually controlling the agent, e.g. as implemented in the [custom env tutorial](https://github.com/edbeeching/godot_rl_agents/blob/main/docs/CUSTOM_ENV.md#adding-the-ai-controller):
+```gdscript
+	var movement : float
+	if ai_controller.heuristic == "human":
+		movement = Input.get_axis("rotate_anticlockwise", "rotate_clockwise")
+	else:
+		movement = ai_controller.move_action
+```
+- Onnx Inference - once you have finished training and [exported an onnx file of the model](https://github.com/edbeeching/godot_rl_agents/blob/main/docs/ADV_STABLE_BASELINES_3.md#train-a-model-for-100_000-steps-then-save-and-export-the-model), you can use it for inference from Godot without the need of starting the Python server. It needs Godot with C#/net support and `.csproj` file to work, check [onnx inference error](https://github.com/edbeeching/godot_rl_agents/blob/main/docs/TROUBLESHOOTING.md#onnx-inference-error).
+
+#### Action Repeat:
+After this many steps, the agent will take the observation, reward, and done info, and send the actions.
+By not doing this on every step, training can potentially be faster as there is less data to process, running the environment can also be faster as data is exchanged and some calculations like the raycast sensor are done less frequently.
+
+#### Speed Up:
+Speeds the physics up in the environments to enable faster training.
+
+#### Onnx Model Path:
+The path to a trained .onnx model file to use for inference (only needed for the `Onnx Inference` control mode).
+
+
