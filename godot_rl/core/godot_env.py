@@ -5,30 +5,31 @@ import pathlib
 import socket
 import subprocess
 import time
+from collections import OrderedDict
 from sys import platform
+from typing import Optional
 
 import numpy as np
-from gymnasium import spaces
-from typing import Optional
 from godot_rl.core.utils import ActionSpaceProcessor, convert_macos_path
+from gymnasium import spaces
 
 
 class GodotEnv:
-    MAJOR_VERSION = "0" # Versioning for the environment
+    MAJOR_VERSION = "0"  # Versioning for the environment
     MINOR_VERSION = "4"
-    DEFAULT_PORT = 11008 # Default port for communication with Godot Game
-    DEFAULT_TIMEOUT = 60 # Default socket timeout TODO
+    DEFAULT_PORT = 11008  # Default port for communication with Godot Game
+    DEFAULT_TIMEOUT = 60  # Default socket timeout TODO
 
     def __init__(
-        self,
-        env_path: str=None,
-        port: int=DEFAULT_PORT,
-        show_window: bool=False,
-        seed:int=0,
-        framerate:Optional[int]=None,
-        action_repeat:Optional[int]=None,
-        speedup:Optional[int]=None,
-        convert_action_space:bool=False,
+            self,
+            env_path: str = None,
+            port: int = DEFAULT_PORT,
+            show_window: bool = False,
+            seed: int = 0,
+            framerate: Optional[int] = None,
+            action_repeat: Optional[int] = None,
+            speedup: Optional[int] = None,
+            convert_action_space: bool = False,
     ):
         """
         Initialize a new instance of GodotEnv
@@ -96,18 +97,18 @@ class GodotEnv:
         if platform == "linux" or platform == "linux2":
             # Linux
             assert (
-                pathlib.Path(filename).suffix == ".x86_64"
-            ), f"Incorrect file suffix for filename {filename} suffix {pathlib.Path(filename).suffix }. Please provide a .x86_64 file"
+                    pathlib.Path(filename).suffix == ".x86_64"
+            ), f"Incorrect file suffix for filename {filename} suffix {pathlib.Path(filename).suffix}. Please provide a .x86_64 file"
         elif platform == "darwin":
             # OSX
             assert (
-                pathlib.Path(filename).suffix == ".app"
-            ), f"Incorrect file suffix for filename {filename} suffix {pathlib.Path(filename).suffix }. Please provide a .app file"
+                    pathlib.Path(filename).suffix == ".app"
+            ), f"Incorrect file suffix for filename {filename} suffix {pathlib.Path(filename).suffix}. Please provide a .app file"
         elif platform == "win32":
             # Windows...
             assert (
-                pathlib.Path(filename).suffix == ".exe"
-            ), f"Incorrect file suffix for filename {filename} suffix {pathlib.Path(filename).suffix }. Please provide a .exe file"
+                    pathlib.Path(filename).suffix == ".exe"
+            ), f"Incorrect file suffix for filename {filename} suffix {pathlib.Path(filename).suffix}. Please provide a .exe file"
         else:
             assert 0, f"unknown filetype {pathlib.Path(filename).suffix}"
 
@@ -157,7 +158,6 @@ class GodotEnv:
         self.step_send(action, order_ij=order_ij)
         return self.step_recv()
 
-
     def step_send(self, action, order_ij=False):
         """
         Send the action to the Godot environment.
@@ -190,8 +190,6 @@ class GodotEnv:
             np.array(response["done"]).tolist(),  # TODO update API to term, trunc
             [{}] * len(response["done"]),
         )
-
-
 
     def _process_obs(self, response_obs: dict):
         """
@@ -319,7 +317,7 @@ class GodotEnv:
 
         # actions can be "single" for a single action head
         # or "multi" for several outputeads
-        action_spaces = {}
+        action_spaces = OrderedDict()
         print("action space", json_dict["action_space"])
         for k, v in json_dict["action_space"].items():
             if v["action_type"] == "discrete":
@@ -335,12 +333,20 @@ class GodotEnv:
         print("observation space", json_dict["observation_space"])
         for k, v in json_dict["observation_space"].items():
             if v["space"] == "box":
-                observation_spaces[k] = spaces.Box(
-                    low=-1.0,
-                    high=1.0,
-                    shape=v["size"],
-                    dtype=np.float32,
-                )
+                if "2d" in k:
+                    observation_spaces[k] = spaces.Box(
+                        low=0,
+                        high=255,
+                        shape=v["size"],
+                        dtype=np.uint8,
+                    )
+                else:
+                    observation_spaces[k] = spaces.Box(
+                        low=-1.0,
+                        high=1.0,
+                        shape=v["size"],
+                        dtype=np.float32,
+                    )
             elif v["space"] == "discrete":
                 observation_spaces[k] = spaces.Discrete(v["size"])
             else:
@@ -350,12 +356,10 @@ class GodotEnv:
 
         self.num_envs = json_dict["n_agents"]
 
-
-
     @staticmethod
     def _decode_2d_obs_from_string(
-        hex_string,
-        shape,
+            hex_string,
+            shape,
     ):
         return (
             np.frombuffer(bytes.fromhex(hex_string), dtype=np.uint8)
