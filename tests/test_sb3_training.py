@@ -13,6 +13,10 @@ from godot_rl.core.utils import can_import
         ("JumperHard", 12200),
         ("Racer", 12300),
         ("FlyBy", 12400),
+        ("3DCarParking", 12600),
+        ("AirHockey", 12800),
+        ("ItemSortingCart", 13000),
+        ("Ships", 13200),
     ],
 )
 @pytest.mark.parametrize("n_parallel", [1, 2, 4])
