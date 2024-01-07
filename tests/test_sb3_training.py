@@ -13,6 +13,10 @@ from godot_rl.core.utils import can_import
         ("JumperHard", 12200),
         ("Racer", 12300),
         ("FlyBy", 12400),
+        ("3DCarParking", 12600),
+        ("AirHockey", 12800),
+        ("ItemSortingCart", 13000),
+        ("Ships", 13200),
     ],
 )
 @pytest.mark.parametrize("n_parallel", [1, 2, 4])
@@ -23,6 +27,7 @@ def test_sb3_training(env_name, port, n_parallel):
     args.env = "gdrl"
     args.env_path = f"examples/godot_rl_{env_name}/bin/{env_name}.x86_64"
     args.experiment_name = f"test_{env_name}_{n_parallel}"
+    args.speedup = 8
     starting_port = port + n_parallel
 
     stable_baselines_training(
