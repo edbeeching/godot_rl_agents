@@ -1,6 +1,7 @@
 # docs and experiment results can be found at https://docs.cleanrl.dev/rl-algorithms/ppo/#ppo_continuous_actionpy
 import argparse
 import os
+import pathlib
 import random
 import time
 from distutils.util import strtobool
@@ -39,6 +40,12 @@ def parse_args():
                         help="the entity (team) of wandb's project")
     parser.add_argument("--capture-video", type=lambda x: bool(strtobool(x)), default=False, nargs="?", const=True,
                         help="whether to capture videos of the agent performances (check out `videos` folder)")
+    parser.add_argument(
+        "--onnx_export_path",
+        default=None,
+        type=str,
+        help="If included, will export onnx file after training to the path specified."
+    )
 
     # Algorithm specific arguments
     parser.add_argument("--env_path", type=str, default=None,
@@ -160,7 +167,8 @@ if __name__ == "__main__":
 
     # env setup
 
-    envs = env = CleanRLGodotEnv(env_path=args.env_path, show_window=args.viz, speedup=args.speedup, seed=args.seed, n_parallel=args.n_parallel)
+    envs = env = CleanRLGodotEnv(env_path=args.env_path, show_window=args.viz, speedup=args.speedup, seed=args.seed,
+                                 n_parallel=args.n_parallel)
     args.num_envs = envs.num_envs
     args.batch_size = int(args.num_envs * args.num_steps)
     args.minibatch_size = int(args.batch_size // args.num_minibatches)
@@ -319,3 +327,37 @@ if __name__ == "__main__":
 
     envs.close()
     writer.close()
+
+    if args.onnx_export_path is not None:
+        path_onnx = pathlib.Path(args.onnx_export_path).with_suffix(".onnx")
+        print("Exporting onnx to: " + os.path.abspath(path_onnx))
+
+        agent.eval().to("cpu")
+
+
+        class OnnxPolicy(torch.nn.Module):
+            def __init__(self, actor_mean):
+                super().__init__()
+                self.actor_mean = actor_mean
+
+            def forward(self, obs, state_ins):
+                action_mean = self.actor_mean(obs)
+                return action_mean, state_ins
+
+
+        onnx_policy = OnnxPolicy(agent.actor_mean)
+        dummy_input = torch.unsqueeze(torch.tensor(envs.single_observation_space.sample()), 0)
+
+        torch.onnx.export(
+            onnx_policy,
+            args=(dummy_input, torch.zeros(1).float()),
+            f=str(path_onnx),
+            opset_version=15,
+            input_names=["obs", "state_ins"],
+            output_names=["output", "state_outs"],
+            dynamic_axes={'obs': {0: 'batch_size'},
+                          'state_ins': {0: 'batch_size'},  # variable length axes
+                          'output': {0: 'batch_size'},
+                          'state_outs': {0: 'batch_size'}}
+
+        )
