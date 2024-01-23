@@ -41,11 +41,12 @@ def export_ppo_model_as_onnx(ppo: PPO, onnx_model_path: str):
         opset_version=9,
         input_names=["obs", "state_ins"],
         output_names=["output", "state_outs"],
-        dynamic_axes={'obs' : {0 : 'batch_size'}, 
-                      'state_ins' : {0 : 'batch_size'},    # variable length axes
-                      'output' : {0 : 'batch_size'},
-                      'state_outs' : {0 : 'batch_size'}}
-
+        dynamic_axes={
+            "obs": {0: "batch_size"},
+            "state_ins": {0: "batch_size"},  # variable length axes
+            "output": {0: "batch_size"},
+            "state_outs": {0: "batch_size"},
+        },
     )
     verify_onnx_export(ppo, onnx_model_path)
 
@@ -59,7 +60,7 @@ def verify_onnx_export(ppo: PPO, onnx_model_path: str, num_tests=10):
     onnx.checker.check_model(onnx_model)
 
     sb3_model = ppo.policy.to("cpu")
-    ort_sess = ort.InferenceSession(onnx_model_path, providers=['CPUExecutionProvider'])
+    ort_sess = ort.InferenceSession(onnx_model_path, providers=["CPUExecutionProvider"])
 
     for i in range(num_tests):
         obs = dict(ppo.observation_space.sample())

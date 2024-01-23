@@ -4,11 +4,8 @@ import gym
 import numpy as np
 from gym.spaces import Box, Discrete, MultiDiscrete
 from ray.rllib.models.torch.fcnet import FullyConnectedNetwork as TorchFCNet
-from ray.rllib.models.torch.misc import (AppendBiasLayer, SlimFC,
-                                         normc_initializer)
-from ray.rllib.models.torch.modules import (GRUGate,
-                                            RelativeMultiHeadAttention,
-                                            SkipConnection)
+from ray.rllib.models.torch.misc import AppendBiasLayer, SlimFC, normc_initializer
+from ray.rllib.models.torch.modules import GRUGate, RelativeMultiHeadAttention, SkipConnection
 from ray.rllib.models.torch.torch_modelv2 import TorchModelV2
 from ray.rllib.policy.sample_batch import SampleBatch
 from ray.rllib.policy.view_requirement import ViewRequirement
@@ -35,7 +32,6 @@ class MyAttentionModel(TorchModelV2, nn.Module):
         model_config: ModelConfigDict,
         name: str,
     ):
-
         TorchModelV2.__init__(self, obs_space, action_space, num_outputs, model_config, name)
 
         nn.Module.__init__(self)
@@ -77,7 +73,6 @@ class MyAttentionModel(TorchModelV2, nn.Module):
         state: List[TensorType],
         seq_lens: TensorType,
     ) -> (TensorType, List[TensorType]):
-
         observations = input_dict[SampleBatch.OBS]
         # print("unbatch", input_dict["obs"]["obs"].unbatch_all()[0])
         # print(input_dict["obs"])

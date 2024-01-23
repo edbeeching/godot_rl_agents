@@ -1,9 +1,10 @@
+from typing import Any, Dict, List, Optional, Tuple, Union
+
 import gymnasium as gym
 import numpy as np
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env.base_vec_env import VecEnv
 from stable_baselines3.common.vec_env.vec_monitor import VecMonitor
-from typing import Any, Dict, List, Optional, Tuple, Union
 
 from godot_rl.core.godot_env import GodotEnv
 from godot_rl.core.utils import can_import, lod_to_dol
@@ -14,13 +15,16 @@ class StableBaselinesGodotEnv(VecEnv):
         # If we are doing editor training, n_parallel must be 1
         if env_path is None and n_parallel > 1:
             raise ValueError("You must provide the path to a exported game executable if n_parallel > 1")
-        
+
         # Define the default port
         port = kwargs.pop("port", GodotEnv.DEFAULT_PORT)
 
         # Create a list of GodotEnv instances
-        self.envs = [GodotEnv(env_path=env_path, convert_action_space=True, port=port+p, seed=seed+p, **kwargs) for p in range(n_parallel)]
-        
+        self.envs = [
+            GodotEnv(env_path=env_path, convert_action_space=True, port=port + p, seed=seed + p, **kwargs)
+            for p in range(n_parallel)
+        ]
+
         # Store the number of parallel environments
         self.n_parallel = n_parallel
 
@@ -51,7 +55,7 @@ class StableBaselinesGodotEnv(VecEnv):
 
         # Send actions to each environment
         for i in range(self.n_parallel):
-            self.envs[i].step_send(action[i*num_envs:(i+1)*num_envs])
+            self.envs[i].step_send(action[i * num_envs : (i + 1) * num_envs])
 
         # Receive results from each environment
         for i in range(self.n_parallel):
@@ -109,12 +113,12 @@ class StableBaselinesGodotEnv(VecEnv):
     def env_method(self):
         raise NotImplementedError()
 
-    def get_attr(self, attr_name: str, indices = None) -> List[Any]:
+    def get_attr(self, attr_name: str, indices=None) -> List[Any]:
         if attr_name == "render_mode":
             return [None for _ in range(self.num_envs)]
         raise AttributeError("get attr not fully implemented in godot-rl StableBaselinesWrapper")
 
-    def seed(self, seed = None):
+    def seed(self, seed=None):
         raise NotImplementedError()
 
     def set_attr(self):
@@ -127,6 +131,7 @@ class StableBaselinesGodotEnv(VecEnv):
     def step_wait(self) -> Tuple[Dict[str, np.ndarray], np.ndarray, np.ndarray, List[Dict[str, Any]]]:
         # Wait for the results from the asynchronous step
         return self.results
+
 
 def stable_baselines_training(args, extras, n_steps: int = 200000, **kwargs) -> None:
     if can_import("ray"):

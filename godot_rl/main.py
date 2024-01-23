@@ -25,23 +25,29 @@ import argparse
 try:
     from godot_rl.wrappers.ray_wrapper import rllib_training
 except ImportError as e:
+
     def rllib_training(args, extras):
-        print("Import error when trying to use rllib. If you have not installed the package, try: pip install godot-rl[rllib]")
+        print(
+            "Import error when trying to use rllib. If you have not installed the package, try: pip install godot-rl[rllib]"
+        )
         print("Otherwise try fixing the error above.")
 
 
 try:
     from godot_rl.wrappers.stable_baselines_wrapper import stable_baselines_training
 except ImportError as e:
+
     def stable_baselines_training(args, extras):
         print(
             "Import error when trying to use sb3. If you have not installed the package, try: pip install godot-rl[sb3]"
         )
         print("Otherwise try fixing the error above.")
 
+
 try:
-    from godot_rl.wrappers.sample_factory_wrapper import sample_factory_training, sample_factory_enjoy
+    from godot_rl.wrappers.sample_factory_wrapper import sample_factory_enjoy, sample_factory_training
 except ImportError as e:
+
     def sample_factory_training(args, extras):
         print(
             "Import error when trying to use sample-factory If you have not installed the package, try: pip install godot-rl[sf]"
@@ -51,26 +57,41 @@ except ImportError as e:
 
 def get_args():
     parser = argparse.ArgumentParser(allow_abbrev=False)
-    parser.add_argument("--trainer", default="sb3", choices=["sb3", "sf", "rllib"], type=str, help="framework to use (rllib, sf, sb3)")
+    parser.add_argument(
+        "--trainer", default="sb3", choices=["sb3", "sf", "rllib"], type=str, help="framework to use (rllib, sf, sb3)"
+    )
     parser.add_argument("--env_path", default=None, type=str, help="Godot binary to use")
-    parser.add_argument("--config_file", default="ppo_test.yaml", type=str, help="The yaml config file [only for rllib]")
+    parser.add_argument(
+        "--config_file", default="ppo_test.yaml", type=str, help="The yaml config file [only for rllib]"
+    )
     parser.add_argument("--restore", default=None, type=str, help="the location of a checkpoint to restore from")
     parser.add_argument("--eval", default=False, action="store_true", help="whether to eval the model")
     parser.add_argument("--speedup", default=1, type=int, help="whether to speed up the physics in the env")
     parser.add_argument("--export", default=False, action="store_true", help="wheter to export the model")
     parser.add_argument("--num_gpus", default=None, type=int, help="Number of GPUs to use [only for rllib]")
-    parser.add_argument("--experiment_dir", default=None, type=str, help="The name of the the experiment directory, in which the tensorboard logs are getting stored")
-    parser.add_argument("--experiment_name", default="experiment", type=str, help="The name of the the experiment, which will be displayed in tensborboard")
+    parser.add_argument(
+        "--experiment_dir",
+        default=None,
+        type=str,
+        help="The name of the the experiment directory, in which the tensorboard logs are getting stored",
+    )
+    parser.add_argument(
+        "--experiment_name",
+        default="experiment",
+        type=str,
+        help="The name of the the experiment, which will be displayed in tensborboard",
+    )
     parser.add_argument("--viz", default=False, action="store_true", help="Whether to visualize one process")
     parser.add_argument("--seed", default=0, type=int, help="seed of the experiment")
-    
-    args, extras =  parser.parse_known_args()
+
+    args, extras = parser.parse_known_args()
     if args.experiment_dir is None:
         args.experiment_dir = f"logs/{args.trainer}"
-        
+
     if args.trainer == "sf" and args.env_path is None:
-        print("WARNING: the sample-factory intergration is not designed to run in interactive mode, please export you game to use this trainer")
-        
+        print(
+            "WARNING: the sample-factory intergration is not designed to run in interactive mode, please export you game to use this trainer"
+        )
 
     return args, extras
 

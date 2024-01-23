@@ -1,15 +1,15 @@
-import numpy as np
+from typing import Any, Dict, List, Optional, Tuple, Union
+
 import gymnasium as gym
+import numpy as np
 from numpy import ndarray
 
-from godot_rl.core.utils import lod_to_dol
 from godot_rl.core.godot_env import GodotEnv
-from typing import Any, Dict, List, Optional, Tuple, Union
+from godot_rl.core.utils import lod_to_dol
 
 
 class CleanRLGodotEnv:
     def __init__(self, env_path: Optional[str] = None, n_parallel: int = 1, seed: int = 0, **kwargs: object) -> None:
-
         # If we are doing editor training, n_parallel must be 1
         if env_path is None and n_parallel > 1:
             raise ValueError("You must provide the path to a exported game executable if n_parallel > 1")
@@ -18,8 +18,10 @@ class CleanRLGodotEnv:
         port = kwargs.pop("port", GodotEnv.DEFAULT_PORT)
 
         # Create a list of GodotEnv instances
-        self.envs = [GodotEnv(env_path=env_path, convert_action_space=True, port=port + p, seed=seed + p, **kwargs) for
-                     p in range(n_parallel)]
+        self.envs = [
+            GodotEnv(env_path=env_path, convert_action_space=True, port=port + p, seed=seed + p, **kwargs)
+            for p in range(n_parallel)
+        ]
 
         # Store the number of parallel environments
         self.n_parallel = n_parallel
@@ -29,7 +31,7 @@ class CleanRLGodotEnv:
         action_space = self.envs[0].action_space
         if isinstance(action_space, gym.spaces.Tuple):
             assert (
-                    len(action_space.spaces) == 1
+                len(action_space.spaces) == 1
             ), f"sb3 supports a single action space, this env contains multiple spaces {action_space}"
 
     def step(self, action: np.ndarray) -> tuple[ndarray, list[Any], list[Any], list[Any], list[Any]]:
@@ -45,7 +47,7 @@ class CleanRLGodotEnv:
 
         # Send actions to each environment
         for i in range(self.n_parallel):
-            self.envs[i].step_send(action[i * num_envs:(i + 1) * num_envs])
+            self.envs[i].step_send(action[i * num_envs : (i + 1) * num_envs])
 
         # Receive results from each environment
         for i in range(self.n_parallel):

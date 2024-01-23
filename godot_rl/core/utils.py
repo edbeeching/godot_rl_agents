@@ -5,13 +5,13 @@ import gymnasium as gym
 import numpy as np
 
 
-
 def lod_to_dol(lod):
     return {k: [dic[k] for dic in lod] for k in lod[0]}
 
 
 def dol_to_lod(dol):
     return [dict(zip(dol, t)) for t in zip(*dol.values())]
+
 
 def convert_macos_path(env_path):
     """
@@ -23,11 +23,10 @@ def convert_macos_path(env_path):
     Example output: ./Demo.app/Contents/Macos/Demo
     """
 
-    filenames = re.findall(r'[^\/]+(?=\.)', env_path)
-    assert (
-        len(filenames) == 1
-    ), f"An error occured while converting the env path for MacOS."
+    filenames = re.findall(r"[^\/]+(?=\.)", env_path)
+    assert len(filenames) == 1, f"An error occured while converting the env path for MacOS."
     return env_path + "/Contents/MacOS/" + filenames[0]
+
 
 class ActionSpaceProcessor:
     # can convert tuple action dists to a single continuous action distribution
@@ -36,7 +35,6 @@ class ActionSpaceProcessor:
     # etc
     # does not yet work with discrete dists of n>2
     def __init__(self, action_space: gym.spaces.Tuple, convert) -> None:
-
         self._original_action_space = action_space
         self._convert = convert
 
@@ -46,7 +44,6 @@ class ActionSpaceProcessor:
             use_multi_discrete_spaces = False
             multi_discrete_spaces = np.array([])
             if isinstance(action_space, gym.spaces.Tuple):
-
                 if all(isinstance(space, gym.spaces.Discrete) for space in action_space.spaces):
                     use_multi_discrete_spaces = True
                     for space in action_space.spaces:
@@ -58,7 +55,7 @@ class ActionSpaceProcessor:
                             space_size += space.shape[0]
                         elif isinstance(space, gym.spaces.Discrete):
                             if space.n > 2:
-                                #for now only binary actions are supported if you mix different spaces
+                                # for now only binary actions are supported if you mix different spaces
                                 # need to add support for the n>2 case
                                 raise NotImplementedError
                             space_size += 1
@@ -96,7 +93,6 @@ class ActionSpaceProcessor:
                 counter += space.shape[0]
 
             elif isinstance(space, gym.spaces.Discrete):
-
                 discrete_actions = np.greater(action[:, counter], 0.0)
                 discrete_actions = discrete_actions.astype(np.float32)
                 original_action.append(discrete_actions)
@@ -107,8 +103,10 @@ class ActionSpaceProcessor:
 
         return original_action
 
+
 def can_import(module_name):
     return not cant_import(module_name)
+
 
 def cant_import(module_name):
     try:

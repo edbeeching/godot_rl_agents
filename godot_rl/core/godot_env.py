@@ -10,10 +10,10 @@ from sys import platform
 from typing import Optional
 
 import numpy as np
-from godot_rl.core.utils import ActionSpaceProcessor, convert_macos_path
 from gymnasium import spaces
 
-from collections import OrderedDict
+from godot_rl.core.utils import ActionSpaceProcessor, convert_macos_path
+
 
 class GodotEnv:
     MAJOR_VERSION = "0"  # Versioning for the environment
@@ -22,15 +22,15 @@ class GodotEnv:
     DEFAULT_TIMEOUT = 60  # Default socket timeout TODO
 
     def __init__(
-            self,
-            env_path: str = None,
-            port: int = DEFAULT_PORT,
-            show_window: bool = False,
-            seed: int = 0,
-            framerate: Optional[int] = None,
-            action_repeat: Optional[int] = None,
-            speedup: Optional[int] = None,
-            convert_action_space: bool = False,
+        self,
+        env_path: str = None,
+        port: int = DEFAULT_PORT,
+        show_window: bool = False,
+        seed: int = 0,
+        framerate: Optional[int] = None,
+        action_repeat: Optional[int] = None,
+        speedup: Optional[int] = None,
+        convert_action_space: bool = False,
     ):
         """
         Initialize a new instance of GodotEnv
@@ -98,17 +98,17 @@ class GodotEnv:
         if platform == "linux" or platform == "linux2":
             # Linux
             assert (
-                    pathlib.Path(filename).suffix == ".x86_64"
+                pathlib.Path(filename).suffix == ".x86_64"
             ), f"Incorrect file suffix for filename {filename} suffix {pathlib.Path(filename).suffix}. Please provide a .x86_64 file"
         elif platform == "darwin":
             # OSX
             assert (
-                    pathlib.Path(filename).suffix == ".app"
+                pathlib.Path(filename).suffix == ".app"
             ), f"Incorrect file suffix for filename {filename} suffix {pathlib.Path(filename).suffix}. Please provide a .app file"
         elif platform == "win32":
             # Windows...
             assert (
-                    pathlib.Path(filename).suffix == ".exe"
+                pathlib.Path(filename).suffix == ".exe"
             ), f"Incorrect file suffix for filename {filename} suffix {pathlib.Path(filename).suffix}. Please provide a .exe file"
         else:
             assert 0, f"unknown filetype {pathlib.Path(filename).suffix}"
@@ -359,13 +359,10 @@ class GodotEnv:
 
     @staticmethod
     def _decode_2d_obs_from_string(
-            hex_string,
-            shape,
+        hex_string,
+        shape,
     ):
-        return (
-            np.frombuffer(bytes.fromhex(hex_string), dtype=np.uint8)
-            .reshape(shape)
-        )
+        return np.frombuffer(bytes.fromhex(hex_string), dtype=np.uint8).reshape(shape)
 
     def _send_as_json(self, dictionary):
         message_json = json.dumps(dictionary)
