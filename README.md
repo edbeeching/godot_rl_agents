@@ -83,6 +83,33 @@ Godot RL Agents supports 4 different RL training frameworks, the links below det
 - [CleanRL](docs/ADV_CLEAN_RL.md) (Windows, Mac, Linux)
 - [Ray rllib](docs/ADV_RLLIB.md) (Windows, Mac, Linux)
 
+## Contributing
+We welcome new contributions to the library, such as:
+- New environments made in Godot
+- Improvements to the readme files
+- Additions to the python codebase
+
+Start by forking the repo and then cloning it to your machine, creating a venv and performing an editable installation.
+
+```
+# If you want to PR, you should fork the lib or ask to be a contibutor
+git clone git@github.com:YOUR_USERNAME/godot_rl_agents.git
+cd godot_rl_agents
+python -m venv venv
+pip install -e ".[dev]"
+# check tests run
+make test
+```
+
+Then add your features.
+Format your code with:
+```
+make style
+make quality
+```
+Then make a PR against main on the original repo.
+
+
 ## FAQ
 
 ### Why have we developed Godot RL Agents?
