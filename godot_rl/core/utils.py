@@ -24,7 +24,7 @@ def convert_macos_path(env_path):
     """
 
     filenames = re.findall(r"[^\/]+(?=\.)", env_path)
-    assert len(filenames) == 1, f"An error occured while converting the env path for MacOS."
+    assert len(filenames) == 1, "An error occured while converting the env path for MacOS."
     return env_path + "/Contents/MacOS/" + filenames[0]
 
 

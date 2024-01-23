@@ -18,7 +18,6 @@ def test_env_ij(env_name, port, n_agents):
     env = GodotEnv(env_path=env_path, port=port)
 
     action_space = env.action_space
-    observation_space = env.observation_space
     n_envs = env.num_envs
 
     for j in range(2):
@@ -58,7 +57,6 @@ def test_env_ji(env_name, port, n_agents):
     env = GodotEnv(env_path=env_path, port=port)
 
     action_space = env.action_space
-    observation_space = env.observation_space
     n_envs = env.num_envs
     assert n_envs == n_agents
     for j in range(2):

@@ -1,6 +1,6 @@
 import os
 import pathlib
-from typing import Callable, List, Optional, Tuple
+from typing import List, Optional, Tuple
 
 import numpy as np
 import ray
@@ -83,38 +83,40 @@ def register_env():
     )
 
 
-def rllib_export(model_path):
-    # get path from the config file and remove the file name
-    path = model_path  # full path with file name
-    path = path.split("/")  # split the path into a list
-    path = path[:-1]  # remove the file name from the list
-    # duplicate the path for the export
-    export_path = path.copy()
-    export_path.append("onnx")
-    export_path = "/".join(export_path)  # join the list into a string
-    # duplicate the last element of the list
-    path.append(path[-1])
-    # change format from checkpoint_000500 to checkpoint-500
-    temp = path[-1].split("_")
-    temp = temp[-1]
-    # parse the number
-    temp = int(temp)
-    # back to string
-    temp = str(temp)
-    # join the string with the new format
-    path[-1] = "checkpoint-" + temp
-    path = "/".join(path)  # join the list into a string
-    # best_checkpoint = results.get_best_checkpoint(results.trials[0], mode="max")
-    # print(f".. best checkpoint was: {best_checkpoint}")
+# TODO: fix this implementation
+# def rllib_export(model_path):
+#     # get path from the config file and remove the file name
+#     path = model_path  # full path with file name
+#     path = path.split("/")  # split the path into a list
+#     path = path[:-1]  # remove the file name from the list
+#     # duplicate the path for the export
+#     export_path = path.copy()
+#     export_path.append("onnx")
+#     export_path = "/".join(export_path)  # join the list into a string
+#     # duplicate the last element of the list
+#     path.append(path[-1])
+#     # change format from checkpoint_000500 to checkpoint-500
+#     temp = path[-1].split("_")
+#     temp = temp[-1]
+#     # parse the number
+#     temp = int(temp)
+#     # back to string
+#     temp = str(temp)
+#     # join the string with the new format
+#     path[-1] = "checkpoint-" + temp
+#     path = "/".join(path)  # join the list into a string
+#     # best_checkpoint = results.get_best_checkpoint(results.trials[0], mode="max")
+#     # print(f".. best checkpoint was: {best_checkpoint}")
 
-    # From here on, the relevant part to exporting the model
-    new_trainer = PPOTrainer(config=exp["config"])
-    new_trainer.restore(path)
-    # policy = new_trainer.get_policy()
-    new_trainer.export_policy_model(export_dir=export_path, onnx=9)  # This works for version 1.11.X
+#     # From here on, the relevant part to exporting the model
+#     new_trainer = PPOTrainer(config=exp["config"])
+#     new_trainer.restore(path)
+#     # policy = new_trainer.get_policy()
+#     new_trainer.export_policy_model(export_dir=export_path, onnx=9)  # This works for version 1.11.X
 
 
-# Running  with: gdrl --env_path envs/builds/JumperHard/jumper_hard.exe --export --restore envs/checkpoints/jumper_hard/checkpoint_000500/checkpoint-500
+# Running  with: gdrl --env_path envs/builds/JumperHard/jumper_hard.exe --export \
+# --restore envs/checkpoints/jumper_hard/checkpoint_000500/checkpoint-500
 # model = policy.model
 # export the model to onnx using torch.onnx.export
 # dummy_input = torch.randn(1, 3, 84, 84)
@@ -139,7 +141,7 @@ def rllib_training(args, extras):
         run_name = exp["algorithm"] + "/editor"
     print("run_name", run_name)
 
-    if args.num_gpus != None:
+    if args.num_gpus is not None:
         exp["config"]["num_gpus"] = args.num_gpus
 
     if args.env_path is None:
@@ -147,7 +149,6 @@ def rllib_training(args, extras):
         exp["config"]["num_workers"] = 1
 
     checkpoint_freq = 10
-    checkpoint_at_end = True
 
     exp["config"]["env_config"]["show_window"] = args.viz
     exp["config"]["env_config"]["speedup"] = args.speedup
@@ -170,7 +171,7 @@ def rllib_training(args, extras):
     ray.init(num_gpus=exp["config"]["num_gpus"] or 1)
 
     if not args.export:
-        results = tune.run(
+        tune.run(
             exp["algorithm"],
             name=run_name,
             config=exp["config"],
@@ -185,6 +186,7 @@ def rllib_training(args, extras):
             else f"{trial.trainable_name}_{trial.trial_id}",
         )
     if args.export:
-        rllib_export(args.restore)
+        raise NotImplementedError("Exporting is not (re)implemented yet")
+        # rllib_export(args.restore)
 
     ray.shutdown()

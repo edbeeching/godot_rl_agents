@@ -4,14 +4,16 @@ import os
 import pathlib
 import random
 import time
-from distutils.util import strtobool
 from collections import deque
+from distutils.util import strtobool
+
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.distributions.normal import Normal
 from torch.utils.tensorboard import SummaryWriter
+
 from godot_rl.wrappers.clean_rl_wrapper import CleanRLGodotEnv
 
 

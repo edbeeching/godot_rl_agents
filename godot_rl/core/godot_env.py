@@ -99,17 +99,17 @@ class GodotEnv:
             # Linux
             assert (
                 pathlib.Path(filename).suffix == ".x86_64"
-            ), f"Incorrect file suffix for filename {filename} suffix {pathlib.Path(filename).suffix}. Please provide a .x86_64 file"
+            ), f"Incorrect file suffix for {filename=} {pathlib.Path(filename).suffix=}. Please provide a .x86_64 file"
         elif platform == "darwin":
             # OSX
             assert (
                 pathlib.Path(filename).suffix == ".app"
-            ), f"Incorrect file suffix for filename {filename} suffix {pathlib.Path(filename).suffix}. Please provide a .app file"
+            ), f"Incorrect file suffix for {filename=} {pathlib.Path(filename).suffix=}. Please provide a .app file"
         elif platform == "win32":
             # Windows...
             assert (
                 pathlib.Path(filename).suffix == ".exe"
-            ), f"Incorrect file suffix for filename {filename} suffix {pathlib.Path(filename).suffix}. Please provide a .exe file"
+            ), f"Incorrect file suffix for {filename=} {pathlib.Path(filename).suffix=}. Please provide a .exe file"
         else:
             assert 0, f"unknown filetype {pathlib.Path(filename).suffix}"
 
@@ -132,7 +132,7 @@ class GodotEnv:
             env_action = {}
 
             for j, k in enumerate(self._action_space.keys()):
-                if order_ij == True:
+                if order_ij is True:
                     v = action[i][j]
                 else:
                     v = action[j][i]
@@ -263,7 +263,7 @@ class GodotEnv:
 
         launch_cmd = f"{path} --port={port} --env_seed={seed}"
 
-        if show_window == False:
+        if show_window is False:
             launch_cmd += " --disable-render-loop --headless"
         if framerate is not None:
             launch_cmd += f" --fixed-fps {framerate}"
@@ -382,7 +382,7 @@ class GodotEnv:
                 data = self.connection.recv(4)
                 if not data:
                     break
-        except BlockingIOError as e:
+        except BlockingIOError:
             pass
         self.connection.setblocking(True)
 

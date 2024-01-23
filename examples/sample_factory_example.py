@@ -1,5 +1,6 @@
 import argparse
-from godot_rl.wrappers.sample_factory_wrapper import sample_factory_training, sample_factory_enjoy
+
+from godot_rl.wrappers.sample_factory_wrapper import sample_factory_enjoy, sample_factory_training
 
 
 def get_args():

@@ -1,14 +1,14 @@
 """
 This is the main entrypoint to the Godot RL Agents interface
 
-Example usage is best found in the documentation: 
+Example usage is best found in the documentation:
 https://github.com/edbeeching/godot_rl_agents/blob/main/docs/EXAMPLE_ENVIRONMENTS.md
 
 Hyperparameters and training algorithm can be defined in a .yaml file, see ppo_test.yaml as an example.
 
 
 Interactive Training:
-With the Godot editor open, type gdrl in the terminal to launch training and 
+With the Godot editor open, type gdrl in the terminal to launch training and
 then press PLAY in the Godot editor. Training can be stopped with CTRL+C or
 by pressing STOP in the editor.
 
@@ -25,34 +25,33 @@ import argparse
 try:
     from godot_rl.wrappers.ray_wrapper import rllib_training
 except ImportError as e:
+    error_message = str(e)
 
     def rllib_training(args, extras):
-        print(
-            "Import error when trying to use rllib. If you have not installed the package, try: pip install godot-rl[rllib]"
-        )
-        print("Otherwise try fixing the error above.")
+        print("Import error importing rllib. If you have not installed the package, try: pip install godot-rl[rllib]")
+        print("Otherwise try fixing the error.", error_message)
 
 
 try:
     from godot_rl.wrappers.stable_baselines_wrapper import stable_baselines_training
 except ImportError as e:
+    error_message = str(e)
 
     def stable_baselines_training(args, extras):
-        print(
-            "Import error when trying to use sb3. If you have not installed the package, try: pip install godot-rl[sb3]"
-        )
-        print("Otherwise try fixing the error above.")
+        print("Import error importing sb3. If you have not installed the package, try: pip install godot-rl[sb3]")
+        print("Otherwise try fixing the error.", error_message)
 
 
 try:
     from godot_rl.wrappers.sample_factory_wrapper import sample_factory_enjoy, sample_factory_training
 except ImportError as e:
+    error_message = str(e)
 
     def sample_factory_training(args, extras):
         print(
-            "Import error when trying to use sample-factory If you have not installed the package, try: pip install godot-rl[sf]"
+            "Import error importing sample-factory If you have not installed the package, try: pip install godot-rl[sf]"
         )
-        print("Otherwise try fixing the error above.")
+        print("Otherwise try fixing the error.", error_message)
 
 
 def get_args():
@@ -89,9 +88,7 @@ def get_args():
         args.experiment_dir = f"logs/{args.trainer}"
 
     if args.trainer == "sf" and args.env_path is None:
-        print(
-            "WARNING: the sample-factory intergration is not designed to run in interactive mode, please export you game to use this trainer"
-        )
+        print("WARNING: the sample-factory intergration is not designed to run in interactive mode, export you game")
 
     return args, extras
 

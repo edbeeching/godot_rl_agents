@@ -3,12 +3,13 @@ import os
 import pathlib
 from typing import Callable
 
-from stable_baselines3.common.callbacks import CheckpointCallback
-from godot_rl.core.utils import can_import
-from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
-from godot_rl.wrappers.onnx.stable_baselines_export import export_ppo_model_as_onnx
 from stable_baselines3 import PPO
+from stable_baselines3.common.callbacks import CheckpointCallback
 from stable_baselines3.common.vec_env.vec_monitor import VecMonitor
+
+from godot_rl.core.utils import can_import
+from godot_rl.wrappers.onnx.stable_baselines_export import export_ppo_model_as_onnx
+from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
 
 # To download the env source and binary:
 # 1.  gdrl.env_from_hub -r edbeeching/godot_rl_BallChase
@@ -214,7 +215,8 @@ else:
         model.learn(**learn_arguments)
     except KeyboardInterrupt:
         print(
-            "Training interrupted by user. Will save if --save_model_path was used and/or export if --onnx_export_path was used."
+            """Training interrupted by user. Will save if --save_model_path was
+            used and/or export if --onnx_export_path was used."""
         )
 
 close_env()

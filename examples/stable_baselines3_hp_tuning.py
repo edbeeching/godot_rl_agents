@@ -8,8 +8,8 @@ This is a simplified version of what can be found in https://github.com/DLR-RM/r
 
 You can run this example as follows:
     $ python examples/stable_baselines3_hp_tuning.py --env_path=<path/to/your/env> --speedup=8 --n_parallel=1
-    
-Feel free to copy this script and update, add or remove the hp values to your liking. 
+
+Feel free to copy this script and update, add or remove the hp values to your liking.
 """
 
 try:
@@ -17,25 +17,21 @@ try:
     from optuna.pruners import MedianPruner
     from optuna.samplers import TPESampler
 except ImportError as e:
+    print(e)
     print("You need to install optuna to use the hyperparameter tuning script. Try: pip install optuna")
     exit()
 
-from typing import Any
-from typing import Dict
+import argparse
+from typing import Any, Dict
 
 import gymnasium as gym
-
-from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
-from godot_rl.core.godot_env import GodotEnv
-
+import torch
 from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import EvalCallback
 from stable_baselines3.common.vec_env.vec_monitor import VecMonitor
 
-import torch
-import torch.nn as nn
-
-import argparse
+from godot_rl.core.godot_env import GodotEnv
+from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
 
 parser = argparse.ArgumentParser(allow_abbrev=False)
 parser.add_argument(

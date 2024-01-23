@@ -1,5 +1,4 @@
 import argparse
-import random
 from functools import partial
 
 import numpy as np

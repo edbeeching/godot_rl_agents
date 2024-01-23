@@ -1,5 +1,4 @@
 import os
-import shutil
 from sys import platform
 from zipfile import ZipFile
 
@@ -50,9 +49,9 @@ def download_editor():
     print(f"downloading editor {FILENAME} for platform: {platform}")
     wget.download(URL, out="")
     print()
-    print(f"unzipping")
+    print("unzipping")
     with ZipFile(FILENAME, "r") as zipObj:
         # Extract all the contents of zip file in different directory
         zipObj.extractall("editor/")
-    print(f"cleaning up")
+    print("cleaning up")
     os.remove(FILENAME)

@@ -1,5 +1,3 @@
-import time
-
 from godot_rl.core.godot_env import GodotEnv
 
 if __name__ == "__main__":

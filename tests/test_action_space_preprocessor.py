@@ -1,7 +1,6 @@
 import pytest
-from gymnasium.spaces import Box, Dict, Discrete, Tuple
+from gymnasium.spaces import Box, Discrete, Tuple
 
-from godot_rl.core.godot_env import GodotEnv
 from godot_rl.core.utils import ActionSpaceProcessor
 
 

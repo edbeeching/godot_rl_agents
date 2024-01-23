@@ -18,7 +18,7 @@ def main():
     parser.add_argument(
         "-r",
         "--hf_repository",
-        help="Repo id of the dataset / environment repository from the Hugging Face Hub in the form user_name/repo_name",
+        help="Repo id of the dataset / environment repo from the Hugging Face Hub in the form user_name/repo_name",
         type=str,
     )
     parser.add_argument(

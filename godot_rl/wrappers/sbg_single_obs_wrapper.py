@@ -5,8 +5,11 @@ import numpy as np
 
 from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
 
-# A variant of the Stable Baselines Godot Env that only supports a single obs space from the dictionary - obs["obs"] by default.
-# This provides some basic support for using envs that have a single obs space with policies other than MultiInputPolicy.
+# A variant of the Stable Baselines Godot Env that only supports a single
+# obs space from the dictionary - obs["obs"] by default.
+
+# This provides some basic support for using envs that have a single obs
+# space with policies other than MultiInputPolicy.
 
 
 class SBGSingleObsEnv(StableBaselinesGodotEnv):
