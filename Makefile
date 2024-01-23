@@ -1,16 +1,16 @@
 .PHONY: quality style test unity-test
 
-check_dirs := src tests godot_rl
+check_dirs := tests godot_rl
 
 # Format source code automatically
 style:
-	python -m black --line-length 119 --target-version py310 $(check_dirs) setup.py
-	python -m isort $(check_dirs) setup.py
+	black --line-length 120 --target-version py310 tests godot_rl
+	isort -w 120 tests godot_rl
 # Check that source code meets quality standards
 quality:
-	python -m black --check --line-length 119 --target-version py310 $(check_dirs) setup.py
-	python -m isort --check-only $(check_dirs) setup.py
-	python -m flake8 --max-line-length 119 $(check_dirs) setup.py
+	black --check --line-length 120 --target-version py310 tests godot_rl
+	isort -w 120 --check-only tests godot_rl
+	flake8 --max-line-length 120 tests godot_rl
 
 # Run tests for the library
 test:
