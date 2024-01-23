@@ -37,12 +37,8 @@ def test_env_ij(env_name, port, n_agents):
             assert isinstance(
                 reward[0], (float, int)
             ), f"The reward returned by 'step()' must be a float or int, and is {reward[0]} of type {type(reward[0])}"
-            assert isinstance(
-                term[0], bool
-            ), f"The 'done' signal {term[0]}  {type(term[0])} must be a boolean"
-            assert isinstance(
-                info[0], dict
-            ), "The 'info' returned by 'step()' must be a python dictionary"
+            assert isinstance(term[0], bool), f"The 'done' signal {term[0]}  {type(term[0])} must be a boolean"
+            assert isinstance(info[0], dict), "The 'info' returned by 'step()' must be a python dictionary"
 
     env.close()
 
@@ -82,11 +78,7 @@ def test_env_ji(env_name, port, n_agents):
             assert isinstance(
                 reward[0], (float, int)
             ), f"The reward returned by 'step()' must be a float or int, and is {reward[0]} of type {type(reward[0])}"
-            assert isinstance(
-                term[0], bool
-            ), f"The 'done' signal {term[0]}  {type(term[0])} must be a boolean"
-            assert isinstance(
-                info[0], dict
-            ), "The 'info' returned by 'step()' must be a python dictionary"
+            assert isinstance(term[0], bool), f"The 'done' signal {term[0]}  {type(term[0])} must be a boolean"
+            assert isinstance(info[0], dict), "The 'info' returned by 'step()' must be a python dictionary"
 
     env.close()
