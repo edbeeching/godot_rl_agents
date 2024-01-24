@@ -191,8 +191,6 @@ if args.eval_episode_count:
     print("Evaluating:")
     env = SBGSingleObsEnv(env_path=args.env_path, show_window=True, seed=args.seed, n_parallel=1, speedup=args.speedup)
     env = VecMonitor(env)
-    from stable_baselines3.common.evaluation import evaluate_policy
-
     mean_reward, _ = evaluate_policy(learner, env, n_eval_episodes=args.eval_episode_count)
     print(f"Mean reward after evaluation: {mean_reward}")
 
