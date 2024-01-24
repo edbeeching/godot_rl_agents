@@ -1,7 +1,7 @@
 import pytest
 
-from godot_rl.main import get_args
 from godot_rl.core.utils import can_import
+from godot_rl.main import get_args
 
 
 @pytest.mark.skipif(can_import("ray"), reason="rllib and sb3 are not compatable")
@@ -30,6 +30,4 @@ def test_sb3_training(env_name, port, n_parallel):
     args.speedup = 8
     starting_port = port + n_parallel
 
-    stable_baselines_training(
-        args, extras, n_steps=2, port=starting_port, n_parallel=n_parallel
-    )
+    stable_baselines_training(args, extras, n_steps=2, port=starting_port, n_parallel=n_parallel)

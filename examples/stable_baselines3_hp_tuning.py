@@ -8,8 +8,8 @@ This is a simplified version of what can be found in https://github.com/DLR-RM/r
 
 You can run this example as follows:
     $ python examples/stable_baselines3_hp_tuning.py --env_path=<path/to/your/env> --speedup=8 --n_parallel=1
-    
-Feel free to copy this script and update, add or remove the hp values to your liking. 
+
+Feel free to copy this script and update, add or remove the hp values to your liking.
 """
 
 try:
@@ -17,30 +17,33 @@ try:
     from optuna.pruners import MedianPruner
     from optuna.samplers import TPESampler
 except ImportError as e:
+    print(e)
     print("You need to install optuna to use the hyperparameter tuning script. Try: pip install optuna")
     exit()
 
-from typing import Any
-from typing import Dict
+import argparse
+from typing import Any, Dict
 
 import gymnasium as gym
-
-from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
-from godot_rl.core.godot_env import GodotEnv
-
+import torch
 from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import EvalCallback
 from stable_baselines3.common.vec_env.vec_monitor import VecMonitor
 
-import torch
-import torch.nn as nn
-
-import argparse
+from godot_rl.core.godot_env import GodotEnv
+from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
 
 parser = argparse.ArgumentParser(allow_abbrev=False)
-parser.add_argument("--env_path", default=None, type=str, help="The Godot binary to use, do not include for in editor training")
+parser.add_argument(
+    "--env_path", default=None, type=str, help="The Godot binary to use, do not include for in editor training"
+)
 parser.add_argument("--speedup", default=8, type=int, help="whether to speed up the physics in the env")
-parser.add_argument("--n_parallel", default=1, type=int, help="How many instances of the environment executable to launch - requires --env_path to be set if > 1.")
+parser.add_argument(
+    "--n_parallel",
+    default=1,
+    type=int,
+    help="How many instances of the environment executable to launch - requires --env_path to be set if > 1.",
+)
 
 args, extras = parser.parse_known_args()
 
@@ -60,6 +63,7 @@ STOP_TRIAL_TIMEOUT = 60 * 60 * 2  # 2 hours
 DEFAULT_HYPERPARAMS = {
     "ent_coef": 0.005,
 }
+
 
 def sample_ppo_params(trial: optuna.Trial) -> Dict[str, Any]:
     """Sampler for PPO hyperparameters."""
@@ -118,10 +122,19 @@ def objective(trial: optuna.Trial) -> float:
     print("args:", kwargs)
     # Create the RL model.
     training_port = GodotEnv.DEFAULT_PORT + 1
-    model = PPO("MultiInputPolicy", VecMonitor(StableBaselinesGodotEnv(env_path=args.env_path, speedup=args.speedup, n_parallel=args.n_parallel, port=training_port)), tensorboard_log="logs/optuna", **kwargs)
+    model = PPO(
+        "MultiInputPolicy",
+        VecMonitor(
+            StableBaselinesGodotEnv(
+                env_path=args.env_path, speedup=args.speedup, n_parallel=args.n_parallel, port=training_port
+            )
+        ),
+        tensorboard_log="logs/optuna",
+        **kwargs,
+    )
     # Create env used for evaluation.
     eval_env = VecMonitor(StableBaselinesGodotEnv(env_path=args.env_path, speedup=args.speedup))
-    
+
     # Create the callback that will periodically evaluate and report the performance.
     eval_callback = TrialEvalCallback(
         eval_env, trial, n_eval_episodes=N_EVAL_EPISODES, eval_freq=EVAL_FREQ, deterministic=True
@@ -142,12 +155,12 @@ def objective(trial: optuna.Trial) -> float:
 
     # Tell the optimizer that the trial failed.
     if nan_encountered:
-        #return 0
+        # return 0
         return float("nan")
 
     if eval_callback.is_pruned:
         raise optuna.exceptions.TrialPruned()
-    
+
     return eval_callback.last_mean_reward
 
 

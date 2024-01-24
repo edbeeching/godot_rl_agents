@@ -31,7 +31,6 @@ if __name__ == "__main__":
     results = {}
 
     for framerate, port in zip(framerates, ports):
-
         env = GodotEnv(
             env_path=env_path,
             port=port,
@@ -44,7 +43,6 @@ if __name__ == "__main__":
         action_space = env.action_space
         start = time.time()
         for i in range(N_STEPS):
-
             actions = [action_space.sample() for _ in range(n_envs)]
             _ = env.step(actions)
 

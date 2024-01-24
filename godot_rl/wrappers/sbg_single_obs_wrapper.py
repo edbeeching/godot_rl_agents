@@ -2,11 +2,15 @@ from typing import Any, Dict, List, Tuple
 
 import gymnasium as gym
 import numpy as np
+
 from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
 
+# A variant of the Stable Baselines Godot Env that only supports a single
+# obs space from the dictionary - obs["obs"] by default.
 
-# A variant of the Stable Baselines Godot Env that only supports a single obs space from the dictionary - obs["obs"] by default.
-# This provides some basic support for using envs that have a single obs space with policies other than MultiInputPolicy.
+# This provides some basic support for using envs that have a single obs
+# space with policies other than MultiInputPolicy.
+
 
 class SBGSingleObsEnv(StableBaselinesGodotEnv):
     def __init__(self, obs_key="obs", *args, **kwargs) -> None:

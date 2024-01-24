@@ -4,14 +4,16 @@ import os
 import pathlib
 import random
 import time
-from distutils.util import strtobool
 from collections import deque
+from distutils.util import strtobool
+
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.distributions.normal import Normal
 from torch.utils.tensorboard import SummaryWriter
+
 from godot_rl.wrappers.clean_rl_wrapper import CleanRLGodotEnv
 
 
@@ -167,8 +169,9 @@ if __name__ == "__main__":
 
     # env setup
 
-    envs = env = CleanRLGodotEnv(env_path=args.env_path, show_window=args.viz, speedup=args.speedup, seed=args.seed,
-                                 n_parallel=args.n_parallel)
+    envs = env = CleanRLGodotEnv(
+        env_path=args.env_path, show_window=args.viz, speedup=args.speedup, seed=args.seed, n_parallel=args.n_parallel
+    )
     args.num_envs = envs.num_envs
     args.batch_size = int(args.num_envs * args.num_steps)
     args.minibatch_size = int(args.batch_size // args.num_minibatches)
@@ -334,7 +337,6 @@ if __name__ == "__main__":
 
         agent.eval().to("cpu")
 
-
         class OnnxPolicy(torch.nn.Module):
             def __init__(self, actor_mean):
                 super().__init__()
@@ -343,7 +345,6 @@ if __name__ == "__main__":
             def forward(self, obs, state_ins):
                 action_mean = self.actor_mean(obs)
                 return action_mean, state_ins
-
 
         onnx_policy = OnnxPolicy(agent.actor_mean)
         dummy_input = torch.unsqueeze(torch.tensor(envs.single_observation_space.sample()), 0)
@@ -355,9 +356,10 @@ if __name__ == "__main__":
             opset_version=15,
             input_names=["obs", "state_ins"],
             output_names=["output", "state_outs"],
-            dynamic_axes={'obs': {0: 'batch_size'},
-                          'state_ins': {0: 'batch_size'},  # variable length axes
-                          'output': {0: 'batch_size'},
-                          'state_outs': {0: 'batch_size'}}
-
+            dynamic_axes={
+                "obs": {0: "batch_size"},
+                "state_ins": {0: "batch_size"},  # variable length axes
+                "output": {0: "batch_size"},
+                "state_outs": {0: "batch_size"},
+            },
         )

@@ -1,15 +1,14 @@
 .PHONY: quality style test unity-test
 
-# Check that source code meets quality standards
-quality:
-	black --check --line-length 119 --target-version py38 tests godot_rl 
-	isort --check-only tests godot_rl 
-	flake8 tests godot_rl
-
 # Format source code automatically
 style:
-	black --line-length 119 --target-version py38 tests godot_rl
-	isort tests godot_rl
+	black --line-length 120 --target-version py310 tests godot_rl examples
+	isort -w 120 tests godot_rl examples
+# Check that source code meets quality standards
+quality:
+	black --check --line-length 120 --target-version py310 tests godot_rl examples
+	isort -w 120 --check-only tests godot_rl examples
+	flake8 --max-line-length 120 tests godot_rl examples
 
 # Run tests for the library
 test:
