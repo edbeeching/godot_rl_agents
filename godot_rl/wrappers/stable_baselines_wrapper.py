@@ -11,17 +11,31 @@ from godot_rl.core.utils import can_import, lod_to_dol
 
 
 class StableBaselinesGodotEnv(VecEnv):
-    def __init__(self, env_path: Optional[str] = None, n_parallel: int = 1, seed: int = 0, **kwargs) -> None:
+    def __init__(
+        self,
+        env_path: Optional[str] = None,
+        n_parallel: int = 1,
+        seed: int = 0,
+        **kwargs,
+    ) -> None:
         # If we are doing editor training, n_parallel must be 1
         if env_path is None and n_parallel > 1:
-            raise ValueError("You must provide the path to a exported game executable if n_parallel > 1")
+            raise ValueError(
+                "You must provide the path to a exported game executable if n_parallel > 1"
+            )
 
         # Define the default port
         port = kwargs.pop("port", GodotEnv.DEFAULT_PORT)
 
         # Create a list of GodotEnv instances
         self.envs = [
-            GodotEnv(env_path=env_path, convert_action_space=True, port=port + p, seed=seed + p, **kwargs)
+            GodotEnv(
+                env_path=env_path,
+                convert_action_space=True,
+                port=port + p,
+                seed=seed + p,
+                **kwargs,
+            )
             for p in range(n_parallel)
         ]
 
@@ -42,7 +56,9 @@ class StableBaselinesGodotEnv(VecEnv):
                 len(action_space.spaces) == 1
             ), f"sb3 supports a single action space, this env contains multiple spaces {action_space}"
 
-    def step(self, action: np.ndarray) -> Tuple[Dict[str, np.ndarray], np.ndarray, np.ndarray, List[Dict[str, Any]]]:
+    def step(
+        self, action: np.ndarray
+    ) -> Tuple[Dict[str, np.ndarray], np.ndarray, np.ndarray, List[Dict[str, Any]]]:
         # Initialize lists for collecting results
         all_obs = []
         all_rewards = []
@@ -70,7 +86,12 @@ class StableBaselinesGodotEnv(VecEnv):
         obs = lod_to_dol(all_obs)
 
         # Return results
-        return {k: np.array(v) for k, v in obs.items()}, np.array(all_rewards), np.array(all_term), all_info
+        return (
+            {k: np.array(v) for k, v in obs.items()},
+            np.array(all_rewards, dtype=np.float32),
+            np.array(all_term),
+            all_info,
+        )
 
     def reset(self) -> Dict[str, np.ndarray]:
         # Initialize lists for collecting results
@@ -105,7 +126,9 @@ class StableBaselinesGodotEnv(VecEnv):
     def num_envs(self) -> int:
         return self.envs[0].num_envs * self.n_parallel
 
-    def env_is_wrapped(self, wrapper_class: type, indices: Optional[List[int]] = None) -> List[bool]:
+    def env_is_wrapped(
+        self, wrapper_class: type, indices: Optional[List[int]] = None
+    ) -> List[bool]:
         # Return a list indicating that no environments are wrapped
         return [False] * (self.envs[0].num_envs * self.n_parallel)
 
@@ -116,7 +139,9 @@ class StableBaselinesGodotEnv(VecEnv):
     def get_attr(self, attr_name: str, indices=None) -> List[Any]:
         if attr_name == "render_mode":
             return [None for _ in range(self.num_envs)]
-        raise AttributeError("get attr not fully implemented in godot-rl StableBaselinesWrapper")
+        raise AttributeError(
+            "get attr not fully implemented in godot-rl StableBaselinesWrapper"
+        )
 
     def seed(self, seed=None):
         raise NotImplementedError()
@@ -128,16 +153,20 @@ class StableBaselinesGodotEnv(VecEnv):
         # Execute the step function asynchronously, not actually implemented in this setting
         self.results = self.step(actions)
 
-    def step_wait(self) -> Tuple[Dict[str, np.ndarray], np.ndarray, np.ndarray, List[Dict[str, Any]]]:
+    def step_wait(
+        self,
+    ) -> Tuple[Dict[str, np.ndarray], np.ndarray, np.ndarray, List[Dict[str, Any]]]:
         # Wait for the results from the asynchronous step
         return self.results
 
 
 def stable_baselines_training(args, extras, n_steps: int = 200000, **kwargs) -> None:
     if can_import("ray"):
-        print("WARNING, stable baselines and ray[rllib] are not compatable")
+        print("WARNING, stable baselines and ray[rllib] are not compatible")
     # Initialize the custom environment
-    env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=args.viz, speedup=args.speedup, **kwargs)
+    env = StableBaselinesGodotEnv(
+        env_path=args.env_path, show_window=args.viz, speedup=args.speedup, **kwargs
+    )
     env = VecMonitor(env)
 
     # Initialize the PPO model

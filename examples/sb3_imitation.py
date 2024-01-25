@@ -63,16 +63,19 @@ parser.add_argument(
     help="Evaluate policy in an env after training in a single env. Will always visualize.",
     default=False,
 )
-parser.add_argument("--speedup", default=1, type=int, help="Whether to speed up the physics in the env")
+parser.add_argument(
+    "--speedup", default=1, type=int, help="Whether to speed up the physics in the env"
+)
 parser.add_argument(
     "--n_parallel",
     default=1,
     type=int,
-    help="How many instances of the environment executable to " "launch - requires --env_path to be set if > 1.",
+    help="How many instances of the environment executable to "
+    "launch - requires --env_path to be set if > 1.",
 )
 parser.add_argument(
     "--il_timesteps",
-    default=100_000,
+    default=0,
     type=int,
     help="How many timesteps to train for using imitation learning.",
 )
@@ -149,37 +152,39 @@ env = VecMonitor(env)
 policy_kwargs = dict(log_std_init=log(1.0))
 
 learner = PPO(
-    batch_size=64,
+    batch_size=128,
     env=env,
     policy="MlpPolicy",
     learning_rate=0.0003,
-    clip_range=0.3,
+    clip_range=0.2,
     n_epochs=20,
     n_steps=64,
     ent_coef=0.0001,
     target_kl=0.025,
     policy_kwargs=policy_kwargs,
+    verbose=1,
 )
 
-reward_net = BasicRewardNet(
-    observation_space=env.observation_space,
-    action_space=env.action_space,
-    normalize_input_layer=RunningNorm,
-)
+if args.il_timesteps:
+    reward_net = BasicRewardNet(
+        observation_space=env.observation_space,
+        action_space=env.action_space,
+        normalize_input_layer=RunningNorm,
+    )
 
-gail_trainer = GAIL(
-    demonstrations=trajectories,
-    demo_batch_size=64,
-    gen_replay_buffer_capacity=64,
-    n_disc_updates_per_round=24,
-    venv=env,
-    gen_algo=learner,
-    reward_net=reward_net,
-    allow_variable_horizon=True,
-)
+    gail_trainer = GAIL(
+        demonstrations=trajectories,
+        demo_batch_size=128,
+        gen_replay_buffer_capacity=512,
+        n_disc_updates_per_round=24,
+        venv=env,
+        gen_algo=learner,
+        reward_net=reward_net,
+        allow_variable_horizon=True,
+    )
 
-print("Starting Imitation Learning Training using GAIL:")
-gail_trainer.train(args.il_timesteps)
+    print("Starting Imitation Learning Training using GAIL:")
+    gail_trainer.train(args.il_timesteps)
 
 if args.rl_timesteps:
     print("Starting RL Training:")
@@ -197,7 +202,9 @@ if args.eval_episode_count:
         speedup=args.speedup,
     )
     env = VecMonitor(env)
-    mean_reward, _ = evaluate_policy(learner, env, n_eval_episodes=args.eval_episode_count)
+    mean_reward, _ = evaluate_policy(
+        learner, env, n_eval_episodes=args.eval_episode_count
+    )
     print(f"Mean reward after evaluation: {mean_reward}")
 
 close_env()
