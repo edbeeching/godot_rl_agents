@@ -141,3 +141,40 @@ Note: I found it difficult to control the robot with action repeat 10, and I rem
 
 Once you are done recording, click on `x` to close the game window (do not use the `Stop` button in the editor as that will not save the file), and you will see `demo.json` in the filesystem. 
 
+##### Export the game
+Click on `Project` > `Export` and export the game for your current OS. We will use the exported game for training.
+
+##### Open conda terminal or venv terminal:
+I use conda in this example, but you can use the corresponding commands with venv or the system that you are using for managing Python environments.
+
+##### Type `conda activate gdrl_il`
+(replace gdrl_il with the name you're using for the virtual env, it should have godot rl agents and imitation library installed)
+
+##### Move to the folder with the Imitation Learning Example
+Download the [sb3 imitation example](/examples/sb3_imitation.py) and `cd` into the folder where the file is.
+
+##### Set the arguments and start the training
+E.g. on Windows:
+````
+python sb3_imitation.py --env_path="PATH_TO_EXPORTED_GAME_EXE_FILE_HERE" --il_timesteps=250_000 --demo_files="PATH_TO_THE_RECORDED_demo.json_FILE_HERE" --eval_episode_count=20 --n_parallel=5 --speedup=15
+````
+
+Training should begin. As we set a small amount of timesteps, the results won't be perfect but it shouldn't take too long (may still take a while, you can reduce the timesteps if you wish to run a quick test). Beside increasing timesteps, you can open the script and modify the hyperaparameters to get better results. Having more high quality recorded demos can help too. You can load multiple files by adding them to the `--demo_files` argument, e.g. `--demo_files="file1_path" "file2_path" "file3_path"`.
+After the training is done, an evaluation environment should open and you will see the trained agent solving the env for 20 episodes.
+
+In my case, I got:
+```Mean reward after evaluation: 5.906429767608643```
+The exact results you get may be different for various reasons, including the possibility that the hyperparameters and/or other variables may have changed since then. 
+
+For comparison, when training just with `--rl_timesteps=250_000` I got a reward of:
+```Mean reward after evaluation: 9.194426536560059```
+
+The imitation-learned reward could be improved by tweaking hyperaparameters (the parameters provided in the script are not optimized), recording more higher quality demos, doing some RL timesteps after it, etc.
+As this environment was designed and tested with PPO RL, in this case the environment is simple enough that PPO alone can learn it quickly from the reward function and imitation learning isn't necessary. 
+However, in more complex environments where it might be difficult to define a good dense reward function, learning from demonstrations and/or combining it with RL learning from sparse rewards could be helpful.
+
+There are a couple of other options to mention:
+
+After imitation learning, you can continue model training with PPO using the environment rewards to further improve the results. This is done by adding an argument to the script, e.g. `--rl_timesteps=250_000`.
+
+You can set the script to export the trained model to onnx by adding e.g. `--onnx_export_path="model.onnx"`. That model can be then be copied to the game folder, and set in sync node in testing_scene to be used for inference without the Python server.
