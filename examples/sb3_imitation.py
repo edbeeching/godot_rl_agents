@@ -99,7 +99,7 @@ def handle_onnx_export():
     if args.onnx_export_path is not None:
         path_onnx = pathlib.Path(args.onnx_export_path).with_suffix(".onnx")
         print("Exporting onnx to: " + os.path.abspath(path_onnx))
-        export_ppo_model_as_onnx(learner, str(path_onnx))
+        export_ppo_model_as_onnx(learner, str(path_onnx), use_obs_array=True)
 
 
 def handle_model_save():
@@ -189,7 +189,13 @@ close_env()
 
 if args.eval_episode_count:
     print("Evaluating:")
-    env = SBGSingleObsEnv(env_path=args.env_path, show_window=True, seed=args.seed, n_parallel=1, speedup=args.speedup)
+    env = SBGSingleObsEnv(
+        env_path=args.env_path,
+        show_window=True,
+        seed=args.seed,
+        n_parallel=1,
+        speedup=args.speedup,
+    )
     env = VecMonitor(env)
     mean_reward, _ = evaluate_policy(learner, env, n_eval_episodes=args.eval_episode_count)
     print(f"Mean reward after evaluation: {mean_reward}")
