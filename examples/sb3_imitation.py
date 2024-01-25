@@ -63,15 +63,12 @@ parser.add_argument(
     help="Evaluate policy in an env after training in a single env. Will always visualize.",
     default=False,
 )
-parser.add_argument(
-    "--speedup", default=1, type=int, help="Whether to speed up the physics in the env"
-)
+parser.add_argument("--speedup", default=1, type=int, help="Whether to speed up the physics in the env")
 parser.add_argument(
     "--n_parallel",
     default=1,
     type=int,
-    help="How many instances of the environment executable to "
-    "launch - requires --env_path to be set if > 1.",
+    help="How many instances of the environment executable to " "launch - requires --env_path to be set if > 1.",
 )
 parser.add_argument(
     "--il_timesteps",
@@ -202,9 +199,7 @@ if args.eval_episode_count:
         speedup=args.speedup,
     )
     env = VecMonitor(env)
-    mean_reward, _ = evaluate_policy(
-        learner, env, n_eval_episodes=args.eval_episode_count
-    )
+    mean_reward, _ = evaluate_policy(learner, env, n_eval_episodes=args.eval_episode_count)
     print(f"Mean reward after evaluation: {mean_reward}")
 
 close_env()
