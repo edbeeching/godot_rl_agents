@@ -5,7 +5,8 @@ For imitation learning, we use the imitation library: https://github.com/HumanCo
 From the docs:
 > Imitation provides clean implementations of imitation and reward learning algorithms, under a unified and
 > user-friendly API. Currently, we have implementations of Behavioral Cloning, DAgger (with synthetic examples),
-> density-based reward modeling, Maximum Causal Entropy Inverse Reinforcement Learning, Adversarial Inverse Reinforcement
+> density-based reward modeling, Maximum Causal Entropy Inverse Reinforcement Learning, Adversarial Inverse
+> Reinforcement
 > Learning, Generative Adversarial Imitation Learning, and Deep RL from Human Preferences.
 
 ### Installation:
@@ -22,17 +23,17 @@ learning. This tutorial assumes you have Godot, Godot RL Agents, Imitation, and 
 the quick-start guide from the readme of this repository and potentially
 the [custom env tutorial](https://github.com/edbeeching/godot_rl_agents/blob/main/docs/CUSTOM_ENV.md) as well.
 
-#### Download all of the examples:
+#### Download all the examples:
 
 https://github.com/edbeeching/godot_rl_agents_examples/tree/main (either clone or click on `Code` > `Download ZIP`)
 
 #### Update plugin:
 
-At the time of writing this tutorials, envs don't currently have the plugin version that includes the demo recorder.
+At the time of writing this tutorial, envs don't currently have the plugin version that includes the demo recorder.
 We'll use the MultiLevelRobotEnv example. First download
-the [latest plugin from Github](https://github.com/edbeeching/godot_rl_agents_plugin) and then copy the `addons` folder
+the [latest plugin from GitHub](https://github.com/edbeeching/godot_rl_agents_plugin) and then copy the `addons` folder
 from the plugin folder to the previously downloaded example folder:
-`godot_rl_agents_examples-main\examples\MultiLevelRobot\addons` (replace all of the files or remove the addons folder in
+`godot_rl_agents_examples-main\examples\MultiLevelRobot\addons` (replace all the files or remove the addons folder in
 the game example before pasting the one from the plugin).
 
 #### In Godot editor, import the MultiLevelRobotEnv example.
@@ -46,11 +47,11 @@ recorder mode.
 
 #### Right click on `GameScene`, then click on `Editable Children`:
 
-![make game scene editable](https://github.com/edbeeching/godot_rl_agents/assets/61947090/c899ec23-45fd-41fa-a1f7-d9a4b836283e)
+![make game scene editable](https://github.com/edbeeching/godot_rl_agents/assets/61947090/91e5a74f-1186-4b28-bdbe-8032b9b9d6ab)
 
 #### Right click on `Robot`, then click on `Editable Children`:
 
-![make robot editable](https://github.com/edbeeching/godot_rl_agents/assets/61947090/16d6819f-77e9-491b-be45-900172b36a8e)
+![make robot editable](https://github.com/edbeeching/godot_rl_agents/assets/61947090/2e0bab9c-5b65-4b1e-843d-d56cc4882a0a)
 
 #### Set Control Mode to `Record Expert Demos` and write a file path to save the demos to:
 
@@ -71,7 +72,8 @@ an episode with a non-optimal outcome (e.g. if the robot fell or hit an enemy ro
 
 This will produce some input lag while recording demos, but this is what is set for training/inference as well. What it
 means is that the currently set action will repeat for 10 frames before the next action is set. Also, only once every 10
-frames, the obs/action will be read and saved to the demo file. You can optionally set a lower value here, in that case
+frames, the obs/action will be read and saved to the demo file. You can optionally set a lower value here to reduce lag,
+in that case
 you may also want to lower it in the `sync` node in `training_scene.tscn` and `testing_scene.tscn`.
 
 ![action repeat 10](https://github.com/edbeeching/godot_rl_agents/assets/61947090/50dd4ca3-1386-4435-a229-2becd71c42a1)
@@ -86,7 +88,7 @@ We need to change some things in the AIController to allow for demo recording to
 
 #### Modify `set_action` and implement `get_action`
 
-Find the set_action method, and replace the code with this:
+Find the set_action method, and replace the code of the method with:
 
 ```gdscript
 ## Returns the action that is currently applied to the robot.
@@ -108,12 +110,16 @@ func set_action(action = null) -> void:
 		).limit_length(1.0)
 ```
 
-The way this works is that if we are running training or inference with a RL agent, the set_action method will be called
-with action provided. However, during demo recording, set_action will be called without any action provided, so we need
+The way this works is that if we are running training or inference with a RL agent, the `set_action` method will be
+called
+with action values provided. However, during demo recording, `set_acation` will be called without any action provided,
+so we need
 to manually set the values.
 
-`set_action()` will be called just before `get_action()` so the demo recorder will record the currently applied action
-for the current state/observations.
+> [!NOTE]
+> `set_action()` will be called just before `get_action()`, so the demo recorder will record the currently applied
+> action
+> for the current state/observations.
 
 Now we can simplify the heuristic handling code (for when "human control" mode is used) in robot.gd.
 
@@ -167,11 +173,16 @@ Here's a highly sped-up video of recording 18 episodes:
 
 https://github.com/edbeeching/godot_rl_agents/assets/61947090/7bdc19ba-6e88-431d-b87b-7ec3e0ce1a7c
 
-Note: I found it difficult to control the robot with action repeat 10, and I removed a few episodes where the robot hit
-an enemy robot during recording so that they don't end up in the recorded demos file. I would recommend setting action
-repeat to a lower value like 6-8 (both in AIController and sync node in the two scenes mentioned previously). It's also
-possible to change the `speed up` property of the `sync` node while recording demos to make the process easier, as it
-will slow down or speed up the game according to the setting.
+> [!NOTE]
+> I found it difficult to control the robot with action repeat 10, and I removed a few episodes where the robot hit
+> an enemy robot during recording so that they don't end up in the recorded demos file. I would recommend setting action
+> repeat to a lower value like 6-8 (both in AIController and sync node in the two scenes mentioned previously).
+> Another way to make this easier is to drag the sync.gd script to Sync node in both training and testing scene.
+> An extended sync script is set in this example which set uses a 30 ticks per second physics setting, which is not
+> ideal for manual control.
+> It's also possible to change the `speed up` property of the `sync` node while recording demos to make the process
+> easier, as it
+> will slow down or speed up the game according to the setting.
 
 Once you are done recording, click on `x` to close the game window (do not use the `Stop` button in the editor as that
 will not save the file), and you will see `demo.json` in the filesystem.
@@ -202,12 +213,13 @@ E.g. on Windows:
 python sb3_imitation.py --env_path="PATH_TO_EXPORTED_GAME_EXE_FILE_HERE" --il_timesteps=250_000 --demo_files="PATH_TO_THE_RECORDED_demo.json_FILE_HERE" --eval_episode_count=20 --n_parallel=5 --speedup=15
 ````
 
-Training should begin. As we set a small amount of timesteps, the results won't be perfect but it shouldn't take too
+Training should begin. As we set a small amount of timesteps, the results won't be perfect, but it shouldn't take too
 long (may still take a while, you can reduce the timesteps if you wish to run a quick test). Beside increasing
-timesteps, you can open the script and modify the hyperaparameters to get better results. Having more high quality
+timesteps, you can open the scripta and modify the hyperaparameters to get better results. Having more high quality
 recorded demos can help too. You can load multiple files by adding them to the `--demo_files` argument,
 e.g. `--demo_files="file1_path" "file2_path" "file3_path"`.
-After the training is done, an evaluation environment should open and you will see the trained agent solving the env for
+After the training is done, an evaluation environment should open, and you will see the trained agent solving the env
+for
 20 episodes.
 
 In my case, I got:
@@ -219,7 +231,7 @@ For comparison, when training just with `--rl_timesteps=250_000` I got a reward 
 ```Mean reward after evaluation: 9.194426536560059```
 
 The imitation-learned reward could be improved by tweaking hyperaparameters (the parameters provided in the script are
-not optimized), recording more higher quality demos, doing some RL timesteps after it, etc.
+not optimized), recording more high quality demos, doing some RL timesteps after it, etc.
 As this environment was designed and tested with PPO RL, in this case the environment is simple enough that PPO alone
 can learn it quickly from the reward function and imitation learning isn't necessary.
 However, in more complex environments where it might be difficult to define a good dense reward function, learning from
