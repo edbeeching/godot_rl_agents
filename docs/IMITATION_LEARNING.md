@@ -177,8 +177,8 @@ https://github.com/edbeeching/godot_rl_agents/assets/61947090/7bdc19ba-6e88-431d
 > I found it difficult to control the robot with action repeat 10, and I removed a few episodes where the robot hit
 > an enemy robot during recording so that they don't end up in the recorded demos file. I would recommend setting action
 > repeat to a lower value like 6-8 (both in AIController and sync node in the two scenes mentioned previously).
-> Another way to make this easier is to drag the sync.gd script to Sync node in both training and testing scene.
-> An extended sync script is set in this example which set uses a 30 ticks per second physics setting, which is not
+> Another way to make this easier is to drag the defauklt sync.gd script to Sync node in both training and testing scene.
+> This example uses an extended sync script with a 30 ticks per second physics setting, which is not
 > ideal for manual control.
 > It's also possible to change the `speed up` property of the `sync` node while recording demos to make the process
 > easier, as it
