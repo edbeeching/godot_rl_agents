@@ -49,7 +49,7 @@ recorder mode.
 
 ![make game scene editable](https://github.com/edbeeching/godot_rl_agents/assets/61947090/91e5a74f-1186-4b28-bdbe-8032b9b9d6ab)
 
-#### Right click on `Robot`, then click on `Editable Children`:
+#### Expand `GameScene`, Right click on `Robot`, then click on `Editable Children`:
 
 ![make robot editable](https://github.com/edbeeching/godot_rl_agents/assets/61947090/2e0bab9c-5b65-4b1e-843d-d56cc4882a0a)
 
