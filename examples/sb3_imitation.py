@@ -34,21 +34,13 @@ parser.add_argument(
     "--save_model_path",
     default=None,
     type=str,
-    help="The path to use for saving the trained sb3 model after training is complete. Saved model can be used later "
-    "to resume training. Extension will be set to .zip",
+    help="The path to use for saving the trained sb3 model after training is complete. Extension will be set to .zip",
 )
 parser.add_argument(
     "--onnx_export_path",
     default=None,
     type=str,
     help="The Godot binary to use, do not include for in editor training",
-)
-parser.add_argument(
-    "--inference",
-    default=False,
-    action="store_true",
-    help="Instead of training, it will run inference on a loaded model for --timesteps steps. "
-    "Requires --resume_model_path to be set.",
 )
 parser.add_argument(
     "--viz",
