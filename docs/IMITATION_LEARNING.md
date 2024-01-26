@@ -215,7 +215,7 @@ python sb3_imitation.py --env_path="PATH_TO_EXPORTED_GAME_EXE_FILE_HERE" --il_ti
 
 Training should begin. As we set a small amount of timesteps, the results won't be perfect, but it shouldn't take too
 long (may still take a while, you can reduce the timesteps if you wish to run a quick test). Beside increasing
-timesteps, you can open the scripta and modify the hyperaparameters to get better results. Having more high quality
+timesteps, you can open the script and modify the hyperaparameters to get better results. Having more high quality
 recorded demos can help too. You can load multiple files by adding them to the `--demo_files` argument,
 e.g. `--demo_files="file1_path" "file2_path" "file3_path"`.
 After the training is done, an evaluation environment should open, and you will see the trained agent solving the env
