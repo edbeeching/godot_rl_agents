@@ -51,19 +51,19 @@ recorder mode.
 
 #### Expand `GameScene`, Right click on `Robot`, then click on `Editable Children`:
 
-![make robot editable](https://github.com/edbeeching/godot_rl_agents/assets/61947090/2e0bab9c-5b65-4b1e-843d-d56cc4882a0a)
+![make robot editable](https://github.com/edbeeching/godot_rl_agents/assets/61947090/08d603cc-abfc-4513-bcae-97bf6ab68084)
 
-#### Set Control Mode to `Record Expert Demos` and write a file path to save the demos to:
+#### Click on expanded `AIController3D`, set `Control Mode` to `Record Expert Demos` and write a file path to save the demos to:
 
-![image](https://github.com/edbeeching/godot_rl_agents/assets/61947090/be531a1e-14e9-4fb3-8055-698d3f99a1e5)
+![configure aicontroller3d](https://github.com/edbeeching/godot_rl_agents/assets/61947090/8dc56be1-a157-4bac-9917-ddfbbe8262eb)
 
 #### Add an `InputEventKey` to `Remove Last Episode Key`:
 
-![image](https://github.com/edbeeching/godot_rl_agents/assets/61947090/ff94ffb6-23e8-4c3e-8dc3-ca8d07cbfc45)
+![add inputeventkey](https://github.com/edbeeching/godot_rl_agents/assets/61947090/ff94ffb6-23e8-4c3e-8dc3-ca8d07cbfc45)
 
 #### Set a key of your choice, then click on `OK`:
 
-![image](https://github.com/edbeeching/godot_rl_agents/assets/61947090/1d10a016-2944-411d-a4ab-cb00409fda04)
+![set remove episode key](https://github.com/edbeeching/godot_rl_agents/assets/61947090/1d10a016-2944-411d-a4ab-cb00409fda04)
 
 This key will be used to remove the last episode during recording. We can use this during demo recording if we recorded
 an episode with a non-optimal outcome (e.g. if the robot fell or hit an enemy robot, the episode timed out, etc.).
