@@ -115,11 +115,11 @@ for file_path in args.demo_files:
     with open(file_path, "r") as file:
         data = json.load(file)
 
-    for i in range(0, len(data)):
+    for traj in data:
         trajectories.append(
             imitation.data.rollout.types.Trajectory(
-                obs=np.array(data[i][0]),
-                acts=np.array(data[i][1]),
+                obs=np.array(traj[0]),
+                acts=np.array(traj[1]),
                 infos=None,
                 terminal=True,
             )
