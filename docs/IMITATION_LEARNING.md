@@ -112,7 +112,7 @@ func set_action(action = null) -> void:
 
 The way this works is that if we are running training or inference with a RL agent, the `set_action` method will be
 called
-with action values provided. However, during demo recording, `set_acation` will be called without any action provided,
+with action values provided. However, during demo recording, `set_action` will be called without any action provided,
 so we need
 to manually set the values.
 
@@ -177,7 +177,8 @@ https://github.com/edbeeching/godot_rl_agents/assets/61947090/7bdc19ba-6e88-431d
 > I found it difficult to control the robot with action repeat 10, and I removed a few episodes where the robot hit
 > an enemy robot during recording so that they don't end up in the recorded demos file. I would recommend setting action
 > repeat to a lower value like 6-8 (both in AIController and sync node in the two scenes mentioned previously).
-> Another way to make this easier is to drag the defauklt sync.gd script to Sync node in both training and testing scene.
+> Another way to make this easier is to drag the default sync.gd script to Sync node in both training and testing
+> scene.
 > This example uses an extended sync script with a 30 ticks per second physics setting, which is not
 > ideal for manual control.
 > It's also possible to change the `speed up` property of the `sync` node while recording demos to make the process
@@ -215,7 +216,7 @@ python sb3_imitation.py --env_path="PATH_TO_EXPORTED_GAME_EXE_FILE_HERE" --il_ti
 
 Training should begin. As we set a small amount of timesteps, the results won't be perfect, but it shouldn't take too
 long (may still take a while, you can reduce the timesteps if you wish to run a quick test). Beside increasing
-timesteps, you can open the script and modify the hyperaparameters to get better results. Having more high quality
+timesteps, you can open the script and modify the hyperparameters to get better results. Having more high quality
 recorded demos can help too. You can load multiple files by adding them to the `--demo_files` argument,
 e.g. `--demo_files="file1_path" "file2_path" "file3_path"`.
 After the training is done, an evaluation environment should open, and you will see the trained agent solving the env
@@ -230,7 +231,7 @@ and/or other variables may have changed since then.
 For comparison, when training just with `--rl_timesteps=250_000` I got a reward of:
 ```Mean reward after evaluation: 9.194426536560059```
 
-The imitation-learned reward could be improved by tweaking hyperaparameters (the parameters provided in the script are
+The imitation-learned reward could be improved by tweaking hyperparameters (the parameters provided in the script are
 not optimized), recording more high quality demos, doing some RL timesteps after it, etc.
 As this environment was designed and tested with PPO RL, in this case the environment is simple enough that PPO alone
 can learn it quickly from the reward function and imitation learning isn't necessary.
