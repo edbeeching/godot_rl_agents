@@ -118,8 +118,15 @@ to manually set the values.
 
 > [!NOTE]
 > `set_action()` will be called just before `get_action()`, so the demo recorder will record the currently applied
-> action
-> for the current state/observations.
+> action for the current state/observations.
+
+> [!TIP]
+> The values in the array that `get_action()` returns should be in the same order as the action keys defined in
+> `func get_action_space()`. For continous actions:
+> If an action is size 1, that means add one value to the array.
+> If an action is size 2, add two values for that action.
+> If an action is size 2, and the next action is size 1, add two values for the first action,
+> then one value for the second. 
 
 Now we can simplify the heuristic handling code (for when "human control" mode is used) in robot.gd.
 
