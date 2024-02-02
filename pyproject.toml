@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 [project]
 name = "godot_rl"
-version = "0.6.2"
+version = "0.7.0"
 authors = [
   { name="Edward Beeching", email="edbeeching@gmail.com" },
 ]
