@@ -17,7 +17,7 @@ from godot_rl.core.utils import ActionSpaceProcessor, convert_macos_path
 
 class GodotEnv:
     MAJOR_VERSION = "0"  # Versioning for the environment
-    MINOR_VERSION = "4"
+    MINOR_VERSION = "7"
     DEFAULT_PORT = 11008  # Default port for communication with Godot Game
     DEFAULT_TIMEOUT = 60  # Default socket timeout TODO
 

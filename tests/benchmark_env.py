@@ -4,7 +4,6 @@ script to benchmark an environments performance
 we perform 10,000 actions and calculate the interactions per second in a variety of configurations
 """
 
-
 import time
 
 from godot_rl.core.godot_env import GodotEnv
