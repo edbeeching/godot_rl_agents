@@ -19,7 +19,7 @@ You can find out more about Godot RL agents in our AAAI-2022 Workshop [paper](ht
 ## Quickstart Guide
 
 This quickstart guide will get you up and running using the Godot RL Agents library with the StableBaselines3 backend, as this supports Windows, Mac and Linux. We suggest starting here and then trying out our Advanced tutorials when learning more complex agent behaviors.
-
+There is also a [video tutorial](https://www.youtube.com/watch?v=f8arMv_rtUU) which shows how to install the library and create a custom env.
 ### Installation and first training
 
 Install the Godot RL Agents library. If you are new to Python or not using a virtual environment, it's highly recommended to create one using [venv](https://docs.python.org/3/library/venv.html) or [Conda](https://www.machinelearningplus.com/deployment/conda-create-environment-and-everything-you-need-to-know-to-manage-conda-virtual-environment/) to isolate your project dependencies.
