@@ -11,7 +11,13 @@ from godot_rl.core.utils import can_import, lod_to_dol
 
 
 class StableBaselinesGodotEnv(VecEnv):
-    def __init__(self, env_path: Optional[str] = None, n_parallel: int = 1, seed: int = 0, **kwargs) -> None:
+    def __init__(
+        self,
+        env_path: Optional[str] = None,
+        n_parallel: int = 1,
+        seed: int = 0,
+        **kwargs,
+    ) -> None:
         # If we are doing editor training, n_parallel must be 1
         if env_path is None and n_parallel > 1:
             raise ValueError("You must provide the path to a exported game executable if n_parallel > 1")
@@ -21,7 +27,13 @@ class StableBaselinesGodotEnv(VecEnv):
 
         # Create a list of GodotEnv instances
         self.envs = [
-            GodotEnv(env_path=env_path, convert_action_space=True, port=port + p, seed=seed + p, **kwargs)
+            GodotEnv(
+                env_path=env_path,
+                convert_action_space=True,
+                port=port + p,
+                seed=seed + p,
+                **kwargs,
+            )
             for p in range(n_parallel)
         ]
 
@@ -70,7 +82,12 @@ class StableBaselinesGodotEnv(VecEnv):
         obs = lod_to_dol(all_obs)
 
         # Return results
-        return {k: np.array(v) for k, v in obs.items()}, np.array(all_rewards), np.array(all_term), all_info
+        return (
+            {k: np.array(v) for k, v in obs.items()},
+            np.array(all_rewards, dtype=np.float32),
+            np.array(all_term),
+            all_info,
+        )
 
     def reset(self) -> Dict[str, np.ndarray]:
         # Initialize lists for collecting results
@@ -128,14 +145,16 @@ class StableBaselinesGodotEnv(VecEnv):
         # Execute the step function asynchronously, not actually implemented in this setting
         self.results = self.step(actions)
 
-    def step_wait(self) -> Tuple[Dict[str, np.ndarray], np.ndarray, np.ndarray, List[Dict[str, Any]]]:
+    def step_wait(
+        self,
+    ) -> Tuple[Dict[str, np.ndarray], np.ndarray, np.ndarray, List[Dict[str, Any]]]:
         # Wait for the results from the asynchronous step
         return self.results
 
 
 def stable_baselines_training(args, extras, n_steps: int = 200000, **kwargs) -> None:
     if can_import("ray"):
-        print("WARNING, stable baselines and ray[rllib] are not compatable")
+        print("WARNING, stable baselines and ray[rllib] are not compatible")
     # Initialize the custom environment
     env = StableBaselinesGodotEnv(env_path=args.env_path, show_window=args.viz, speedup=args.speedup, **kwargs)
     env = VecMonitor(env)
