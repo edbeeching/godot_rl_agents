@@ -12,7 +12,7 @@ quality:
 
 # Run tests for the library
 test:
-	pytest -n auto tests/
+	python -m pytest tests/
 
 download_examples:
 	bash scripts/get_all_examples_from_hub.sh
