@@ -109,7 +109,6 @@ make quality
 ```
 Then make a PR against main on the original repo.
 
-
 ## FAQ
 
 ### Why have we developed Godot RL Agents?
