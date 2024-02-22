@@ -93,6 +93,7 @@ Start by forking the repo and then cloning it to your machine, creating a venv a
 
 ```
 # If you want to PR, you should fork the lib or ask to be a contibutor
+
 git clone git@github.com:YOUR_USERNAME/godot_rl_agents.git
 cd godot_rl_agents
 python -m venv venv
