@@ -18,6 +18,7 @@ from godot_rl.core.utils import can_import
         ("AirHockey", 12014),
         ("ItemSortingCart", 12015),
         ("Ships", 12016),
+        ("DownFall", 12017),
     ],
 )
 def test_pytorch_vs_onnx(env_name, port):

@@ -17,6 +17,7 @@ from godot_rl.main import get_args
         ("AirHockey", 12800),
         ("ItemSortingCart", 13000),
         ("Ships", 13200),
+        ("DownFall", 13400),
     ],
 )
 @pytest.mark.parametrize("n_parallel", [1, 2, 4])
