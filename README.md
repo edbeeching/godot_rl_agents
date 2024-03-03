@@ -64,9 +64,9 @@ If you face any issues getting started, please reach out on our [Discord](https:
 
 ### Exporting and loading your trained agent in onnx format:
 
-The latest version of the library provides experimental support for onnx models with the Stable Baselines 3 and rllib training frameworks.
+The latest version of the library provides experimental support for onnx models with the Stable Baselines 3, rllib, and CleanRL training frameworks.
 
-1. First run train you agent using the sb3 example on the [GitHub repo](https://github.com/edbeeching/godot_rl_agents/blob/main/examples/stable_baselines3_example.py), enabling the option `--onnx_export_path=GameModel.onnx`
+1. First run train you agent using the [sb3 example](https://github.com/edbeeching/godot_rl_agents/blob/main/examples/stable_baselines3_example.py) ([instructions for using the script](https://github.com/edbeeching/godot_rl_agents/blob/main/docs/ADV_STABLE_BASELINES_3.md#train-a-model-from-scratch)), enabling the option `--onnx_export_path=GameModel.onnx`
 2. Then, using the **mono version** of the Godot Editor, add the onnx model path to the sync node. If you do not seen this option you may need to download the plugin from [source](https://github.com/edbeeching/godot_rl_agents_plugin)
 3. The game should now load and run using the onnx model. If you are having issues building the project, ensure that the contents of the `.csproj` and `.sln` files in you project match that those of the plugin [source](https://github.com/edbeeching/godot_rl_agents_plugin).
 
