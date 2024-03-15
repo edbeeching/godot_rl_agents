@@ -6,9 +6,10 @@ from math import log
 
 import imitation.data
 import numpy as np
+from imitation.algorithms import bc
 from imitation.algorithms.adversarial.gail import GAIL
 from imitation.rewards.reward_nets import BasicRewardNet
-from imitation.util.networks import RunningNorm
+from imitation.util import logger as imit_logger
 from stable_baselines3 import PPO
 from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.vec_env.vec_monitor import VecMonitor
@@ -27,7 +28,16 @@ parser.add_argument(
     "--demo_files",
     nargs="+",
     type=str,
-    help="""One or more files with recoded expert demos, with a space in between, e.g. "demo1.json", demo2.json""",
+    help="""One or more files with recorded expert demos, with a space in between, e.g. --demo_files demo1.json
+    demo2.json""",
+)
+parser.add_argument(
+    "--experiment_name",
+    default=None,
+    type=str,
+    help="The name of the experiment, which will be displayed in tensorboard, logs will be stored in logs/["
+    "experiment_name], if set. You should use a unique name for every experiment for the tensorboard log to "
+    "display properly.",
 )
 parser.add_argument("--seed", type=int, default=0, help="seed of the experiment")
 parser.add_argument(
@@ -63,10 +73,18 @@ parser.add_argument(
     help="How many instances of the environment executable to " "launch - requires --env_path to be set if > 1.",
 )
 parser.add_argument(
-    "--il_timesteps",
+    "--bc_epochs",
     default=0,
     type=int,
-    help="How many timesteps to train for using imitation learning.",
+    help="[Optional] How many epochs to train for using imitation learning with BC. Policy is trained with BC "
+    "before GAIL or RL.",
+)
+parser.add_argument(
+    "--gail_timesteps",
+    default=0,
+    type=int,
+    help="[Optional] How many timesteps to train for using imitation learning with GAIL. If --bc_timesteps are set, "
+    "GAIL training is done after pre-training the policy with BC.",
 )
 parser.add_argument(
     "--rl_timesteps",
@@ -110,7 +128,6 @@ def close_env():
 
 
 trajectories = []
-
 for file_path in args.demo_files:
     with open(file_path, "r") as file:
         data = json.load(file)
@@ -124,11 +141,14 @@ for file_path in args.demo_files:
                 terminal=True,
             )
         )
-
+    print(
+        f"Loaded trajectories from {file_path}, found {len(data)} recorded trajectories (GDRL plugin records 1 "
+        f"episode as 1 trajectory)."
+    )
 
 env = SBGSingleObsEnv(
     env_path=args.env_path,
-    show_window=args.viz,
+    show_window=True,
     seed=args.seed,
     n_parallel=args.n_parallel,
     speedup=args.speedup,
@@ -137,49 +157,74 @@ env = SBGSingleObsEnv(
 
 env = VecMonitor(env)
 
-
 policy_kwargs = dict(log_std_init=log(1.0))
 
+logger = None
+if args.experiment_name:
+    logger = imit_logger.configure(f"logs/{args.experiment_name}", format_strs=["tensorboard", "stdout"])
+
+# The hyperparams are set for IL tutorial env where BC > GAIL training is used. Feel free to customize for
+# your usage.
 learner = PPO(
-    batch_size=128,
     env=env,
     policy="MlpPolicy",
-    learning_rate=0.0003,
-    clip_range=0.2,
-    n_epochs=20,
-    n_steps=64,
-    ent_coef=0.0001,
-    target_kl=0.025,
+    batch_size=256,
+    ent_coef=0.009,
+    learning_rate=0.0002,
+    n_steps=32,
+    target_kl=0.02,
+    n_epochs=5,
     policy_kwargs=policy_kwargs,
-    verbose=1,
+    verbose=2,
+    tensorboard_log=f"logs/{args.experiment_name}",
+    # seed=args.seed // Not currently supported as stable_baselines_wrapper.py seed() method is not yet implemented.
 )
 
-if args.il_timesteps:
-    reward_net = BasicRewardNet(
-        observation_space=env.observation_space,
-        action_space=env.action_space,
-        normalize_input_layer=RunningNorm,
+try:
+    if args.bc_epochs > 0:
+        rng = np.random.default_rng(args.seed)
+        bc_trainer = bc.BC(
+            observation_space=env.observation_space,
+            action_space=env.action_space,
+            demonstrations=trajectories,
+            rng=rng,
+            policy=learner.policy,
+            custom_logger=logger,
+        )
+        print("Starting Imitation Learning Training using BC:")
+        bc_trainer.train(n_epochs=args.bc_epochs)
+
+    if args.gail_timesteps > 0:
+        print("Starting Imitation Learning Training using GAIL:")
+        reward_net = BasicRewardNet(
+            observation_space=env.observation_space,
+            action_space=env.action_space,
+        )
+
+        gail_trainer = GAIL(
+            demonstrations=trajectories,
+            demo_batch_size=256,
+            n_disc_updates_per_round=16,
+            venv=env,
+            gen_algo=learner,
+            reward_net=reward_net,
+            allow_variable_horizon=True,
+            init_tensorboard=True,
+            init_tensorboard_graph=True,
+            custom_logger=logger,
+        )
+        gail_trainer.train(args.gail_timesteps)
+
+        if args.rl_timesteps > 0:
+            print("Starting RL Training:")
+            learner.train(args.rl_timesteps)
+
+except KeyboardInterrupt:
+    print(
+        """Training interrupted by user. Will save if --save_model_path was
+        used and/or export if --onnx_export_path was used."""
     )
 
-    gail_trainer = GAIL(
-        demonstrations=trajectories,
-        demo_batch_size=128,
-        gen_replay_buffer_capacity=512,
-        n_disc_updates_per_round=24,
-        venv=env,
-        gen_algo=learner,
-        reward_net=reward_net,
-        allow_variable_horizon=True,
-    )
-
-    print("Starting Imitation Learning Training using GAIL:")
-    gail_trainer.train(args.il_timesteps)
-
-if args.rl_timesteps:
-    print("Starting RL Training:")
-    learner.learn(args.rl_timesteps, progress_bar=True)
-
-close_env()
 
 if args.eval_episode_count:
     print("Evaluating:")
