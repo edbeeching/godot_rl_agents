@@ -148,7 +148,7 @@ for file_path in args.demo_files:
 
 env = SBGSingleObsEnv(
     env_path=args.env_path,
-    show_window=True,
+    show_window=args.viz,
     seed=args.seed,
     n_parallel=args.n_parallel,
     speedup=args.speedup,
