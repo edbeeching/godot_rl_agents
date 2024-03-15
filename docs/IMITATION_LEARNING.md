@@ -218,7 +218,7 @@ Download the [sb3 imitation example](/examples/sb3_imitation.py) and `cd` into t
 E.g. on Windows:
 
 ````
-python sb3_imitation.py --env_path="PATH_TO_EXPORTED_GAME_EXE_FILE_HERE" --il_timesteps=250_000 --demo_files="PATH_TO_THE_RECORDED_demo.json_FILE_HERE" --eval_episode_count=20 --n_parallel=5 --speedup=15
+python sb3_imitation.py --env_path="PATH_TO_EXPORTED_GAME_EXE_FILE_HERE" --gail_timesteps=250_000 --demo_files="PATH_TO_THE_RECORDED_demo.json_FILE_HERE" --eval_episode_count=20 --n_parallel=5 --speedup=15
 ````
 
 Training should begin. As we set a small amount of timesteps, the results won't be perfect, but it shouldn't take too
@@ -230,25 +230,24 @@ After the training is done, an evaluation environment should open, and you will 
 for
 20 episodes.
 
-In my case, I got:
-```Mean reward after evaluation: 5.906429767608643```
-The exact results you get may be different for various reasons, including the possibility that the hyperparameters
-and/or other variables may have changed since then.
+Note: If the results are worse than expected, consider opening the Python script and adjusting the hyperparameters for optimal results for your env.
 
-For comparison, when training just with `--rl_timesteps=250_000` I got a reward of:
-```Mean reward after evaluation: 9.194426536560059```
-
-The imitation-learned reward could be improved by tweaking hyperparameters (the parameters provided in the script are
-not optimized), recording more high quality demos, doing some RL timesteps after it, etc.
+The results could be improved by adjusting the hyperparameters and recording more high quality demos.
 As this environment was designed and tested with PPO RL, in this case the environment is simple enough that PPO alone
 can learn it quickly from the reward function and imitation learning isn't necessary.
 However, in more complex environments where it might be difficult to define a good dense reward function, learning from
 demonstrations and/or combining it with RL learning from sparse rewards could be helpful.
 
-There are a couple of other options to mention:
+You can also try pretraining with BC (Behavioral cloning) before the GAIL training by e.g. adding:
+```
+--bc_epochs=NUM_EPOCHS (e.g. try 50-200)
+--gail_timesteps=250_000
+```
 
-After imitation learning, you can continue model training with PPO using the environment rewards to further improve the
-results. This is done by adding an argument to the script, e.g. `--rl_timesteps=250_000`.
+and/or RL training afterwads by also adding:
+```
+--rl_timesteps=NUM_STEPS
+```
 
 You can set the script to export the trained model to onnx by adding e.g. `--onnx_export_path="model.onnx"`. That model
 can be then be copied to the game folder, and set in sync node in testing_scene to be used for inference without the
