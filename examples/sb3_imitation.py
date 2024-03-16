@@ -215,9 +215,9 @@ try:
         )
         gail_trainer.train(args.gail_timesteps)
 
-        if args.rl_timesteps > 0:
-            print("Starting RL Training:")
-            learner.train(args.rl_timesteps)
+    if args.rl_timesteps > 0:
+        print("Starting RL Training:")
+        learner.learn(args.rl_timesteps, progress_bar=True)
 
 except KeyboardInterrupt:
     print(
@@ -238,8 +238,8 @@ if args.eval_episode_count:
     )
     env = VecMonitor(env)
     mean_reward, _ = evaluate_policy(learner, env, n_eval_episodes=args.eval_episode_count)
+    close_env()
     print(f"Mean reward after evaluation: {mean_reward}")
 
-close_env()
 handle_onnx_export()
 handle_model_save()
