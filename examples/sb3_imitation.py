@@ -225,6 +225,7 @@ except KeyboardInterrupt:
         used and/or export if --onnx_export_path was used."""
     )
 
+close_env()
 
 if args.eval_episode_count:
     print("Evaluating:")
