@@ -26,13 +26,13 @@ class RayVectorGodotEnv(VectorEnv):
         config=None,
     ) -> None:
         self._env = GodotEnv(
-            env_path=env_path,
+            env_path=config["env_path"],
             port=port,
             seed=seed,
-            show_window=show_window,
+            show_window=config["show_window"],
             framerate=framerate,
-            action_repeat=action_repeat,
-            speedup=speedup,
+            action_repeat=config["action_repeat"],
+            speedup=config["speedup"],
         )
         super().__init__(
             observation_space=self._env.observation_space,
