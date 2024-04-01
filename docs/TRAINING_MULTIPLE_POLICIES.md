@@ -41,6 +41,9 @@ For each AIController, you can set a different policy name in Godot. Policies wi
 
 Screenshot from [MultiAgent Simple env](https://github.com/edbeeching/godot_rl_agents_examples/tree/main/examples/MultiAgentSimple).
 
+> [!IMPORTANT]  
+> All agents that have the same policy name must have the same observation and action space.
+
 ## Training:
 After installing the prerequisites and adjusting the config, you can start training by using `python rllib_example.py` in your conda env/venv (if you are in the same folder).
 Rllib will print out useful info in the console, such as the command to start `Tensorboard` to see the training logs for the session.
