@@ -38,6 +38,7 @@ In the example env, we have a training manager script that sets all agents `done
 For each AIController, you can set a different policy name in Godot. Policies will be assigned to agents based on this name. E.g. if you have 10 agents assigned to `policy1`, they will all use policy 1, and if you have one agent assigned to `policy2`, it will use policy 2.
 
 ![setting-policy-names](https://github.com/edbeeching/godot_rl_agents/assets/61947090/13eb9b46-f7fb-467c-ad16-8609cda9f292)
+
 Screenshot from [MultiAgent Simple env](https://github.com/edbeeching/godot_rl_agents_examples/tree/main/examples/MultiAgentSimple).
 
 ## Training:
