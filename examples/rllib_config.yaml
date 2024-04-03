@@ -32,9 +32,10 @@ config:
     lambda: 0.95
     gamma: 0.99
 
-    vf_clip_param: 0.5
+    vf_clip_param: 10
+    vf_loss_coeff: 0.5
     clip_param: 0.2
-    entropy_coeff: 0.001
+    entropy_coeff: 0.0001
     entropy_coeff_schedule: null
 
     rollout_fragment_length: 64
