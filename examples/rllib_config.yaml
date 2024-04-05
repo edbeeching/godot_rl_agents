@@ -47,7 +47,9 @@ config:
     sgd_minibatch_size: 128
     num_workers: 4
     num_envs_per_worker: 1 # This will be set automatically if not multi-agent. If multi-agent, changing this changes how many envs to launch per worker.
-    train_batch_size: 2048
+    # The value below needs changing per env
+    # Basic calculation for this value can be rollout_fragment_length * num_workers * num_envs_per_worker (how many AIControllers you have if not multi_agent, otherwise the value you set)
+    train_batch_size: 2048 
 
     num_sgd_iter: 4
     batch_mode: truncate_episodes
