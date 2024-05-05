@@ -392,7 +392,7 @@ class GodotEnv:
                 else:
                     print(f"observation space {v['space']} is not supported")
                     assert 0, f"observation space {v['space']} is not supported"
-                self.observation_spaces.append(spaces.Dict(observation_spaces))
+            self.observation_spaces.append(spaces.Dict(observation_spaces))
 
         # Gets policy names defined in AIControllers in Godot. If an older version of the plugin is used and no policy
         # names are sent, "shared_policy" will be set for compatibility.
