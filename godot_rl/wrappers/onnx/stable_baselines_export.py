@@ -1,4 +1,5 @@
 import torch
+from gymnasium.vector.utils import spaces
 from stable_baselines3 import PPO
 
 
@@ -52,7 +53,7 @@ def export_ppo_model_as_onnx(ppo: PPO, onnx_model_path: str, use_obs_array: bool
         dummy_input = dict(ppo.observation_space.sample())
         for k, v in dummy_input.items():
             dummy_input[k] = torch.from_numpy(v).unsqueeze(0)
-            dummy_input = [v for v in dummy_input.values()]
+        dummy_input = [v for v in dummy_input.values()]
 
     torch.onnx.export(
         onnxable_model,
@@ -68,7 +69,12 @@ def export_ppo_model_as_onnx(ppo: PPO, onnx_model_path: str, use_obs_array: bool
             "state_outs": {0: "batch_size"},
         },
     )
-    verify_onnx_export(ppo, onnx_model_path, use_obs_array=use_obs_array)
+
+    # If the space is MultiDiscrete, we skip verifying as action output will have an expected mismatch
+    # (the output from onnx will be the action logits for each discrete action,
+    # while the output from sb3 will be a single int)
+    if not isinstance(ppo.action_space, spaces.MultiDiscrete):
+        verify_onnx_export(ppo, onnx_model_path, use_obs_array=use_obs_array)
 
 
 def verify_onnx_export(ppo: PPO, onnx_model_path: str, num_tests=10, use_obs_array: bool = False):
