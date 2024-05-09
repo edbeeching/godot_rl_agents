@@ -64,14 +64,9 @@ def register_env():
     tune.register_env(
         "godot",
         lambda c: RayVectorGodotEnv(
-            env_path=c["env_path"],
             config=c,
             port=c.worker_index + GodotEnv.DEFAULT_PORT + 10,
-            show_window=c["show_window"],
-            framerate=c["framerate"],
             seed=c.worker_index + c["seed"],
-            action_repeat=c["framerate"],
-            speedup=c["speedup"],
         ),
     )
 
