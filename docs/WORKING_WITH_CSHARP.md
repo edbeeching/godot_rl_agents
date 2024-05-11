@@ -8,18 +8,17 @@ We recommended completing the [custom env](https://github.com/edbeeching/godot_r
 gdscript to get an idea of the usual process with gdscript first.
 
 We have prepared a simple example that comes in 3 variants:
-- GDScript [TODO: LINK] (the entire game is written in gdscript)
-- CSharp [TODO: LINK] (most of the game is written in C#, except for the extended AIController which is written in GDScript)
-- CSharpAll [TODO: LINK] (the game is written in C#, and an AIController wrapper is written in C# as well)
-
-A brief comparison of the two C# approaches:
-1. CSharp:
-2. CSharpAll: The entire game is written in C#, and interfacing with the plugin is done through an AIController also 
-written in C#.
-
-[//]: # "TODO: What elso should we add here? Should we combine this brief comparison with the listing above?"
+- GDScript [TODO: LINK] (The entire game is written in gdscript)
+- CSharp [TODO: LINK] (Most of the game is written in C#, except for the extended AIController which is written in GDScript)
+- CSharpAll [TODO: LINK] (The entire game is written in C#, and interfacing with the plugin is done through an AIController also  written in C#)
 
 ### CSharp
+
+In this approach, we extend the AIController using gdscript as we cannot directly extend from it using C#, but we still write the rest of the game in C# (e.g. Player and other classes). 
+
+You can see the [extended AIController here](https://github.com/edbeeching/godot_rl_agents_examples/blob/AddSimpleTestEnv/examples/TestExamples/SimpleReachGoal/CSharp/scenes/player/player_ai_controller.gd). The code is very is very similar to the gdscript env version [extended AI Controller](https://github.com/edbeeching/godot_rl_agents_examples/blob/AddSimpleTestEnv/examples/TestExamples/SimpleReachGoal/GDScript/scenes/player/player_ai_controller.gd), except that we don't get code completion for the C# classes. It is slightly more complex to access/modify the AIController properties from the C# Player class, and you can see how that is done in the [Player script](https://github.com/edbeeching/godot_rl_agents_examples/blob/AddSimpleTestEnv/examples/TestExamples/SimpleReachGoal/CSharp/scenes/player/Player.cs).
+
+The main advantage of this approach is that it doesn't require any modifications to the plugin, or writing an AIController wrapper (see [CSharpAll](#csharpall) for that approach). It's also easy to access data from [sensors](https://github.com/edbeeching/godot_rl_agents/blob/main/docs/NODE_REFERENCE.md#sensors) included in the plugin which are written in gdscript. The disadvantage is that it uses [cross-language scripting](https://docs.godotengine.org/en/stable/tutorials/scripting/cross_language_scripting.html) when interfacing between the AIController and the Player script and/or the rest of the env code written in C#.
 
 ### CSharpAll
 
