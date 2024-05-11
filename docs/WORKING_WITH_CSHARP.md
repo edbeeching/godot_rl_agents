@@ -13,5 +13,51 @@ We have prepared a simple example that comes in 3 variants:
 - CSharpAll [TODO: LINK] (the game is written in C#, and an AIController wrapper is written in C# as well)
 
 A brief comparison of the two C# approaches:
+1. CSharp:
+2. CSharpAll: The entire game is written in C#, and interfacing with the plugin is done through an AIController also 
+written in C#.
+
+[//]: # "TODO: What elso should we add here? Should we combine this brief comparison with the listing above?"
+
 ### CSharp
+
 ### CSharpAll
+
+As mentioned the _CSharpAll_ variant of this example has the entire game written in C#, aiming to provide a more 
+consistent experience for C# developers. The main advantage of this approach is that interfacing with the AIController 
+no longer assumes [cross-language scripting](https://docs.godotengine.org/en/stable/tutorials/scripting/cross_language_scripting.html) between C# and GDScript.
+
+This approach is slightly more complicated to set up than the _CSharp_ variant, as it requires a custom C# wrapper for 
+the `ai_controller_3d.gd` node. We provide this wrapper called `AIControllerSharp3D.cs` [here](https://github.com/edbeeching/godot_rl_agents_examples/blob/AddSimpleTestEnv/examples/TestExamples/SimpleReachGoal/CSharpAll/scenes/player/AIControllerSharp3D.cs),
+but it should be noted that this wrapper may not be kept up to date with the GDScript version, as such it may need small
+changes in the future to work.
+
+[//]: # "TODO: Change `AIControllerSharp3D.cs` branch infix to main when merged"
+
+#### Using the C# AIController
+
+As we did in the other examples, we need to inherit from the AIController node, only now we will inherit from the 
+provided C# wrapper. Upon inheriting, you will find the C# equivalent of the GDScript AIController functions that you 
+need to add logic to, see this section of [custom env](https://github.com/edbeeching/godot_rl_agents/blob/main/docs/CUSTOM_ENV.md#adding-the-ai-controller) tutorial for more details.
+
+As mentioned before, by writing the AIController in C# we eliminate [cross-language scripting](https://docs.godotengine.org/en/stable/tutorials/scripting/cross_language_scripting.html) between the 'player'
+C# script and the AIController script, but this does mean that interfacing with other GDScript nodes, such as the 
+sensors provided by the plugin, means a minimal cross-language scripting is still required. This example also showcases
+how to inferface with these components (see [PlayerAIController.cs](https://github.com/edbeeching/godot_rl_agents_examples/blob/AddSimpleTestEnv/examples/TestExamples/SimpleReachGoal/CSharpAll/scenes/player/PlayerAIController.cs)).
+
+[//]: # "TODO: Change `PlayerAIController` branch infix to main when merged"
+
+#### Modifying the AIController 3D wrapper to 2D version
+
+In case you want to use the 2D version of the AIController, you will need to modify the provided 
+`AIControllerSharp3D.cs` in a few minor ways:
+- Change the class name to `AIControllerSharp2D` and the base class to `Node2D`
+```diff
+- public abstract partial class AIControllerSharp3D : Node3D
++ public abstract partial class AIControllerSharp2D : Node2D
+```
+- Change the `_player` field to be of type `Node3D` instead of `Node2D`
+```diff
+- public Node2D _player;
++ public Node3D _player;
+```
