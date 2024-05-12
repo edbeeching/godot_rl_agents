@@ -55,8 +55,8 @@ In case you want to use the 2D version of the AIController, you will need to mod
 - public abstract partial class AIControllerSharp3D : Node3D
 + public abstract partial class AIControllerSharp2D : Node2D
 ```
-- Change the `_player` field to be of type `Node3D` instead of `Node2D`
+- Change the `_player` field to be of type `Node2D` instead of `Node3D`
 ```diff
-- public Node2D _player;
-+ public Node3D _player;
+- public Node3D _player;
++ public Node2D _player;
 ```
