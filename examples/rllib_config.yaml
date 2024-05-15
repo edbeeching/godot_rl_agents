@@ -1,0 +1,60 @@
+algorithm: PPO
+
+# Multi-agent-env setting:
+# If true:
+# - Any AIController with done = true will receive zeroes as action values until all AIControllers are done, an episode ends at that point.
+# - ai_controller.needs_reset will also be set to true every time a new episode begins (but you can ignore it in your env if needed).
+# If false:
+# - AIControllers auto-reset in Godot and will receive actions after setting done = true.
+# - Each AIController has its own episodes that can end/reset at any point.
+# Set to false if you have a single policy name for all agents set in AIControllers
+env_is_multiagent: false
+
+checkpoint_frequency: 20
+
+# You can set one or more stopping criteria
+stop:
+    #episode_reward_mean: 0
+    #training_iteration: 1000
+    #timesteps_total: 10000
+    time_total_s: 10000000
+
+config:
+    env: godot
+    env_config:
+        env_path: null # Set your env path here (exported executable from Godot) - e.g. env_path: 'env_path.exe' on Windows
+        action_repeat: null # Doesn't need to be set here, you can set this in sync node in Godot editor as well
+        show_window: true # Displays game window while training. Might be faster when false in some cases, turning off also reduces GPU usage if you don't need rendering.
+        speedup: 30 # Speeds up Godot physics
+
+    framework: torch # ONNX models exported with torch are compatible with the current Godot RL Agents Plugin
+
+    lr: 0.0003
+    lambda: 0.95
+    gamma: 0.99
+
+    vf_loss_coeff: 0.5
+    vf_clip_param: .inf
+    #clip_param: 0.2
+    entropy_coeff: 0.0001
+    entropy_coeff_schedule: null
+    #grad_clip: 0.5
+
+    normalize_actions: False
+    clip_actions: True # During onnx inference we simply clip the actions to [-1.0, 1.0] range, set here to match
+
+    rollout_fragment_length: 32
+    sgd_minibatch_size: 128
+    num_workers: 4
+    num_envs_per_worker: 1 # This will be set automatically if not multi-agent. If multi-agent, changing this changes how many envs to launch per worker.
+    # The value below needs changing per env
+    # Basic calculation for this value can be rollout_fragment_length * num_workers * num_envs_per_worker (how many AIControllers you have if not multi_agent, otherwise the value you set)
+    train_batch_size: 2048 
+
+    num_sgd_iter: 4
+    batch_mode: truncate_episodes
+
+    num_gpus: 0
+    model:
+        vf_share_layers: False
+        fcnet_hiddens: [64, 64]
