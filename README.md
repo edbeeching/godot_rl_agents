@@ -98,6 +98,16 @@ git clone git@github.com:YOUR_USERNAME/godot_rl_agents.git
 cd godot_rl_agents
 python -m venv venv
 pip install -e ".[dev]"
+```
+
+In order to run the tests, you'll need to make sure that you first have git-lfs installed. Once this is installed, you can download the examples which are used in the tests:
+
+```
+make download_examples
+```
+Note that the examples are only available for Linux and Windows. Once you've installed the examples, you can run the tests:
+
+```
 # check tests run
 make test
 ```
