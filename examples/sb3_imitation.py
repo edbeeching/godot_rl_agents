@@ -177,6 +177,7 @@ learner = PPO(
     policy_kwargs=policy_kwargs,
     verbose=2,
     tensorboard_log=f"logs/{args.experiment_name}",
+    device="cpu",
     # seed=args.seed // Not currently supported as stable_baselines_wrapper.py seed() method is not yet implemented.
 )
 
@@ -190,6 +191,7 @@ try:
             rng=rng,
             policy=learner.policy,
             custom_logger=logger,
+            device="cpu",
         )
         print("Starting Imitation Learning Training using BC:")
         bc_trainer.train(n_epochs=args.bc_epochs)
