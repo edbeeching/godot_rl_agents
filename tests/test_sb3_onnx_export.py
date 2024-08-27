@@ -24,7 +24,7 @@ from godot_rl.core.utils import can_import
 def test_pytorch_vs_onnx(env_name, port):
     from stable_baselines3 import PPO
 
-    from godot_rl.wrappers.onnx.stable_baselines_export import export_ppo_model_as_onnx, verify_onnx_export
+    from godot_rl.wrappers.onnx.stable_baselines_export import export_model_as_onnx, verify_onnx_export
     from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
 
     env_path = f"examples/godot_rl_{env_name}/bin/{env_name}.x86_64"
@@ -39,6 +39,6 @@ def test_pytorch_vs_onnx(env_name, port):
         tensorboard_log="logs/log",
     )
 
-    export_ppo_model_as_onnx(ppo, f"{env_name}_tmp.onnx")
+    export_model_as_onnx(ppo, f"{env_name}_tmp.onnx")
     verify_onnx_export(ppo, f"{env_name}_tmp.onnx")
     os.remove(f"{env_name}_tmp.onnx")
