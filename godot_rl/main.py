@@ -94,10 +94,12 @@ def get_args():
     return args, extras
 
 
-
 def main():
-    warnings.warn("This use of gdrl is deprecated and will be removed in version 1.0, please refer to the examples in the github repo", DeprecationWarning)
-    
+    warnings.warn(
+        "This use of gdrl is deprecated and will be removed in version 1.0, please refer to the examples in the github repo",
+        DeprecationWarning,
+    )
+
     args, extras = get_args()
     if args.trainer == "rllib":
         training_function = rllib_training
