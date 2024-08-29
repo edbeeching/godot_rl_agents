@@ -42,9 +42,13 @@ You may need to add run permissions on the game executable.
 chmod +x examples/godot_rl_JumperHard/bin/JumperHard.x86_64
 ```
 
-Train and visualize
-
+Train and visualize, first download the [Stable Baselines 3 example](https://github.com/edbeeching/godot_rl_agents/blob/main/examples/stable_baselines3_example.py) script in the github repo:
 ```bash
+python examples/stable_baselines3_example.py --env_path=examples/godot_rl_JumperHard/bin/JumperHard.x86_64 --experiment_name=Experiment_01 --viz
+```
+
+Deprecated usage with an entrypoint (to be removed in version 1.0):
+```
 gdrl --env=gdrl --env_path=examples/godot_rl_JumperHard/bin/JumperHard.x86_64 --experiment_name=Experiment_01 --viz
 ```
 
@@ -54,7 +58,7 @@ You can also train an agent in the Godot editor, without the need to export the 
 
 1. Download the Godot 4 Game Engine from [https://godotengine.org/](https://godotengine.org/)
 2. Open the engine and import the JumperHard example in `examples/godot_rl_JumperHard`
-3. Start in editor training with: `gdrl`
+3. Start in editor training with: `python examples/stable_baselines3_example.py`
 
 ### Creating a custom environment
 
