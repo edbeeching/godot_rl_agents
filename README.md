@@ -56,7 +56,7 @@ gdrl --env=gdrl --env_path=examples/godot_rl_JumperHard/bin/JumperHard.x86_64 --
 
 You can also train an agent in the Godot editor, without the need to export the game executable.
 
-1. Download the Godot 4 Game Engine from [https://godotengine.org/](https://godotengine.org/)
+1. Download the Godot 4 Game Engine (.NET version) from [https://godotengine.org/](https://godotengine.org/)
 2. Open the engine and import the JumperHard example in `examples/godot_rl_JumperHard`
 3. Start in editor training with: `python examples/stable_baselines3_example.py`
 
