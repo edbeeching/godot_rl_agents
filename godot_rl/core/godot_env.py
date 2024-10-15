@@ -31,7 +31,7 @@ class GodotEnv:
         action_repeat: Optional[int] = None,
         speedup: Optional[int] = None,
         convert_action_space: bool = False,
-        **kwargs,
+        **kwargs
     ):
         """
         Initialize a new instance of GodotEnv
@@ -52,20 +52,9 @@ class GodotEnv:
             env_path = self._set_platform_suffix(env_path)
 
             self.check_platform(env_path)
-            self._launch_env(
-                env_path,
-                port,
-                show_window,
-                framerate,
-                seed,
-                action_repeat,
-                speedup,
-                **kwargs,
-            )
+            self._launch_env(env_path, port, show_window, framerate, seed, action_repeat, speedup, **kwargs)
         else:
-            print(
-                "No game binary has been provided, please press PLAY in the Godot editor"
-            )
+            print("No game binary has been provided, please press PLAY in the Godot editor")
 
         self.port = port
         self.connection = self._start_server()
@@ -84,13 +73,10 @@ class GodotEnv:
         # sf2 requires a tuple action space
         # Multiple agents' action space(s)
         self.tuple_action_spaces = [
-            spaces.Tuple([v for _, v in action_space.items()])
-            for action_space in self.action_spaces
+            spaces.Tuple([v for _, v in action_space.items()]) for action_space in self.action_spaces
         ]
         # Single agent action space processor using the action space(s) of the first agent
-        self.action_space_processor = ActionSpaceProcessor(
-            self.tuple_action_spaces[0], convert_action_space
-        )
+        self.action_space_processor = ActionSpaceProcessor(self.tuple_action_spaces[0], convert_action_space)
 
         # For multi-policy envs: The name of each agent's policy set in the env itself (any training_mode
         # AIController instance is treated as an agent)
@@ -237,9 +223,7 @@ class GodotEnv:
         for k in response_obs[0].keys():
             if "2d" in k:
                 for sub in response_obs:
-                    sub[k] = self._decode_2d_obs_from_string(
-                        sub[k], self.observation_space[k].shape
-                    )
+                    sub[k] = self._decode_2d_obs_from_string(sub[k], self.observation_space[k].shape)
 
         return response_obs
 
@@ -294,17 +278,7 @@ class GodotEnv:
         print("exit was not clean, using atexit to close env")
         self.close()
 
-    def _launch_env(
-        self,
-        env_path,
-        port,
-        show_window,
-        framerate,
-        seed,
-        action_repeat,
-        speedup,
-        **kwargs,
-    ):
+    def _launch_env(self, env_path, port, show_window, framerate, seed, action_repeat, speedup, **kwargs):
         # --fixed-fps {framerate}
         path = convert_macos_path(env_path) if platform == "darwin" else env_path
 
@@ -386,9 +360,7 @@ class GodotEnv:
                 if v["action_type"] == "discrete":
                     tmp_action_spaces[k] = spaces.Discrete(v["size"])
                 elif v["action_type"] == "continuous":
-                    tmp_action_spaces[k] = spaces.Box(
-                        low=-1.0, high=1.0, shape=(v["size"],)
-                    )
+                    tmp_action_spaces[k] = spaces.Box(low=-1.0, high=1.0, shape=(v["size"],))
                 else:
                     print(f"action space {v['action_type']} is not supported")
                     assert 0, f"action space {v['action_type']} is not supported"
@@ -399,9 +371,7 @@ class GodotEnv:
         # A single observation space will be received as a dict in previous versions,
         # A list of dicts will be received from newer version, defining the observation_space for each agent (AIController)
         if isinstance(json_dict["observation_space"], dict):
-            json_dict["observation_space"] = [
-                json_dict["observation_space"]
-            ] * self.num_envs
+            json_dict["observation_space"] = [json_dict["observation_space"]] * self.num_envs
 
         for agent_obs_space in json_dict["observation_space"]:
             observation_spaces = {}
@@ -430,9 +400,7 @@ class GodotEnv:
 
         # Gets policy names defined in AIControllers in Godot. If an older version of the plugin is used and no policy
         # names are sent, "shared_policy" will be set for compatibility.
-        self.agent_policy_names = json_dict.get(
-            "agent_policy_names", ["shared_policy"] * self.num_envs
-        )
+        self.agent_policy_names = json_dict.get("agent_policy_names", ["shared_policy"] * self.num_envs)
 
     @staticmethod
     def _decode_2d_obs_from_string(
