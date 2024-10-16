@@ -13,19 +13,23 @@ from godot_rl.core.godot_env import GodotEnv
 
 
 class RayVectorGodotEnv(VectorEnv):
-    def __init__(
-        self,
-        port=10008,
-        seed=0,
-        config=None,
-    ) -> None:
+    def __init__(self, port=10008, seed=0, config=None) -> None:
+        config = config or {}  # initialize config as empty dict if None
+
+        # using default values from GodotEnv
+        env_path = config.pop("env_path", None)
+        show_window = config.pop("show_window", False)
+        action_repeat = config.pop("action_repeat", None)
+        speedup = config.pop("speedup", None)
+
         self._env = GodotEnv(
-            env_path=config["env_path"],
+            env_path=env_path,
             port=port,
             seed=seed,
-            show_window=config["show_window"],
-            action_repeat=config["action_repeat"],
-            speedup=config["speedup"],
+            show_window=show_window,
+            action_repeat=action_repeat,
+            speedup=speedup,
+            **config,
         )
         super().__init__(
             observation_space=self._env.observation_space,
@@ -127,9 +131,12 @@ def rllib_training(args, extras):
             checkpoint_freq=checkpoint_freq,
             checkpoint_at_end=not args.eval,
             restore=args.restore,
-            storage_path=os.path.abspath(args.experiment_dir) or os.path.abspath("logs/rllib"),
+            storage_path=os.path.abspath(args.experiment_dir)
+            or os.path.abspath("logs/rllib"),
             trial_name_creator=lambda trial: (
-                f"{args.experiment_name}" if args.experiment_name else f"{trial.trainable_name}_{trial.trial_id}"
+                f"{args.experiment_name}"
+                if args.experiment_name
+                else f"{trial.trainable_name}_{trial.trial_id}"
             ),
         )
     if args.export:
