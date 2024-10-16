@@ -131,12 +131,9 @@ def rllib_training(args, extras):
             checkpoint_freq=checkpoint_freq,
             checkpoint_at_end=not args.eval,
             restore=args.restore,
-            storage_path=os.path.abspath(args.experiment_dir)
-            or os.path.abspath("logs/rllib"),
+            storage_path=os.path.abspath(args.experiment_dir) or os.path.abspath("logs/rllib"),
             trial_name_creator=lambda trial: (
-                f"{args.experiment_name}"
-                if args.experiment_name
-                else f"{trial.trainable_name}_{trial.trial_id}"
+                f"{args.experiment_name}" if args.experiment_name else f"{trial.trainable_name}_{trial.trial_id}"
             ),
         )
     if args.export:

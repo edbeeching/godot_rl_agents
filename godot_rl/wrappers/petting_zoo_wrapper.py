@@ -26,9 +26,7 @@ def env(render_mode=None):
 class GDRLPettingZooEnv(ParallelEnv):
     metadata = {"render_modes": ["human"], "name": "GDRLPettingZooEnv"}
 
-    def __init__(
-        self, port=GodotEnv.DEFAULT_PORT, show_window=True, seed=0, config: Dict = None
-    ):
+    def __init__(self, port=GodotEnv.DEFAULT_PORT, show_window=True, seed=0, config: Dict = None):
         """
         The init method takes in environment arguments and should define the following attributes:
         - possible_agents
@@ -62,9 +60,7 @@ class GDRLPettingZooEnv(ParallelEnv):
 
         self.render_mode = None  # Controlled by the env
 
-        self.possible_agents = [
-            agent_idx for agent_idx in range(self.godot_env.num_envs)
-        ]
+        self.possible_agents = [agent_idx for agent_idx in range(self.godot_env.num_envs)]
         self.agents = self.possible_agents[:]
 
         # The policy names here are set on each AIController in Godot editor,
@@ -72,18 +68,14 @@ class GDRLPettingZooEnv(ParallelEnv):
         self.agent_policy_names = self.godot_env.agent_policy_names
 
         # optional: a mapping between agent name and ID
-        self.agent_name_mapping = dict(
-            zip(self.possible_agents, list(range(len(self.possible_agents))))
-        )
+        self.agent_name_mapping = dict(zip(self.possible_agents, list(range(len(self.possible_agents)))))
 
         self.observation_spaces = {
-            agent: self.godot_env.observation_spaces[agent_idx]
-            for agent_idx, agent in enumerate(self.agents)
+            agent: self.godot_env.observation_spaces[agent_idx] for agent_idx, agent in enumerate(self.agents)
         }
 
         self.action_spaces = {
-            agent: self.godot_env.tuple_action_spaces[agent_idx]
-            for agent_idx, agent in enumerate(self.agents)
+            agent: self.godot_env.tuple_action_spaces[agent_idx] for agent_idx, agent in enumerate(self.agents)
         }
 
     # Observation space should be defined here.
@@ -122,12 +114,8 @@ class GDRLPettingZooEnv(ParallelEnv):
         """
         godot_obs, godot_infos = self.godot_env.reset()
 
-        observations = {
-            agent: godot_obs[agent_idx] for agent_idx, agent in enumerate(self.agents)
-        }
-        infos = {
-            agent: godot_infos[agent_idx] for agent_idx, agent in enumerate(self.agents)
-        }
+        observations = {agent: godot_obs[agent_idx] for agent_idx, agent in enumerate(self.agents)}
+        infos = {agent: godot_infos[agent_idx] for agent_idx, agent in enumerate(self.agents)}
 
         return observations, infos
 
@@ -146,16 +134,12 @@ class GDRLPettingZooEnv(ParallelEnv):
         # Godot env have done = true. For agents that received no actions, we will set zeros instead for
         # compatibility.
         godot_actions = [
-            (
-                actions[agent]
-                if agent in actions
-                else np.zeros_like(self.action_spaces[agent_idx].sample())
-            )
+            (actions[agent] if agent in actions else np.zeros_like(self.action_spaces[agent_idx].sample()))
             for agent_idx, agent in enumerate(self.agents)
         ]
 
-        godot_obs, godot_rewards, godot_dones, godot_truncations, godot_infos = (
-            self.godot_env.step(godot_actions, order_ij=True)
+        godot_obs, godot_rewards, godot_dones, godot_truncations, godot_infos = self.godot_env.step(
+            godot_actions, order_ij=True
         )
         observations = {agent: godot_obs[agent] for agent in actions}
         rewards = {agent: godot_rewards[agent] for agent in actions}
