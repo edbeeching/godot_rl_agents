@@ -122,17 +122,17 @@ python stable_baselines3_example.py --timesteps=1_000_000 --linear_lr_schedule
 ```
 
 ### Custom environments and additional arguments:
-This part is a bit more specific, and is used primerily for Custom Godot Environments.
+This part is a bit more specific, and is used primarily for Custom Godot Environments.
 
 > OBSERVATION: The following example focuses on how to change the **starting_level** using additional command line arguments.
 > 
-> You can also use commind line arguments to: 
+> You can also use command line arguments to: 
 > * change the **game_difficulty**  
 > * change the **starting_character** 
 > * load a custom **game_state**
 > * update any other variable before the game starts 
 
-Let's say you have a Godot Environment with multiple levels and want to set the **starting_level** before the simulation starts. All you need to do is to pass **starting_level** as a argument, when instantiating a `StableBaselinesGodotEnv` along with the value you want to pass to Godot and you're good to go. Here's an example in python:
+Let's say you have a Godot Environment with multiple levels and want to set the **starting_level** before the simulation starts. All you need to do is to pass **starting_level** as an argument, when instantiating a `StableBaselinesGodotEnv` along with the value you want to pass to Godot and you're good to go. Here's an example in python:
 
 ```python
 from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
@@ -156,7 +156,7 @@ getting command line arguments
 ```
 Which means that those variables got to the Godot Environment successfully. However, your environment needs to support handling those environments, prior to it being built. 
 
-You can access the environemnt variables though the **godot_rl_agents_plugin/sync.gd** script. You'll see there's a `args` variable that stores all the command line arguments your environment received from the python script. You can access **starting_level** by doing:
+You can access the environment variables though the **godot_rl_agents_plugin/sync.gd** script. You'll see there's a `args` variable that stores all the command line arguments your environment received from the python script. You can access **starting_level** by doing:
 ```godot
 func get_starting_level():
     return agrs.get("starting_level", None)
