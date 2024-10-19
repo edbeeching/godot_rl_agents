@@ -196,6 +196,49 @@ https://user-images.githubusercontent.com/7275864/209363084-f91b2fcb-2042-494c-9
 
 https://user-images.githubusercontent.com/7275864/209363098-a6bee0a6-dc85-4b8d-b69a-d747bcf39635.mp4
 
+### Custom environments and additional arguments:
+
+> OBSERVATION 
+> 
+> The following example focuses on how to change the **starting_level** using additional command line arguments. \
+> You can also use command line arguments to: 
+> * change the **game_difficulty**  
+> * change the **starting_character** 
+> * load a custom **game_state**
+> * update any other variable before the game starts 
+
+Let's say you have a Godot Environment with multiple levels and want to set the **starting_level** before the simulation starts. All you need to do is to pass **starting_level** as an argument, when instantiating a `StableBaselinesGodotEnv` along with the value you want to pass to Godot and you're good to go. Here's an example in python:
+
+```python
+from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
+
+# we set the starting_level as RainbowRoad
+env = StableBaselinesGodotEnv(
+        env_path=PATH_TO_ENVIRONMENT,
+        port=11008,
+        env_seed=42,
+        speedup=1,
+        starting_level="RainbowRoad"
+)
+```
+After running the script you'll see in the console something like:
+```bask
+getting command line arguments
+--port=11008
+--env_seed=42
+--speedup=1
+--starting_level=RainbowRoad
+```
+Which means that those variables got to the Godot Environment successfully. However, your environment needs to support handling those environments, prior to it being built. 
+
+You can access the environment variables though the **godot_rl_agents_plugin/sync.gd** script. You'll see there's a `args` variable that stores all the command line arguments your environment received from the python script. You can access **starting_level** by doing:
+```godot
+func get_starting_level():
+    return agrs.get("starting_level", None)
+```
+
+Then, you can use the returned value to set the starting level before the game begins.
+
 ## There’s more!
 
 We have only scratched the surface of what can be achieved with Godot RL Agents, the library includes custom sensors and cameras to enrich the information available to the agent. Take a look at the [examples](https://github.com/edbeeching/godot_rl_agents_examples) to find out more!
