@@ -206,7 +206,7 @@ class GodotEnv:
             response["reward"],
             np.array(response["done"]).tolist(),
             np.array(response["done"]).tolist(),  # TODO update API to term, trunc
-            [{}] * len(response["done"]),
+            response["info"],
         )
 
     def _process_obs(self, response_obs: dict):
