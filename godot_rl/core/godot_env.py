@@ -31,6 +31,7 @@ class GodotEnv:
         action_repeat: Optional[int] = None,
         speedup: Optional[int] = None,
         convert_action_space: bool = False,
+        **kwargs,
     ):
         """
         Initialize a new instance of GodotEnv
@@ -51,7 +52,16 @@ class GodotEnv:
             env_path = self._set_platform_suffix(env_path)
 
             self.check_platform(env_path)
-            self._launch_env(env_path, port, show_window, framerate, seed, action_repeat, speedup)
+            self._launch_env(
+                env_path,
+                port,
+                show_window,
+                framerate,
+                seed,
+                action_repeat,
+                speedup,
+                **kwargs,
+            )
         else:
             print("No game binary has been provided, please press PLAY in the Godot editor")
 
@@ -277,7 +287,17 @@ class GodotEnv:
         print("exit was not clean, using atexit to close env")
         self.close()
 
-    def _launch_env(self, env_path, port, show_window, framerate, seed, action_repeat, speedup):
+    def _launch_env(
+        self,
+        env_path,
+        port,
+        show_window,
+        framerate,
+        seed,
+        action_repeat,
+        speedup,
+        **kwargs,
+    ):
         # --fixed-fps {framerate}
         path = convert_macos_path(env_path) if platform == "darwin" else env_path
 
@@ -291,6 +311,9 @@ class GodotEnv:
             launch_cmd += f" --action_repeat={action_repeat}"
         if speedup is not None:
             launch_cmd += f" --speedup={speedup}"
+        if len(kwargs) > 0:
+            for key, value in kwargs.items():
+                launch_cmd += f" --{key}={value}"
 
         launch_cmd = launch_cmd.split(" ")
         self.proc = subprocess.Popen(

@@ -13,12 +13,14 @@ from godot_rl.core.godot_env import GodotEnv
 
 
 class RayVectorGodotEnv(VectorEnv):
-    def __init__(
-        self,
-        port=10008,
-        seed=0,
-        config=None,
-    ) -> None:
+    def __init__(self, port=10008, seed=0, config=None) -> None:
+        config = config or {}  # initialize config as empty dict if None
+        extra_arguments = {
+            key: value
+            for key, value in config.items()
+            if key not in ["env_path", "show_window", "action_repeat", "speedup", "seed", "port"]
+        }
+
         self._env = GodotEnv(
             env_path=config["env_path"],
             port=port,
@@ -26,6 +28,7 @@ class RayVectorGodotEnv(VectorEnv):
             show_window=config["show_window"],
             action_repeat=config["action_repeat"],
             speedup=config["speedup"],
+            **extra_arguments,
         )
         super().__init__(
             observation_space=self._env.observation_space,

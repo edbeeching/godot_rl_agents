@@ -26,7 +26,7 @@ def env(render_mode=None):
 class GDRLPettingZooEnv(ParallelEnv):
     metadata = {"render_modes": ["human"], "name": "GDRLPettingZooEnv"}
 
-    def __init__(self, port=GodotEnv.DEFAULT_PORT, show_window=True, seed=0, config: Dict = {}):
+    def __init__(self, port=GodotEnv.DEFAULT_PORT, show_window=True, seed=0, config: Dict = None):
         """
         The init method takes in environment arguments and should define the following attributes:
         - possible_agents
@@ -38,15 +38,23 @@ class GDRLPettingZooEnv(ParallelEnv):
 
         These attributes should not be changed after initialization.
         """
+        config = config or {}  # initialize config as empty dict if None
+        extra_arguments = {
+            key: value
+            for key, value in config.items()
+            if key not in ["env_path", "show_window", "action_repeat", "speedup", "seed", "port"]
+        }
+
         # Initialize the Godot Env which we will wrap
         self.godot_env = GodotEnv(
-            env_path=config.get("env_path"),
-            show_window=config.get("show_window"),
-            action_repeat=config.get("action_repeat"),
-            speedup=config.get("speedup"),
+            env_path=config["env_path"],
+            show_window=show_window,
+            action_repeat=config["action_repeat"],
+            speedup=config["speedup"],
             convert_action_space=False,
             seed=seed,
             port=port,
+            **extra_arguments,
         )
 
         self.render_mode = None  # Controlled by the env
@@ -125,7 +133,7 @@ class GDRLPettingZooEnv(ParallelEnv):
         # Godot env have done = true. For agents that received no actions, we will set zeros instead for
         # compatibility.
         godot_actions = [
-            actions[agent] if agent in actions else np.zeros_like(self.action_spaces[agent_idx].sample())
+            (actions[agent] if agent in actions else np.zeros_like(self.action_spaces[agent_idx].sample()))
             for agent_idx, agent in enumerate(self.agents)
         ]
 
