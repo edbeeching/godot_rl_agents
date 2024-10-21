@@ -234,7 +234,7 @@ Which means that those variables got to the Godot Environment successfully. Howe
 You can access the environment variables though the **godot_rl_agents_plugin/sync.gd** script. You'll see there's a `args` variable that stores all the command line arguments your environment received from the python script. You can access **starting_level** by doing:
 ```godot
 func get_starting_level():
-    return agrs.get("starting_level", None)
+    return args.get("starting_level", None)
 ```
 
 Then, you can use the returned value to set the starting level before the game begins.
