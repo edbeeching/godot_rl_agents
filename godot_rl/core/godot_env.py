@@ -201,7 +201,7 @@ class GodotEnv:
         response = self._get_json_dict()
         response["obs"] = self._process_obs(response["obs"])
 
-        # TODO: update godot_rl_agents so we won't need this default_info
+        # Kept for backward compatibility if the plugin doesn't send info.
         default_info = [{}] * len(response["done"])
 
         return (
