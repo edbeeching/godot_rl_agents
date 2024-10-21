@@ -124,17 +124,13 @@ var is_success := false
 func get_info() -> Dictionary:
 	if done: 
 		return {"is_success": is_success}
-		is_success = false
 	return {}
 ```
 
 The above snippet will send the information on whether or not the episode was succesful to the Python training server.
 SB3 can use this to report the success rate.
 
-Note that we are setting `"false"` as the default, this is just one way to implement it, you can adjust the implementation to your preference.
-Due to it being reset to `false`, we just need to set it to `true` when an episode is done succesfully, otherwise we don't need to change it.
-
-#### 2 - On some condition, set `is_success` to `true`:
+#### 2 - Set is_success to `true` or `false` when ending the episode
 The condition depends on your use case, for example, here's how we can implement this in the [SimpleReachGoal](https://github.com/edbeeching/godot_rl_agents_examples/tree/main/examples/TestExamples/SimpleReachGoal) env.
 In the `player.gd` script, we just add `is_success` to depend on whether or not the reward is higher than 0:
 
