@@ -211,12 +211,15 @@ class GodotEnv:
         response = self._get_json_dict()
         response["obs"] = self._process_obs(response["obs"])
 
+        # Kept for backward compatibility if the plugin doesn't send info.
+        default_info = [{}] * len(response["done"])
+
         return (
             response["obs"],
             response["reward"],
             np.array(response["done"]).tolist(),
             np.array(response["done"]).tolist(),  # TODO update API to term, trunc
-            [{}] * len(response["done"]),
+            response.get("info", default_info),
         )
 
     def _process_obs(self, response_obs: dict):

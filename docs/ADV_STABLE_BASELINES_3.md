@@ -27,7 +27,6 @@ pip install godot-rl[sb3]
 ```
 
 ## Basic Environment Usage
-Usage instructions for envs **BallChase**, **FlyBy** and **JumperHard.**
 
 ### Download the env:
 
@@ -36,19 +35,8 @@ gdrl.env_from_hub -r edbeeching/godot_rl_<ENV_NAME>
 chmod +x examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64 # linux example
 ```
 
-### Train a model from scratch:
-
-```bash
-gdrl --env=gdrl --env_path=examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64 --experiment_name=Experiment_01 --viz
-```
-
-While the default options for sb3 work reasonably well. You may be interested in changing the hyperparameters.
-
-We recommend taking the [sb3 example](https://github.com/edbeeching/godot_rl_agents/blob/main/examples/stable_baselines3_example.py) and modifying to match your needs. 
-
-The example exposes more parameters for the user to configure, such as `--speedup` to run the environment faster than realtime and the `--n_parallel` to launch several instances of the game executable in order to accelerate training (not available for in-editor training). 
-
-## SB3 Example script usage:
+## Training / SB3 Example script usage:
+Clone the repository or download the script [sb3 example](https://github.com/edbeeching/godot_rl_agents/blob/main/examples/stable_baselines3_example.py). 
 To use the example script, first move to the location where the downloaded script is in the console/terminal, and then try some of the example use cases below:
 
 ### Train a model in editor:
@@ -60,8 +48,12 @@ python stable_baselines3_example.py
 ```bash
 python stable_baselines3_example.py --env_path=path_to_executable
 ```
+For the previously downloaded envs, the path will be e.g.
+`--env_path=examples/godot_rl_<ENV_NAME>/bin/<ENV_NAME>.x86_64`
+
 Note that the exported environment will not be rendered in order to accelerate training.
 If you want to display it, add the `--viz` argument.
+
 
 ### Train an exported environment using 4 environment processes:
 ```bash
@@ -120,3 +112,60 @@ and reach 0 at `--timesteps` value.
 ```bash
 python stable_baselines3_example.py --timesteps=1_000_000 --linear_lr_schedule
 ```
+
+## Training statistics and logging:
+### Adding success rate to console logs:
+If you want to report success rate based on some condition (e.g. whether the agent successfully finished the level or not), 
+follow the steps below:
+
+#### 1 - Add the following method to your extended `AIController`:
+```gdscript
+var is_success := false
+func get_info() -> Dictionary:
+	if done: 
+		return {"is_success": is_success}
+	return {}
+```
+
+The above snippet will send the information on whether or not the episode was succesful to the Python training server.
+SB3 can use this to report the success rate.
+
+#### 2 - Set is_success to `true` or `false` when ending the episode
+The condition depends on your use case, for example, here's how we can implement this in the [SimpleReachGoal](https://github.com/edbeeching/godot_rl_agents_examples/tree/main/examples/TestExamples/SimpleReachGoal) env.
+In the `player.gd` script, we just add `is_success` to depend on whether or not the reward is higher than 0:
+
+```gdscript
+## Ends the game, setting an optional reward
+func game_over(reward: float = 0.0):
+	ai_controller.is_success = reward > 0
+	ai_controller.reward += reward
+	game_scene_manager.reset()
+```
+Notes:
+- Although not directly visible, the `done` condition is also set by this method (by calling `game_scene_manager.reset()`),
+in a different env it might be something such as:
+
+```gdscript
+func game_over():
+	ai_controller.is_success = reward > 0
+	ai_controller.done = true
+	ai_controller.needs_reset = true
+```
+
+- The condition for success can vary based on your environment, it does not have to depend directly on the reward.
+- The current [sb3 docs relevant section](https://stable-baselines3.readthedocs.io/en/master/common/logger.html#rollout) suggests:
+> you must pass an extra argument to the Monitor wrapper to log that value (info_keywords=("is_success",)
+
+We didn't add this to the SB3 example script since it seems to work without the value in the current SB3 version,
+as we didn't test this in-depth yet - try adding the argument in case of any issues.
+
+After these changes, you should be able to see the rate in the training stats, e.g.:
+
+![success rate](https://github.com/user-attachments/assets/4901df0b-e48f-463d-a05f-39a16b9f94fb)
+
+
+### Tensorboard:
+You can see the output from the training session in tensorboard. Check [this guide](https://github.com/GianiStatie/godot_rl_agents/blob/main/docs/TRAINING_STATISTICS.md) for more info.
+
+
+
