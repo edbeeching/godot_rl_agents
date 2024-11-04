@@ -14,7 +14,7 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.vec_env.vec_monitor import VecMonitor
 
-from godot_rl.wrappers.onnx.stable_baselines_export import export_ppo_model_as_onnx
+from godot_rl.wrappers.onnx.stable_baselines_export import export_model_as_onnx
 from godot_rl.wrappers.sbg_single_obs_wrapper import SBGSingleObsEnv
 
 parser = argparse.ArgumentParser(allow_abbrev=False)
@@ -109,7 +109,7 @@ def handle_onnx_export():
     if args.onnx_export_path is not None:
         path_onnx = pathlib.Path(args.onnx_export_path).with_suffix(".onnx")
         print("Exporting onnx to: " + os.path.abspath(path_onnx))
-        export_ppo_model_as_onnx(learner, str(path_onnx), use_obs_array=True)
+        export_model_as_onnx(learner, str(path_onnx), use_obs_array=True)
 
 
 def handle_model_save():
