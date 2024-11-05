@@ -1,5 +1,3 @@
-from typing import List
-
 import torch
 from gymnasium.vector.utils import spaces
 from stable_baselines3 import PPO, SAC
