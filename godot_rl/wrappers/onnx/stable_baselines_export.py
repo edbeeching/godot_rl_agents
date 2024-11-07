@@ -45,7 +45,9 @@ class OnnxablePolicy(torch.nn.Module):
             return self.forward_ppo(obs, state_ins)
 
 
-def export_model_as_onnx(model, onnx_model_path: str, use_obs_array: bool = False):
+def export_model_as_onnx(model, onnx_model_path: str, use_obs_array: bool = False, obs_keys=None):
+    if obs_keys is None:
+        obs_keys = ["obs"]
     policy = model.policy.to("cpu")
     dummy_input = None
     onnxable_model = None
@@ -55,7 +57,7 @@ def export_model_as_onnx(model, onnx_model_path: str, use_obs_array: bool = Fals
 
     if isinstance(model, PPO):
         onnxable_model = OnnxablePolicy(
-            ["obs"],
+            obs_keys,
             policy.features_extractor,
             policy.mlp_extractor,
             policy.action_net,
