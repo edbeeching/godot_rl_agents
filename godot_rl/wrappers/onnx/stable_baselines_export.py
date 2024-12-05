@@ -1,5 +1,5 @@
 import torch
-from gymnasium.vector.utils import spaces
+from gymnasium import spaces
 from stable_baselines3 import PPO, SAC
 
 
