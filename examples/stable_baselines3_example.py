@@ -133,6 +133,12 @@ def close_env():
         print("Exception while closing env: ", e)
 
 
+def cleanup():
+    handle_onnx_export()
+    handle_model_save()
+    close_env()
+
+
 path_checkpoint = os.path.join(args.experiment_dir, args.experiment_name + "_checkpoints")
 abs_path_checkpoint = os.path.abspath(path_checkpoint)
 
@@ -213,12 +219,10 @@ else:
         learn_arguments["callback"] = checkpoint_callback
     try:
         model.learn(**learn_arguments)
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, ConnectionError, ConnectionResetError):
         print(
-            """Training interrupted by user. Will save if --save_model_path was
+            """Training interrupted by user or a ConnectionError. Will save if --save_model_path was
             used and/or export if --onnx_export_path was used."""
         )
-
-close_env()
-handle_onnx_export()
-handle_model_save()
+    finally:
+        cleanup()
