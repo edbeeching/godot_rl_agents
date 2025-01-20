@@ -78,6 +78,7 @@ jobs:
       run: |
         pip uninstall -y stable-baselines3 gymnasium
         pip install "ray[rllib]<=2.38.0"
+        pip install onnx==1.16.1
     - name: Download examples
       run: |
         make download_examples
@@ -106,6 +107,7 @@ jobs:
       run: |
         pip uninstall -y stable-baselines3 gymnasium
         pip install "ray[rllib]<=2.38.0"
+        pip install onnx==1.16.1
     - name: Download examples
       run: |
         make download_examples
