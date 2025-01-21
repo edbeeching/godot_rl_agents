@@ -8,6 +8,8 @@ This is a brief guide on training multiple policies focusing on Rllib specifical
 
 `pip install ray[rllib]<=2.38.0`
 
+`pip install onnx==1.16.1`
+
 `pip install PettingZoo`
 
 ### Download the examples file and config file:
