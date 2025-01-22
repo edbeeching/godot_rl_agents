@@ -6,7 +6,9 @@ This is a brief guide on training multiple policies focusing on Rllib specifical
 
 `pip install https://github.com/edbeeching/godot_rl_agents/archive/refs/heads/main.zip` (to get the latest version)
 
-`pip install ray[rllib]`
+`pip install ray[rllib]<=2.38.0`
+
+`pip install onnx==1.16.1`
 
 `pip install PettingZoo`
 

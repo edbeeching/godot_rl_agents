@@ -74,10 +74,11 @@ jobs:
         python -m pip install --upgrade pip wheel==0.38.4
         # cpu version of pytorch
         pip install .[test]
-    - name: Clean up dependencies
+    - name: Install Rllib
       run: |
         pip uninstall -y stable-baselines3 gymnasium
-        pip install ray[rllib]
+        pip install "ray[rllib]<=2.38.0"
+        pip install onnx==1.16.1
     - name: Download examples
       run: |
         make download_examples
@@ -102,10 +103,11 @@ jobs:
         python -m pip install --upgrade pip wheel==0.38.4
         # cpu version of pytorch
         pip install .[test]
-    - name: Clean up dependencies
+    - name: Install Rllib
       run: |
         pip uninstall -y stable-baselines3 gymnasium
-        pip install ray[rllib]
+        pip install "ray[rllib]<=2.38.0"
+        pip install onnx==1.16.1
     - name: Download examples
       run: |
         make download_examples
