@@ -150,9 +150,10 @@ If the README and docs here not provide enough information, reach out to us on [
 
 We are inspired by the the Unity ML agents toolkit and we aim to provide a more compact, concise and hackable codebase, with little abstraction.
 
-### The environment appears to freeze periodically during training, why does it happen?
+### The environment appears to periodicallly freeze during training, why does it happen?
 
-With the default, SB3 training script, it's normal for the Godot env to freeze ocassionally while the model is updating.
+With the default SB3 training script, it's normal for the Godot env to periodically freeze while the model is updating.
+Once the model is trained, if you save and/or export it to onnx, you can run inference from the trained model, which will run faster.
 
 # License
 
