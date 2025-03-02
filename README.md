@@ -60,9 +60,23 @@ You can also train an agent in the Godot editor, without the need to export the 
 2. Open the engine and import the JumperHard example in `examples/godot_rl_JumperHard`
 3. Start in editor training with: `python examples/stable_baselines3_example.py`
 
-### Creating a custom environment
+### Tutorials
 
-There is a dedicated tutorial on creating custom environments [here](docs/CUSTOM_ENV.md). We recommend following this tutorial before trying to create your own environment.
+[Custom env tutorial](docs/CUSTOM_ENV.md)
+
+Dedicated tutorial on creating custom environments. We recommend following this tutorial before trying to create your own environment.
+
+[Simple env tutorial](https://github.com/Ivan-267/GDRLSimpleEnvTutorial)
+
+Video and textual tutorial on how to create an environment using new sensors (position and reward sensor). Recommended to take the above tutorial first, but you can start with this one too.
+
+[Cross the road tutorial](https://github.com/edbeeching/godot_rl_agents_examples/blob/main/examples/CrossTheRoad/Tutorial/tutorial.md)
+
+Tutorial on how to make a cross the road mini-game.
+
+[Imitation learning tutorial](https://huggingface.co/learn/deep-rl-course/unitbonus5/introduction) 
+
+Teaches how to use imitation learning with GDRL. 
 
 If you face any issues getting started, please reach out on our [Discord](https://discord.gg/HMMD2J8SxY) or raise a GitHub issue.
 
