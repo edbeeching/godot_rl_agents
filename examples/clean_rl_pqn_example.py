@@ -5,7 +5,6 @@
 import os
 import random
 import time
-from collections import deque
 from dataclasses import dataclass
 
 import gymnasium as gym
