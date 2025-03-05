@@ -63,8 +63,10 @@ class ActionSpaceProcessor:
                         elif isinstance(space, gym.spaces.Discrete):
                             if space.n > 2:
                                 # for now only binary actions are supported if you mix different spaces
-                                raise NotImplementedError("Discrete actions with size larger than 2 "
-                                                          "are currently not supported if used together with continuous actions.")
+                                raise NotImplementedError(
+                                    "Discrete actions with size larger than 2 "
+                                    "are currently not supported if used together with continuous actions."
+                                )
                             space_size += 1
                         else:
                             raise NotImplementedError
@@ -105,7 +107,7 @@ class ActionSpaceProcessor:
         for space in self._original_action_space.spaces:
             if isinstance(space, gym.spaces.Box):
                 assert len(space.shape) == 1
-                original_action.append(action[:, counter: counter + space.shape[0]])
+                original_action.append(action[:, counter : counter + space.shape[0]])
                 counter += space.shape[0]
 
             elif isinstance(space, gym.spaces.Discrete):
@@ -115,8 +117,10 @@ class ActionSpaceProcessor:
                     discrete_actions = action[:, counter]
                 else:
                     if space.n > 2:
-                        raise NotImplementedError("Discrete actions with size larger than "
-                                                  "2 are currently not implemented for this algorithm.")
+                        raise NotImplementedError(
+                            "Discrete actions with size larger than "
+                            "2 are currently not implemented for this algorithm."
+                        )
                     # If the action is not an integer, convert it to a binary discrete action
                     discrete_actions = np.greater(action[:, counter], 0.0)
                     discrete_actions = discrete_actions.astype(np.float32)
