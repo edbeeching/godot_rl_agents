@@ -64,9 +64,9 @@ class Args:
     """the discount factor gamma"""
     start_e: float = 1
     """the starting epsilon for exploration"""
-    end_e: float = 0.08
+    end_e: float = 0.05
     """the ending epsilon for exploration"""
-    exploration_fraction: float = 0.2
+    exploration_fraction: float = 0.5
     """the fraction of `total_timesteps` it takes from start_e to end_e"""
     max_grad_norm: float = 10.0
     """the maximum norm for the gradient clipping"""
@@ -117,8 +117,7 @@ if __name__ == "__main__":
 
     # env setup
     envs = env = CleanRLGodotEnv(
-        env_path=args.env_path#, show_window=args.viz, speedup=args.speedup, seed=args.seed, n_parallel=args.n_parallel,
-
+        env_path=args.env_path  # , show_window=args.viz, speedup=args.speedup, seed=args.seed, n_parallel=args.n_parallel,
     )
     print(envs.single_action_space)
     assert isinstance(envs.single_action_space, gym.spaces.Discrete), "only discrete action space is supported"
@@ -154,7 +153,6 @@ if __name__ == "__main__":
 
     device = torch.device("cuda" if torch.cuda.is_available() and args.cuda else "cpu")
 
-
     # agent setup
     q_network = QNetwork(envs).to(device)
     optimizer = optim.RAdam(q_network.parameters(), lr=args.learning_rate)
@@ -185,7 +183,9 @@ if __name__ == "__main__":
             obs[step] = next_obs
             dones[step] = next_done
 
-            epsilon = linear_schedule(args.start_e, args.end_e, args.exploration_fraction * args.total_timesteps, global_step)
+            epsilon = linear_schedule(
+                args.start_e, args.end_e, args.exploration_fraction * args.total_timesteps, global_step
+            )
             random_actions = torch.randint(0, envs.single_action_space.n, (args.num_envs,)).to(device)
             with torch.no_grad():
                 q_values = q_network(next_obs)
@@ -222,7 +222,9 @@ if __name__ == "__main__":
                     next_value = values[t + 1]
                     returns[t] = (
                         rewards[t]
-                        + args.gamma * (args.q_lambda * returns[t + 1] + (1 - args.q_lambda) * next_value) * nextnonterminal
+                        + args.gamma
+                        * (args.q_lambda * returns[t + 1] + (1 - args.q_lambda) * next_value)
+                        * nextnonterminal
                     )
 
         # flatten the batch
