@@ -21,10 +21,15 @@ from godot_rl.wrappers.clean_rl_wrapper import CleanRLGodotEnv
 
 @dataclass
 class Args:
-    viz: bool = False
-    """Whether the exported Godot environment will displayed during training"""
     env_path: str = None
     """Path to the Godot exported environment"""
+    n_parallel: int = 1
+    """How many instances of the environment executable to
+    launch (requires --env_path to be set if > 1)."""
+    viz: bool = False
+    """Whether the exported Godot environment will displayed during training"""
+    speedup: int = 8
+    """How much to speed up the environment"""
     exp_name: str = os.path.basename(__file__)[: -len(".py")]
     """the name of this experiment"""
     seed: int = 1
@@ -116,9 +121,12 @@ if __name__ == "__main__":
 
     # env setup
     envs = env = CleanRLGodotEnv(
-        env_path=args.env_path  # , show_window=args.viz, speedup=args.speedup, seed=args.seed, n_parallel=args.n_parallel,
+        env_path=args.env_path,
+        show_window=args.viz,
+        speedup=args.speedup,
+        seed=args.seed,
+        n_parallel=args.n_parallel,
     )
-    print(envs.single_action_space)
     assert isinstance(envs.single_action_space, gym.spaces.Discrete), "only discrete action space is supported"
 
     args.num_envs = envs.num_envs
