@@ -90,10 +90,9 @@ class ActionSpaceProcessor:
 
     def to_original_dist(self, action):
         if not self._convert:
-            if self._only_one_action_space and self._all_actions_discrete:
-                return [action]
-            else:
-                return action
+            return action
+        elif self._only_one_action_space and self._all_actions_discrete:
+            return [action]
 
         original_action = []
         counter = 0
