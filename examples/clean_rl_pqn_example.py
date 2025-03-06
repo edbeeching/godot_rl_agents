@@ -6,6 +6,7 @@ import os
 import pathlib
 import random
 import time
+from collections import deque
 from dataclasses import dataclass
 
 import gymnasium as gym
@@ -181,6 +182,10 @@ if __name__ == "__main__":
     next_obs = torch.Tensor(next_obs).to(device)
     next_done = torch.zeros(args.num_envs).to(device)
 
+    # episode reward stats, modified as Godot RL does not return this information in info (yet)
+    episode_returns = deque(maxlen=20)
+    accum_rewards = np.zeros(args.num_envs)
+
     for iteration in range(1, args.num_iterations + 1):
         # Annealing the rate if instructed to do so.
         if args.anneal_lr:
@@ -212,12 +217,12 @@ if __name__ == "__main__":
             rewards[step] = torch.tensor(reward).to(device).view(-1)
             next_obs, next_done = torch.Tensor(next_obs).to(device), torch.Tensor(next_done).to(device)
 
-            if "final_info" in infos:
-                for info in infos["final_info"]:
-                    if info and "episode" in info:
-                        print(f"global_step={global_step}, episodic_return={info['episode']['r']}")
-                        writer.add_scalar("charts/episodic_return", info["episode"]["r"], global_step)
-                        writer.add_scalar("charts/episodic_length", info["episode"]["l"], global_step)
+            accum_rewards += np.array(reward)
+
+            for i, d in enumerate(next_done):
+                if d:
+                    episode_returns.append(accum_rewards[i])
+                    accum_rewards[i] = 0
 
         # Compute Q(lambda) targets
         with torch.no_grad():
@@ -261,8 +266,14 @@ if __name__ == "__main__":
 
         writer.add_scalar("losses/td_loss", loss, global_step)
         writer.add_scalar("losses/q_values", old_val.mean().item(), global_step)
-        print(f"SPS: {int(global_step / (time.time() - start_time))}, Epsilon: {epsilon}")
+        print(f"SPS: {int(global_step / (time.time() - start_time))}, Epsilon (rand action prob): {epsilon}")
+        if len(episode_returns) > 0:
+            print(
+                "Returns:",
+                np.mean(np.array(episode_returns)),
+            )
         writer.add_scalar("charts/SPS", int(global_step / (time.time() - start_time)), global_step)
+        writer.add_scalar("charts/episodic_return", np.mean(np.array(episode_returns)), global_step)
 
     envs.close()
     writer.close()
