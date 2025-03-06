@@ -3,6 +3,7 @@
 
 # docs and experiment results can be found at https://docs.cleanrl.dev/rl-algorithms/pqn/#pqnpy
 import os
+import pathlib
 import random
 import time
 from dataclasses import dataclass
@@ -21,6 +22,8 @@ from godot_rl.wrappers.clean_rl_wrapper import CleanRLGodotEnv
 
 @dataclass
 class Args:
+    onnx_export_path: str = None
+    """If set, will export onnx to this path after training is done"""
     env_path: str = None
     """Path to the Godot exported environment"""
     n_parallel: int = 1
@@ -258,9 +261,41 @@ if __name__ == "__main__":
 
         writer.add_scalar("losses/td_loss", loss, global_step)
         writer.add_scalar("losses/q_values", old_val.mean().item(), global_step)
-        print("SPS:", int(global_step / (time.time() - start_time)))
-        print("epsilon:", epsilon)
+        print(f"SPS: {int(global_step / (time.time() - start_time))}, Epsilon: {epsilon}")
         writer.add_scalar("charts/SPS", int(global_step / (time.time() - start_time)), global_step)
 
     envs.close()
     writer.close()
+
+    if args.onnx_export_path is not None:
+        path_onnx = pathlib.Path(args.onnx_export_path).with_suffix(".onnx")
+        print("Exporting onnx to: " + os.path.abspath(path_onnx))
+
+        q_network.eval().to("cpu")
+
+        class OnnxPolicy(torch.nn.Module):
+            def __init__(self, network):
+                super().__init__()
+                self.network = network
+
+            def forward(self, onnx_obs, state_ins):
+                network_output = self.network(onnx_obs)
+                return network_output, state_ins
+
+        onnx_policy = OnnxPolicy(q_network.network)
+        dummy_input = torch.unsqueeze(torch.tensor(envs.single_observation_space.sample()), 0)
+
+        torch.onnx.export(
+            onnx_policy,
+            args=(dummy_input, torch.zeros(1).float()),
+            f=str(path_onnx),
+            opset_version=15,
+            input_names=["obs", "state_ins"],
+            output_names=["output", "state_outs"],
+            dynamic_axes={
+                "obs": {0: "batch_size"},
+                "state_ins": {0: "batch_size"},  # variable length axes
+                "output": {0: "batch_size"},
+                "state_outs": {0: "batch_size"},
+            },
+        )
