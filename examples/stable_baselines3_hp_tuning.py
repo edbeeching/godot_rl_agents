@@ -1,4 +1,4 @@
-""" Optuna example that optimizes the hyperparameters of
+"""Optuna example that optimizes the hyperparameters of
 a reinforcement learning agent using PPO implementation from Stable-Baselines3
 on a Gymnasium environment.
 

@@ -37,6 +37,13 @@ class ActionSpaceProcessor:
     def __init__(self, action_space: gym.spaces.Tuple, convert) -> None:
         self._original_action_space = action_space
         self._convert = convert
+        self._all_actions_discrete: bool = all(isinstance(space, gym.spaces.Discrete) for space in action_space.spaces)
+        self._only_one_action_space: bool = len(action_space) == 1
+
+        # For DQN or other similar algorithms, we need a single discrete action space
+        if self._only_one_action_space and self._all_actions_discrete:
+            self.converted_action_space = action_space[0]
+            return
 
         space_size = 0
 
@@ -44,7 +51,7 @@ class ActionSpaceProcessor:
             use_multi_discrete_spaces = False
             multi_discrete_spaces = np.array([])
             if isinstance(action_space, gym.spaces.Tuple):
-                if all(isinstance(space, gym.spaces.Discrete) for space in action_space.spaces):
+                if self._all_actions_discrete:
                     use_multi_discrete_spaces = True
                     for space in action_space.spaces:
                         multi_discrete_spaces = np.append(multi_discrete_spaces, space.n)
@@ -84,6 +91,8 @@ class ActionSpaceProcessor:
     def to_original_dist(self, action):
         if not self._convert:
             return action
+        elif self._only_one_action_space and self._all_actions_discrete:
+            return [action]
 
         original_action = []
         counter = 0

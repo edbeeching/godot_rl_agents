@@ -94,10 +94,10 @@ def export_model_as_onnx(model, onnx_model_path: str, use_obs_array: bool = Fals
     # We only verify with PPO currently due to different output shape with SAC
     # (this can be updated in the future)
     if isinstance(model, PPO):
-        # If the space is MultiDiscrete, we skip verifying as action output will have an expected mismatch
+        # If the space is Discrete/MultiDiscrete, we skip verifying as action output will have an expected mismatch
         # (the output from onnx will be the action logits for each discrete action,
         # while the output from sb3 will be a single int)
-        if not isinstance(model.action_space, spaces.MultiDiscrete):
+        if not isinstance(model.action_space, (spaces.Discrete, spaces.MultiDiscrete)):
             verify_onnx_export(model, onnx_model_path, use_obs_array=use_obs_array)
 
 
