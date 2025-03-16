@@ -408,8 +408,8 @@ class GodotEnv:
                         )
                     else:
                         observation_spaces[k] = spaces.Box(
-                            low=-1.0,
-                            high=1.0,
+                            low=v.get("low", -1.0),
+                            high=v.get("high", 1.0),
                             shape=v["size"],
                             dtype=np.float32,
                         )
