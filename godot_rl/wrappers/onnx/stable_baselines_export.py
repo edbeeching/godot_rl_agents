@@ -81,10 +81,10 @@ def export_model_as_onnx(model, onnx_model_path: str, use_obs_array: bool = Fals
         args=(dummy_input, torch.zeros(1).float()),
         f=onnx_model_path,
         opset_version=17,
-        input_names=["obs", "state_ins"],
+        input_names=obs_keys + ["state_ins"],
         output_names=["output", "state_outs"],
         dynamic_axes={
-            "obs": {0: "batch_size"},
+            **{sub_obs: {0: "batch_size"} for sub_obs in obs_keys},
             "state_ins": {0: "batch_size"},  # variable length axes
             "output": {0: "batch_size"},
             "state_outs": {0: "batch_size"},
