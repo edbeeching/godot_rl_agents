@@ -120,15 +120,15 @@ def verify_onnx_export(ppo: PPO, onnx_model_path: str, num_tests=10, use_obs_arr
             obs = np.expand_dims(ppo.observation_space.sample(), axis=0)
             obs2 = torch.tensor(obs)
         else:
-            obs = dict(ppo.observation_space.sample())
+            obs_dict = dict(ppo.observation_space.sample())
             obs2 = {}
-            for k, v in obs.items():
+            for k, v in obs_dict.items():
                 obs2[k] = torch.from_numpy(v).unsqueeze(0)
-            obs = [v for v in obs.values()]
+            obs = {k: [v] for k, v in obs_dict.items()}
 
         with torch.no_grad():
             action_sb3, _, _ = sb3_model(obs2, deterministic=True)
 
-        action_onnx, state_outs = ort_sess.run(None, {"obs": obs, "state_ins": np.array([0.0], dtype=np.float32)})
+        action_onnx, state_outs = ort_sess.run(None, {**obs, "state_ins": np.array([0.0], dtype=np.float32)})
         assert np.allclose(action_sb3, action_onnx, atol=1e-5), "Mismatch in action output"
         assert np.allclose(state_outs, np.array([0.0]), atol=1e-5), "Mismatch in state_outs output"
