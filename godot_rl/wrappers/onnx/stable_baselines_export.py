@@ -119,6 +119,7 @@ def verify_onnx_export(ppo: PPO, onnx_model_path: str, num_tests=10, use_obs_arr
         if use_obs_array:
             obs = np.expand_dims(ppo.observation_space.sample(), axis=0)
             obs2 = torch.tensor(obs)
+            obs = {"obs": obs}
         else:
             obs_dict = dict(ppo.observation_space.sample())
             obs2 = {}
