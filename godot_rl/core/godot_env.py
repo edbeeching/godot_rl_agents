@@ -386,7 +386,9 @@ class GodotEnv:
                 else:
                     print(f"action space {v['action_type']} is not supported")
                     assert 0, f"action space {v['action_type']} is not supported"
-            self.action_spaces.append(spaces.Dict(tmp_action_spaces))
+            # Note: We're using list to avoid the keys getting sorted
+            tmp_action_spaces_list = list(tmp_action_spaces.items())
+            self.action_spaces.append(spaces.Dict(tmp_action_spaces_list))
 
         print("observation space", json_dict["observation_space"])
         # Compatibility with older versions of Godot plugin:
