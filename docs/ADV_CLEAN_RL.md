@@ -23,6 +23,8 @@ pip install godot-rl[cleanrl]
 While the default options for cleanrl work reasonably well. You may be interested in changing the hyperparameters.
 We recommend taking the [cleanrl example](https://github.com/edbeeching/godot_rl_agents/blob/main/examples/clean_rl_example.py) and modifying to match your needs.
 
+Note: The above linked example is for PPO with continuous action support. We also have a [PQN](https://github.com/edbeeching/godot_rl_agents/blob/main/examples/clean_rl_pqn_example.py) discrete action example (it might not support all of the options below).
+
 ## CleanRL Example script usage:
 To use the example script, first move to the location where the downloaded script is in the console/terminal, and then try some of the example use cases below:
 
