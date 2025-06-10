@@ -66,6 +66,7 @@ class GodotEnv:
             print("No game binary has been provided, please press PLAY in the Godot editor")
 
         self.port = port
+        self.host_binding = kwargs.get("host_binding", False)
         self.connection = self._start_server()
         self.num_envs = None
         self._handshake()
@@ -336,7 +337,8 @@ class GodotEnv:
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
         # Bind the socket to the port, "localhost" was not working on windows VM, had to use the IP
-        server_address = ("0.0.0.0", self.port)
+        address = "0.0.0.0" if self.host_binding else "127.0.0.1"
+        server_address = (address, self.port)
         sock.bind(server_address)
 
         # Listen for incoming connections
