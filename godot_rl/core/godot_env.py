@@ -66,6 +66,7 @@ class GodotEnv:
             print("No game binary has been provided, please press PLAY in the Godot editor")
 
         self.port = port
+        self.host_binding = kwargs.get("host_binding", False)
         self.connection = self._start_server()
         self.num_envs = None
         self._handshake()
@@ -304,21 +305,23 @@ class GodotEnv:
         # --fixed-fps {framerate}
         path = convert_macos_path(env_path) if platform == "darwin" else env_path
 
-        launch_cmd = f"{path} --port={port} --env_seed={seed}"
+        launch_cmd = [path]
+        launch_cmd.append(f"--port={port}")
+        launch_cmd.append(f"--env_seed={seed}")
 
         if show_window is False:
-            launch_cmd += " --disable-render-loop --headless"
+            launch_cmd.append("--disable-render-loop")
+            launch_cmd.append("--headless")
         if framerate is not None:
-            launch_cmd += f" --fixed-fps {framerate}"
+            launch_cmd.append(f"--fixed-fps {framerate}")
         if action_repeat is not None:
-            launch_cmd += f" --action_repeat={action_repeat}"
+            launch_cmd.append(f"--action_repeat={action_repeat}")
         if speedup is not None:
-            launch_cmd += f" --speedup={speedup}"
+            launch_cmd.append(f"--speedup={speedup}")
         if len(kwargs) > 0:
             for key, value in kwargs.items():
-                launch_cmd += f" --{key}={value}"
+                launch_cmd.append(f"--{key}={value}")
 
-        launch_cmd = launch_cmd.split(" ")
         self.proc = subprocess.Popen(
             launch_cmd,
             start_new_session=True,
@@ -334,7 +337,8 @@ class GodotEnv:
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
         # Bind the socket to the port, "localhost" was not working on windows VM, had to use the IP
-        server_address = ("127.0.0.1", self.port)
+        address = "0.0.0.0" if self.host_binding else "127.0.0.1"
+        server_address = (address, self.port)
         sock.bind(server_address)
 
         # Listen for incoming connections
