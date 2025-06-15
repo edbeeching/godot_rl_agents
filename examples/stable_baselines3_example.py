@@ -22,7 +22,7 @@ parser.add_argument(
     "--env_path",
     default=None,
     type=str,
-    help="The Godot binary to use, do not include for in editor training",
+    help="The Godot binary to use, do not include for in-editor training",
 )
 parser.add_argument(
     "--experiment_dir",
@@ -138,6 +138,15 @@ def cleanup():
     handle_model_save()
     close_env()
 
+def parse_extras_into_kwargs(extras):
+    kwargs = {}
+    for extra in extras:
+        if not extra.strip():
+            continue
+        if (extra.startswith("--") or extra.startswith("-")) and "=" in extra:
+            key, value = extra.split("=", 1)
+            kwargs[key] = value
+    return kwargs
 
 path_checkpoint = os.path.join(args.experiment_dir, args.experiment_name + "_checkpoints")
 abs_path_checkpoint = os.path.abspath(path_checkpoint)
@@ -158,7 +167,12 @@ if args.env_path is None and args.viz:
     print("Info: Using --viz without --env_path set has no effect, in-editor training will always render.")
 
 env = StableBaselinesGodotEnv(
-    env_path=args.env_path, show_window=args.viz, seed=args.seed, n_parallel=args.n_parallel, speedup=args.speedup
+    env_path=args.env_path,
+    show_window=args.viz,
+    seed=args.seed,
+    n_parallel=args.n_parallel,
+    speedup=args.speedup,
+    **parse_extras_into_kwargs(extras),
 )
 env = VecMonitor(env)
 

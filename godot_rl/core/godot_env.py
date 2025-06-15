@@ -320,7 +320,7 @@ class GodotEnv:
             launch_cmd.append(f"--speedup={speedup}")
         if len(kwargs) > 0:
             for key, value in kwargs.items():
-                launch_cmd.append(f"--{key}={value}")
+                launch_cmd.append(f"{key}={value}")
 
         self.proc = subprocess.Popen(
             launch_cmd,
