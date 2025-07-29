@@ -6,6 +6,8 @@ from math import log
 
 import imitation.data
 import numpy as np
+from godot_rl.wrappers.onnx.stable_baselines_export import export_model_as_onnx
+from godot_rl.wrappers.sbg_single_obs_wrapper import SBGSingleObsEnv
 from imitation.algorithms import bc
 from imitation.algorithms.adversarial.gail import GAIL
 from imitation.rewards.reward_nets import BasicRewardNet
@@ -13,9 +15,6 @@ from imitation.util import logger as imit_logger
 from stable_baselines3 import PPO
 from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.vec_env.vec_monitor import VecMonitor
-
-from godot_rl.wrappers.onnx.stable_baselines_export import export_model_as_onnx
-from godot_rl.wrappers.sbg_single_obs_wrapper import SBGSingleObsEnv
 
 parser = argparse.ArgumentParser(allow_abbrev=False)
 parser.add_argument(
@@ -221,27 +220,28 @@ try:
         print("Starting RL Training:")
         learner.learn(args.rl_timesteps, progress_bar=True)
 
-except KeyboardInterrupt:
+    if args.eval_episode_count:
+        close_env()
+        print("Evaluating:")
+        env = SBGSingleObsEnv(
+            env_path=args.env_path,
+            show_window=True,
+            seed=args.seed,
+            n_parallel=1,
+            speedup=args.speedup,
+        )
+        env = VecMonitor(env)
+        mean_reward, _ = evaluate_policy(learner, env, n_eval_episodes=args.eval_episode_count)
+        close_env()
+        print(f"Mean reward after evaluation: {mean_reward}")
+
+except (KeyboardInterrupt, ConnectionError, ConnectionResetError):
     print(
-        """Training interrupted by user. Will save if --save_model_path was
+        """Training interrupted by user or a ConnectionError. Will save if --save_model_path was
         used and/or export if --onnx_export_path was used."""
     )
 
-close_env()
-
-if args.eval_episode_count:
-    print("Evaluating:")
-    env = SBGSingleObsEnv(
-        env_path=args.env_path,
-        show_window=True,
-        seed=args.seed,
-        n_parallel=1,
-        speedup=args.speedup,
-    )
-    env = VecMonitor(env)
-    mean_reward, _ = evaluate_policy(learner, env, n_eval_episodes=args.eval_episode_count)
+finally:
+    handle_onnx_export()
+    handle_model_save()
     close_env()
-    print(f"Mean reward after evaluation: {mean_reward}")
-
-handle_onnx_export()
-handle_model_save()
