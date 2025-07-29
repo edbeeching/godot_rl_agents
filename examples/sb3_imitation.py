@@ -6,8 +6,6 @@ from math import log
 
 import imitation.data
 import numpy as np
-from godot_rl.wrappers.onnx.stable_baselines_export import export_model_as_onnx
-from godot_rl.wrappers.sbg_single_obs_wrapper import SBGSingleObsEnv
 from imitation.algorithms import bc
 from imitation.algorithms.adversarial.gail import GAIL
 from imitation.rewards.reward_nets import BasicRewardNet
@@ -15,6 +13,9 @@ from imitation.util import logger as imit_logger
 from stable_baselines3 import PPO
 from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.vec_env.vec_monitor import VecMonitor
+
+from godot_rl.wrappers.onnx.stable_baselines_export import export_model_as_onnx
+from godot_rl.wrappers.sbg_single_obs_wrapper import SBGSingleObsEnv
 
 parser = argparse.ArgumentParser(allow_abbrev=False)
 parser.add_argument(
