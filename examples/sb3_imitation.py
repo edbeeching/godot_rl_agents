@@ -226,7 +226,14 @@ except (KeyboardInterrupt, ConnectionError, ConnectionResetError):
         """Training interrupted by user or a ConnectionError. Will save if --save_model_path was
         used and/or export if --onnx_export_path was used."""
     )
+except (KeyboardInterrupt, ConnectionError, ConnectionResetError):
+    print(
+        """Training interrupted by user or a ConnectionError. Will save if --save_model_path was
+        used and/or export if --onnx_export_path was used."""
+    )
 finally:
+    close_env()
+    
     if args.eval_episode_count:
         print("Evaluating:")
         env = SBGSingleObsEnv(
@@ -238,9 +245,8 @@ finally:
         )
         env = VecMonitor(env)
         mean_reward, _ = evaluate_policy(learner, env, n_eval_episodes=args.eval_episode_count)
+        close_env()
         print(f"Mean reward after evaluation: {mean_reward}")
 
     handle_onnx_export()
     handle_model_save()
-    
-    close_env()
