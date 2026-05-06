@@ -220,9 +220,7 @@ else:
     try:
         model.learn(**learn_arguments)
     except (KeyboardInterrupt, ConnectionError, ConnectionResetError):
-        print(
-            """Training interrupted by user or a ConnectionError. Will save if --save_model_path was
-            used and/or export if --onnx_export_path was used."""
-        )
+        print("""Training interrupted by user or a ConnectionError. Will save if --save_model_path was
+            used and/or export if --onnx_export_path was used.""")
     finally:
         cleanup()
