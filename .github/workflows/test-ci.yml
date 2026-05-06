@@ -15,10 +15,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v3
-    - name: Set up uv
-      uses: astral-sh/setup-uv@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v3
     - name: Install dependencies
       run: uv pip install --system .[test,sf]
     - name: Download examples
@@ -36,10 +38,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v3
-    - name: Set up uv
-      uses: astral-sh/setup-uv@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v3
     - name: Install dependencies
       run: uv pip install --system .[test]
     - name: Download examples
@@ -59,10 +63,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v3
-    - name: Set up uv
-      uses: astral-sh/setup-uv@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v3
     - name: Install dependencies
       run: uv pip install --system .[test]
     - name: Install Rllib
@@ -84,10 +90,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v3
-    - name: Set up uv
-      uses: astral-sh/setup-uv@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v3
     - name: Install dependencies
       run: uv pip install --system .[test]
     - name: Install Rllib
