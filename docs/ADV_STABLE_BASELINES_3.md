@@ -23,7 +23,7 @@ Main Features
 
 ## Installation
 ```bash
-pip install godot-rl[sb3]
+uv pip install godot-rl[sb3]
 ```
 
 ## Basic Environment Usage

@@ -25,8 +25,8 @@ Find out more on their website: www.samplefactory.dev
 ## Installation
 
 ```bash
-# remove sb3 installation with pip uninstall godot-rl[sb3]
-pip install godot-rl[sf]
+# remove sb3 installation with uv pip uninstall godot-rl
+uv pip install godot-rl[sf]
 ```
 
 ## Basic Environment Usage

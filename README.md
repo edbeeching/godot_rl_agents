@@ -24,10 +24,10 @@ There is also a [video tutorial](https://www.youtube.com/watch?v=f8arMv_rtUU) wh
 
 Install the Godot RL Agents library. If you are new to Python or not using a virtual environment, it's highly recommended to create one using [venv](https://docs.python.org/3/library/venv.html) or [Conda](https://www.machinelearningplus.com/deployment/conda-create-environment-and-everything-you-need-to-know-to-manage-conda-virtual-environment/) to isolate your project dependencies.
 
-Once you have set up your virtual environment, proceed with the installation:
+Once you have set up your virtual environment, proceed with the installation. We use [uv](https://docs.astral.sh/uv/getting-started/installation/) for installs throughout the docs — install it first if you haven't already.
 
 ```bash
-pip install godot-rl
+uv pip install godot-rl
 ```
 
 Download one, or more of [examples](https://github.com/edbeeching/godot_rl_agents_examples), such as BallChase, JumperHard, FlyBy.
@@ -114,8 +114,9 @@ Start by forking the repo and then cloning it to your machine, creating a venv a
 
 git clone git@github.com:YOUR_USERNAME/godot_rl_agents.git
 cd godot_rl_agents
-python -m venv venv
-pip install -e ".[dev]"
+uv venv
+source .venv/bin/activate
+uv pip install -e ".[dev]"
 ```
 
 In order to run the tests, you'll need to make sure that you first have git-lfs installed. Once this is installed, you can download the examples which are used in the tests:

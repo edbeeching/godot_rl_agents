@@ -18,7 +18,7 @@ try:
     from optuna.samplers import TPESampler
 except ImportError as e:
     print(e)
-    print("You need to install optuna to use the hyperparameter tuning script. Try: pip install optuna")
+    print("You need to install optuna to use the hyperparameter tuning script. Try: uv pip install optuna")
     exit()
 
 import argparse
