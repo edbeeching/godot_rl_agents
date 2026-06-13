@@ -162,7 +162,7 @@ If the README and docs here not provide enough information, reach out to us on [
 
 ### How similar is this tool to Unity ML agents?
 
-We are inspired by the the Unity ML agents toolkit and we aim to provide a more compact, concise and hackable codebase, with little abstraction.
+We are inspired by the Unity ML agents toolkit and we aim to provide a more compact, concise and hackable codebase, with little abstraction.
 
 ### The environment appears to periodically freeze during training, why does it happen?
 
