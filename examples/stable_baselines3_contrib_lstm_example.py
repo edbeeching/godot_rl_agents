@@ -3,12 +3,12 @@ import os
 import pathlib
 from typing import Callable
 
-import numpy as np
-from sb3_contrib import RecurrentPPO
+from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import CheckpointCallback
 from stable_baselines3.common.vec_env.vec_monitor import VecMonitor
 
 from godot_rl.core.utils import can_import
+from godot_rl.wrappers.onnx.stable_baselines_export import export_model_as_onnx
 from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
 
 # To download the env source and binary:
@@ -62,6 +62,12 @@ parser.add_argument(
         "Requires a unique --experiment_name or --experiment_dir for each run. "
         "Does not need --save_model_path to be set. "
     ),
+)
+parser.add_argument(
+    "--onnx_export_path",
+    default=None,
+    type=str,
+    help="If included, will export onnx file after training to the path specified.",
 )
 parser.add_argument(
     "--timesteps",
@@ -128,15 +134,17 @@ parser.add_argument(
     type=float,
     help="The clipping range (default 0.2). This limits the policy changes per update",
 )
-# According to sb3-contrib documentation, the default for number of LSTM units is 256 (usually way too large)
-parser.add_argument(
-    "--lstm_hidden_size",
-    default=32,
-    type=int,
-    help="Number of units in the LSTM layer (default 32)",
-)
 
 args, extras = parser.parse_known_args()
+
+
+def handle_onnx_export():
+    # Enforce the extension of onnx and zip when saving model to avoid potential conflicts in case of same name
+    # and extension used for both
+    if args.onnx_export_path is not None:
+        path_onnx = pathlib.Path(args.onnx_export_path).with_suffix(".onnx")
+        print("Exporting onnx to: " + os.path.abspath(path_onnx))
+        export_model_as_onnx(model, str(path_onnx))
 
 
 def handle_model_save():
@@ -155,6 +163,7 @@ def close_env():
 
 
 def cleanup():
+    handle_onnx_export()
     handle_model_save()
     close_env()
 
@@ -214,8 +223,8 @@ def linear_schedule(initial_value: float) -> Callable[[float], float]:
 if args.resume_model_path is None:
     learning_rate = args.learning_rate if not args.linear_lr_schedule else linear_schedule(args.learning_rate)
 
-    model: RecurrentPPO = RecurrentPPO(
-        "MultiInputLstmPolicy",
+    model: PPO = PPO(
+        "MultiInputPolicy",
         env,
         ent_coef=args.ent_coef,
         verbose=2,
@@ -224,26 +233,17 @@ if args.resume_model_path is None:
         learning_rate=learning_rate,
         batch_size=args.batch_size,
         clip_range=args.clip_range,
-        policy_kwargs={"lstm_hidden_size": args.lstm_hidden_size},
     )
 else:
     path_zip = pathlib.Path(args.resume_model_path)
     print("Loading model: " + os.path.abspath(path_zip))
-    model = RecurrentPPO.load(path_zip, env=env, tensorboard_log=args.experiment_dir)
-
+    model = PPO.load(path_zip, env=env, tensorboard_log=args.experiment_dir)
 
 if args.inference:
     obs = env.reset()
-
-    # cell and hidden state of the LSTM
-    lstm_states = None
-    # Episode start signals are used to reset the lstm states
-    episode_starts = np.ones((env.num_envs,), dtype=bool)
-
     for i in range(args.timesteps):
-        action, lstm_states = model.predict(obs, state=lstm_states, episode_start=episode_starts, deterministic=True)
+        action, _state = model.predict(obs, deterministic=True)
         obs, reward, done, info = env.step(action)
-        episode_starts = done
 else:
     learn_arguments = dict(total_timesteps=args.timesteps, tb_log_name=args.experiment_name)
     if args.save_checkpoint_frequency:
@@ -257,6 +257,7 @@ else:
     try:
         model.learn(**learn_arguments)
     except (KeyboardInterrupt, ConnectionError, ConnectionResetError):
-        print("Training interrupted by user or a ConnectionError. Will save if --save_model_path was used.")
+        print("""Training interrupted by user or a ConnectionError. Will save if --save_model_path was
+            used and/or export if --onnx_export_path was used.""")
     finally:
         cleanup()
