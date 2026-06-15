@@ -1,5 +1,12 @@
 .PHONY: quality style test unity-test
 
+# Switch between the download scripts based on OS
+ifeq ($(OS),Windows_NT)
+    SCRIPT = scripts\\get_all_examples_from_hub.bat
+else
+    SCRIPT = bash scripts/get_all_examples_from_hub.sh
+endif
+
 # Format source code automatically
 style:
 	black --line-length 120 --target-version py310 tests godot_rl examples
@@ -15,7 +22,8 @@ test:
 	python -m pytest tests/
 
 download_examples:
-	bash scripts/get_all_examples_from_hub.sh
+	@echo "Running script: $(SCRIPT)"
+	$(SCRIPT)
 
 wheel:
 	rm dist/*
