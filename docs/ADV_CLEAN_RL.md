@@ -17,7 +17,7 @@ You can read more about CleanRL in their [technical paper](https://arxiv.org/abs
 
 # Installation
 ```bash
-pip install godot-rl[cleanrl]
+uv pip install godot-rl[cleanrl]
 ```
 
 While the default options for cleanrl work reasonably well. You may be interested in changing the hyperparameters.

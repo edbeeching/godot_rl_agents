@@ -19,11 +19,10 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v3
     - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        # cpu version of pytorch
-        pip install .[test,sf]
+      run: uv pip install --system .[test,sf]
     - name: Download examples
       run: |
         make download_examples
@@ -43,11 +42,10 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v3
     - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        # cpu version of pytorch
-        pip install .[test]
+      run: uv pip install --system .[test]
     - name: Download examples
       run: |
         make download_examples
@@ -69,16 +67,14 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v3
     - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip wheel==0.38.4
-        # cpu version of pytorch
-        pip install .[test]
+      run: uv pip install --system .[test]
     - name: Install Rllib
       run: |
-        pip uninstall -y stable-baselines3 gymnasium
-        pip install "ray[rllib]<=2.38.0"
-        pip install onnx==1.16.1
+        uv pip uninstall --system stable-baselines3 gymnasium
+        uv pip install --system "ray[rllib]<=2.38.0" onnx==1.16.1
     - name: Download examples
       run: |
         make download_examples
@@ -98,16 +94,14 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v3
     - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip wheel==0.38.4
-        # cpu version of pytorch
-        pip install .[test]
+      run: uv pip install --system .[test]
     - name: Install Rllib
       run: |
-        pip uninstall -y stable-baselines3 gymnasium
-        pip install "ray[rllib]<=2.38.0"
-        pip install onnx==1.16.1
+        uv pip uninstall --system stable-baselines3 gymnasium
+        uv pip install --system "ray[rllib]<=2.38.0" onnx==1.16.1
     - name: Download examples
       run: |
         make download_examples

@@ -4,13 +4,13 @@ This is a brief guide on training multiple policies focusing on Rllib specifical
 
 ### Install dependencies:
 
-`pip install https://github.com/edbeeching/godot_rl_agents/archive/refs/heads/main.zip` (to get the latest version)
+`uv pip install https://github.com/edbeeching/godot_rl_agents/archive/refs/heads/main.zip` (to get the latest version)
 
-`pip install ray[rllib]<=2.38.0`
+`uv pip install ray[rllib]<=2.38.0`
 
-`pip install onnx==1.16.1`
+`uv pip install onnx==1.16.1`
 
-`pip install PettingZoo`
+`uv pip install PettingZoo`
 
 ### Download the examples file and config file:
 

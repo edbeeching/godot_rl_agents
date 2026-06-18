@@ -18,9 +18,6 @@ download_examples:
 	bash scripts/get_all_examples_from_hub.sh
 
 wheel:
-	rm dist/*
-	python3 -m pip install --upgrade build
-	python3 -m build
-
-	python3 -m pip install --upgrade twine
-	python3 -m twine upload dist/*
+	rm -f dist/*
+	uv build
+	uv publish
