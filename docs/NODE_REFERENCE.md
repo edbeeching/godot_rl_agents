@@ -116,7 +116,7 @@ The path to a trained .onnx model file to use for inference (only needed for the
 
 #### Send Terminal Obs Info
 
-When enabled, then the terminal observation is sent to the Python server on termination or truncation. By default, truncation is triggered automatically when a predefined number of steps have been exceeded, [see `Reset After`](#reset-after) of the `AIController` nodes.  However, enabling this allows the Python server to correctly calculate the bootstrap estimations on truncated episodes by utilizing the terminal observations. Alternatively, a truncation can be triggered manually by setting both flags `truncated` and `needs_reset` to `true` and then handling `needs_reset`.
+When enabled, then the terminal observation is sent to the Python server on termination or truncation. By default, truncation is triggered automatically when a predefined number of steps have been exceeded, [see `Reset After`](#reset-after) of the `AIController` nodes.  However, enabling this allows the Python server to correctly calculate the bootstrap estimations on truncated episodes by utilizing the terminal observations. Alternatively, a truncation can be triggered manually by setting `truncated` to true and then handling the env reset (e.g. set `needs_reset` to `true` and then handle `needs_reset`).
 
 ## Sensors
 
