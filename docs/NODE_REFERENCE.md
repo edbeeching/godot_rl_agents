@@ -36,9 +36,8 @@ func _physics_process(delta):
 		return
 ```
 
-`needs_reset` is also set to `true` manually (along with `done`) when finishing the episode due to e.g. game over
-conditions.
 Calling `ai_controller.reset()` will set it to `false` and reset the `AIController`'s internal step counter to 0.
+Note that `needs_reset` can be set to `true` manually (along with `done`) when finishing the episode due to e.g. game over conditions.
 
 #### How to disable the time-out reset:
 
@@ -114,6 +113,10 @@ Speeds the physics up in the environments to enable faster training.
 #### Onnx Model Path:
 
 The path to a trained .onnx model file to use for inference (only needed for the `Onnx Inference` control mode).
+
+#### Send Terminal Obs Info
+
+When enabled, then the terminal observation is sent to the Python server on termination or truncation. By default, truncation is triggered automatically when a predefined number of steps have been exceeded, [see `Reset After`](#reset-after) of the `AIController` nodes.  However, enabling this allows the Python server to correctly calculate the bootstrap estimations on truncated episodes by utilizing the terminal observations. Alternatively, a truncation can be triggered manually by setting `truncated` to true and then handling the env reset (e.g. set `needs_reset` to `true` and then handle `needs_reset`).
 
 ## Sensors
 
