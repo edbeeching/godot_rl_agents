@@ -90,7 +90,7 @@ python stable_baselines3_example.py --timesteps=100_000 --onnx_export_path=model
 Note: If you interrupt/halt training using `ctrl + c`, it should save/export models before closing training (but only if you have included the corresponding arguments mentioned above). Using checkpoints (see below) is a safer way to keep progress.
 
 > [!NOTE]
-> For Python inference, the `Control Mode` in the Sync node in Godot Editor should be set to `Training`. Set `Onnx Inference` if you want to use the .onnx file without using the Python server (onnx inference uses C# instead).
+> For Python inference, the `Control Mode` in the Sync node in Godot Editor should be set to `Training`. Set `Onnx Inference` if you want to run inference in Godot without Python (this mode uses C# instead).
 
 ### Resume training from a saved .zip model:
 This will load the previously saved model.zip, and resume training for another 100 000 steps, so the saved model will have been trained for 200 000 steps in total.
@@ -119,7 +119,7 @@ python stable_baselines3_example.py --timesteps=100_000 --resume_model_path=mode
 ```
 
 > [!NOTE]
-> For Python inference, the `Control Mode` in the Sync node in Godot Editor should be set to `Training`. Set `Onnx Inference` if you want to use the .onnx file without using the Python server (onnx inference uses C# instead).
+> For Python inference, the `Control Mode` in the Sync node in Godot Editor should be set to `Training`. Set `Onnx Inference` if you want to run inference in Godot without Python (this mode uses C# instead).
 
 ### Use a linear learning rate schedule:
 By default, the learning rate will be constant throughout training.
