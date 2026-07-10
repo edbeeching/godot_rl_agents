@@ -92,7 +92,6 @@ Note: If you interrupt/halt training using `ctrl + c`, it should save/export mod
 > [!NOTE]
 > For Python inference, the `Control Mode` in the Sync node in Godot Editor should be set to `Training`. Set `Onnx Inference` if you want to use the .onnx file without using the Python server (onnx inference uses C# instead).
 
-
 ### Resume training from a saved .zip model:
 This will load the previously saved model.zip, and resume training for another 100 000 steps, so the saved model will have been trained for 200 000 steps in total.
 Note that the console log will display the `total_timesteps` for the last training session only, so it will show `100000` instead of `200000`. 
@@ -118,6 +117,7 @@ You can run Python inference on a model that was previously saved using either `
 ```bash
 python stable_baselines3_example.py --timesteps=100_000 --resume_model_path=model.zip --inference
 ```
+
 > [!NOTE]
 > For Python inference, the `Control Mode` in the Sync node in Godot Editor should be set to `Training`. Set `Onnx Inference` if you want to use the .onnx file without using the Python server (onnx inference uses C# instead).
 
