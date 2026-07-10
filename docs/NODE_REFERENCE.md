@@ -72,14 +72,13 @@ This is the main node that controls training and inference (using the trained mo
 
 There are three modes:
 
-- Training - will start training when you click `Play` in Godot editor (or use the exported application as `--env_path`
-  in training).
+- Training - After you start the Python training script, will start training when you click `Play` in Godot editor (or you can use the exported application as `--env_path` for training). This mode is also used for Python based inference of a saved model.
 
 > [!NOTE]
 > For training to work, you need
 > to [install Godot-RL](https://github.com/edbeeching/godot_rl_agents#installation-and-first-training) and start the
-> training server using `gdrl`, or, to have the ability to save the model after training is done, using
-> the [sb3 example script](https://github.com/edbeeching/godot_rl_agents/blob/main/docs/ADV_STABLE_BASELINES_3.md#sb3-example-script-usage).
+> training server using the [sb3 example script](https://github.com/edbeeching/godot_rl_agents/blob/main/docs/ADV_STABLE_BASELINES_3.md#sb3-example-script-usage) -
+> check the link also for how to save/export a model for Python or ONNX inference.
 
 - Human - `ai_controller.heuristic` will be set to `"human"`. You can use this to test the environment by manually
   controlling the agent, e.g. as implemented in
