@@ -7,7 +7,7 @@ import subprocess
 import time
 from collections import OrderedDict
 from sys import platform
-from typing import Optional
+from typing import List, Optional
 
 import numpy as np
 from gymnasium import spaces
@@ -291,6 +291,43 @@ class GodotEnv:
         print("exit was not clean, using atexit to close env")
         self.close()
 
+    @staticmethod
+    def _build_launch_cmd(
+        env_path,
+        port,
+        show_window,
+        framerate,
+        seed,
+        action_repeat,
+        speedup,
+        **kwargs,
+    ) -> List[str]:
+        """Build the argv list used to launch the Godot game.
+
+        Kept separate from the actual launch so it can be unit tested without a game binary.
+        """
+        path = convert_macos_path(env_path) if platform == "darwin" else env_path
+
+        launch_cmd = [path]
+        launch_cmd.append(f"--port={port}")
+        launch_cmd.append(f"--env_seed={seed}")
+
+        if show_window is False:
+            launch_cmd.append("--disable-render-loop")
+            launch_cmd.append("--headless")
+        if framerate is not None:
+            # --fixed-fps is a Godot engine argument, it expects its value as a separate token
+            launch_cmd.extend(["--fixed-fps", str(framerate)])
+        if action_repeat is not None:
+            launch_cmd.append(f"--action_repeat={action_repeat}")
+        if speedup is not None:
+            launch_cmd.append(f"--speedup={speedup}")
+        if len(kwargs) > 0:
+            for key, value in kwargs.items():
+                launch_cmd.append(f"--{key}={value}")
+
+        return launch_cmd
+
     def _launch_env(
         self,
         env_path,
@@ -302,25 +339,16 @@ class GodotEnv:
         speedup,
         **kwargs,
     ):
-        # --fixed-fps {framerate}
-        path = convert_macos_path(env_path) if platform == "darwin" else env_path
-
-        launch_cmd = [path]
-        launch_cmd.append(f"--port={port}")
-        launch_cmd.append(f"--env_seed={seed}")
-
-        if show_window is False:
-            launch_cmd.append("--disable-render-loop")
-            launch_cmd.append("--headless")
-        if framerate is not None:
-            launch_cmd.append(f"--fixed-fps {framerate}")
-        if action_repeat is not None:
-            launch_cmd.append(f"--action_repeat={action_repeat}")
-        if speedup is not None:
-            launch_cmd.append(f"--speedup={speedup}")
-        if len(kwargs) > 0:
-            for key, value in kwargs.items():
-                launch_cmd.append(f"--{key}={value}")
+        launch_cmd = self._build_launch_cmd(
+            env_path,
+            port,
+            show_window,
+            framerate,
+            seed,
+            action_repeat,
+            speedup,
+            **kwargs,
+        )
 
         self.proc = subprocess.Popen(
             launch_cmd,
