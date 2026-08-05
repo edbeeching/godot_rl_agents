@@ -1,5 +1,6 @@
 import importlib
 import re
+from typing import Optional
 
 import gymnasium as gym
 import numpy as np
@@ -131,6 +132,30 @@ class ActionSpaceProcessor:
                 raise NotImplementedError
 
         return original_action
+
+
+def set_torch_threads(num_threads: Optional[int]) -> Optional[int]:
+    """Limit the threads torch uses for intra op parallelism.
+
+    Torch allocates one thread per core by default. With several game instances running
+    next to the learner this oversubscribes the machine and the learner update slows down
+    a lot, which is most visible on many core machines with a high --n_parallel.
+
+    Args:
+        num_threads (int): thread count to apply, or None to leave torch alone.
+
+    Returns:
+        int: the applied thread count, or None if nothing was changed.
+    """
+    if num_threads is None:
+        return None
+    if num_threads < 1:
+        raise ValueError(f"num_threads must be 1 or more, got {num_threads}")
+
+    import torch
+
+    torch.set_num_threads(num_threads)
+    return num_threads
 
 
 def can_import(module_name):

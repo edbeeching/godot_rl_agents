@@ -7,7 +7,7 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import CheckpointCallback
 from stable_baselines3.common.vec_env.vec_monitor import VecMonitor
 
-from godot_rl.core.utils import can_import
+from godot_rl.core.utils import can_import, set_torch_threads
 from godot_rl.wrappers.onnx.stable_baselines_export import export_model_as_onnx
 from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
 
@@ -134,8 +134,18 @@ parser.add_argument(
     type=float,
     help="The clipping range (default 0.2). This limits the policy changes per update",
 )
+parser.add_argument(
+    "--torch_num_threads",
+    default=None,
+    type=int,
+    help="Threads torch may use for intra op parallelism. Torch takes one per core by default, "
+    "which oversubscribes the machine once several game instances run next to the learner. "
+    "Try 1 when raising --n_parallel on a many core machine.",
+)
 
 args, extras = parser.parse_known_args()
+
+set_torch_threads(args.torch_num_threads)
 
 
 def handle_onnx_export():
