@@ -1,7 +1,12 @@
 import numpy as np
+import pytest
 
 from godot_rl.core.godot_env import GodotEnv
-from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
+from godot_rl.core.utils import can_import
+
+# The sb3 wrapper imports stable_baselines3, which the rllib CI job uninstalls, so it is
+# imported inside the helper below and the tests that need it are skipped when ray is present.
+needs_sb3 = pytest.mark.skipif(can_import("ray"), reason="rllib and sb3 are not compatable")
 
 
 def make_godot_env():
@@ -46,6 +51,8 @@ class FakeGodotEnv:
 
 
 def make_vec_env(n_parallel=3, num_envs=1):
+    from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
+
     env = object.__new__(StableBaselinesGodotEnv)
     env.envs = [FakeGodotEnv(num_envs) for _ in range(n_parallel)]
     env.n_parallel = n_parallel
@@ -53,11 +60,13 @@ def make_vec_env(n_parallel=3, num_envs=1):
     return env
 
 
+@needs_sb3
 def test_seed_returns_one_seed_per_parallel_game():
     env = make_vec_env(3)
     assert env.seed(10) == [10, 11, 12]
 
 
+@needs_sb3
 def test_latched_seeds_reach_the_games_on_the_next_reset():
     env = make_vec_env(3)
     env.seed(10)
@@ -65,6 +74,7 @@ def test_latched_seeds_reach_the_games_on_the_next_reset():
     assert [e.reset_seed for e in env.envs] == [10, 11, 12]
 
 
+@needs_sb3
 def test_a_seed_applies_to_a_single_reset():
     env = make_vec_env(2)
     env.seed(5)
@@ -73,12 +83,14 @@ def test_a_seed_applies_to_a_single_reset():
     assert [e.reset_seed for e in env.envs] == [None, None]
 
 
+@needs_sb3
 def test_reset_without_seeding_sends_no_seed():
     env = make_vec_env(2)
     env.reset()
     assert [e.reset_seed for e in env.envs] == [None, None]
 
 
+@needs_sb3
 def test_seed_none_clears_the_latch():
     env = make_vec_env(2)
     env.seed(5)
