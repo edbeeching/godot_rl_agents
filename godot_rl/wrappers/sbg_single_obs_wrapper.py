@@ -14,8 +14,10 @@ class SBGSingleObsEnv(StableBaselinesGodotEnv):
         self.obs_key = obs_key
         super().__init__(*args, **kwargs)
 
-    def step(self, action: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray, List[Dict[str, Any]]]:
-        obs, rewards, term, info = super().step(action)
+    def step_wait(self) -> Tuple[np.ndarray, np.ndarray, np.ndarray, List[Dict[str, Any]]]:
+        # The projection lives here rather than in step() because sb3 drives a vec env through
+        # the step_async/step_wait pair, so a step() override alone would be bypassed.
+        obs, rewards, term, info = super().step_wait()
 
         # Terminal obs info is needed for imitation learning
         for idx, done in enumerate(term):
