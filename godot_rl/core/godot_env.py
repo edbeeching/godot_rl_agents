@@ -244,12 +244,18 @@ class GodotEnv:
         """
         Reset the Godot environment.
 
+        Args:
+            seed (int): optional seed sent to the game along with the reset request.
+
         Returns:
             dict: The initial observation data.
         """
         message = {
             "type": "reset",
         }
+        if seed is not None:
+            # int() as numpy integers are not json serializable
+            message["seed"] = int(seed)
         self._send_as_json(message)
         response = self._get_json_dict()
         response["obs"] = self._process_obs(response["obs"])
