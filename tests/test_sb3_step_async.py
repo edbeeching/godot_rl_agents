@@ -1,6 +1,11 @@
 import numpy as np
+import pytest
 
-from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
+from godot_rl.core.utils import can_import
+
+# The sb3 wrapper imports stable_baselines3, which the rllib CI job uninstalls, so it is
+# imported inside the helper below and the whole module is skipped when ray is present.
+pytestmark = pytest.mark.skipif(can_import("ray"), reason="rllib and sb3 are not compatable")
 
 
 class FakeGodotEnv:
@@ -27,6 +32,8 @@ class FakeGodotEnv:
 
 
 def make_env(n_parallel=3, num_envs=2):
+    from godot_rl.wrappers.stable_baselines_wrapper import StableBaselinesGodotEnv
+
     # Bypass __init__ so no Godot game is launched
     env = object.__new__(StableBaselinesGodotEnv)
     calls = []
