@@ -43,9 +43,6 @@ class StableBaselinesGodotEnv(VecEnv):
         # Check the action space for validity
         self._check_valid_action_space()
 
-        # Initialize the results holder
-        self.results = None
-
     def _check_valid_action_space(self) -> None:
         # Check if the action space is a tuple space with multiple spaces
         action_space = self.envs[0].action_space
@@ -55,39 +52,8 @@ class StableBaselinesGodotEnv(VecEnv):
             ), f"sb3 supports a single action space, this env contains multiple spaces {action_space}"
 
     def step(self, action: np.ndarray) -> Tuple[Dict[str, np.ndarray], np.ndarray, np.ndarray, List[Dict[str, Any]]]:
-        # Initialize lists for collecting results
-        all_obs = []
-        all_rewards = []
-        all_term = []
-        all_trunc = []
-        all_info = []
-
-        # Get the number of environments
-        num_envs = self.envs[0].num_envs
-
-        # Send actions to each environment
-        for i in range(self.n_parallel):
-            self.envs[i].step_send(action[i * num_envs : (i + 1) * num_envs])
-
-        # Receive results from each environment
-        for i in range(self.n_parallel):
-            obs, reward, term, trunc, info = self.envs[i].step_recv()
-            all_obs.extend(obs)
-            all_rewards.extend(reward)
-            all_term.extend(term)
-            all_trunc.extend(trunc)
-            all_info.extend(info)
-
-        # Convert list of dictionaries to dictionary of lists
-        obs = lod_to_dol(all_obs)
-
-        # Return results
-        return (
-            {k: np.array(v) for k, v in obs.items()},
-            np.array(all_rewards, dtype=np.float32),
-            np.array(all_term),
-            all_info,
-        )
+        self.step_async(action)
+        return self.step_wait()
 
     def reset(self) -> Dict[str, np.ndarray]:
         # Initialize lists for collecting results
@@ -142,14 +108,40 @@ class StableBaselinesGodotEnv(VecEnv):
         raise NotImplementedError()
 
     def step_async(self, actions: np.ndarray) -> None:
-        # Execute the step function asynchronously, not actually implemented in this setting
-        self.results = self.step(actions)
+        # Send the actions to every environment, then return without waiting for the results
+        num_envs = self.envs[0].num_envs
+
+        for i in range(self.n_parallel):
+            self.envs[i].step_send(actions[i * num_envs : (i + 1) * num_envs])
 
     def step_wait(
         self,
     ) -> Tuple[Dict[str, np.ndarray], np.ndarray, np.ndarray, List[Dict[str, Any]]]:
-        # Wait for the results from the asynchronous step
-        return self.results
+        # Collect the results of the actions sent by step_async
+        all_obs = []
+        all_rewards = []
+        all_term = []
+        all_trunc = []
+        all_info = []
+
+        for i in range(self.n_parallel):
+            obs, reward, term, trunc, info = self.envs[i].step_recv()
+            all_obs.extend(obs)
+            all_rewards.extend(reward)
+            all_term.extend(term)
+            all_trunc.extend(trunc)
+            all_info.extend(info)
+
+        # Convert list of dictionaries to dictionary of lists
+        obs = lod_to_dol(all_obs)
+
+        # Return results
+        return (
+            {k: np.array(v) for k, v in obs.items()},
+            np.array(all_rewards, dtype=np.float32),
+            np.array(all_term),
+            all_info,
+        )
 
 
 def stable_baselines_training(args, extras, n_steps: int = 200000, **kwargs) -> None:
