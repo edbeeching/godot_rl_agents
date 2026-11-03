@@ -40,14 +40,14 @@ class StableBaselinesGodotEnv(VecEnv):
         # Store the number of parallel environments
         self.n_parallel = n_parallel
 
+        # Seeds latched by seed(), applied on the next reset
+        self._seeds: List[Optional[int]] = [None] * n_parallel
+
         # Check the action space for validity
         self._check_valid_action_space()
 
         # Initialize the results holder
         self.results = None
-
-        # Seeds latched by seed(), applied on the next reset
-        self._seeds: List[Optional[int]] = [None] * n_parallel
 
     def _check_valid_action_space(self) -> None:
         # Check if the action space is a tuple space with multiple spaces
