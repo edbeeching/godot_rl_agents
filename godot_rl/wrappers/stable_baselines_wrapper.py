@@ -40,6 +40,9 @@ class StableBaselinesGodotEnv(VecEnv):
         # Store the number of parallel environments
         self.n_parallel = n_parallel
 
+        # Seeds latched by seed(), applied on the next reset
+        self._seeds: List[Optional[int]] = [None] * n_parallel
+
         # Check the action space for validity
         self._check_valid_action_space()
 
@@ -94,11 +97,14 @@ class StableBaselinesGodotEnv(VecEnv):
         all_obs = []
         all_info = []
 
-        # Reset each environment
+        # Reset each environment, applying any seed latched by seed()
         for i in range(self.n_parallel):
-            obs, info = self.envs[i].reset()
+            obs, info = self.envs[i].reset(seed=self._seeds[i])
             all_obs.extend(obs)
             all_info.extend(info)
+
+        # A latched seed applies to one reset only, as in sb3's own vec envs
+        self._seeds = [None] * self.n_parallel
 
         # Convert list of dictionaries to dictionary of lists
         obs = lod_to_dol(all_obs)
@@ -135,8 +141,14 @@ class StableBaselinesGodotEnv(VecEnv):
             return [None for _ in range(self.num_envs)]
         raise AttributeError("get attr not fully implemented in godot-rl StableBaselinesWrapper")
 
-    def seed(self, seed=None):
-        raise NotImplementedError()
+    def seed(self, seed: Optional[int] = None) -> List[Optional[int]]:
+        # Each parallel game gets seed + p, matching the offsets used when they were launched.
+        # The seeds are latched here and sent with the next reset.
+        if seed is None:
+            self._seeds = [None] * self.n_parallel
+        else:
+            self._seeds = [seed + p for p in range(self.n_parallel)]
+        return list(self._seeds)
 
     def set_attr(self):
         raise NotImplementedError()
