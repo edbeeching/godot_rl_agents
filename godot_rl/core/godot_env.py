@@ -237,6 +237,11 @@ class GodotEnv:
             if "2d" in k:
                 for sub in response_obs:
                     sub[k] = self._decode_2d_obs_from_string(sub[k], self.observation_space[k].shape)
+            elif isinstance(response_obs[0][k], str):
+                # Sent by the plugin's Sync node when binary observations are enabled:
+                # the float32 bytes of the observation, hex-encoded.
+                for sub in response_obs:
+                    sub[k] = self._decode_float_obs_from_string(sub[k], self.observation_space[k].shape)
 
         return response_obs
 
@@ -436,6 +441,13 @@ class GodotEnv:
         shape,
     ):
         return np.frombuffer(bytes.fromhex(hex_string), dtype=np.uint8).reshape(shape)
+
+    @staticmethod
+    def _decode_float_obs_from_string(
+        hex_string,
+        shape,
+    ):
+        return np.frombuffer(bytes.fromhex(hex_string), dtype="<f4").reshape(shape)
 
     def _send_as_json(self, dictionary):
         message_json = json.dumps(dictionary)
